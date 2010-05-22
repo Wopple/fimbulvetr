@@ -1,0 +1,18 @@
+Character
+  -Moves
+    -Frames
+      -Image
+        -Size
+        -Center location
+      -Hitboxes
+        -Location/Size
+        -Damage
+        -Knockback velocity
+        -Stun amount
+        -Elemental effect
+        -Hit effect
+      -Acceleration/Velocity
+      -Can Control During Move?
+      -Friction During Move?
+      -Invulnerability
+    -Pointers to other moves
