@@ -6,6 +6,8 @@ from constants import *
 
 import socket
 
+import netcode
+
 class NetClient(object):
     def __init__(self):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -16,7 +18,7 @@ class NetClient(object):
         msgSize = NET_MESSAGE_SIZE
         inMsg = ''
         while (inMsg == ''):
-            inMsg = self.receiveMessage(msgSize)
+            inMsg = netcode.receiveMessage(self.s, msgSize)
             if (inMsg == ''):
                 print "No message"
             else:
@@ -24,25 +26,6 @@ class NetClient(object):
 
         sent = 0
         while (sent == 0):
-            sent = self.sendMessage(outMsg)
+            sent = netcode.sendMessage(self.s, outMsg)
             
         return inMsg, 1
-
-    def sendMessage(self, msg):
-        msgSize = len(msg)
-        totalsent = 0
-        while totalsent < msgSize:
-            sent = self.s.send(msg[totalsent:])
-            if sent == 0:
-                return 0
-            totalsent = totalsent + sent
-        return 1
-
-    def receiveMessage(self, msgSize):
-        msg = ''
-        while len(msg) < msgSize:
-            chunk = self.s.recv(msgSize-len(msg))
-            if chunk == '':
-                raise RuntimeError, "socket connection broken"
-            msg = msg + chunk
-        return msg

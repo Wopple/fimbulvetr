@@ -11,14 +11,13 @@ def sendMessage(sock, msg):
     msgSize = len(msg)
     totalsent = 0
     while totalsent < msgSize:
-        print "!"
         sent = sock.send(msg[totalsent:])
         if sent == 0:
             return 0
         totalsent = totalsent + sent
     return 1
 
-def myreceive(sock):
+def receiveMessage(sock, msgSize):
     msg = ''
     while len(msg) < msgSize:
         chunk = sock.recv(msgSize-len(msg))
@@ -26,3 +25,4 @@ def myreceive(sock):
             raise RuntimeError, "socket connection broken"
         msg = msg + chunk
     return msg
+
