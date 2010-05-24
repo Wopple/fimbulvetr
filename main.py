@@ -36,7 +36,7 @@ def changeC(newC):
     c.setModel(m)
 
 
-def proceed(clock):
+def proceed(clock, net=None):
     #Progresses by one frame, updating each component of the MVC system.
     global m
     global v
@@ -46,6 +46,9 @@ def proceed(clock):
     v.update()
     c.update()
     checkError()
+    if not net is None:
+        recvMsg, p = net.update(m.buildNetMessage())
+        m.parseNetMessage(recvMsg, p)
     clock.tick(FRAME_RATE)
 
 def checkError():
@@ -67,9 +70,7 @@ def goBattle(data, netType):
     changeMVC(battle_m.Model(data[0], data[1], data[2]), battle_v.View(), battle_c.Controller(), screen)
     c.setPlayer(cp)
     while not m.advance():
-        proceed(clock)
-        if not net is None:
-            net.update()
+        proceed(clock, net)
     sys.exit()
 
 m = mvc.Model()

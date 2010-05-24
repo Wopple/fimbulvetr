@@ -12,21 +12,21 @@ class NetClient(object):
         host = '127.0.0.1'
         self.s.connect((host, MULTIPLAYER_PORT))
 
-    def update(self):
-        msgSize = 4
-        msg = ''
-        while (msg == ''):
-            msg = self.receiveMessage(msgSize)
-            if (msg == ''):
+    def update(self, outMsg):
+        msgSize = NET_MESSAGE_SIZE
+        inMsg = ''
+        while (inMsg == ''):
+            inMsg = self.receiveMessage(msgSize)
+            if (inMsg == ''):
                 print "No message"
             else:
-                print "Message Received: " + str(msg)
+                print "Message Received: " + str(inMsg)
+        return inMsg, 1
 
     def sendMessage(self, msg):
         msgSize = len(msg)
         totalsent = 0
         while totalsent < msgSize:
-            print "!"
             sent = self.conn.send(msg[totalsent:])
             if sent == 0:
                 return 0

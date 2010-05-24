@@ -14,18 +14,16 @@ class NetServer(object):
         self.conn, addr = self.s.accept()
         print "Connected to client at " + str(addr)
 
-    def update(self):
-        msg = 'blah'
+    def update(self, outMsg):
         sent = 0
         while (sent == 0):
-            sent = self.sendMessage(msg)
-            print str(sent) + ": " + str(msg)
+            sent = self.sendMessage(outMsg)
+        return '', 0
 
     def sendMessage(self, msg):
         msgSize = len(msg)
         totalsent = 0
         while totalsent < msgSize:
-            print "!"
             sent = self.conn.send(msg[totalsent:])
             if sent == 0:
                 return 0

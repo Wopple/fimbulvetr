@@ -204,10 +204,49 @@ class Model(mvc.Model):
             p.currFrame = 0
 
     def buildNetMessage(self):
-        pass
+        msg = ''
+        for i in self.keys:
+            if i:
+                j = '1'
+            else:
+                j = '0'
+            msg += j
+        for i in self.keysNow:
+            msg += str(i)
 
-    def parseNetMessage(self):
-        pass
+        return msg
+
+    def parseNetMessage(self, msg, p):
+        if p == 0:
+            return
+        elif p == 1:
+            keys = self.keys
+            keysNow = self.keysNow
+            
+        msg1 = msg[0:7]
+        if len(msg1) != 7:
+            print "!!!!"
+            sys.exit()
+        msg2 = msg[7:]
+        if len(msg2) != 7:
+            print "!!!!"
+            sys.exit()
+        
+        for i, c in enumerate(msg1):
+            if c == '1':
+                keys[i] = True
+            elif c == '0':
+                keys[i] = False
+            else:
+                print "Error in message parsing"
+                sys.exit()
+
+        for i, c in enumerate(msg2):
+            try:
+                keysNow[i] = int(c)
+            except:
+                print "Error in message parsing"
+                sys.exit()
         
 
 def testData():
