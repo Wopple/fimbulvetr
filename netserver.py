@@ -18,7 +18,17 @@ class NetServer(object):
         sent = 0
         while (sent == 0):
             sent = self.sendMessage(outMsg)
-        return '', 0
+
+        msgSize = NET_MESSAGE_SIZE
+        inMsg = ''
+        while (inMsg == ''):
+            inMsg = self.receiveMessage(msgSize)
+            if (inMsg == ''):
+                print "No message"
+            else:
+                print "Message Received: " + str(inMsg)
+
+        return inMsg, 0
 
     def sendMessage(self, msg):
         msgSize = len(msg)

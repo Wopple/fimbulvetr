@@ -21,13 +21,18 @@ class NetClient(object):
                 print "No message"
             else:
                 print "Message Received: " + str(inMsg)
+
+        sent = 0
+        while (sent == 0):
+            sent = self.sendMessage(outMsg)
+            
         return inMsg, 1
 
     def sendMessage(self, msg):
         msgSize = len(msg)
         totalsent = 0
         while totalsent < msgSize:
-            sent = self.conn.send(msg[totalsent:])
+            sent = self.s.send(msg[totalsent:])
             if sent == 0:
                 return 0
             totalsent = totalsent + sent
