@@ -43,7 +43,9 @@ class Model(mvc.Model):
 
         self.centerCamera(self.player)
 
-    def key(self, k, t):
+    def key(self, k, t, p):
+        if p == 0:
+            return
         self.keys[k] = t
         if t:
             self.keysNow[k] = KEY_BUFFER
@@ -200,6 +202,12 @@ class Model(mvc.Model):
         if (p.currMove == p.moves['dissolve']) and (p.currFrame == len(p.currMove.frames)-1):
             p.destroy = True
             p.currFrame = 0
+
+    def buildNetMessage(self):
+        pass
+
+    def parseNetMessage(self):
+        pass
         
 
 def testData():
