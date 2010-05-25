@@ -24,7 +24,6 @@ class Controller(mvc.Controller):
                     self.model.incMenu()
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                print event.button
                 if event.button == 1:
                     self.model.confirm()
 

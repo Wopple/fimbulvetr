@@ -26,7 +26,8 @@ class Model(mvc.Model):
         self.debugMenu.dec()
 
     def confirm(self):
-        self.advanceNow = True
+        if not self.debugMenu.noSelection:
+            self.advanceNow = True
 
     def update(self):
         pass
@@ -38,3 +39,5 @@ class Model(mvc.Model):
         val = self.debugMenu.isAreaRect(pos)
         if val > 0:
             self.debugMenu.setVal(val)
+        else:
+            self.debugMenu.setVal(-1)

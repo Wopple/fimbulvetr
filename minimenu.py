@@ -38,6 +38,8 @@ class MiniMenu(object):
         self.colorOff = colorOff
         self.colorBG = colorBG
 
+        self.noSelection = False
+
         
         self.slate = pygame.Surface( (self.rect.width, self.rect.height) )
         self.slate.fill(colorBG)
@@ -55,6 +57,10 @@ class MiniMenu(object):
     def setVal(self, val):
         if val >= self.selection.minimum and val <= self.selection.maximum:
             self.selection.value = val
+            self.noSelection = False
+
+        if val == -1:
+            self.noSelection = True
 
         self.update()
 
@@ -69,7 +75,7 @@ class MiniMenu(object):
         for x in range(len(self.options)):
             textRect = pygame.Rect( (0, offset), (self.rectSingle.width, self.rectSingle.height) )
             self.areaRects.append(textRect)
-            if self.selection.value == (x + 1):
+            if (self.selection.value == (x + 1)) and (not self.noSelection):
                 currColor = self.colorOn
             else:
                 currColor = self.colorOff
