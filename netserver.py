@@ -30,4 +30,4 @@ class NetServer(object):
             else:
                 print "Message Received: " + str(inMsg)
 
-        return inMsg, 0
+        return inMsg, 2

@@ -14,7 +14,8 @@ class View(mvc.View):
         self.screen.blit(BLACK_SCREEN, (0, 0))
         self.screen.blit(self.model.background, self.model.rect)
 
-        self.model.player.draw(self.screen, self.model.rect.topleft)
+        for p in self.model.players:
+            p.draw(self.screen, self.model.rect.topleft)
 
         for p in self.model.projectiles:
             p.draw(self.screen, self.model.rect.topleft)

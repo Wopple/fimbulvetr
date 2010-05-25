@@ -60,15 +60,20 @@ def goBattle(data, netType):
     if netType == 0:
         net = None
         cp = 1
+        cam = 0
     elif netType == 1:
         net = netserver.NetServer()
         cp = 1
+        cam = 0
     elif netType == 2:
         net = netclient.NetClient()
-        cp = 0
+        cp = 2
+        cam = 1
         
     changeMVC(battle_m.Model(data[0], data[1], data[2]), battle_v.View(), battle_c.Controller(), screen)
     c.setPlayer(cp)
+    m.setNetPlayer(cp)
+    m.setCameraPlayer(cam)
     while not m.advance():
         proceed(clock, net)
     sys.exit()

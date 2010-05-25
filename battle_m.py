@@ -12,25 +12,33 @@ import hare, fox
 from constants import *
 
 class Model(mvc.Model):
-    def __init__(self, inChar, areaSize, bg):
+    def __init__(self, inChars, areaSize, bg):
         super(Model, self).__init__()
-        self.player = inChar
-        self.player.beginBattle()
+        self.players = inChars
+        for p in self.players:
+            p.beginBattle()
         self.background = bg
         self.rect = pygame.Rect((0, 0), areaSize)
-        self.keys = [False, False, False, False, False, False, False]
-        self.keysNow = [0, 0, 0, 0, 0, 0, 0]
+        self.keys = [[False, False, False, False, False, False, False],
+                     [False, False, False, False, False, False, False]]
+        self.keysNow = [[0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0]]
         self.projectiles = []
+        self.cameraPlayer = 0
+        self.netPlayer = 0
 
     def update(self):
-        l, r = self.exclusiveKeys(self.keys[2], self.keys[3])
-        self.resetKeysNow()
-        self.act()
-        self.checkReversable(l, r)
-        self.checkForGround(self.player)
-        self.player.update()
-        self.checkShoot(self.player)
-        self.player.DI(l, r)
+        for i, p in enumerate(self.players):
+            keys = self.keys[i]
+            keysNow = self.keysNow[i]
+            l, r = self.exclusiveKeys(keys[2], keys[3])
+            self.resetKeysNow(keysNow)
+            self.act(p, keys, keysNow)
+            self.checkReversable(l, r, p)
+            self.checkForGround(p)
+            p.update()
+            self.checkShoot(p)
+            p.DI(l, r)
 
         temp = []
         for i in range(len(self.projectiles)):
@@ -41,25 +49,29 @@ class Model(mvc.Model):
                 temp.append(self.projectiles[i])
         self.projectiles = temp
 
-        self.centerCamera(self.player)
+        self.centerCamera(self.players[self.cameraPlayer])
+
+    def setCameraPlayer(self, c):
+        if (c >= 0) and (c <= 1):
+            self.cameraPlayer = c
 
     def key(self, k, t, p):
         if p == 0:
             return
-        self.keys[k] = t
+        self.keys[p-1][k] = t
         if t:
-            self.keysNow[k] = KEY_BUFFER
+            self.keysNow[p-1][k] = KEY_BUFFER
 
-    def resetKeysNow(self):
-        for k in range(len(self.keysNow)):
-            if self.keysNow[k] > 0:
-                self.keysNow[k] -= 1
+    def resetKeysNow(self, keysNow):
+        for k in range(len(keysNow)):
+            if keysNow[k] > 0:
+                keysNow[k] -= 1
 
-    def wasKeyPressed(self, k):
+    def wasKeyPressed(self, k, keysNow):
         if k == -1:
-            return ((self.keysNow[2] > 0) or (self.keysNow[3] > 0))
+            return ((keysNow[2] > 0) or (keysNow[3] > 0))
         else:
-            return (self.keysNow[k] > 0)
+            return (keysNow[k] > 0)
 
     def exclusiveKeys(self, k1, k2):
         if k1 and k2:
@@ -67,9 +79,9 @@ class Model(mvc.Model):
             k2 = False
         return k1, k2
 
-    def keyTowardFacing(self):
-        l, r = self.exclusiveKeys(self.keys[2], self.keys[3])
-        return self.player.keyTowardFacing(l, r)
+    def keyTowardFacing(self, p, keys):
+        l, r = self.exclusiveKeys(keys[2], keys[3])
+        return p.keyTowardFacing(l, r)
 
     def centerCamera(self, target):
         self.rect.left = -(int(target.preciseLoc[0]) - (SCREEN_SIZE[0] / 2))
@@ -85,62 +97,62 @@ class Model(mvc.Model):
         if self.rect.bottom < SCREEN_SIZE[1]:
             self.rect.bottom = SCREEN_SIZE[1]
 
-    def act(self):
-        self.player.actLeft = True
-        u, d = self.exclusiveKeys(self.keys[0], self.keys[1])
-        l, r = self.exclusiveKeys(self.keys[2], self.keys[3])
-        if not self.keyTowardFacing():
-            self.player.actTransition('noXMove')
-        if self.player.holdJump:
-            if self.player.vel[1] > 0 or (not self.keys[6]):
-                self.player.unholdJump()
-        if self.player.canAct():
+    def act(self, p, keys, keysNow):
+        p.actLeft = True
+        u, d = self.exclusiveKeys(keys[0], keys[1])
+        l, r = self.exclusiveKeys(keys[2], keys[3])
+        if not self.keyTowardFacing(p, keys):
+            p.actTransition('noXMove')
+        if p.holdJump:
+            if p.vel[1] > 0 or (not keys[6]):
+                p.unholdJump()
+        if p.canAct():
             if d:
-                self.player.actTransition('doDuck')
+                p.actTransition('doDuck')
             if l or r:
-                self.player.actTransitionFacing('doDash', l, r)
+                p.actTransitionFacing('doDash', l, r)
             if not d:
-                self.player.actTransition('stopDuck')
-            if self.wasKeyPressed(4):
+                p.actTransition('stopDuck')
+            if self.wasKeyPressed(4, keysNow):
                 if u:
-                    if self.player.actTransition('attackAUp'):
-                        self.keysNow[4] = 0
+                    if p.actTransition('attackAUp'):
+                        keysNow[4] = 0
                 elif d:
-                    if self.player.actTransition('attackADown'):
-                        self.keysNow[4] = 0
+                    if p.actTransition('attackADown'):
+                        keysNow[4] = 0
                 else:
-                    if self.player.actTransition('attackA'):
-                        self.keysNow[4] = 0
-            if self.wasKeyPressed(5):
+                    if p.actTransition('attackA'):
+                        keysNow[4] = 0
+            if self.wasKeyPressed(5, keysNow):
                 if u:
-                    if self.player.aerialCharge:
-                        if self.player.actTransition('attackBUpCharge'):
-                            self.keysNow[5] = 0
-                            self.player.aerialCharge = False
+                    if p.aerialCharge:
+                        if p.actTransition('attackBUpCharge'):
+                            keysNow[5] = 0
+                            p.aerialCharge = False
                     else:
-                        if self.player.actTransition('attackBUp'):
-                            self.keysNow[5] = 0
+                        if p.actTransition('attackBUp'):
+                            keysNow[5] = 0
                 elif d:
-                    if self.player.actTransition('attackBDown'):
-                        self.keysNow[5] = 0
+                    if p.actTransition('attackBDown'):
+                        keysNow[5] = 0
                 else:
-                    if self.player.actTransition('attackB'):
-                        self.keysNow[5] = 0
-            if self.wasKeyPressed(6):
-                if self.player.actTransitionFacing('jump', l, r):
-                    self.keysNow[6] = 0
-            if not self.keys[4]:
-                self.player.actTransition('releaseA')
-            if not self.keys[5]:
-                self.player.actTransition('releaseB')
+                    if p.actTransition('attackB'):
+                        keysNow[5] = 0
+            if self.wasKeyPressed(6, keysNow):
+                if p.actTransitionFacing('jump', l, r):
+                    keysNow[6] = 0
+            if not keys[4]:
+                p.actTransition('releaseA')
+            if not keys[5]:
+                p.actTransition('releaseB')
 
-    def checkReversable(self, l, r):
-        if self.player.currFrame == 0 and self.player.currSubframe == 1:
-            if self.player.currMove.reversable:
+    def checkReversable(self, l, r, p):
+        if p.currFrame == 0 and p.currSubframe == 1:
+            if p.currMove.reversable:
                 if l:
-                    self.player.facingRight = False
+                    p.facingRight = False
                 if r:
-                    self.player.facingRight = True
+                    p.facingRight = True
 
     def checkForGround(self, c):
         old = c.inAir
@@ -178,14 +190,15 @@ class Model(mvc.Model):
                 
 
     def testKey(self, k):
-        temp = self.player.preciseLoc
+        temp = self.players[0].preciseLoc
         
         if k == 1:
-            self.player = hare.Hare()
+            self.players[0] = hare.Hare()
         if k == 2:
-            self.player = fox.Fox()
+            self.players[0] = fox.Fox()
 
-        self.player.preciseLoc = temp
+        self.players[0].preciseLoc = temp
+        self.players[0].beginBattle()
 
 
     def checkProjForEdge(self, p):
@@ -203,15 +216,19 @@ class Model(mvc.Model):
             p.destroy = True
             p.currFrame = 0
 
+    def setNetPlayer(self, p):
+        self.netPlayer = p
+
     def buildNetMessage(self):
+        p = self.netPlayer - 1
         msg = ''
-        for i in self.keys:
+        for i in self.keys[p]:
             if i:
                 j = '1'
             else:
                 j = '0'
             msg += j
-        for i in self.keysNow:
+        for i in self.keysNow[p]:
             msg += str(i)
 
         return msg
@@ -219,9 +236,9 @@ class Model(mvc.Model):
     def parseNetMessage(self, msg, p):
         if p == 0:
             return
-        elif p == 1:
-            keys = self.keys
-            keysNow = self.keysNow
+        else:
+            keys = self.keys[p-1]
+            keysNow = self.keysNow[p-1]
             
         msg1 = msg[0:7]
         if len(msg1) != 7:
@@ -250,8 +267,7 @@ class Model(mvc.Model):
         
 
 def testData():
-    hero = hare.Hare()
-    #hero = fox.Fox()
+    heroes = [hare.Hare(), fox.Fox()]
     
     size = (1920, 1305)
     bg = pygame.Surface(size)
@@ -266,4 +282,4 @@ def testData():
     bg2 = pygame.Surface((size[0], BATTLE_AREA_FLOOR_HEIGHT))
     bg2.fill((120, 120, 120))
     bg.blit(bg2, (0, size[1] - BATTLE_AREA_FLOOR_HEIGHT))
-    return [hero, size, bg]
+    return [heroes, size, bg]
