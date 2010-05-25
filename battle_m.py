@@ -6,6 +6,7 @@ import copy
 import mvc
 
 import incint
+import energybar
 
 import hare, fox
 
@@ -26,6 +27,7 @@ class Model(mvc.Model):
         self.projectiles = []
         self.cameraPlayer = 0
         self.netPlayer = 0
+        self.createHealthBar()
 
     def update(self):
         for i, p in enumerate(self.players):
@@ -50,6 +52,7 @@ class Model(mvc.Model):
         self.projectiles = temp
 
         self.centerCamera(self.players[self.cameraPlayer])
+        self.healthBar.update()
 
     def setCameraPlayer(self, c):
         if (c >= 0) and (c <= 1):
@@ -190,15 +193,12 @@ class Model(mvc.Model):
                 
 
     def testKey(self, k):
-        temp = self.players[0].preciseLoc
+        p = self.players[self.cameraPlayer]
         
         if k == 1:
-            self.players[0] = hare.Hare()
-        if k == 2:
-            self.players[0] = fox.Fox()
-
-        self.players[0].preciseLoc = temp
-        self.players[0].beginBattle()
+            p.hp.add(-100)
+        elif k == 2:
+            p.hp.add(100)
 
 
     def checkProjForEdge(self, p):
@@ -264,6 +264,14 @@ class Model(mvc.Model):
             except:
                 print "Error in message parsing"
                 sys.exit()
+
+    def createHealthBar(self):
+        self.healthBar = energybar.EnergyBar(self.players[self.cameraPlayer].hp,
+                                             pygame.Rect(HEALTH_BAR_POSITION,
+                                                         HEALTH_BAR_SIZE),
+                                             HEALTH_BAR_BORDERS,
+                                             HEALTH_BAR_COLORS,
+                                             HEALTH_BAR_PULSE)
         
 
 def testData():

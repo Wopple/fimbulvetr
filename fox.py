@@ -12,7 +12,6 @@ from constants import *
 class Fox(battlechar.BattleChar):
     def __init__(self):
         self.spriteSet = FOX_IMAGES
-        self.hp = 920
         self.groundAccel = 1.2
         self.groundVelMax = 12.5
         self.groundFriction = 2.2
@@ -22,11 +21,8 @@ class Fox(battlechar.BattleChar):
         self.vertAccel = 1.5
         self.vertVelMax = 15.0
         self.jumpVel = -24.0
-        super(Fox, self).__init__()
+        super(Fox, self).__init__(920)
         self.initSpecMoves()
-
-    def beginBattle(self):
-        pass
 
     def initSpecMoves(self):
         self.createMoveIdle()

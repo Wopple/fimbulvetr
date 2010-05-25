@@ -11,7 +11,6 @@ from constants import *
 class Hare(battlechar.BattleChar):
     def __init__(self):
         self.spriteSet = HARE_IMAGES
-        self.hp = 850
         self.groundAccel = 1.2
         self.groundVelMax = 14.0
         self.groundFriction = 2.2
@@ -21,12 +20,9 @@ class Hare(battlechar.BattleChar):
         self.vertAccel = 1.4
         self.vertVelMax = 19.5
         self.jumpVel = -26.0
-        super(Hare, self).__init__()
+        super(Hare, self).__init__(850)
         self.initSpecMoves()
-    
-    def beginBattle(self):
-        pass
-
+        
     def initSpecMoves(self):
         self.createMoveIdle()
         self.createMoveDash()

@@ -51,6 +51,16 @@ BATTLE_AREA_FLOOR_HEIGHT = 200
 
 PROJECTILE_SCREEN_ALLOWANCE = 100
 
+HEALTH_BAR_POSITION = (15, 15)
+HEALTH_BAR_SIZE = (250, 25)
+HEALTH_BAR_BORDERS = (6, 4)
+HEALTH_BAR_COLORS = ( (5, 120, 10),
+                      (15, 200, 25),
+                      (12, 160, 20),
+                      (20, 20, 20),
+                      (200, 200, 10) )
+HEALTH_BAR_PULSE = 20
+
 DIREC_GRAPHICS = "graphics"
 DIREC_BACKGROUNDS = os.path.join(DIREC_GRAPHICS, "backgrounds")
 DIREC_CHARACTER_GRAPHICS = os.path.join(DIREC_GRAPHICS, "characters")

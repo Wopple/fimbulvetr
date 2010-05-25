@@ -3,14 +3,15 @@ import sys
 import pygame
 
 import incint
+import boundint
 
 import move
 
 from constants import *
 
 class BattleChar(object):
-    def __init__(self):
-        self.hpMax = self.hp
+    def __init__(self, hp):
+        self.hp = boundint.BoundInt(0, hp, hp)
         self.preciseLoc = [50.0, 50.0]
         self.accel = [0.0, 0.0]
         self.vel = [0.0, 0.0]
@@ -26,6 +27,9 @@ class BattleChar(object):
 
         self.initMoves()
         self.setCurrMove('idle')
+
+    def beginBattle(self):
+        pass
 
     def update(self):
         self.proceedFrame()
