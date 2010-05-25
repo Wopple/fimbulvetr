@@ -25,9 +25,5 @@ class NetServer(object):
         inMsg = ''
         while (inMsg == ''):
             inMsg = netcode.receiveMessage(self.conn, msgSize)
-            if (inMsg == ''):
-                print "No message"
-            else:
-                print "Message Received: " + str(inMsg)
 
         return inMsg, 2

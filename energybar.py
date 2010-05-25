@@ -3,9 +3,13 @@ import pygame
 from pygame.locals import *
 from math import sqrt
 import boundint
+import textrect
+
+from constants import *
 
 class EnergyBar(object):
-    def __init__(self, inVal, inRect, inBorders, inColors, pulse, threshold=None):
+    def __init__(self, inVal, inRect, inBorders, inColors, pulse,
+                 text=None, threshold=None):
         if not isinstance(inVal, boundint.BoundInt):
             raise RuntimeError, "EnergyBar must be given BoundInt"
 
@@ -25,16 +29,17 @@ class EnergyBar(object):
         self.fullHighColor = inColors[2]
         self.emptyColor = inColors[3]
         self.borderColor = inColors[4]
+        self.fontColor = inColors[5]
         self.prevVal = -1
         self.pulse = pulse
         self.currPulse = 0
         self.pulseUp = True
         self.threshold = threshold
-        print self.threshold
 
         self.createPulse()
         self.createBackground()
         self.createForeground()
+        self.createText(text)
         self.createFinish()
 
     def update(self):
@@ -57,6 +62,11 @@ class EnergyBar(object):
 
     def draw(self, screen):
         screen.blit(self.image, self.rect.topleft)
+
+        if not self.text is None:
+            x = self.rect.left
+            y = self.rect.top + self.rect.height - self.vertBorderSize
+            screen.blit(self.text, (x, y))
 
     def createBackground(self):
         self.backImage = pygame.Surface((self.rect.width, self.rect.height))
@@ -101,3 +111,14 @@ class EnergyBar(object):
             self.pulseColors.append((newColor[0], newColor[1], newColor[2]))
 
         self.pulseColors.append(self.fullHighColor)
+
+    def createText(self, t):
+        if t is None:
+            self.text = None
+        else:
+            w = self.rect.width
+            h = ENERGY_BAR_FONT.get_height() + 2
+            self.text = textrect.render_textrect(t, ENERGY_BAR_FONT,
+                                                 pygame.Rect((0, 0), (w, h)),
+                                                 self.fontColor,
+                                                 (0, 0, 0), 0, True)

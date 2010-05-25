@@ -19,11 +19,7 @@ class NetClient(object):
         inMsg = ''
         while (inMsg == ''):
             inMsg = netcode.receiveMessage(self.s, msgSize)
-            if (inMsg == ''):
-                print "No message"
-            else:
-                print "Message Received: " + str(inMsg)
-
+            
         sent = 0
         while (sent == 0):
             sent = netcode.sendMessage(self.s, outMsg)

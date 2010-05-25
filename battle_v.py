@@ -20,7 +20,8 @@ class View(mvc.View):
         for p in self.model.projectiles:
             p.draw(self.screen, self.model.rect.topleft)
 
-        self.model.healthBar.draw(self.screen)
+        for b in self.model.bars:
+            b.draw(self.screen)
 
         if tickClock:
             pygame.display.flip()

@@ -56,11 +56,29 @@ HEALTH_BAR_SIZE = (250, 25)
 HEALTH_BAR_BORDERS = (6, 4)
 HEALTH_BAR_COLORS = ( (5, 120, 10),
                       (15, 200, 25),
-                      (12, 160, 20),
+                      (15, 200, 25),
                       (20, 20, 20),
-                      (200, 200, 10) )
-HEALTH_BAR_PULSE = 20
+                      (200, 200, 10),
+                      (10, 10, 10))
+HEALTH_BAR_PULSE = 2
 
+HARE_ENERGY_MAX = 100
+HARE_ENERGY_USAGE = 50
+HARE_ENERGY_BATTLE_START = 40
+HARE_ENERGY_NAME = "Cancel"
+
+SPECIAL_BAR_OFFSET = 15
+SPECIAL_BAR_SIZE = (250, 16)
+SPECIAL_BAR_BORDERS = (3, 2)
+SPECIAL_BAR_COLORS = ( (0, 183, 240),
+                      (0, 160, 210),
+                      (20, 210, 253),
+                      (20, 20, 20),
+                      (200, 200, 10),
+                      (10, 10, 10))
+SPECIAL_BAR_PULSE = 20
+
+DIREC_FONTS = "fonts"
 DIREC_GRAPHICS = "graphics"
 DIREC_BACKGROUNDS = os.path.join(DIREC_GRAPHICS, "backgrounds")
 DIREC_CHARACTER_GRAPHICS = os.path.join(DIREC_GRAPHICS, "characters")
@@ -172,6 +190,17 @@ temp = [ ["00.png", (43, 67)],
 FOX_IMAGES = []
 for i in temp:
     FOX_IMAGES.append([pygame.image.load(os.path.join(DIREC_FOX_GRAPHICS, i[0])).convert_alpha(), i[1]])
+
+temp = [ ["fontdata.ttf",10],
+         ["fontbars.ttf", 14] ]
+FONTS = []
+for i in temp:
+    FONTS.append(pygame.font.Font(
+        os.path.join(DIREC_FONTS, i[0]), i[1]))
+
+MINIMENU_FONT = FONTS[0]
+ENERGY_BAR_FONT = FONTS[1]
+
 
 def add_points(i, j):
     return ( (i[0] + j[0]), (i[1] + j[1]) )

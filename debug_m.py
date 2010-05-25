@@ -15,7 +15,7 @@ class Model(mvc.Model):
         menuOptions = ["Combat Debug", "Map Debug", "Network Debug - Server",
                        "Network Debug - Client", "Play Game Normally", "Exit"]
         self.debugMenu = minimenu.MiniMenu(tempRect, menuOptions,
-                                           12, (250, 250, 250),
+                                           MINIMENU_FONT, (250, 250, 250),
                                            (125, 125, 125), (15, 15, 15))
         self.debugMenu.center(ENTIRE_SCREEN, True, True)
 

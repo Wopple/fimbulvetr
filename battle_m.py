@@ -27,7 +27,7 @@ class Model(mvc.Model):
         self.projectiles = []
         self.cameraPlayer = 0
         self.netPlayer = 0
-        self.createHealthBar()
+        self.createBars()
 
     def update(self):
         for i, p in enumerate(self.players):
@@ -52,11 +52,14 @@ class Model(mvc.Model):
         self.projectiles = temp
 
         self.centerCamera(self.players[self.cameraPlayer])
-        self.healthBar.update()
+
+        for b in self.bars:
+            b.update()
 
     def setCameraPlayer(self, c):
         if (c >= 0) and (c <= 1):
             self.cameraPlayer = c
+        self.createBars()
 
     def key(self, k, t, p):
         if p == 0:
@@ -265,13 +268,32 @@ class Model(mvc.Model):
                 print "Error in message parsing"
                 sys.exit()
 
-    def createHealthBar(self):
-        self.healthBar = energybar.EnergyBar(self.players[self.cameraPlayer].hp,
+    def createBars(self):
+        self.bars = []
+        p = self.players[self.cameraPlayer]
+
+        self.bars.append(energybar.EnergyBar(p.hp,
                                              pygame.Rect(HEALTH_BAR_POSITION,
                                                          HEALTH_BAR_SIZE),
                                              HEALTH_BAR_BORDERS,
                                              HEALTH_BAR_COLORS,
-                                             HEALTH_BAR_PULSE)
+                                             HEALTH_BAR_PULSE,
+                                             self.players[self.cameraPlayer].name)
+            )
+
+        x = HEALTH_BAR_POSITION[0]
+        y = HEALTH_BAR_POSITION[1] + HEALTH_BAR_SIZE[1] + SPECIAL_BAR_OFFSET
+        if isinstance(p, hare.Hare):
+            self.bars.append(energybar.EnergyBar(p.hareEnergy,
+                                                 pygame.Rect((x, y), SPECIAL_BAR_SIZE),
+                                                 SPECIAL_BAR_BORDERS,
+                                                 SPECIAL_BAR_COLORS,
+                                                 SPECIAL_BAR_PULSE,
+                                                 HARE_ENERGY_NAME,
+                                                 HARE_ENERGY_USAGE)
+                             )
+                                                 
+
         
 
 def testData():

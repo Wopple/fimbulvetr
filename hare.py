@@ -3,13 +3,15 @@ import sys
 import pygame
 
 import incint
+import boundint
 import battlechar
 import move
 
 from constants import *
 
 class Hare(battlechar.BattleChar):
-    def __init__(self):
+    def __init__(self, name="Unnamed Hare"):
+        self.name = name
         self.spriteSet = HARE_IMAGES
         self.groundAccel = 1.2
         self.groundVelMax = 14.0
@@ -20,8 +22,12 @@ class Hare(battlechar.BattleChar):
         self.vertAccel = 1.4
         self.vertVelMax = 19.5
         self.jumpVel = -26.0
+        self.hareEnergy = boundint.BoundInt(0, HARE_ENERGY_MAX, 0)
         super(Hare, self).__init__(850)
         self.initSpecMoves()
+
+    def beginBattle(self):
+        self.hareEnergy.change(HARE_ENERGY_BATTLE_START)
         
     def initSpecMoves(self):
         self.createMoveIdle()

@@ -22,14 +22,14 @@ import textrect
 import incint
 
 class MiniMenu(object):
-    def __init__(self, inRect, options, fontSize, colorOn, colorOff, colorBG):
+    def __init__(self, inRect, options, inFont, colorOn, colorOff, colorBG):
 
         self.rectSingle = inRect
         self.options = options
         self.selection = incint.IncInt(1, 1, len(options))
-        self.font = pygame.font.Font("fontdata.ttf", fontSize)
+        self.font = inFont
         
-        lineSize = fontSize + 8
+        lineSize = self.font.get_height() + self.font.get_linesize()
         if self.rectSingle.height < lineSize:
             self.rectSingle.height = lineSize
         self.rect = pygame.Rect( self.rectSingle.topleft, (self.rectSingle.width, (self.rectSingle.height * len(self.options))) )
