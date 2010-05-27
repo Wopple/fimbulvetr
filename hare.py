@@ -23,16 +23,34 @@ class Hare(battlechar.BattleChar):
         self.vertVelMax = 19.5
         self.jumpVel = -26.0
         self.hareEnergy = boundint.BoundInt(0, HARE_ENERGY_MAX, 0)
+        self.prevEnergy = self.hareEnergy.value
+        self.energyDelayTick = HARE_ENERGY_DELAY
+        self.energy = self.hareEnergy
         super(Hare, self).__init__(850)
         self.initSpecMoves()
 
     def beginBattle(self):
         self.hareEnergy.change(HARE_ENERGY_BATTLE_START)
+
+    def update(self):
+        super(Hare, self).update()
+
+        if self.prevEnergy != self.hareEnergy.value:
+            self.energyDelayTick = 0
+        self.prevEnergy = self.hareEnergy.value
+
+        if self.energyDelayTick < HARE_ENERGY_DELAY:
+            self.energyDelayTick += 1
+        else:
+            self.hareEnergy.add(HARE_ENERGY_RECHARGE)
+            self.prevEnergy = self.hareEnergy.value
         
     def initSpecMoves(self):
         self.createMoveIdle()
+        self.createMoveIdleLike()
         self.createMoveDash()
         self.createMoveAir()
+        self.createMoveAirLike()
         self.createMoveLanding()
         self.createMoveJumping()
         self.createMoveDucking()
@@ -52,6 +70,16 @@ class Hare(battlechar.BattleChar):
               self.frameData(1, 9)]
         self.moves['idle'].append(f, [])
 
+    def createMoveIdleLike(self):
+        f = [ self.frameData(66, 1),
+              self.frameData(0, 1),
+              self.frameData(66, 1) ]
+        self.moves['idleLike'].append(f, [])
+        self.moves['idleLike'].frames[0].ignoreFriction = True
+        self.moves['idleLike'].frames[0].ignoreSpeedCap = True
+        self.moves['idleLike'].frames[1].ignoreFriction = True
+        self.moves['idleLike'].frames[1].ignoreSpeedCap = True
+
     def createMoveDash(self):
         f = [ self.frameData(2, 3),
               self.frameData(3, 3),
@@ -64,6 +92,16 @@ class Hare(battlechar.BattleChar):
     def createMoveAir(self):
         f = [ self.frameData(8, 2) ]
         self.moves['air'].append(f, [])
+
+    def createMoveAirLike(self):
+        f = [ self.frameData(67, 1),
+              self.frameData(8, 1),
+              self.frameData(67, 1) ]
+        self.moves['airLike'].append(f, [])
+        self.moves['airLike'].frames[0].ignoreFriction = True
+        self.moves['airLike'].frames[0].ignoreSpeedCap = True
+        self.moves['airLike'].frames[1].ignoreFriction = True
+        self.moves['airLike'].frames[1].ignoreSpeedCap = True
 
     def createMoveLanding(self):
         f = [ self.frameData(9, 3) ]
@@ -78,7 +116,7 @@ class Hare(battlechar.BattleChar):
         self.moves['ducking'].append(f, [])
 
     def createMoveJabA(self):
-        f = [ self.frameData(41, 3),
+        f = [ self.frameData(41, 4),
               self.frameData(42, 2),
               self.frameData(43, 2),
               self.frameData(43, 10)]
@@ -91,8 +129,10 @@ class Hare(battlechar.BattleChar):
     def createMoveJab2(self):
         f = [ self.frameData(43, 2),
               self.frameData(44, 3),
-              self.frameData(45, 8) ]
-        self.moves['jab2'] = move.Move(f, [])
+              self.frameData(45, 8),
+              self.frameData(45, 3)]
+        t = [ ['doDuck', move.Transition(2, HARE_ENERGY_USAGE, 1, 2, 'idleLike')] ]
+        self.moves['jab2'] = move.Move(f, t)
         self.moves['jab2'].canDI = False
 
     def createMoveJabB(self):
@@ -105,8 +145,8 @@ class Hare(battlechar.BattleChar):
         self.moves['jabB'].canDI = False
 
     def createDashAttackA(self):
-        f = [ self.frameData(59, 2),
-              self.frameData(59, 1),
+        f = [ self.frameData(59, 3),
+              self.frameData(59, 2),
               self.frameData(59, 4),
               self.frameData(60, 1),
               self.frameData(61, 1),
@@ -114,7 +154,8 @@ class Hare(battlechar.BattleChar):
               self.frameData(63, 5),
               self.frameData(64, 2),
               self.frameData(65, 2) ]
-        self.moves['dashAttackA'].append(f, [])
+        t = [ ['doDuck', move.Transition(2, HARE_ENERGY_USAGE, 2, 3, 'idleLike')] ]
+        self.moves['dashAttackA'].append(f, t)
         self.moves['dashAttackA'].canDI = False
         self.moves['dashAttackA'].frames[0].setVelX = 15
         self.moves['dashAttackA'].frames[0].ignoreFriction = True
@@ -141,7 +182,7 @@ class Hare(battlechar.BattleChar):
               self.frameData(33, 2)]
         t = [ ['exitFrame', move.Transition(-1, None, None, None, 'rollingSlash')],
               ['releaseB', move.Transition(-1, None, 5, None, 'rollingSlash')],
-              ['doDuck', move.Transition(None, None, 4, None, 'ducking')]]
+              ['doDuck', move.Transition(2, HARE_ENERGY_USAGE, 4, None, 'idleLike')]]
         self.moves['dashAttackB'].append(f, t)
         self.moves['dashAttackB'].canDI = False
         self.moves['dashAttackB'].frames[0].setVelX = 17
@@ -238,7 +279,8 @@ class Hare(battlechar.BattleChar):
               self.frameData(54, 1),
               self.frameData(8, 2),
               self.frameData(8, 5)]
-        self.moves['upAirB'].append(f, [])
+        t = [ ['doDuck', move.Transition(2, HARE_ENERGY_USAGE, 2, None, 'airLike')] ]
+        self.moves['upAirB'].append(f, t)
         self.moves['upAirB'].canDI = False
         self.moves['upAirB'].reversable = True
         for i in range(len(self.moves['upAirB'].frames)):

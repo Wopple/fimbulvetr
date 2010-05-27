@@ -160,8 +160,10 @@ class BattleChar(object):
     def initMoves(self):
         self.moves = {}
         self.moves['idle'] = move.baseIdle()
+        self.moves['idleLike'] = move.baseBlank()
         self.moves['dash'] = move.baseDash()
         self.moves['air'] = move.baseAir()
+        self.moves['airLike'] = move.baseBlank()
         self.moves['landing'] = move.baseLanding()
         self.moves['jumping'] = move.baseJumping()
         self.moves['ducking'] = move.baseDucking()
@@ -246,6 +248,12 @@ class BattleChar(object):
     def actTransition(self, key, var1=None, var2=None):
         t = self.currMove.transitions[key]
         if self.actLeft and self.checkTransition(key, var1, var2):
+            
+            if t.var1 == 2: #Energy cost to perform
+                if self.energy.value < t.var2:
+                    return False
+                else:
+                    self.energy.add(-t.var2)
             self.setCurrMove(t.destination)
             if not key == 'exitFrame':
                 self.actLeft = False

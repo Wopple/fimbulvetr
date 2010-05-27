@@ -62,21 +62,23 @@ HEALTH_BAR_COLORS = ( (5, 120, 10),
                       (10, 10, 10))
 HEALTH_BAR_PULSE = 2
 
-HARE_ENERGY_MAX = 100
-HARE_ENERGY_USAGE = 50
-HARE_ENERGY_BATTLE_START = 40
+HARE_ENERGY_MAX = 200
+HARE_ENERGY_USAGE = 100
+HARE_ENERGY_BATTLE_START = 200
+HARE_ENERGY_DELAY = 50
+HARE_ENERGY_RECHARGE = 1
 HARE_ENERGY_NAME = "Cancel"
 
 SPECIAL_BAR_OFFSET = 15
 SPECIAL_BAR_SIZE = (250, 16)
 SPECIAL_BAR_BORDERS = (3, 2)
 SPECIAL_BAR_COLORS = ( (0, 183, 240),
-                      (0, 160, 210),
+                      (0, 185, 245),
                       (20, 210, 253),
                       (20, 20, 20),
                       (200, 200, 10),
                       (10, 10, 10))
-SPECIAL_BAR_PULSE = 20
+SPECIAL_BAR_PULSE = 5
 
 DIREC_FONTS = "fonts"
 DIREC_GRAPHICS = "graphics"
@@ -155,7 +157,9 @@ temp = [ ["00.png", (24, 62)],
          ["62.png", (30, 64)],
          ["63.png", (30, 64)],
          ["64.png", (30, 64)],
-         ["65.png", (30, 64)] ]
+         ["65.png", (30, 64)],
+         ["66.png", (24, 62)],
+         ["67.png", (14, 68)] ]
 
 HARE_IMAGES = []
 for i in temp:
