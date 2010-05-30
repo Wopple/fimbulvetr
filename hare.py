@@ -277,9 +277,12 @@ class Hare(battlechar.BattleChar):
               self.frameData(52, 1),
               self.frameData(53, 1),
               self.frameData(54, 1),
+              self.frameData(52, 1),
+              self.frameData(53, 1),
+              self.frameData(54, 1),
               self.frameData(8, 2),
               self.frameData(8, 5)]
-        t = [ ['doDuck', move.Transition(2, HARE_ENERGY_USAGE, 2, None, 'airLike')] ]
+        t = [ ['doDuck', move.Transition(2, HARE_ENERGY_USAGE, 1, 17, 'airLike')] ]
         self.moves['upAirB'].append(f, t)
         self.moves['upAirB'].canDI = False
         self.moves['upAirB'].reversable = True
@@ -288,10 +291,10 @@ class Hare(battlechar.BattleChar):
             self.moves['upAirB'].frames[i].setVelX = 10.0
         self.moves['upAirB'].frames[0].setVelY = 0
         self.moves['upAirB'].frames[0].setVelX = 0
-        self.moves['upAirB'].frames[16].setVelY = 0
-        self.moves['upAirB'].frames[16].setVelX = None
-        self.moves['upAirB'].frames[17].setVelY = None
-        self.moves['upAirB'].frames[17].setVelX = None
+        self.moves['upAirB'].frames[19].setVelY = 0
+        self.moves['upAirB'].frames[19].setVelX = None
+        self.moves['upAirB'].frames[20].setVelY = None
+        self.moves['upAirB'].frames[20].setVelX = None
 
     def createDownAirB(self):
         f = [ self.frameData(55, 5),
