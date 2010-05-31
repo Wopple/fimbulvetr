@@ -66,8 +66,23 @@ class Hare(battlechar.BattleChar):
         self.createDownAirB()
 
     def createMoveIdle(self):
-        f = [ self.frameData(0, 10),
-              self.frameData(1, 9)]
+        r = [
+                [
+                    (-13, -44, 1, -35),
+                    (-13, -52, -2, -44),
+                    (-12, -35, 1, -19),
+                    (0, -33, 5, -29),
+                    (-18, -32, -11, -26),
+                    (-24, -29, -17, -24),
+                    (-12, -19, -5, 0),
+                    (-8, -19, 1, -12),
+                    (0, -16, 7, -11),
+                    (3, -12, 8, 0),
+                    (5, -4, 17, 1)
+                 ]
+            ]
+        f = [ self.frameData(0, 10, r[0]),
+              self.frameData(1, 9, r[0])]
         self.moves['idle'].append(f, [])
 
     def createMoveIdleLike(self):
@@ -81,12 +96,44 @@ class Hare(battlechar.BattleChar):
         self.moves['idleLike'].frames[1].ignoreSpeedCap = True
 
     def createMoveDash(self):
-        f = [ self.frameData(2, 3),
-              self.frameData(3, 3),
-              self.frameData(4, 3),
-              self.frameData(5, 3),
-              self.frameData(6, 3),
-              self.frameData(7, 3) ]
+        r = [
+                [
+                    (-8, -47, 5, -37),
+                    (-8, -53, 2, -47),
+                    (-10, -37, 4, -22),
+                    (2, -35, 13, -29),
+                    (-18, -30, -10, -21),
+                    (-25, -19, -6, -10),
+                    (-11, -21, 8, -13),
+                    (8, -18, 20, -12),
+                    (19, -20, 26, -11),
+                    (1, -31, 10, -24)
+                ],
+                [
+                    (-8, -47, 5, -37),
+                    (-8, -53, 2, -47),
+                    (-10, -37, 5, -20),
+                    (-9, -21, 8, -11),
+                    (-16, -10, -4, 0),
+                    (4, -12, 11, -3),
+                    (9, -8, 22, -3),
+                    (1, -30, 10, -25)
+                ],
+                [
+                    (-8, -47, 5, -37),
+                    (-8, -53, 2, -47),
+                    (-10, -37, 5, -20),
+                    (-7, -20, 5, -1),
+                    (-3, -4, 9, 0)
+                ]
+            ]
+                    
+        f = [ self.frameData(2, 3, r[0]),
+              self.frameData(3, 3, r[1]),
+              self.frameData(4, 3, r[2]),
+              self.frameData(5, 3, r[0]),
+              self.frameData(6, 3, r[1]),
+              self.frameData(7, 3, r[2]) ]
         self.moves['dash'].append(f, [])
 
     def createMoveAir(self):

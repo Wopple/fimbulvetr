@@ -4,6 +4,9 @@ import pygame
 
 import incint
 
+import hitbox
+import hurtbox
+
 from constants import *
 
 class Move(object):
@@ -30,13 +33,13 @@ class Move(object):
 
     def append(self, f, t):
         for i in f:
-            self.frames.append(Frame(i[0], i[1], i[2]))
+            self.frames.append(Frame(i[0], i[1], i[2], i[3]))
 
         for i in t:
             self.transitions[i[0]] = i[1]
 
 class Frame(object):
-    def __init__(self, inImage, inOffset, inLength):
+    def __init__(self, inImage, inOffset, inLength, hurtboxData):
         self.image = inImage
         self.offset = inOffset
         self.length = inLength
@@ -47,6 +50,18 @@ class Frame(object):
         self.setVelYIfDrop = None
         self.ignoreSpeedCap = False
         self.ignoreFriction = False
+        self.buildHurtboxes(hurtboxData)
+
+    def buildHurtboxes(self, data):
+        self.hurtboxes = []
+
+        for d in data:
+            topleft = (d[0], d[1])
+            width = d[2] - d[0]
+            height = d[3] - d[1]
+            size = (width, height)
+            rect = pygame.Rect(topleft, size)
+            self.hurtboxes.append(hurtbox.Hurtbox(rect))
 
 class Transition(object):
     def __init__(self, var1, var2, rangeMin, rangeMax, dest):

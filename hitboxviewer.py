@@ -102,6 +102,20 @@ def printList(screen):
                                     (250, 250, 250), (5, 5, 5), 0, True)
         screen.blit(text, pos)
 
+def printListToOutput():
+    global boxList
+
+    f = open('scrap/easy.txt', 'w')
+    for i, b in enumerate(boxList):
+        tl = posRelatedToAnchor(b[1].topleft)
+        br = posRelatedToAnchor(b[1].bottomright)
+        f.write ("(" + str(tl[0]) + ", " +
+               str(tl[1]) + ", " +
+               str(br[0]) + ", " +
+               str(br[1]) + ")" )
+        if i < len(boxList) - 1:
+            f.write(",")
+        f.write("\n")
     
 
 if len(sys.argv) != 4:
@@ -165,6 +179,8 @@ while (True):
             elif event.key == K_RIGHT:
                 imageInc.inc()
                 setImage()
+            elif event.key == K_SPACE:
+                printListToOutput()
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 leftClick(pygame.mouse.get_pos())

@@ -90,6 +90,14 @@ class BattleChar(object):
 
     def draw(self, screen, inOffset):
         screen.blit(self.image, add_points(self.rect.topleft, inOffset))
+
+        for b in self.getCurrentFrame().hurtboxes:
+            if self.facingRight:
+                boxPos = b.rect.topleft
+            else:
+                boxPos = flipRect(b.rect)
+            screen.blit(b.image, add_points(add_points(self.preciseLoc, boxPos), inOffset))
+        
         if SHOW_RED_DOT:
             screen.blit(RED_DOT, add_points(self.preciseLoc, inOffset))
 
@@ -280,6 +288,6 @@ class BattleChar(object):
         if not c:
             self.setCurrMove('idle')
 
-    def frameData(self, i, j):
-        return [self.spriteSet[i][0], self.spriteSet[i][1], j]
+    def frameData(self, i, j, r=[]):
+        return [self.spriteSet[i][0], self.spriteSet[i][1], j, r]
         

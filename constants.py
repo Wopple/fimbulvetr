@@ -26,7 +26,10 @@ BLACK_SCREEN.fill(BLACK, (0, 0, SCREEN_SIZE[0], SCREEN_SIZE[1]))
 
 RED_DOT = pygame.Surface((1, 1))
 RED_DOT.fill((250, 0, 0))
+
 SHOW_RED_DOT = True
+SHOW_HURTBOXES = True
+SHOW_HITBOXES = True
 
 MAP_CHAR_TOKEN_SIZE = (32, 32)
 
@@ -79,6 +82,12 @@ SPECIAL_BAR_COLORS = ( (0, 183, 240),
                       (200, 200, 10),
                       (10, 10, 10))
 SPECIAL_BAR_PULSE = 5
+
+ATTACK_PROPERTIES = [ "melee",
+                      "projectile"  ]
+
+HURTBOX_COLOR = (255, 242, 5)
+HURTBOX_ALPHA = 100
 
 DIREC_FONTS = "fonts"
 DIREC_GRAPHICS = "graphics"
@@ -207,10 +216,19 @@ ENERGY_BAR_FONT = FONTS[1]
 
 
 def add_points(i, j):
+    i = (int(i[0]), int(i[1]))
+    j = (int(j[0]), int(j[1]))
     return ( (i[0] + j[0]), (i[1] + j[1]) )
 
 def mirror_points(i, j):
+    i = (int(i[0]), int(i[1]))
+    j = (int(j[0]), int(j[1]))
     return ( (i[0] - j[0]), (i[1] + j[1]) )
 
 def sub_points(i, j):
+    i = (int(i[0]), int(i[1]))
+    j = (int(j[0]), int(j[1]))
     return ( (i[0] - j[0]), (i[1] - j[1]) )
+
+def flipRect(i):
+    return ( ((i.left * -1) - i.width), i.top )
