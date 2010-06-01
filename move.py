@@ -33,13 +33,13 @@ class Move(object):
 
     def append(self, f, t):
         for i in f:
-            self.frames.append(Frame(i[0], i[1], i[2], i[3]))
+            self.frames.append(Frame(i[0], i[1], i[2], i[3], i[4]))
 
         for i in t:
             self.transitions[i[0]] = i[1]
 
 class Frame(object):
-    def __init__(self, inImage, inOffset, inLength, hurtboxData):
+    def __init__(self, inImage, inOffset, inLength, hurtboxData, hitboxData):
         self.image = inImage
         self.offset = inOffset
         self.length = inLength
@@ -51,6 +51,7 @@ class Frame(object):
         self.ignoreSpeedCap = False
         self.ignoreFriction = False
         self.buildHurtboxes(hurtboxData)
+        self.buildHitboxes(hitboxData)
 
     def buildHurtboxes(self, data):
         self.hurtboxes = []
@@ -62,6 +63,23 @@ class Frame(object):
             size = (width, height)
             rect = pygame.Rect(topleft, size)
             self.hurtboxes.append(hurtbox.Hurtbox(rect))
+
+    def buildHitboxes(self, data):
+        self.hitboxes = []
+
+        for d in data:
+            topleft = (d[0], d[1])
+            width = d[2] - d[0]
+            height = d[3] - d[1]
+            size = (width, height)
+            rect = pygame.Rect(topleft, size)
+            damage = d[4]
+            stun = d[5]
+            knockback = d[6]
+            angle = d[7]
+            properties = d[8]
+            self.hitboxes.append(hitbox.Hitbox(rect, damage, stun, knockback,
+                                               angle, properties))
 
 class Transition(object):
     def __init__(self, var1, var2, rangeMin, rangeMax, dest):

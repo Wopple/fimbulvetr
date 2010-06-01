@@ -163,10 +163,40 @@ class Hare(battlechar.BattleChar):
         self.moves['ducking'].append(f, [])
 
     def createMoveJabA(self):
-        f = [ self.frameData(41, 4),
-              self.frameData(42, 2),
-              self.frameData(43, 2),
-              self.frameData(43, 10)]
+        r = [
+                [
+                    (-9, -43, 4, -32),
+                    (-9, -48, 1, -43),
+                    (-9, -33, 5, -17),
+                    (-10, -18, -4, 1),
+                    (-9, -17, 6, -11),
+                    (5, -14, 10, 0),
+                    (6, -2, 18, 1),
+                    (-12, -40, -9, -35)
+                ],
+                [
+                    (-5, -44, 8, -32),
+                    (-5, -49, 6, -44),
+                    (-7, -32, 8, -15),
+                    (-14, -29, -6, -24),
+                    (6, -33, 20, -25),
+                    (-9, -16, -2, 1),
+                    (-6, -18, 13, -9),
+                    (6, -11, 12, 1),
+                    (8, -2, 18, 2)
+                ]
+            ]
+
+        h = [
+                [
+                    (27, -34, 52, -20, 40, 8, 10, 3, [])
+                ]
+            ]
+                    
+        f = [ self.frameData(41, 4, r[0]),
+              self.frameData(42, 2, r[1], h[0]),
+              self.frameData(43, 2, r[1]),
+              self.frameData(43, 10, r[1])]
         t = [ ['attackA', move.Transition(None, None, 3, None, 'jab2')] ]
         self.moves['jabA'].append(f, t)
         self.moves['jabA'].canDI = False
@@ -174,10 +204,51 @@ class Hare(battlechar.BattleChar):
         self.createMoveJab2()
 
     def createMoveJab2(self):
-        f = [ self.frameData(43, 2),
-              self.frameData(44, 3),
-              self.frameData(45, 8),
-              self.frameData(45, 3)]
+        r = [
+                [
+                    (-5, -44, 8, -32),
+                    (-5, -49, 6, -44),
+                    (-7, -32, 8, -15),
+                    (-14, -29, -6, -24),
+                    (6, -33, 20, -25),
+                    (-9, -16, -2, 1),
+                    (-6, -18, 13, -9),
+                    (6, -11, 12, 1),
+                    (8, -2, 18, 2)
+                ],
+                [
+                    (-5, -44, 8, -32),
+                    (-5, -49, 6, -44),
+                    (-7, -32, 8, -15),
+                    (6, -33, 20, -25),
+                    (-9, -16, -2, 1),
+                    (-6, -18, 13, -9),
+                    (6, -11, 12, 1),
+                    (8, -2, 18, 2)
+                ],
+                [
+                    (-5, -44, 8, -32),
+                    (-5, -49, 6, -44),
+                    (-7, -32, 8, -15),
+                    (6, -28, 17, -23),
+                    (-9, -16, -2, 1),
+                    (-6, -18, 13, -9),
+                    (6, -11, 12, 1),
+                    (8, -2, 18, 2),
+                    (-15, -36, -1, -28)
+                ]
+            ]
+
+        h = [
+                [
+                    (27, -34, 52, -20, 40, 8, 10, 3, [])
+                ]
+            ]
+        
+        f = [ self.frameData(43, 2, r[0]),
+              self.frameData(44, 3, r[1], h[0]),
+              self.frameData(45, 8, r[2]),
+              self.frameData(45, 3, r[2])]
         t = [ ['doDuck', move.Transition(2, HARE_ENERGY_USAGE, 1, 2, 'idleLike')] ]
         self.moves['jab2'] = move.Move(f, t)
         self.moves['jab2'].canDI = False

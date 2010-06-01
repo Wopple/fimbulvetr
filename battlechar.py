@@ -91,15 +91,21 @@ class BattleChar(object):
     def draw(self, screen, inOffset):
         screen.blit(self.image, add_points(self.rect.topleft, inOffset))
 
-        for b in self.getCurrentFrame().hurtboxes:
+        if SHOW_HURTBOXES:
+            self.drawBoxes(self.getCurrentFrame().hurtboxes, screen, inOffset)
+        if SHOW_HITBOXES:
+            self.drawBoxes(self.getCurrentFrame().hitboxes, screen, inOffset)
+        
+        if SHOW_RED_DOT:
+            screen.blit(RED_DOT, add_points(self.preciseLoc, inOffset))
+
+    def drawBoxes(self, boxes, screen, inOffset):
+        for b in boxes:
             if self.facingRight:
                 boxPos = b.rect.topleft
             else:
                 boxPos = flipRect(b.rect)
             screen.blit(b.image, add_points(add_points(self.preciseLoc, boxPos), inOffset))
-        
-        if SHOW_RED_DOT:
-            screen.blit(RED_DOT, add_points(self.preciseLoc, inOffset))
 
     def testMove(self, t):
         self.accel[0] = self.airAccel * t
@@ -288,6 +294,6 @@ class BattleChar(object):
         if not c:
             self.setCurrMove('idle')
 
-    def frameData(self, i, j, r=[]):
-        return [self.spriteSet[i][0], self.spriteSet[i][1], j, r]
+    def frameData(self, i, j, r=[], h=[]):
+        return [self.spriteSet[i][0], self.spriteSet[i][1], j, r, h]
         
