@@ -20,6 +20,7 @@ class BattleChar(object):
         self.holdJump = True
         self.aerialCharge = True
         self.projectiles = []
+        self.attackCanHit = True
         
         temp = pygame.Surface((50, 80))
         temp.fill((2, 2, 2))
@@ -46,6 +47,9 @@ class BattleChar(object):
             self.preciseLoc[i] += self.vel[i]
 
         self.rect.topleft = self.getRectPos()
+
+        frame = self.getCurrentFrame()
+        self.setImage(frame.image, frame.offset)
 
     def speedCap(self, caps, i):
         if not self.getCurrentFrame().ignoreSpeedCap:
@@ -101,11 +105,18 @@ class BattleChar(object):
 
     def drawBoxes(self, boxes, screen, inOffset):
         for b in boxes:
-            if self.facingRight:
-                boxPos = b.rect.topleft
-            else:
-                boxPos = flipRect(b.rect)
-            screen.blit(b.image, add_points(add_points(self.preciseLoc, boxPos), inOffset))
+            boxpos = self.getBoxAbsRect(b, inOffset).topleft
+            screen.blit(b.image, boxpos)
+
+    def getBoxAbsRect(self, box, inOffset):
+        if self.facingRight:
+            boxPos = box.rect.topleft
+        else:
+            boxPos = flipRect(box.rect)
+
+        topleft = add_points(add_points(self.preciseLoc, boxPos), inOffset)
+
+        return pygame.Rect(topleft, box.rect.size)
 
     def testMove(self, t):
         self.accel[0] = self.airAccel * t
@@ -196,6 +207,7 @@ class BattleChar(object):
         self.currMove = self.moves[index]
         self.currFrame = frame
         self.currSubframe = 0
+        self.attackCanHit = True
 
         if len(self.currMove.frames) == 0:
             self.currMove = self.moves['idle']
@@ -210,8 +222,7 @@ class BattleChar(object):
         return self.currMove.canDI
 
     def proceedFrame(self):
-        frame = self.currMove.frames[self.currFrame]
-        self.setImage(frame.image, frame.offset)
+        frame = self.getCurrentFrame()
 
         self.currSubframe += 1
         if self.currSubframe == frame.length:
@@ -296,4 +307,10 @@ class BattleChar(object):
 
     def frameData(self, i, j, r=[], h=[]):
         return [self.spriteSet[i][0], self.spriteSet[i][1], j, r, h]
+
+    def getHitboxes(self):
+        return self.getCurrentFrame().hitboxes
+
+    def getHurtboxes(self):
+        return self.getCurrentFrame().hurtboxes
         

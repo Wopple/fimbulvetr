@@ -28,6 +28,7 @@ class Model(mvc.Model):
         self.cameraPlayer = 0
         self.netPlayer = 0
         self.createBars()
+        self.resetHitMemory()
 
     def update(self):
         for i, p in enumerate(self.players):
@@ -38,6 +39,16 @@ class Model(mvc.Model):
             self.act(p, keys, keysNow)
             self.checkReversable(l, r, p)
             self.checkForGround(p)
+
+        self.resetHitMemory()
+        self.checkForHits()
+        for i, p in enumerate(self.players):
+            self.actOnHit(i, p)
+
+        for i, p in enumerate(self.players):
+            keys = self.keys[i]
+            keysNow = self.keysNow[i]
+            l, r = self.exclusiveKeys(keys[2], keys[3])
             p.update()
             self.checkShoot(p)
             p.DI(l, r)
@@ -294,10 +305,30 @@ class Model(mvc.Model):
                              )
                                                  
 
-        
+    def resetHitMemory(self):
+        self.hitMemory = [None, None]
+
+    def checkForHits(self):
+        offset = self.rect.topleft
+        for i, p in enumerate(self.players):
+            for j, q in enumerate(self.players):
+                if not q is p:
+                    for h in p.getHitboxes():
+                        for r in q.getHurtboxes():
+                            if (self.hitMemory[j] is None) and (p.attackCanHit):
+                                hRect = p.getBoxAbsRect(h, offset)
+                                rRect = q.getBoxAbsRect(r, offset)
+                                if hRect.colliderect(rRect):
+                                    self.hitMemory[j] = h
+                                    p.attackCanHit = False
+
+    def actOnHit(self, i, p):
+        mem = self.hitMemory[i]
+        if not mem is None:
+            print "Player " + str(i+1) + " got hit!"
 
 def testData():
-    heroes = [hare.Hare(), fox.Fox()]
+    heroes = [hare.Hare(), hare.Hare()]
     
     size = (1920, 1305)
     bg = pygame.Surface(size)
