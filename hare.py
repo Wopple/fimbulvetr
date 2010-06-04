@@ -65,6 +65,9 @@ class Hare(battlechar.BattleChar):
         self.createUpAirB()
         self.createDownAirB()
 
+        self.createMoveStun1()
+        self.createMoveStun2()
+
     def createMoveIdle(self):
         r = [
                 [
@@ -189,7 +192,7 @@ class Hare(battlechar.BattleChar):
 
         h = [
                 [
-                    (22, -34, 52, -20, 40, 8, 10, 3, [])
+                    (22, -34, 52, -20, 40, 40, 8, 8, [])
                 ]
             ]
                     
@@ -241,7 +244,7 @@ class Hare(battlechar.BattleChar):
 
         h = [
                 [
-                    (22, -34, 52, -20, 40, 8, 10, 3, [])
+                    (22, -34, 52, -20, 40, 60, 8, 8, [])
                 ]
             ]
         
@@ -455,3 +458,20 @@ class Hare(battlechar.BattleChar):
         f = [ self.frameData(9, 10) ]
         self.moves['downBAirLag'] = move.Move(f, [])
         self.moves['downBAirLag'].canDI = False
+
+    def createMoveStun1(self):
+        f = [ self.frameData(68, 5) ]
+
+        self.moves['stun1'].append(f, [])
+
+        for i in range(len(self.moves['stun1'].frames)):
+            self.moves['stun1'].frames[i].ignoreSpeedCap = True
+
+    def createMoveStun2(self):
+        f = [ self.frameData(69, 8) ]
+
+        self.moves['stun2'].append(f, [])
+
+        for i in range(len(self.moves['stun2'].frames)):
+            self.moves['stun2'].frames[i].ignoreSpeedCap = True
+

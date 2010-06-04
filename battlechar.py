@@ -203,6 +203,9 @@ class BattleChar(object):
         self.moves['upAirB'] = move.baseBlank()
         self.moves['downAirB'] = move.baseBlank()
 
+        self.moves['stun1'] = move.baseStun()
+        self.moves['stun2'] = move.baseStun()
+
     def setCurrMove(self, index, frame=0):
         self.currMove = self.moves[index]
         self.currFrame = frame
@@ -297,7 +300,7 @@ class BattleChar(object):
         return c
 
     def transToAir(self):
-        if not self.currMove.liftOff:
+        if (not self.currMove.liftOff) and (not self.currMove.isStun):
             self.setCurrMove('air')
 
     def transToGround(self):
@@ -313,4 +316,18 @@ class BattleChar(object):
 
     def getHurtboxes(self):
         return self.getCurrentFrame().hurtboxes
+
+    def getHit(self, damage, stun, vel):
+        self.hp.add(-damage)
+
+        print vel
+        self.vel[0] = vel[0]
+        self.vel[1] = vel[1]
+
+        if stun <= STUN_THRESHOLD_1:
+            self.setCurrMove('stun1')
+        elif stun <= STUN_THRESHOLD_2:
+            self.setCurrMove('stun2')
+        else:
+            self.setCurrMove('stun3')
         

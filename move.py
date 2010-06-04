@@ -27,6 +27,7 @@ class Move(object):
 
         self.canDI = True
         self.isJump = False
+        self.isStun = False
         self.liftOff = False
         self.reversable = False
 
@@ -141,6 +142,12 @@ def baseDucking():
           ['attackBDown', Transition(None, None, None, None, 'downB')] ]
     m = Move([], t)
     m.canDI = False
+    return m
+
+def baseStun():
+    m = Move([], [])
+    m.canDI = False
+    m.isStun = True
     return m
 
 def baseBlank():

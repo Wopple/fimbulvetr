@@ -100,6 +100,9 @@ DIREC_CHARACTER_GRAPHICS = os.path.join(DIREC_GRAPHICS, "characters")
 DIREC_HARE_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "hare")
 DIREC_FOX_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "fox")
 
+STUN_THRESHOLD_1 = 50
+STUN_THRESHOLD_2 = 100
+
 temp = []
 BACKGROUNDS = []
 for i in temp:
@@ -172,7 +175,9 @@ temp = [ ["00.png", (24, 62)],
          ["64.png", (30, 64)],
          ["65.png", (30, 64)],
          ["66.png", (24, 62)],
-         ["67.png", (14, 68)] ]
+         ["67.png", (14, 68)],
+         ["68.png", (26, 62)],
+         ["69.png", (27, 62)]]
 
 HARE_IMAGES = []
 for i in temp:

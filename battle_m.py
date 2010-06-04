@@ -2,6 +2,7 @@ import os
 import sys
 import pygame
 import copy
+import math
 
 import mvc
 
@@ -319,13 +320,30 @@ class Model(mvc.Model):
                                 hRect = p.getBoxAbsRect(h, offset)
                                 rRect = q.getBoxAbsRect(r, offset)
                                 if hRect.colliderect(rRect):
-                                    self.hitMemory[j] = h
+                                    self.hitMemory[j] = [h, p]
                                     p.attackCanHit = False
 
     def actOnHit(self, i, p):
-        mem = self.hitMemory[i]
-        if not mem is None:
+        if not self.hitMemory[i] is None:
+            mem = self.hitMemory[i][0]
+            hitter = self.hitMemory[i][1]
             print "Player " + str(i+1) + " got hit!"
+
+            p.facingRight = not hitter.facingRight
+
+            damage = mem.damage
+            stun = mem.stun
+
+            xVel = math.cos(math.radians(mem.angle)) * mem.knockback
+            yVel = math.sin(math.radians(mem.angle)) * mem.knockback
+
+            yVel *= -1
+            if p.facingRight:
+                xVel *= -1
+
+            p.getHit(damage, stun, (xVel, yVel))
+
+            
 
 def testData():
     heroes = [hare.Hare(), hare.Hare()]
