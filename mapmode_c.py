@@ -14,7 +14,11 @@ class Controller(mvc.Controller):
     def update(self):
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 4:
+                if event.button == 1:
+                    self.model.leftClick()
+                elif event.button == 3:
+                    self.model.rightClick()
+                elif event.button == 4:
                     self.model.scrollIn()
                 elif event.button == 5:
                     self.model.scrollOut()

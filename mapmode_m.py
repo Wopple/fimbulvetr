@@ -17,6 +17,8 @@ class Model(mvc.Model):
         self.characters = inChars
         self.zoomVal = 1.0
         self.mapRect = None
+        self.currHighlighted = None
+        self.currSelected = None
         self.drawOrigMap()
         self.mousePos = pygame.mouse.get_pos()
         self.placeChars()
@@ -24,6 +26,14 @@ class Model(mvc.Model):
     def update(self):
         self.mousePos = pygame.mouse.get_pos()
         self.checkScrolling()
+        self.checkMouseOverObject()
+        for c in self.characters:
+            if c is self.currSelected:
+                c.setImage(2)
+            elif c is self.currHighlighted:
+                c.setImage(1)
+            else:
+                c.setImage(0)
 
     def zoom(self):
         self.drawZoomMap()
@@ -106,9 +116,41 @@ class Model(mvc.Model):
             else:
                 spot = self.map.startingPoints[0]
             self.characters[i].setPos(spot)
-                    
+
+    def leftClick(self):
+        if not self.currHighlighted is None:
+            self.currSelected = self.currHighlighted
+        else:
+            self.currSelected = None
+
+    def rightClick(self):
+        pass
+
+    def checkMouseOverObject(self):
+        
+        if self.mouseOverCharacter(self.currSelected):
+            self.currHighlighted = self.currSelected
+            return
+        
+        if self.mouseOverCharacter(self.currHighlighted):
+            return
+        
+        for c in self.characters:
+            if self.mouseOverCharacter(c):
+                self.currHighlighted = c
+                return
+
+        self.currHighlighted = None
+
+    def mouseOverCharacter(self, c):
+        if isinstance(c, mapchar.MapChar):
+            if c.tokenRect.collidepoint(self.mousePos):
+                return True
+
+        return False
         
 
 def testData():
-    chars = [mapchar.Hare()]
+    chars = [mapchar.Hare(0, "Awesomez"),
+             mapchar.Hare(0, "Dude")]
     return [gamemap.map00(), chars]

@@ -32,9 +32,19 @@ SHOW_HURTBOXES = True
 SHOW_HITBOXES = True
 
 MAP_CHAR_TOKEN_SIZE = (32, 32)
+TOKEN_BORDER_NEUTRAL = (153, 153, 153, 255)
 
-TERRAIN_COLORS = [ (15, 91, 20),
-                   (230, 230, 230) ]
+TOKEN_BORDER_HIGHLIGHTED = [(10, 80, 200, 255),
+                            (210, 20, 20, 255)]
+
+TOKEN_BORDER_OFF = [(0, 0, 150, 255),
+                   (150, 0, 0, 255)]
+
+TOKEN_BORDER_SELECTED = (250, 250, 250, 255)
+
+TERRAIN_COLORS = [ (15, 91, 20, 255),
+                   (230, 230, 230, 255) ]
+
 
 ZOOM_CLICK = 0.9
 ZOOM_MAX = 1.0
@@ -213,6 +223,15 @@ FOX_IMAGES = []
 for i in temp:
     FOX_IMAGES.append([pygame.image.load(os.path.join(DIREC_FOX_GRAPHICS, i[0])).convert_alpha(), i[1]])
 
+temp = [ 'face1.png',
+         'face2.png',
+         'face2.png' ]
+
+HARE_TOKENS = []
+for i in temp:
+    HARE_TOKENS.append(pygame.image.load(os.path.join(DIREC_HARE_GRAPHICS, i)).convert_alpha())
+
+
 temp = [ ["fontdata.ttf",10],
          ["fontbars.ttf", 14] ]
 FONTS = []
@@ -241,3 +260,51 @@ def sub_points(i, j):
 
 def flipRect(i):
     return ( ((i.left * -1) - i.width), i.top )
+
+def colorSwap(i, color1, color2, tolerance):
+    lowerBound = []
+    upperBound = []
+
+    for k in range(4):
+        c = color1[k]
+        
+        d = c - tolerance
+        if d < 0:
+            d = 0
+        lowerBound.append(d)
+
+        d = c + tolerance
+        if d > 255:
+            d = 255
+        upperBound.append(d)
+    
+    size = i.get_size()
+    for x in range(size[0]):
+        for y in range(size[1]):
+            c = i.get_at((x, y))
+            variance = []
+            for j in range(4):
+                if c[j] <= upperBound[j] and c[j] >= lowerBound[j]:
+                    variance.append(c[j] - color1[j])
+                else:
+                    variance.append(None)
+
+            checker = True
+            for j in range(4):
+                if variance[j] is None:
+                    checker = False
+
+            if checker:
+                newColor = []
+                for j in range(4):
+                    temp = color2[j] + variance[j]
+                    if temp < 0:
+                        temp = 0
+                    if temp > 255:
+                        temp = 255
+                    newColor.append(temp)
+
+                complete = (newColor[0], newColor[1],
+                            newColor[2], newColor[3])
+
+                i.set_at((x,y), complete)

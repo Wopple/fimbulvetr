@@ -14,7 +14,8 @@ class GameMap(object):
 
 def map00():
     m = GameMap()
-    m.startingPoints = [(100, 500)]
+    m.startingPoints = [(100, 500),
+                        (120, 520)]
     m.mapSize = (1500, 1200)
     m.mountains = [((50, 50), 25),
                    ((125, 300), 50),

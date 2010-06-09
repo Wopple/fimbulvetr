@@ -4,6 +4,8 @@ import pygame
 
 import mvc
 
+import mapchar
+
 from constants import *
 
 class View(mvc.View):
@@ -15,7 +17,17 @@ class View(mvc.View):
         self.screen.blit(self.model.mapImage, self.model.mapRect.topleft)
 
         for c in self.model.characters:
-            c.draw(self.screen, self.model.zoomVal, self.model.mapRect.topleft)
+            if ((not c is self.model.currHighlighted) and
+                (not c is self.model.currSelected)):
+                c.draw(self.screen, self.model.zoomVal, self.model.mapRect.topleft)
+
+        if ( (isinstance(self.model.currHighlighted, mapchar.MapChar)) and
+             (not self.model.currHighlighted is self.model.currSelected) ):
+            self.model.currHighlighted.draw(self.screen, self.model.zoomVal, self.model.mapRect.topleft)
+
+        if isinstance(self.model.currSelected, mapchar.MapChar):
+            self.model.currSelected.draw(self.screen, self.model.zoomVal, self.model.mapRect.topleft)
+
 
         if tickClock:
             pygame.display.flip()
