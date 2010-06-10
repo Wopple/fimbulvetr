@@ -40,6 +40,8 @@ class Controller(mvc.Controller):
                     self.model.testKey(3)
                 elif event.key == K_F4:
                     self.model.testKey(4)
+                elif event.key == K_ESCAPE:
+                    sys.exit(0)
             elif event.type == pygame.KEYUP:
                 if event.key == K_UP:
                     self.model.key(0, False, self.player)

@@ -5,7 +5,7 @@ import pygame
 import mvc
 import gamemap
 import mapchar
-
+import util
 import incint
 
 from constants import *
@@ -36,6 +36,8 @@ class Model(mvc.Model):
             else:
                 c.setImage(0)
 
+            self.checkBounds(c)
+            self.checkTerrain(c)
             c.update()
 
     def zoom(self):
@@ -165,6 +167,23 @@ class Model(mvc.Model):
                 return True
 
         return False
+
+    def checkTerrain(self, c):
+        for i in self.map.mountains:
+            dist = util.distance(c.precisePos, i[0])
+            if dist <= i[1]:
+                c.currTerrain = 2
+                return
+
+            c.currTerrain = 0
+
+    def checkBounds(self, c):
+        future = [c.precisePos[0] + c.vel[0],
+                  c.precisePos[1] + c.vel[1]]
+
+        for i in range(2):
+            if (future[i] <= 0) or (future[i] >= self.map.mapSize[i]):
+                c.stop()
         
 
 def testData():

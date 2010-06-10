@@ -2,7 +2,7 @@ import os
 import pygame
 import sys
 
-FULL_SCREEN = False
+FULL_SCREEN = True
 FRAME_RATE = 40
 SCREEN_SIZE = (800, 700)
 ENTIRE_SCREEN = pygame.Rect( (0,0), SCREEN_SIZE )
@@ -52,7 +52,7 @@ ZOOM_MIN = 0.15
 
 MOUNTAIN_FILL_COLOR = (99, 84, 61)
 
-SCROLL_AREA_WIDTH = 15
+SCROLL_AREA_WIDTH = 35
 SCROLL_SPEED = 10
 
 KEY_BUFFER = 4
@@ -114,9 +114,17 @@ STUN_THRESHOLD_1 = 50
 STUN_THRESHOLD_2 = 100
 
 HARE_MAP_SPEED_BASE = 2.5
+
+#Terrain types
+#0 = PLAINS
+#1 = FOREST
+#2 = MOUNTAIN
+#3 = WATER
+
 HARE_MAP_SPEED_MODIFIERS = [1.0,
                             0.8,
-                            0.3]
+                            0.2,
+                            0.2]
 
 temp = []
 BACKGROUNDS = []
@@ -228,13 +236,13 @@ FOX_IMAGES = []
 for i in temp:
     FOX_IMAGES.append([pygame.image.load(os.path.join(DIREC_FOX_GRAPHICS, i[0])).convert_alpha(), i[1]])
 
-temp = [ 'face1.png',
-         'face2.png',
-         'face2.png' ]
+temp = [ ['face1.png', (28, 66)],
+         ['face2.png', (28, 66)],
+         ['face2.png', (28, 66)] ]
 
 HARE_TOKENS = []
 for i in temp:
-    HARE_TOKENS.append(pygame.image.load(os.path.join(DIREC_HARE_GRAPHICS, i)).convert_alpha())
+    HARE_TOKENS.append([pygame.image.load(os.path.join(DIREC_HARE_GRAPHICS, i[0])).convert_alpha(), i[1]])
 
 
 temp = [ ["fontdata.ttf",10],

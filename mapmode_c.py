@@ -22,5 +22,8 @@ class Controller(mvc.Controller):
                     self.model.scrollIn()
                 elif event.button == 5:
                     self.model.scrollOut()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == K_ESCAPE:
+                    sys.exit(0)
             elif event.type == pygame.QUIT:
                 sys.exit(0)
