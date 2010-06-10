@@ -11,8 +11,9 @@ import incint
 from constants import *
 
 class Model(mvc.Model):
-    def __init__(self, inMap, inChars):
+    def __init__(self, inMap, inChars, team):
         super(Model, self).__init__()
+        self.team = team
         self.map = inMap
         self.characters = inChars
         self.zoomVal = 1.0
@@ -34,6 +35,8 @@ class Model(mvc.Model):
                 c.setImage(1)
             else:
                 c.setImage(0)
+
+            c.update()
 
     def zoom(self):
         self.drawZoomMap()
@@ -109,22 +112,36 @@ class Model(mvc.Model):
             self.mapRect.top = (SCREEN_SIZE[1] / 2) - (self.mapRect.height / 2)
 
     def placeChars(self):
-        s = len(self.map.startingPoints)
-        for i in range(len(self.characters)):
-            if i < s:
-                spot = self.map.startingPoints[i]
-            else:
-                spot = self.map.startingPoints[0]
-            self.characters[i].setPos(spot)
+        for team in range(2):
+            s = len(self.map.startingPoints[team])
+            count = 0
+            for c in self.characters:
+                if c.team == team:
+                    if count < s:
+                        spot = self.map.startingPoints[team][count]
+                    else:
+                        spot = self.map.startingPoints[team][0]
+                    c.setPos(spot)
+                    count += 1
 
     def leftClick(self):
-        if not self.currHighlighted is None:
-            self.currSelected = self.currHighlighted
-        else:
-            self.currSelected = None
+        if isinstance(self.currHighlighted, mapchar.MapChar):
+            if self.currHighlighted.team == self.team:
+                self.currSelected = self.currHighlighted
+                return
+
+        self.currSelected = None
 
     def rightClick(self):
-        pass
+        if not self.currSelected is None:
+            self.currSelected.startMovement(self.absMousePos())
+
+    def absMousePos(self):
+        temp = []
+        for i in range(2):
+            temp.append((self.mousePos[i] - self.mapRect.topleft[i]) / self.zoomVal)
+
+        return temp
 
     def checkMouseOverObject(self):
         
@@ -152,5 +169,6 @@ class Model(mvc.Model):
 
 def testData():
     chars = [mapchar.Hare(0, "Awesomez"),
+             mapchar.Hare(1, "Bob"),
              mapchar.Hare(0, "Dude")]
     return [gamemap.map00(), chars]

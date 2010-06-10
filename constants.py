@@ -86,11 +86,11 @@ SPECIAL_BAR_OFFSET = 15
 SPECIAL_BAR_SIZE = (250, 16)
 SPECIAL_BAR_BORDERS = (3, 2)
 SPECIAL_BAR_COLORS = ( (0, 183, 240),
-                      (0, 185, 245),
-                      (20, 210, 253),
-                      (20, 20, 20),
-                      (200, 200, 10),
-                      (10, 10, 10))
+                       (0, 185, 245),
+                       (20, 210, 253),
+                       (20, 20, 20),
+                       (200, 200, 10),
+                       (10, 10, 10))
 SPECIAL_BAR_PULSE = 5
 
 ATTACK_PROPERTIES = [ "melee",
@@ -112,6 +112,11 @@ DIREC_FOX_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "fox")
 
 STUN_THRESHOLD_1 = 50
 STUN_THRESHOLD_2 = 100
+
+HARE_MAP_SPEED_BASE = 2.5
+HARE_MAP_SPEED_MODIFIERS = [1.0,
+                            0.8,
+                            0.3]
 
 temp = []
 BACKGROUNDS = []
