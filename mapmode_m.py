@@ -15,8 +15,10 @@ class Model(mvc.Model):
         super(Model, self).__init__()
         self.team = team
         self.map = inMap
-        self.characters = inChars
         self.zoomVal = 1.0
+        self.characters = inChars
+        if SHOW_BATTLE_TRIGGER_AREA:
+            self.setBattleTriggerAreas()
         self.mapRect = None
         self.currHighlighted = None
         self.currSelected = None
@@ -43,6 +45,9 @@ class Model(mvc.Model):
     def zoom(self):
         self.drawZoomMap()
         self.adjustMap()
+        if SHOW_BATTLE_TRIGGER_AREA:
+            self.setBattleTriggerAreas()
+            
 
     def drawOrigMap(self):
         
@@ -184,6 +189,10 @@ class Model(mvc.Model):
         for i in range(2):
             if (future[i] <= 0) or (future[i] >= self.map.mapSize[i]):
                 c.stop()
+
+    def setBattleTriggerAreas(self):
+        for c in self.characters:
+            c.createBattleTriggerArea(self.zoomVal)
         
 
 def testData():

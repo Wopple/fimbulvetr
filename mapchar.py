@@ -3,6 +3,8 @@ import sys
 import pygame
 import copy
 
+from pygame.locals import *
+
 import drawable
 import util
 
@@ -23,6 +25,8 @@ class MapChar(object):
         self.target = None
         self.currTerrain = 0
         self.oldTerrain = 0
+        self.battleTriggerArea = None
+        self.battleTriggerRect = None
 
         self.modifyImages()
 
@@ -65,12 +69,17 @@ class MapChar(object):
     def draw(self, screen, inZoom, inOffset):
         self.setImagePos(inZoom, inOffset)
         screen.blit(self.image, self.tokenRect.topleft)
+        if SHOW_BATTLE_TRIGGER_AREA:
+            screen.blit(self.battleTriggerArea, self.battleTriggerRect.topleft)
 
     def setImagePos(self, inZoom, inOffset):
         imageOffset = self.images[self.imageNum][1]
         pos = (int(self.precisePos[0] * inZoom) + inOffset[0] - imageOffset[0],
                int(self.precisePos[1] * inZoom) + inOffset[1] - imageOffset[1])
         self.tokenRect.topleft = pos
+        if not self.battleTriggerRect is None:
+            self.battleTriggerRect.center = (int(self.precisePos[0] * inZoom) + inOffset[0],
+                                             int(self.precisePos[1] * inZoom) + inOffset[1])
 
     def modifyImages(self):
         colorSwap(self.images[0][0], TOKEN_BORDER_NEUTRAL,
@@ -92,6 +101,15 @@ class MapChar(object):
 
     def getCurrSpeed(self):
         return self.speedBase * self.speedModifiers[self.currTerrain]
+
+    def createBattleTriggerArea(self, zoom):
+        d = BATTLE_TRIGGER_RANGE * zoom
+        r = int(d/2)
+        self.battleTriggerArea = pygame.Surface((d, d), SRCALPHA)
+        self.battleTriggerArea.fill ((0, 0, 0, 0))
+        pygame.draw.circle(self.battleTriggerArea, BATTLE_TRIGGER_AREA_COLOR_WITH_ALPHA,
+                           (r, r), r)
+        self.battleTriggerRect = pygame.Rect((0, 0), (d, d))
         
 
 def Hare(team, name="Unnamed Hare"):
