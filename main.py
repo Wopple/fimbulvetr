@@ -78,6 +78,22 @@ def goBattle(data, netType):
         proceed(clock, net)
     sys.exit()
 
+def goBattlePrompt(data):
+    chars = [data[0], data[1]]
+    
+    print "Battle between " + str(chars[0].name) + " and " + str(chars[1].name)
+    result = []
+    for i in range(2):
+        try:
+            temp = int(raw_input("Result for " + str(chars[i].name) + ":"))
+        except:
+            temp = 0
+        if (temp < -1) or (temp > 1):
+            temp = 0
+        result.append(temp)
+
+    return result
+
 m = mvc.Model()
 v = mvc.View()
 c = mvc.Controller()
@@ -93,6 +109,9 @@ if DEBUG_MODE:
         changeMVC(mapmode_m.Model(data[0], data[1], 0), mapmode_v.View(), mapmode_c.Controller(), screen)
         while not m.advance():
             proceed(clock)
+            if not m.pendingBattle is None:
+                result = goBattlePrompt(m.pendingBattle)
+                m.resolveBattle(result)
         sys.exit()
     elif m.debugMenu.value() == 3:
         goBattle(battle_m.testData(), 1)

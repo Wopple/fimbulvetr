@@ -55,6 +55,7 @@ class MapChar(object):
 
     def stop(self):
         self.vel = [0.0, 0.0]
+        self.target = None
 
     def setPos(self, inPos):
         self.precisePos[0] = float(inPos[0] * 1.00)
@@ -103,8 +104,8 @@ class MapChar(object):
         return self.speedBase * self.speedModifiers[self.currTerrain]
 
     def createBattleTriggerArea(self, zoom):
-        d = BATTLE_TRIGGER_RANGE * zoom
-        r = int(d/2)
+        r = int(BATTLE_TRIGGER_RANGE * zoom)
+        d = int(r*2)
         self.battleTriggerArea = pygame.Surface((d, d), SRCALPHA)
         self.battleTriggerArea.fill ((0, 0, 0, 0))
         pygame.draw.circle(self.battleTriggerArea, BATTLE_TRIGGER_AREA_COLOR_WITH_ALPHA,

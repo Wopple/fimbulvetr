@@ -16,7 +16,12 @@ class Model(mvc.Model):
         self.team = team
         self.map = inMap
         self.zoomVal = 1.0
+        
         self.characters = inChars
+        self.charactersInTeams = [[], []]
+        for c in self.characters:
+            self.charactersInTeams[c.team].append(c)
+        
         if SHOW_BATTLE_TRIGGER_AREA:
             self.setBattleTriggerAreas()
         self.mapRect = None
@@ -25,22 +30,26 @@ class Model(mvc.Model):
         self.drawOrigMap()
         self.mousePos = pygame.mouse.get_pos()
         self.placeChars()
+        self.pendingBattle = None
 
     def update(self):
-        self.mousePos = pygame.mouse.get_pos()
-        self.checkScrolling()
-        self.checkMouseOverObject()
-        for c in self.characters:
-            if c is self.currSelected:
-                c.setImage(2)
-            elif c is self.currHighlighted:
-                c.setImage(1)
-            else:
-                c.setImage(0)
+        self.checkForBattle()
+        
+        if self.pendingBattle is None:
+            self.mousePos = pygame.mouse.get_pos()
+            self.checkScrolling()
+            self.checkMouseOverObject()
+            for c in self.characters:
+                if c is self.currSelected:
+                    c.setImage(2)
+                elif c is self.currHighlighted:
+                    c.setImage(1)
+                else:
+                    c.setImage(0)
 
-            self.checkBounds(c)
-            self.checkTerrain(c)
-            c.update()
+                self.checkBounds(c)
+                self.checkTerrain(c)
+                c.update()
 
     def zoom(self):
         self.drawZoomMap()
@@ -193,7 +202,34 @@ class Model(mvc.Model):
     def setBattleTriggerAreas(self):
         for c in self.characters:
             c.createBattleTriggerArea(self.zoomVal)
-        
+
+    def checkForBattle(self):
+        self.pendingBattle = None
+        for c in self.charactersInTeams[0]:
+            for d in self.charactersInTeams[1]:
+                dist = util.distance(c.precisePos, d.precisePos)
+                if dist <= BATTLE_TRIGGER_RANGE:
+                    self.pendingBattle = [c, d]
+                    return
+
+    def resolveBattle(self, result):
+        print "Hi!"
+        for i in range(2):
+            self.pendingBattle[i].stop()
+
+            if i == 0:
+                temp = [1, 0]
+            else:
+                temp = [0, 1]
+            temp2 = util.get_direction(self.pendingBattle[temp[0]].precisePos,
+                                       self.pendingBattle[temp[1]].precisePos)
+            retreat = []
+            for j in range(2):
+                retreat.append(temp2[j] * RETREAT_DISTANCE)
+            
+            if result[i] == 1:
+                for j in range(2):
+                    self.pendingBattle[i].precisePos[j] += retreat[j]
 
 def testData():
     chars = [mapchar.Hare(0, "Awesomez"),
