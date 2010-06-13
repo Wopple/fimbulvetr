@@ -25,5 +25,7 @@ class Controller(mvc.Controller):
             elif event.type == pygame.KEYDOWN:
                 if event.key == K_ESCAPE:
                     sys.exit(0)
+                elif event.key == K_SPACE:
+                    self.model.pausePressed()
             elif event.type == pygame.QUIT:
                 sys.exit(0)

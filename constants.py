@@ -65,6 +65,15 @@ BATTLE_TRIGGER_AREA_COLOR_WITH_ALPHA = (BATTLE_TRIGGER_AREA_COLOR[0],
                                         BATTLE_TRIGGER_AREA_ALPHA)
 RETREAT_DISTANCE = 80
 
+PAUSE_PLAY_RESIZE_FACTOR = 0.6
+PAUSE_PLAY_BIG_FROM_TOP = 10
+PAUSE_PLAY_LITTLE_ADJUSTMENT = (25, 20)
+PAUSE_PLAY_LITTLE_COLORS = [(10, 80, 200, 255),
+                            (210, 20, 20, 255)]
+PAUSE_PLAY_ORIG_COLOR = (255, 180, 20, 255)
+PAUSE_PLAY_MOVEMENT_SPEED = 3
+PAUSE_PLAY_MOVEMENT_DISTANCE = 25
+
 KEY_BUFFER = 4
 
 MULTIPLAYER_PORT = 1338
@@ -119,6 +128,7 @@ DIREC_BACKGROUNDS = os.path.join(DIREC_GRAPHICS, "backgrounds")
 DIREC_CHARACTER_GRAPHICS = os.path.join(DIREC_GRAPHICS, "characters")
 DIREC_HARE_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "hare")
 DIREC_FOX_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "fox")
+DIREC_INTERFACE_GRAPHICS = os.path.join(DIREC_GRAPHICS, "interface")
 
 STUN_THRESHOLD_1 = 50
 STUN_THRESHOLD_2 = 100
@@ -253,6 +263,14 @@ temp = [ ['face1.png', (28, 66)],
 HARE_TOKENS = []
 for i in temp:
     HARE_TOKENS.append([pygame.image.load(os.path.join(DIREC_HARE_GRAPHICS, i[0])).convert_alpha(), i[1]])
+
+temp = ['pauseicon.png',
+        'playicon.png']
+
+INTERFACE_GRAPHICS = []
+for i in temp:
+    INTERFACE_GRAPHICS.append(pygame.image.load(os.path.join(
+        DIREC_INTERFACE_GRAPHICS, i)).convert_alpha())
 
 
 temp = [ ["fontdata.ttf",10],

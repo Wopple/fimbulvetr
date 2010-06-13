@@ -28,6 +28,10 @@ class View(mvc.View):
         if isinstance(self.model.currSelected, mapchar.MapChar):
             self.model.currSelected.draw(self.screen, self.model.zoomVal, self.model.mapRect.topleft)
 
+        self.model.bigPausePlayIcon.draw(self.screen)
+        for i in self.model.littlePausePlayIcons:
+            i.draw(self.screen)
+
 
         if tickClock:
             pygame.display.flip()

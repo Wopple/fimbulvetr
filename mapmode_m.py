@@ -7,6 +7,7 @@ import gamemap
 import mapchar
 import util
 import incint
+import pauseplayicon
 
 from constants import *
 
@@ -31,22 +32,28 @@ class Model(mvc.Model):
         self.mousePos = pygame.mouse.get_pos()
         self.placeChars()
         self.pendingBattle = None
+        self.pause = [False, False]
+
+        self.buildInterface()
 
     def update(self):
         self.checkForBattle()
-        
-        if self.pendingBattle is None:
-            self.mousePos = pygame.mouse.get_pos()
-            self.checkScrolling()
-            self.checkMouseOverObject()
-            for c in self.characters:
-                if c is self.currSelected:
-                    c.setImage(2)
-                elif c is self.currHighlighted:
-                    c.setImage(1)
-                else:
-                    c.setImage(0)
 
+        self.mousePos = pygame.mouse.get_pos()
+        self.checkScrolling()
+        self.checkMouseOverObject()
+        for c in self.characters:
+            if c is self.currSelected:
+                c.setImage(2)
+            elif c is self.currHighlighted:
+                c.setImage(1)
+            else:
+                c.setImage(0)
+
+        self.updateInterface()
+        
+        if (self.pendingBattle is None) and (not self.paused()):
+            for c in self.characters:
                 self.checkBounds(c)
                 self.checkTerrain(c)
                 c.update()
@@ -236,6 +243,28 @@ class Model(mvc.Model):
             if result[i] == 1:
                 for j in range(2):
                     self.pendingBattle[i].precisePos[j] += retreat[j]
+
+    def paused(self):
+        return ((self.pause[0]) or (self.pause[1]))
+
+    def pausePressed(self):
+        self.pause[self.team] = not(self.pause[self.team])
+
+    def buildInterface(self):
+        self.bigPausePlayIcon = pauseplayicon.PausePlayIcon(2)
+
+        self.littlePausePlayIcons = []
+        for i in range(2):
+            self.littlePausePlayIcons.append(pauseplayicon.PausePlayIcon(i))
+
+    def updateInterface(self):
+        self.updatePausePlayIcons()
+
+    def updatePausePlayIcons(self):
+        self.bigPausePlayIcon.update(self.paused())
+
+        for i in range(2):
+            self.littlePausePlayIcons[i].update(self.pause[i])
 
 def testData():
     chars = [mapchar.Hare(0, "Awesomez"),
