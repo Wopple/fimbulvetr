@@ -199,6 +199,12 @@ class Model(mvc.Model):
             if (future[i] <= 0) or (future[i] >= self.map.mapSize[i]):
                 c.stop()
 
+            if c.precisePos[i] < 0:
+                c.precisePos[i] = 0
+            if c.precisePos[i] > self.map.mapSize[i]:
+                c.precisePos[i] = self.map.mapSize[i]
+
+
     def setBattleTriggerAreas(self):
         for c in self.characters:
             c.createBattleTriggerArea(self.zoomVal)
