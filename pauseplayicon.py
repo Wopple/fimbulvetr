@@ -5,11 +5,15 @@ import copy
 
 from constants import *
 
-class PausePlayIcon(object):
+import mapinterfaceitem
+
+class PausePlayIcon(mapinterfaceitem.MapInterfaceItem):
     def __init__(self, inType):
         self.images = [copy.copy(INTERFACE_GRAPHICS[0]),
                        copy.copy(INTERFACE_GRAPHICS[1])]
         self.currImage = 0
+
+        super(PausePlayIcon, self).__init__()
 
         if inType == 0:
             xMod = -PAUSE_PLAY_LITTLE_ADJUSTMENT[0]
@@ -71,5 +75,6 @@ class PausePlayIcon(object):
 
         self.rect.left = self.pauseX + (self.xMovement * self.moveFactor)
 
-    def draw(self, screen):
-        screen.blit(self.images[self.currImage], self.rect.topleft)
+        self.image = self.images[self.currImage]
+
+        super(PausePlayIcon, self).update()

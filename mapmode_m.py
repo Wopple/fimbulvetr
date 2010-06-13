@@ -226,7 +226,6 @@ class Model(mvc.Model):
                     return
 
     def resolveBattle(self, result):
-        print "Hi!"
         for i in range(2):
             self.pendingBattle[i].stop()
 
@@ -262,9 +261,11 @@ class Model(mvc.Model):
 
     def updatePausePlayIcons(self):
         self.bigPausePlayIcon.update(self.paused())
+        self.bigPausePlayIcon.setAlphaFade(self.paused())
 
         for i in range(2):
             self.littlePausePlayIcons[i].update(self.pause[i])
+            self.littlePausePlayIcons[i].setAlphaFade(self.paused())
 
 def testData():
     chars = [mapchar.Hare(0, "Awesomez"),
