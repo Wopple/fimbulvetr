@@ -157,7 +157,7 @@ class Model(mvc.Model):
         self.currSelected = None
 
     def rightClick(self):
-        if not self.currSelected is None:
+        if (not self.currSelected is None) and (not self.paused()):
             self.currSelected.startMovement(self.absMousePos())
 
     def absMousePos(self):
