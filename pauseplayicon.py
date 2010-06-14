@@ -9,11 +9,14 @@ import mapinterfaceitem
 
 class PausePlayIcon(mapinterfaceitem.MapInterfaceItem):
     def __init__(self, inType):
+        super(PausePlayIcon, self).__init__()
+        
         self.images = [copy.copy(INTERFACE_GRAPHICS[0]),
                        copy.copy(INTERFACE_GRAPHICS[1])]
         self.currImage = 0
 
-        super(PausePlayIcon, self).__init__()
+        for i, s in enumerate(self.images):
+            self.images[i] = s.convert()
 
         if inType == 0:
             xMod = -PAUSE_PLAY_LITTLE_ADJUSTMENT[0]

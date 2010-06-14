@@ -9,14 +9,12 @@ import drawable
 
 class MapInterfaceItem(drawable.Drawable):
     def __init__(self):
-        self.alpha = boundint.BoundInt(MAP_INTERFACE_ALPHA_MIN, 255, 255)
+        self.alpha = boundint.BoundInt(MAP_INTERFACE_ALPHA_MIN, 240, 240)
         self.alphaUp = True
         self.tick = MAP_INTERFACE_ALPHA_TICK
         self.pastImage = None
 
-        for i, s in enumerate(self.images):
-            self.images[i] = s.convert()
-            
+        self.image = pygame.Surface((1, 1))
 
     def update(self):
         oldVal = self.alpha.value

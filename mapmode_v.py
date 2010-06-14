@@ -32,6 +32,9 @@ class View(mvc.View):
         for i in self.model.littlePausePlayIcons:
             i.draw(self.screen)
 
+        for i in self.model.charBars:
+            i.draw(self.screen)
+
 
         if tickClock:
             pygame.display.flip()

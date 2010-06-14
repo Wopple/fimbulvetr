@@ -8,6 +8,7 @@ import mapchar
 import util
 import incint
 import pauseplayicon
+import mapcharacterbar
 
 from constants import *
 
@@ -256,6 +257,17 @@ class Model(mvc.Model):
         for i in range(2):
             self.littlePausePlayIcons.append(pauseplayicon.PausePlayIcon(i))
 
+        self.charBars = []
+        for i, c in enumerate(self.charactersInTeams[self.team]):
+            x = MAP_CHAR_BAR_INIT_POS[0]
+            if i == 0:
+                y = MAP_CHAR_BAR_INIT_POS[1]
+            else:
+                y = self.charBars[i-1].rect.bottom + MAP_CHAR_BAR_SPACING
+
+            bar = mapcharacterbar.MapCharacterBar((x, y), c)
+            self.charBars.append(bar)
+
     def updateInterface(self):
         self.updatePausePlayIcons()
 
@@ -266,6 +278,14 @@ class Model(mvc.Model):
         for i in range(2):
             self.littlePausePlayIcons[i].update(self.pause[i])
             self.littlePausePlayIcons[i].setAlphaFade(self.paused())
+
+        for i in self.charBars:
+            i.update()
+            i.setActive(i.character is self.currSelected)
+            i.setAlphaFade(self.isHighlightedOrSelected(i.character))
+
+    def isHighlightedOrSelected(self, i):
+        return ((i is self.currHighlighted) or (i is self.currSelected))
 
 def testData():
     chars = [mapchar.Hare(0, "Awesomez"),
