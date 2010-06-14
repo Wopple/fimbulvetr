@@ -143,6 +143,7 @@ DIREC_CHARACTER_GRAPHICS = os.path.join(DIREC_GRAPHICS, "characters")
 DIREC_HARE_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "hare")
 DIREC_FOX_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "fox")
 DIREC_INTERFACE_GRAPHICS = os.path.join(DIREC_GRAPHICS, "interface")
+DIREC_PORTRAITS = os.path.join(DIREC_GRAPHICS, "portraits")
 
 STUN_THRESHOLD_1 = 50
 STUN_THRESHOLD_2 = 100
@@ -285,6 +286,13 @@ INTERFACE_GRAPHICS = []
 for i in temp:
     INTERFACE_GRAPHICS.append(pygame.image.load(os.path.join(
         DIREC_INTERFACE_GRAPHICS, i)).convert_alpha())
+
+temp = ['hare00.png']
+
+HARE_PORTRAITS = []
+for i in temp:
+    HARE_PORTRAITS.append(pygame.image.load(os.path.join(
+        DIREC_PORTRAITS, i)).convert_alpha())
 
 
 temp = [ ["fontdata.ttf",10],

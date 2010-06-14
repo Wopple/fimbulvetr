@@ -36,6 +36,9 @@ class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
         colorSwap(self.staticSurfaces[1], MAP_CHAR_BAR_COLOR_BORDER[team],
                   MAP_CHAR_BAR_COLOR_SELECTED, 5)
 
+        for s in self.staticSurfaces:
+            s.blit(self.character.portrait, ((b+p), (b+p)))
+
                 
         self.setActive(False)
 
@@ -47,9 +50,8 @@ class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
 
         self.static = self.staticSurfaces[num]
 
-    def draw(self, screen):
-        print self.image, self.static
+        self.remakeImage()
+
+    def remakeImage(self):
         self.image = self.static
-        print self.image
-        
-        super(MapCharacterBar, self).draw(screen)
+        self.image.set_alpha(self.alpha.value)

@@ -287,8 +287,19 @@ class Model(mvc.Model):
     def isHighlightedOrSelected(self, i):
         return ((i is self.currHighlighted) or (i is self.currSelected))
 
+    def numberKey(self, k):
+        try:
+            k = int(k)
+        except:
+            k = 0
+
+        k -= 1
+
+        if (k >= 0) and (k < len(self.charactersInTeams[self.team])):
+            self.currSelected = self.charactersInTeams[self.team][k]
+
 def testData():
-    chars = [mapchar.Hare(0, "Awesomez"),
+    chars = [mapchar.Hare(0, "Awesomez", HARE_PORTRAITS[0]),
              mapchar.Hare(1, "Bob"),
              mapchar.Hare(0, "Dude")]
     return [gamemap.map00(), chars]

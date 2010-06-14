@@ -11,9 +11,10 @@ import util
 from constants import *
 
 class MapChar(object):
-    def __init__(self, inImages, speedBase, speedModifiers, team, name):
+    def __init__(self, inImages, speedBase, speedModifiers, team, name, portrait):
         self.team = team
         self.name = name
+        self.initPortrait(portrait)
         self.images = []
         for i in inImages:
             self.images.append([copy.copy(i[0]), i[1]])
@@ -111,9 +112,17 @@ class MapChar(object):
         pygame.draw.circle(self.battleTriggerArea, BATTLE_TRIGGER_AREA_COLOR_WITH_ALPHA,
                            (r, r), r)
         self.battleTriggerRect = pygame.Rect((0, 0), (d, d))
+
+    def initPortrait(self, p):
+        q = pygame.Surface(MAP_CHAR_BAR_PORTRAIT_SIZE)
+        if not p is None:
+            q.blit(p, (0, 0))
+        q.convert()
+        self.portrait = q
         
 
-def Hare(team, name="Unnamed Hare"):
+def Hare(team, name="Unnamed Hare", portrait=None):
     c = MapChar(HARE_TOKENS, HARE_MAP_SPEED_BASE,
-                HARE_MAP_SPEED_MODIFIERS, team, name)
+                HARE_MAP_SPEED_MODIFIERS, team,
+                name, portrait)
     return c

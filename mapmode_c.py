@@ -27,5 +27,23 @@ class Controller(mvc.Controller):
                     sys.exit(0)
                 elif event.key == K_SPACE:
                     self.model.pausePressed()
+                elif event.key == K_1:
+                    self.model.numberKey(1)
+                elif event.key == K_2:
+                    self.model.numberKey(2)
+                elif event.key == K_3:
+                    self.model.numberKey(3)
+                elif event.key == K_4:
+                    self.model.numberKey(4)
+                elif event.key == K_5:
+                    self.model.numberKey(5)
+                elif event.key == K_6:
+                    self.model.numberKey(6)
+                elif event.key == K_7:
+                    self.model.numberKey(7)
+                elif event.key == K_8:
+                    self.model.numberKey(8)
+                elif event.key == K_9:
+                    self.model.numberKey(9)
             elif event.type == pygame.QUIT:
                 sys.exit(0)
