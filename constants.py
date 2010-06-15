@@ -2,9 +2,9 @@ import os
 import pygame
 import sys
 
-FULL_SCREEN = False
+FULL_SCREEN = True
 FRAME_RATE = 40
-SCREEN_SIZE = (800, 700)
+SCREEN_SIZE = (800, 600)
 ENTIRE_SCREEN = pygame.Rect( (0,0), SCREEN_SIZE )
 DEBUG_MODE = True
 
@@ -67,8 +67,8 @@ ZOOM_MIN = 0.15
 
 MOUNTAIN_FILL_COLOR = (99, 84, 61)
 
-SCROLL_AREA_WIDTH = 35
-SCROLL_SPEED = 10
+SCROLL_AREA_WIDTH = 15
+SCROLL_SPEED = 18
 
 BATTLE_TRIGGER_RANGE = 100
 BATTLE_TRIGGER_AREA_COLOR = (200, 10, 10)
@@ -280,7 +280,8 @@ for i in temp:
     HARE_TOKENS.append([pygame.image.load(os.path.join(DIREC_HARE_GRAPHICS, i[0])).convert_alpha(), i[1]])
 
 temp = ['pauseicon.png',
-        'playicon.png']
+        'playicon.png',
+        'target.png']
 
 INTERFACE_GRAPHICS = []
 for i in temp:

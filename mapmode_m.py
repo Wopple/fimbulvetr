@@ -9,6 +9,7 @@ import util
 import incint
 import pauseplayicon
 import mapcharacterbar
+import targetmarker
 
 from constants import *
 
@@ -34,6 +35,7 @@ class Model(mvc.Model):
         self.placeChars()
         self.pendingBattle = None
         self.pause = [False, False]
+        self.keys = [False, False, False, False]
 
         self.buildInterface()
 
@@ -109,6 +111,16 @@ class Model(mvc.Model):
                 axis[i] = -1
             if self.mousePos[i] > SCREEN_SIZE[i] - SCROLL_AREA_WIDTH:
                 axis[i] = 1
+
+        if self.keys[0] and not self.keys[1]:
+            axis[1] = -1
+        if self.keys[1] and not self.keys[0]:
+            axis[1] = 1
+        if self.keys[2] and not self.keys[3]:
+            axis[0] = -1
+        if self.keys[3] and not self.keys[2]:
+            axis[0] = 1
+        
 
         self.mapRect.left -= SCROLL_SPEED * axis[0]
         self.mapRect.top -= SCROLL_SPEED * axis[1]
@@ -268,6 +280,8 @@ class Model(mvc.Model):
             bar = mapcharacterbar.MapCharacterBar((x, y), c)
             self.charBars.append(bar)
 
+        self.targetMarker = targetmarker.TargetMarker()
+
     def updateInterface(self):
         self.updatePausePlayIcons()
 
@@ -296,7 +310,21 @@ class Model(mvc.Model):
         k -= 1
 
         if (k >= 0) and (k < len(self.charactersInTeams[self.team])):
-            self.currSelected = self.charactersInTeams[self.team][k]
+            if self.currSelected is self.charactersInTeams[self.team][k]:
+                self.centerOnCharacter(self.currSelected)
+            else:
+                self.currSelected = self.charactersInTeams[self.team][k]
+
+    def key(self, k, t):
+        self.keys[k] = t
+
+    def centerOnCharacter(self, c):
+        newLoc = [0, 0]
+        for i in range(2):
+            newLoc[i] = -(int(c.precisePos[i])) + (SCREEN_SIZE[i] / 2)
+
+        self.mapRect.topleft = newLoc
+        self.adjustMap()
 
 def testData():
     chars = [mapchar.Hare(0, "Awesomez", HARE_PORTRAITS[0]),

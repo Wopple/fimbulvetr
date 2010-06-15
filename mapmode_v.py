@@ -16,6 +16,12 @@ class View(mvc.View):
         self.screen.blit(BLACK_SCREEN, (0, 0))
         self.screen.blit(self.model.mapImage, self.model.mapRect.topleft)
 
+        c = self.model.currSelected
+        if not c is None:
+            if not c.target is None:
+                self.model.targetMarker.draw(self.screen, c.target,
+                                             self.model.zoomVal, self.model.mapRect.topleft)
+
         for c in self.model.characters:
             if ((not c is self.model.currHighlighted) and
                 (not c is self.model.currSelected)):

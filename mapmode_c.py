@@ -45,5 +45,22 @@ class Controller(mvc.Controller):
                     self.model.numberKey(8)
                 elif event.key == K_9:
                     self.model.numberKey(9)
+                elif event.key == K_UP:
+                    self.model.key(0, True)
+                elif event.key == K_DOWN:
+                    self.model.key(1, True)
+                elif event.key == K_LEFT:
+                    self.model.key(2, True)
+                elif event.key == K_RIGHT:
+                    self.model.key(3, True)
+            elif event.type == pygame.KEYUP:
+                if event.key == K_UP:
+                    self.model.key(0, False)
+                elif event.key == K_DOWN:
+                    self.model.key(1, False)
+                elif event.key == K_LEFT:
+                    self.model.key(2, False)
+                elif event.key == K_RIGHT:
+                    self.model.key(3, False)
             elif event.type == pygame.QUIT:
                 sys.exit(0)
