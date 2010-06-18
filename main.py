@@ -8,19 +8,23 @@ import debug_m, debug_v, menu_c, mapmode_m, mapmode_v, mapmode_c
 import battle_m, battle_v, battle_c
 import title_m, title_v
 import mainmenu_m, mainmenu_v
+import charactereditor_m, charactereditor_v, charactereditor_c
 import cutscene_c
 import netclient, netserver
 
 from constants import *
 
 
-def changeMVC(newM, newV, newC, screen):
+def changeMVC(newM, newV, newC, screen, emptyLists=True):
     #Changes the Model/View/Controller currently in use
     #Val must be a new value than the previous value in order to
     #register.
     global m
     global v
     global c
+
+    global mList
+    global vList
     
     m = newM
     v = newV
@@ -30,6 +34,27 @@ def changeMVC(newM, newV, newC, screen):
     c.setModel(m)
     v.setModel(m)
     v.setScreen(screen)
+
+    if emptyLists:
+        mList = []
+        vList = []
+
+def multiMVC(newM, newV, newC, screen):
+    global m
+    global v
+    global c
+
+    global mList
+    global vList
+
+    if len(mList) == 0:
+        mList.append(m)
+        vList.append(v)
+
+    mList.append(newM)
+    vList.append(newV)
+
+    changeMVC(newM, newV, newC, screen, False)
 
 def changeC(newC):
     #Changes only the controller
@@ -49,6 +74,31 @@ def proceed(clock, net=None):
     v.update()
     c.update()
     checkError()
+    if not net is None:
+        recvMsg, p = net.update(m.buildNetMessage())
+        m.parseNetMessage(recvMsg, p)
+    clock.tick(FRAME_RATE)
+
+def proceedMulti(clock, net=None):
+    global m
+    global v
+    global c
+
+    global mList
+    global vList
+
+    for i in range(len(mList)):
+        m = mList[i]
+        v = vList[i]
+        
+        mList[i].update()
+        if i == len(mList) - 1:
+            vList[i].update()
+            c.update()
+        else:
+            vList[i].update(False)
+        checkError()
+        
     if not net is None:
         recvMsg, p = net.update(m.buildNetMessage())
         m.parseNetMessage(recvMsg, p)
@@ -108,6 +158,14 @@ def goMainMenu():
     while not m.advance():
         proceed(clock)
 
+    if m.menu.value() == 3:
+        multiMVC(charactereditor_m.Model(), charactereditor_v.View(),
+                 charactereditor_c.Controller(), screen)
+        while not m.advance():
+            proceedMulti(clock)
+    if m.menu.value() == 5:
+        sys.exit()
+
 
 
 
@@ -117,6 +175,9 @@ def goMainMenu():
 m = mvc.Model()
 v = mvc.View()
 c = mvc.Controller()
+
+mList = []
+vList = []
 
 if DEBUG_MODE:
     debugLoop = True

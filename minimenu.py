@@ -64,6 +64,9 @@ class MiniMenu(object):
 
         self.update()
 
+    def setToMax(self):
+        self.setVal(self.selection.maximum)
+
     def reset(self):
         self.selection.value = 1
 
@@ -104,3 +107,9 @@ class MiniMenu(object):
             if self.areaRects[r].collidepoint(currPos):
                 return r+1
         return 0
+
+    def isMax(self):
+        return self.selection.isMax()
+
+    def isMin(self):
+        return self.selection.isMin()
