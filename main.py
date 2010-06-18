@@ -6,6 +6,9 @@ import mvc
 
 import debug_m, debug_v, menu_c, mapmode_m, mapmode_v, mapmode_c
 import battle_m, battle_v, battle_c
+import title_m, title_v
+import mainmenu_m, mainmenu_v
+import cutscene_c
 import netclient, netserver
 
 from constants import *
@@ -94,35 +97,54 @@ def goBattlePrompt(data):
 
     return result
 
+def goTitle():
+    changeMVC(title_m.Model(), title_v.View(), cutscene_c.Controller(), screen)
+    while not m.advance():
+        proceed(clock)
+
+
+def goMainMenu():
+    changeMVC(mainmenu_m.Model(), mainmenu_v.View(), menu_c.Controller(), screen)
+    while not m.advance():
+        proceed(clock)
+
+
+
+
+
+
+
 m = mvc.Model()
 v = mvc.View()
 c = mvc.Controller()
 
 if DEBUG_MODE:
-    changeMVC(debug_m.Model(), debug_v.View(), menu_c.Controller(), screen)
-    while not m.advance():
-        proceed(clock)
-    if m.debugMenu.value() == 1:
-        goBattle(battle_m.testData(), 0)
-    elif m.debugMenu.value() == 2:
-        data = mapmode_m.testData()
-        changeMVC(mapmode_m.Model(data[0], data[1], 0), mapmode_v.View(), mapmode_c.Controller(), screen)
+    debugLoop = True
+    while debugLoop:
+        changeMVC(debug_m.Model(), debug_v.View(), menu_c.Controller(), screen)
         while not m.advance():
             proceed(clock)
-            if not m.pendingBattle is None:
-                result = goBattlePrompt(m.pendingBattle)
-                m.resolveBattle(result)
-        sys.exit()
-    elif m.debugMenu.value() == 3:
-        goBattle(battle_m.testData(), 1)
-    elif m.debugMenu.value() == 4:
-        goBattle(battle_m.testData(), 2)
-    elif m.debugMenu.value() == 6:
-        sys.exit()
-        
+        if m.debugMenu.value() == 1:
+            goBattle(battle_m.testData(), 0)
+        elif m.debugMenu.value() == 2:
+            data = mapmode_m.testData()
+            changeMVC(mapmode_m.Model(data[0], data[1], 0), mapmode_v.View(), mapmode_c.Controller(), screen)
+            while not m.advance():
+                proceed(clock)
+                if not m.pendingBattle is None:
+                    result = goBattlePrompt(m.pendingBattle)
+                    m.resolveBattle(result)
+            sys.exit()
+        elif m.debugMenu.value() == 3:
+            goBattle(battle_m.testData(), 1)
+        elif m.debugMenu.value() == 4:
+            goBattle(battle_m.testData(), 2)
+        elif m.debugMenu.value() == 5:
+            debugLoop = False
+        elif m.debugMenu.value() == 6:
+            sys.exit()
+
+
+goTitle()
 while 1:
-    changeMVC(title_m.Model(), title_v.View(), menu_c.Controller(), screen)
-    while not m.either():
-        proceed(clock)
-    if m.back():
-        sys.exit()
+    goMainMenu()

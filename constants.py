@@ -2,7 +2,7 @@ import os
 import pygame
 import sys
 
-FULL_SCREEN = True
+FULL_SCREEN = False
 FRAME_RATE = 40
 SCREEN_SIZE = (800, 600)
 ENTIRE_SCREEN = pygame.Rect( (0,0), SCREEN_SIZE )
@@ -20,12 +20,25 @@ clock = pygame.time.Clock()
 
 BLACK = (0, 0, 0)
 WHITE = (252, 252, 252)
+ALMOST_BLACK = (3, 3, 3)
 
 BLACK_SCREEN = pygame.Surface(SCREEN_SIZE)
 BLACK_SCREEN.fill(BLACK, (0, 0, SCREEN_SIZE[0], SCREEN_SIZE[1]))
 
 RED_DOT = pygame.Surface((1, 1))
 RED_DOT.fill((250, 0, 0))
+
+MAIN_MENU_COLOR_ON = (0, 183, 239)
+MAIN_MENU_COLOR_OFF = (10, 10, 10)
+MAIN_MENU_COLOR_BG = (60, 100, 120)
+MAIN_MENU_OFFSET_FROM_SIDE = 50
+MAIN_MENU_FADE_SPEED = 5
+
+MAIN_MENU_TITLE_POS = [ ((SCREEN_SIZE[0] / 6), 10),
+                        ((SCREEN_SIZE[0] / 6), 50) ]
+
+INTRO_MAX_FADE = 240
+INTRO_SPEEDS = [4, 30, 5, 50, 5, 15]
 
 SHOW_RED_DOT = True
 SHOW_HURTBOXES = True
@@ -297,7 +310,10 @@ for i in temp:
 
 
 temp = [ ["fontdata.ttf",10],
-         ["fontbars.ttf", 14] ]
+         ["fontbars.ttf", 14],
+         ["fontslab.ttf", 12],
+         ["fontslab.ttf", 30],
+         ["fontheadline.ttf", 16] ]
 FONTS = []
 for i in temp:
     FONTS.append(pygame.font.Font(
@@ -305,6 +321,7 @@ for i in temp:
 
 MINIMENU_FONT = FONTS[0]
 ENERGY_BAR_FONT = FONTS[1]
+MAIN_MENU_FONT = FONTS[4]
 
 
 def add_points(i, j):
