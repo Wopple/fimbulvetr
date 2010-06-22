@@ -12,6 +12,7 @@ from constants import *
 class Fox(battlechar.BattleChar):
     def __init__(self, name="Unnamed Fox"):
         self.name = name
+        self.speciesName = "Fox"
         self.spriteSet = FOX_IMAGES
         self.groundAccel = 1.2
         self.groundVelMax = 12.5

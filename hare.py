@@ -12,6 +12,7 @@ from constants import *
 class Hare(battlechar.BattleChar):
     def __init__(self, name="Unnamed Hare"):
         self.name = name
+        self.speciesName = "Hare"
         self.spriteSet = HARE_IMAGES
         self.groundAccel = 1.2
         self.groundVelMax = 14.0

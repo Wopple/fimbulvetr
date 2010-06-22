@@ -65,6 +65,8 @@ MAP_CHAR_BAR_SPACING = 20
 MAP_CHAR_BAR_INIT_POS = (20, 20)
 MAP_CHAR_BAR_PORTRAIT_SIZE = (40, 40)
 
+TEXT_ENTRY_BORDER_SIZE = 10
+
 MAP_CHAR_TOKEN_SIZE = (32, 32)
 TOKEN_BORDER_NEUTRAL = (153, 153, 153, 255)
 
@@ -157,6 +159,8 @@ DEFAULT_HITSTUN = 2
 
 DIREC_FONTS = "fonts"
 DIREC_GRAPHICS = "graphics"
+DIREC_DATA = "data"
+DIREC_CHARACTER_SAVES = os.path.join(DIREC_DATA, "characters")
 DIREC_BACKGROUNDS = os.path.join(DIREC_GRAPHICS, "backgrounds")
 DIREC_CHARACTER_GRAPHICS = os.path.join(DIREC_GRAPHICS, "characters")
 DIREC_HARE_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "hare")
@@ -319,7 +323,8 @@ temp = [ ["fontdata.ttf",10],
          ["fontbars.ttf", 14],
          ["fontslab.ttf", 12],
          ["fontslab.ttf", 30],
-         ["fontheadline.ttf", 16] ]
+         ["fontheadline.ttf", 16],
+         ["fontapple.ttf", 22] ]
 FONTS = []
 for i in temp:
     FONTS.append(pygame.font.Font(
@@ -329,6 +334,14 @@ MINIMENU_FONT = FONTS[0]
 ENERGY_BAR_FONT = FONTS[1]
 MAIN_MENU_FONT = FONTS[4]
 CHAR_EDITOR_FONT = FONTS[4]
+TEXT_ENTRY_FONT = FONTS[5]
+
+VALID_INPUT_CHARACTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+                          'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+                          'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D',
+                          'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+                          'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+                          'Y', 'Z', '-', '.']
 
 
 def add_points(i, j):

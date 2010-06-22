@@ -9,6 +9,7 @@ import battle_m, battle_v, battle_c
 import title_m, title_v
 import mainmenu_m, mainmenu_v
 import charactereditor_m, charactereditor_v, charactereditor_c
+import textentry_m, textentry_v, textentry_c
 import cutscene_c
 import netclient, netserver
 
@@ -25,6 +26,7 @@ def changeMVC(newM, newV, newC, screen, emptyLists=True):
 
     global mList
     global vList
+    global cList
     
     m = newM
     v = newV
@@ -38,6 +40,7 @@ def changeMVC(newM, newV, newC, screen, emptyLists=True):
     if emptyLists:
         mList = []
         vList = []
+        cList = []
 
 def multiMVC(newM, newV, newC, screen):
     global m
@@ -46,15 +49,35 @@ def multiMVC(newM, newV, newC, screen):
 
     global mList
     global vList
+    global cList
 
     if len(mList) == 0:
         mList.append(m)
         vList.append(v)
+        cList.append(c)
 
     mList.append(newM)
     vList.append(newV)
+    cList.append(newC)
 
     changeMVC(newM, newV, newC, screen, False)
+
+def multiMVCBack():
+    global m
+    global v
+    global c
+
+    global mList
+    global vList
+    global cList
+
+    mList = mList[0:-1]
+    vList = vList[0:-1]
+    cList = cList[0:-1]
+
+    m = mList[-1]
+    v = vList[-1]
+    c = cList[-1]
 
 def changeC(newC):
     #Changes only the controller
@@ -161,13 +184,33 @@ def goMainMenu():
     if m.menu.value() == 3:
         multiMVC(charactereditor_m.Model(), charactereditor_v.View(),
                  charactereditor_c.Controller(), screen)
-        while not m.advance():
+        while not m.back():
             proceedMulti(clock)
+            if m.advance():
+                m.advanceNow = False
+                goCreateCharacter()
+                
     if m.menu.value() == 5:
         sys.exit()
 
-
-
+def goCreateCharacter():
+    multiMVC(textentry_m.Model(), textentry_v.View(),
+             textentry_c.Controller(), screen)
+    while not m.either():
+        proceedMulti(clock)
+    if m.back():
+        multiMVCBack()
+    else:
+        characterName = m.convert()
+        multiMVCBack()
+        m.setStage(1)
+        while not m.either():
+            proceedMulti(clock)
+        if m.back():
+            m.setStage(0)
+        else:
+            print "BLAH!"
+        
 
 
 
@@ -178,6 +221,7 @@ c = mvc.Controller()
 
 mList = []
 vList = []
+cList = []
 
 if DEBUG_MODE:
     debugLoop = True

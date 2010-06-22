@@ -16,6 +16,8 @@ class View(mvc.View):
             self.screen.blit(self.model.blackPanel, i)
         self.model.menu.draw(self.screen)
         self.model.charMenu.draw(self.screen)
+        if not self.model.characterToDisplay is None:
+            self.model.characterToDisplay.draw(self.screen, (0, 0))
 
 
         if tickClock:

@@ -51,6 +51,16 @@ class BattleChar(object):
         frame = self.getCurrentFrame()
         self.setImage(frame.image, frame.offset)
 
+    #Updates the character for non-battle viewing, such as
+    #in the character editor.
+    def staticUpdate(self):
+        self.actLeft = True
+        self.proceedFrame()
+        self.frameSpecial()
+        frame = self.getCurrentFrame()
+        self.setImage(frame.image, frame.offset)
+        
+
     def speedCap(self, caps, i):
         if not self.getCurrentFrame().ignoreSpeedCap:
             if self.vel[i] > caps[i]:
