@@ -21,6 +21,9 @@ class BattleChar(object):
         self.aerialCharge = True
         self.projectiles = []
         self.attackCanHit = True
+
+        self.superMoves = []
+        self.currSuperMove = None
         
         temp = pygame.Surface((50, 80))
         temp.fill((2, 2, 2))

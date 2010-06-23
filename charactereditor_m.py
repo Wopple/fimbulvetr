@@ -17,10 +17,7 @@ class Model(mvc.Model):
     def __init__(self):
         super(Model, self).__init__()
 
-        self.stage = 0
-        self.charCharacter = None
-        self.characterToDisplay = None
-        self.makeMenu()
+        self.setStage(0)
 
         self.tempNames = ["Blah",
                           "Yo",
@@ -36,6 +33,7 @@ class Model(mvc.Model):
                           "YO!!!",
                           "Yo Momma",
                           "Fat guy"]
+        
         numOfPages = int(len(self.tempNames) / CHAR_EDITOR_NUM_PER_PAGE)
         if ( (int(len(self.tempNames) % CHAR_EDITOR_NUM_PER_PAGE)) == 0):
             numOfPages -= 1
@@ -84,6 +82,11 @@ class Model(mvc.Model):
             for s in self.currSpeciesList:
                 menuOptions.append(s.speciesName)
 
+        elif self.stage == 2:
+            menuOptions = []
+            for i in self.characterToDisplay.superMoves:
+                menuOptions.append(i.name)
+
         tempRect = pygame.Rect( (50, 50), (200, 0) )
         self.menu = minimenu.MiniMenu(tempRect, menuOptions,
                                           CHAR_EDITOR_FONT, CHAR_EDITOR_COLOR_ON,
@@ -94,6 +97,12 @@ class Model(mvc.Model):
     def setStage(self, s):
         self.stage = s
         self.makeMenu()
+
+        self.advanceNow = False
+        self.backNow = False
+
+        if self.stage == 0:
+            self.characterToDisplay = None
 
     def getSpeciesList(self):
         self.currSpeciesList = [ hare.Hare(),
@@ -150,8 +159,10 @@ class Model(mvc.Model):
                     self.advanceNow = True
                 elif self.menu.value() == 4:
                     self.backNow = True
-            if self.stage == 1:
-                 self.advanceNow = True
+            elif self.stage == 1:
+                self.advanceNow = True
+            elif self.stage == 2:
+                self.advanceNow = True
 
     def click(self, pos):
         val = self.charMenu.isAreaRect(pos)

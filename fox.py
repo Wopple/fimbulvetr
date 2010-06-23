@@ -36,6 +36,11 @@ class Fox(battlechar.BattleChar):
 
         self.createProjectiles()
 
+        self.createSuperMoves()
+
+    def createSuperMoves(self):
+        self.createSuperMove1()
+
     def createMoveIdle(self):
         f = [ self.frameData(0, 2) ]
         self.moves['idle'].append(f, [])
@@ -207,3 +212,8 @@ class Fox(battlechar.BattleChar):
 
         m.dissolveOnPhysical = True
 
+
+    def createSuperMove1(self):
+        s = move.SuperMove("Shadow Trap", [], [])
+
+        self.superMoves.append(s)

@@ -209,7 +209,13 @@ def goCreateCharacter():
         if m.back():
             m.setStage(0)
         else:
-            print "BLAH!"
+            m.setStage(2)
+            while not m.either():
+                proceedMulti(clock)
+            if m.back():
+                m.setStage(0)
+            else:
+                m.setStage(0)
         
 
 

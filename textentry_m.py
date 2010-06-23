@@ -45,8 +45,9 @@ class Model(mvc.Model):
         pass
 
     def key(self, k):
-        self.response.append(k)
-        self.updateImage()
+        if len(self.response) < TEXT_ENTRY_LENGTH_MAX:
+            self.response.append(k)
+            self.updateImage()
 
     def backspace(self):
         self.response = self.response[0:-1]
@@ -56,7 +57,8 @@ class Model(mvc.Model):
         self.backNow = True        
 
     def enter(self):
-        self.advanceNow = True
+        if len(self.response) > 0:
+            self.advanceNow = True
 
     def convert(self):
         return string.join(self.response, "")

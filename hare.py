@@ -69,6 +69,12 @@ class Hare(battlechar.BattleChar):
         self.createMoveStun1()
         self.createMoveStun2()
 
+        self.createSuperMoves()
+
+    def createSuperMoves(self):
+        self.createSuperMove1()
+        self.createSuperMove2()
+
     def createMoveIdle(self):
         r = [
                 [
@@ -476,3 +482,13 @@ class Hare(battlechar.BattleChar):
         for i in range(len(self.moves['stun2'].frames)):
             self.moves['stun2'].frames[i].ignoreSpeedCap = True
 
+
+    def createSuperMove1(self):
+        s = move.SuperMove("Blazing Ambush", [], [])
+
+        self.superMoves.append(s)
+
+    def createSuperMove2(self):
+        s = move.SuperMove("Lightning Strike", [], [])
+
+        self.superMoves.append(s)
