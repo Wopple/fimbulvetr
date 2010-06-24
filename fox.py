@@ -26,6 +26,12 @@ class Fox(battlechar.BattleChar):
         super(Fox, self).__init__(920)
         self.initSpecMoves()
 
+        self.speciesDesc = ("A master of stealth and trickery capable of" +
+                            " sneaking invisibly through enemy lines," +
+                            " delivering unexpected ambushes, laying hidden" +
+                            " traps across the battlefield, and fighting" +
+                            " effectively at long range.")
+
     def initSpecMoves(self):
         self.createMoveIdle()
         self.createMoveDash()
@@ -214,6 +220,12 @@ class Fox(battlechar.BattleChar):
 
 
     def createSuperMove1(self):
-        s = move.SuperMove("Shadow Trap", [], [])
+        n = "Shadow Trap"
+        
+        d = ("Secures the exit areas of the battlefield with traps of" +
+             " harmful dark energy, punishing those who try to escape" +
+             " from the encounter.")
+        
+        s = move.SuperMove(n, d, [], [])
 
         self.superMoves.append(s)

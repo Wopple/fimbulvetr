@@ -30,6 +30,11 @@ class Hare(battlechar.BattleChar):
         super(Hare, self).__init__(850)
         self.initSpecMoves()
 
+        self.speciesDesc = ("A speedy light-assault unit specializing in" +
+                            " chasing down opponents, using hit-and-run" +
+                            " tactics, and evading danger with acrobatic" +
+                            " mobility.")
+
     def beginBattle(self):
         self.hareEnergy.change(HARE_ENERGY_BATTLE_START)
 
@@ -484,11 +489,22 @@ class Hare(battlechar.BattleChar):
 
 
     def createSuperMove1(self):
-        s = move.SuperMove("Blazing Ambush", [], [])
+        n = "Blazing Ambush"
+        
+        d = ("A powerup effect that can be used at the beginning of battle" +
+             " in order to deal additional damage for the first few moments" +
+             " of the encounter.")
+        
+        s = move.SuperMove(n, d, [], [])
 
         self.superMoves.append(s)
 
     def createSuperMove2(self):
-        s = move.SuperMove("Lightning Strike", [], [])
+        n = "Lightning Strike"
+        
+        d = ("A heavily damaging assault of steel and electricity that is" +
+             " initiated with a slash at close range.")
+        
+        s = move.SuperMove(n, d, [], [])
 
         self.superMoves.append(s)

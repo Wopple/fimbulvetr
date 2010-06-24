@@ -101,8 +101,11 @@ class Model(mvc.Model):
         self.advanceNow = False
         self.backNow = False
 
+        self.createDescription(None)
+
         if self.stage == 0:
             self.characterToDisplay = None
+            self.superMoveToDisplay = None
 
     def getSpeciesList(self):
         self.currSpeciesList = [ hare.Hare(),
@@ -126,11 +129,32 @@ class Model(mvc.Model):
             self.menu.setVal(val)
             if self.stage == 1:
                 self.characterToDisplay = self.currSpeciesList[val-1]
+                self.createDescription(self.characterToDisplay.speciesName,
+                                       self.characterToDisplay.speciesDesc)
+            elif self.stage == 2:
+                self.superMoveToDisplay = self.characterToDisplay.superMoves[val-1]
+                self.createDescription(self.superMoveToDisplay.name,
+                                       self.superMoveToDisplay.desc)
         else:
             self.menu.setVal(-1)
             if self.stage == 1:
                 self.characterToDisplay = None
+                self.superMoveToDisplay = None
+                self.createDescription(None)
+                
             
+    def createDescription(self, name=None, desc=None):
+        if name is None:
+            self.descSurface = None
+        else:
+            text = str(name + "\n\n" + desc)
+
+            self.descSurface = textrect.render_textrect(text, CHAR_EDITOR_FONT,
+                                                        self.charMenu.rect,
+                                                        CHAR_EDITOR_COLOR_OFF,
+                                                        CHAR_EDITOR_BLACK_PANEL_COLOR)
+                                                        
+                                                        
 
     def incMenu(self):
         self.charMenu.inc()
@@ -166,7 +190,7 @@ class Model(mvc.Model):
 
     def click(self, pos):
         val = self.charMenu.isAreaRect(pos)
-        if val > 0:
+        if (val > 0) and (self.stage == 0):
             self.charMenu.setVal(val)
         else:
             self.confirm()

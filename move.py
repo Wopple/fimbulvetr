@@ -40,9 +40,10 @@ class Move(object):
             self.transitions[i[0]] = i[1]
 
 class SuperMove(Move):
-    def __init__(self, inName, f, t):
+    def __init__(self, inName, inDesc, f, t):
         super(SuperMove, self).__init__(f, t)
         self.name = inName
+        self.desc = inDesc
 
 class Frame(object):
     def __init__(self, inImage, inOffset, inLength, hurtboxData, hitboxData):
