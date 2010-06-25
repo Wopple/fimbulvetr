@@ -26,13 +26,20 @@ class MiniMenu(object):
 
         self.rectSingle = inRect
         self.options = options
-        self.selection = incint.IncInt(1, 1, len(options))
+        if len(options) > 0:
+            self.selection = incint.IncInt(1, 1, len(options))
+        else:
+            self.selection = None
         self.font = inFont
         
         lineSize = self.font.get_height() + self.font.get_linesize()
         if self.rectSingle.height < lineSize:
             self.rectSingle.height = lineSize
-        self.rect = pygame.Rect( self.rectSingle.topleft, (self.rectSingle.width, (self.rectSingle.height * len(self.options))) )
+
+        h = self.rectSingle.height * len(self.options)
+        if h <= 0:
+            h = 1
+        self.rect = pygame.Rect( self.rectSingle.topleft, (self.rectSingle.width, h) )
 
         self.colorOn = colorOn
         self.colorOff = colorOff
@@ -47,50 +54,59 @@ class MiniMenu(object):
         self.update()
 
     def inc(self):
-        self.selection.increment()
-        self.update()
+        if not self.selection is None:
+            self.selection.increment()
+            self.update()
 
     def dec(self):
-        self.selection.decrement()
-        self.update()
+        if not self.selection is None:
+            self.selection.decrement()
+            self.update()
 
     def setVal(self, val):
-        if val >= self.selection.minimum and val <= self.selection.maximum:
-            self.selection.value = val
-            self.noSelection = False
+        if not self.selection is None:
+            if val >= self.selection.minimum and val <= self.selection.maximum:
+                self.selection.value = val
+                self.noSelection = False
 
-        if val == -1:
-            self.noSelection = True
+            if val == -1:
+                self.noSelection = True
 
-        self.update()
+            self.update()
 
     def setToMax(self):
-        self.setVal(self.selection.maximum)
+        if not self.selection is None:
+            self.setVal(self.selection.maximum)
 
     def reset(self):
-        self.selection.value = 1
+        if not self.selection is None:
+            self.selection.value = 1
 
     def update(self):
         self.mainFrame = pygame.Surface( (self.rect.width, self.rect.height) )
-
         self.areaRects = []
-        offset = 0
-        for x in range(len(self.options)):
-            textRect = pygame.Rect( (0, offset), (self.rectSingle.width, self.rectSingle.height) )
-            self.areaRects.append(textRect)
-            if (self.selection.value == (x + 1)) and (not self.noSelection):
-                currColor = self.colorOn
-            else:
-                currColor = self.colorOff
-            textSurface = textrect.render_textrect(self.options[x], self.font, textRect, currColor, self.colorBG, 1)
-            self.mainFrame.blit(textSurface, (0, offset))
-            offset += textRect.height
+
+        if not self.selection is None:
+            offset = 0
+            for x in range(len(self.options)):
+                textRect = pygame.Rect( (0, offset), (self.rectSingle.width, self.rectSingle.height) )
+                self.areaRects.append(textRect)
+                if (self.selection.value == (x + 1)) and (not self.noSelection):
+                    currColor = self.colorOn
+                else:
+                    currColor = self.colorOff
+                textSurface = textrect.render_textrect(self.options[x], self.font, textRect, currColor, self.colorBG, 1)
+                self.mainFrame.blit(textSurface, (0, offset))
+                offset += textRect.height
             
     def draw(self, screen):
         screen.blit(self.mainFrame, self.rect.topleft)
 
     def value(self):
-        return self.selection.value
+        if not self.selection is None:
+            return self.selection.value
+        else:
+            return None
 
     def text(self):
         return self.options[self.selection.value - 1]

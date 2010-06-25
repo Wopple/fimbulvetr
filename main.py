@@ -12,6 +12,7 @@ import charactereditor_m, charactereditor_v, charactereditor_c
 import textentry_m, textentry_v, textentry_c
 import cutscene_c
 import netclient, netserver
+import chardata
 
 from constants import *
 
@@ -215,6 +216,8 @@ def goCreateCharacter():
             if m.back():
                 m.setStage(0)
             else:
+                m.characterToDisplay.name = characterName
+                chardata.saveCharacter(m.characterToDisplay)
                 m.setStage(0)
         
 

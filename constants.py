@@ -170,6 +170,10 @@ DIREC_FOX_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "fox")
 DIREC_INTERFACE_GRAPHICS = os.path.join(DIREC_GRAPHICS, "interface")
 DIREC_PORTRAITS = os.path.join(DIREC_GRAPHICS, "portraits")
 
+CHARACTER_FILE_NAME = "char"
+CHARACTER_FILE_EXT = "dat"
+MAX_CHARACTER_SAVES = 100
+
 STUN_THRESHOLD_1 = 50
 STUN_THRESHOLD_2 = 100
 
@@ -343,7 +347,7 @@ VALID_INPUT_CHARACTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                           'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D',
                           'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
                           'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
-                          'Y', 'Z', '-', '.']
+                          'Y', 'Z', '-']
 
 
 def add_points(i, j):

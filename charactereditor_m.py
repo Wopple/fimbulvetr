@@ -4,6 +4,8 @@ import pygame
 
 import mvc
 
+import chardata
+
 import minimenu
 import textrect
 import boundint
@@ -17,30 +19,13 @@ class Model(mvc.Model):
     def __init__(self):
         super(Model, self).__init__()
 
-        self.setStage(0)
+        self.setStage(0, True)
 
-        self.tempNames = ["Blah",
-                          "Yo",
-                          "Bob",
-                          "Aether",
-                          "Dude",
-                          "Blahhhh",
-                          "Earl",
-                          "TJ",
-                          "Quote",
-                          "Bulbasaur",
-                          "Shinku Hadouken",
-                          "YO!!!",
-                          "Yo Momma",
-                          "Fat guy"]
+        self.idealSize = self.buildIdealSize()
         
-        numOfPages = int(len(self.tempNames) / CHAR_EDITOR_NUM_PER_PAGE)
-        if ( (int(len(self.tempNames) % CHAR_EDITOR_NUM_PER_PAGE)) == 0):
-            numOfPages -= 1
-        self.page = incint.IncInt(0, 0, numOfPages)
         self.buildCharMenu(True)
 
-        size = (self.menu.rect.width *  3, self.charMenu.rect.height)
+        size = (self.menu.rect.width *  3, self.idealSize[1])
         self.baseSurface = pygame.Surface(size)
         self.baseSurface.fill(CHAR_EDITOR_COLOR_BG)
         self.baseSurfaceRect = pygame.Rect((0,0), size)
@@ -48,21 +33,40 @@ class Model(mvc.Model):
         self.charMenu.rect.topleft = self.baseSurfaceRect.topleft
 
         self.blackPanel = pygame.Surface((self.menu.rect.width,
-                                          self.charMenu.rect.height))
+                                          self.baseSurfaceRect.height))
         self.blackPanel.fill(CHAR_EDITOR_BLACK_PANEL_COLOR)
         pos1 = self.charMenu.rect.topleft
-        pos2 = (pos1[0] + (self.charMenu.rect.width * 2), pos1[1])
+        pos2 = (pos1[0] + (self.idealSize[0] * 2), pos1[1])
         self.blackPanelPos = [pos1, pos2]
         
 
     def buildCharMenu(self, firstTime=False):
-        low = CHAR_EDITOR_NUM_PER_PAGE * self.page.value
-        high = CHAR_EDITOR_NUM_PER_PAGE * (self.page.value + 1)
-        if high > len(self.tempNames):
-            high = len(self.tempNames)
+        numOfPages = int(len(self.savedNames) / CHAR_EDITOR_NUM_PER_PAGE)
+        if ( (int(len(self.savedNames) % CHAR_EDITOR_NUM_PER_PAGE)) == 0):
+            numOfPages -= 1
+        if numOfPages < 0:
+            self.page = None
+        else:
+            self.page = incint.IncInt(0, 0, numOfPages)
+        
+        if not self.page is None:
+            low = CHAR_EDITOR_NUM_PER_PAGE * self.page.value
+            high = CHAR_EDITOR_NUM_PER_PAGE * (self.page.value + 1)
+            if high > len(self.savedNames):
+                high = len(self.savedNames)
+
+            nameList = self.savedNames[low:high]
+        else:
+            nameList = []
+
+
+        
         
         tempRect = pygame.Rect( (50, 50), (200, 0) )
-        self.charMenu = minimenu.MiniMenu(tempRect, self.tempNames[low:high],
+
+        
+                                            
+        self.charMenu = minimenu.MiniMenu(tempRect, nameList,
                                           CHAR_EDITOR_FONT, CHAR_EDITOR_COLOR_ON,
                                           CHAR_EDITOR_COLOR_OFF,
                                           CHAR_EDITOR_BLACK_PANEL_COLOR)
@@ -71,6 +75,20 @@ class Model(mvc.Model):
         else:
             pos = self.baseSurfaceRect.topleft
         self.charMenu.rect.topleft = pos
+
+    def buildIdealSize(self):
+        tempList = []
+        for i in range(CHAR_EDITOR_NUM_PER_PAGE):
+            tempList.append("!")
+
+        tempRect = pygame.Rect( (50, 50), (200, 0) )
+        temp = minimenu.MiniMenu(tempRect, tempList,
+                                 CHAR_EDITOR_FONT, CHAR_EDITOR_COLOR_ON,
+                                 CHAR_EDITOR_COLOR_OFF,
+                                 CHAR_EDITOR_BLACK_PANEL_COLOR)
+
+        return temp.rect.size
+        
 
     def makeMenu(self):
         if self.stage == 0:
@@ -94,7 +112,7 @@ class Model(mvc.Model):
                                           CHAR_EDITOR_COLOR_BG)
         self.menu.rect.center = (SCREEN_SIZE[0]/2, SCREEN_SIZE[1]/2)
 
-    def setStage(self, s):
+    def setStage(self, s, firstTime=False):
         self.stage = s
         self.makeMenu()
 
@@ -103,9 +121,15 @@ class Model(mvc.Model):
 
         self.createDescription(None)
 
+        self.mouseMoved(pygame.mouse.get_pos())
+
         if self.stage == 0:
             self.characterToDisplay = None
             self.superMoveToDisplay = None
+
+            self.savedNames = chardata.getNameList()
+            if not firstTime:
+                self.buildCharMenu()
 
     def getSpeciesList(self):
         self.currSpeciesList = [ hare.Hare(),
@@ -113,7 +137,7 @@ class Model(mvc.Model):
         
         for s in self.currSpeciesList:
             s.preciseLoc = [self.menu.rect.center[0] + self.menu.rect.width,
-                            self.charMenu.rect.center[1] + (self.baseSurfaceRect.height / 8)]
+                            self.baseSurfaceRect.center[1] + (self.baseSurfaceRect.height / 8)]
             s.facingRight = False
 
     def update(self):
@@ -150,31 +174,35 @@ class Model(mvc.Model):
             text = str(name + "\n\n" + desc)
 
             self.descSurface = textrect.render_textrect(text, CHAR_EDITOR_FONT,
-                                                        self.charMenu.rect,
+                                                        pygame.Rect(self.charMenu.rect.topleft, self.idealSize),
                                                         CHAR_EDITOR_COLOR_OFF,
                                                         CHAR_EDITOR_BLACK_PANEL_COLOR)
                                                         
                                                         
 
     def incMenu(self):
-        self.charMenu.inc()
-        if self.charMenu.isMin():
-            self.incPage()
+        if not self.page is None:
+            self.charMenu.inc()
+            if self.charMenu.isMin():
+                self.incPage()
 
     def decMenu(self):
-        self.charMenu.dec()
-        if self.charMenu.isMax():
-            self.decPage()
+        if not self.page is None:
+            self.charMenu.dec()
+            if self.charMenu.isMax():
+                self.decPage()
 
     def incPage(self):
-        self.page.inc()
-        self.buildCharMenu()
-        self.charMenu.setVal(0)
+        if not self.page is None:
+            self.page.inc()
+            self.buildCharMenu()
+            self.charMenu.setVal(0)
 
     def decPage(self):
-        self.page.dec()
-        self.buildCharMenu()
-        self.charMenu.setToMax()
+        if not self.page is None:
+            self.page.dec()
+            self.buildCharMenu()
+            self.charMenu.setToMax()
 
     def confirm(self):
         if not self.menu.noSelection:
@@ -187,6 +215,7 @@ class Model(mvc.Model):
                 self.advanceNow = True
             elif self.stage == 2:
                 self.advanceNow = True
+                self.characterToDisplay.currSuperMove = self.menu.value() - 1
 
     def click(self, pos):
         val = self.charMenu.isAreaRect(pos)
