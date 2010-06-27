@@ -10,7 +10,7 @@ import projectile
 from constants import *
 
 class Fox(battlechar.BattleChar):
-    def __init__(self, name="Unnamed Fox"):
+    def __init__(self, name="Unnamed Fox", inSpecial=0):
         self.name = name
         self.speciesName = "Fox"
         self.spriteSet = FOX_IMAGES
@@ -31,6 +31,10 @@ class Fox(battlechar.BattleChar):
                             " delivering unexpected ambushes, laying hidden" +
                             " traps across the battlefield, and fighting" +
                             " effectively at long range.")
+
+        if (inSpecial < 0) or (inSpecial >= len(self.superMoves)):
+            inSpecial = 0
+        self.currSuperMove = inSpecial
 
     def initSpecMoves(self):
         self.createMoveIdle()

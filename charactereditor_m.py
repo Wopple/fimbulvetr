@@ -38,7 +38,9 @@ class Model(mvc.Model):
         pos1 = self.charMenu.rect.topleft
         pos2 = (pos1[0] + (self.idealSize[0] * 2), pos1[1])
         self.blackPanelPos = [pos1, pos2]
-        
+
+        if not self.page is None:
+            self.loadCharacter()
 
     def buildCharMenu(self, firstTime=False):
         numOfPages = int(len(self.savedNames) / CHAR_EDITOR_NUM_PER_PAGE)
@@ -70,10 +72,13 @@ class Model(mvc.Model):
                                           CHAR_EDITOR_FONT, CHAR_EDITOR_COLOR_ON,
                                           CHAR_EDITOR_COLOR_OFF,
                                           CHAR_EDITOR_BLACK_PANEL_COLOR)
+                    
         if firstTime:
             pos = (0, 0)
         else:
             pos = self.baseSurfaceRect.topleft
+            if not self.page is None:
+                self.loadCharacter()
         self.charMenu.rect.topleft = pos
 
     def buildIdealSize(self):
@@ -105,6 +110,9 @@ class Model(mvc.Model):
             for i in self.characterToDisplay.superMoves:
                 menuOptions.append(i.name)
 
+        elif self.stage == 101:
+            menuOptions = ["Delete", "Nevermind..."]
+
         tempRect = pygame.Rect( (50, 50), (200, 0) )
         self.menu = minimenu.MiniMenu(tempRect, menuOptions,
                                           CHAR_EDITOR_FONT, CHAR_EDITOR_COLOR_ON,
@@ -130,6 +138,19 @@ class Model(mvc.Model):
             self.savedNames = chardata.getNameList()
             if not firstTime:
                 self.buildCharMenu()
+
+        elif self.stage == 101:
+            n = "Delete\n" + self.characterToDisplay.name
+            d = "Are you sure?"
+            self.createDescription(n, d)
+
+    def loadCharacter(self):
+        self.characterToDisplay = chardata.loadCharacter(self.charMenu.text())
+        self.characterToDisplay.preciseLoc = [self.menu.rect.center[0] + self.menu.rect.width,
+                                              self.baseSurfaceRect.center[1] + (self.baseSurfaceRect.height / 8)]
+        self.characterToDisplay.facingRight = False
+        
+        
 
     def getSpeciesList(self):
         self.currSpeciesList = [ hare.Hare(),
@@ -185,30 +206,37 @@ class Model(mvc.Model):
             self.charMenu.inc()
             if self.charMenu.isMin():
                 self.incPage()
+            self.loadCharacter()
 
     def decMenu(self):
         if not self.page is None:
             self.charMenu.dec()
             if self.charMenu.isMax():
                 self.decPage()
+            self.loadCharacter()
 
     def incPage(self):
         if not self.page is None:
             self.page.inc()
             self.buildCharMenu()
             self.charMenu.setVal(0)
+            self.loadCharacter()
 
     def decPage(self):
         if not self.page is None:
             self.page.dec()
             self.buildCharMenu()
             self.charMenu.setToMax()
+            self.loadCharacter()
 
     def confirm(self):
         if not self.menu.noSelection:
             if self.stage == 0:
                 if self.menu.value() == 1:
                     self.advanceNow = True
+                elif self.menu.value() == 2:
+                    if not self.characterToDisplay is None:
+                        self.setStage(101)
                 elif self.menu.value() == 4:
                     self.backNow = True
             elif self.stage == 1:
@@ -216,10 +244,15 @@ class Model(mvc.Model):
             elif self.stage == 2:
                 self.advanceNow = True
                 self.characterToDisplay.currSuperMove = self.menu.value() - 1
+            elif self.stage == 101:
+                if self.menu.value() == 1:
+                    chardata.deleteCharacter(self.characterToDisplay.name)
+                self.setStage(0)
 
     def click(self, pos):
         val = self.charMenu.isAreaRect(pos)
         if (val > 0) and (self.stage == 0):
             self.charMenu.setVal(val)
+            self.loadCharacter()
         else:
             self.confirm()

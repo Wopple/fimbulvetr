@@ -10,7 +10,7 @@ import move
 from constants import *
 
 class Hare(battlechar.BattleChar):
-    def __init__(self, name="Unnamed Hare"):
+    def __init__(self, name="Unnamed Hare", inSpecial=0):
         self.name = name
         self.speciesName = "Hare"
         self.spriteSet = HARE_IMAGES
@@ -34,6 +34,10 @@ class Hare(battlechar.BattleChar):
                             " chasing down opponents, using hit-and-run" +
                             " tactics, and evading danger with acrobatic" +
                             " mobility.")
+
+        if (inSpecial < 0) or (inSpecial >= len(self.superMoves)):
+            inSpecial = 0
+        self.currSuperMove = inSpecial
 
     def beginBattle(self):
         self.hareEnergy.change(HARE_ENERGY_BATTLE_START)

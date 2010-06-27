@@ -4,6 +4,8 @@ import pygame
 
 from constants import *
 
+import hare, fox
+
 def saveCharacter(c):
     try:
         fileToUse = None
@@ -66,6 +68,37 @@ def getInfo(filePath):
         info = saveCharInfo("", "", 0, False)
 
     return info
+
+def loadCharacter(name):
+    for i in range(MAX_CHARACTER_SAVES):
+        fileName = CHARACTER_FILE_NAME + str(i) + "." + CHARACTER_FILE_EXT
+        filePath = os.path.join(DIREC_CHARACTER_SAVES, fileName)
+        if os.path.exists(filePath) and os.path.isfile(filePath):
+            info = getInfo(filePath)
+            if (info.name == name):
+                c = makeCharacterFromInfo(info)
+                return c
+            
+    fileError("Error finding save file for character")
+    return None
+
+def deleteCharacter(name):
+    for i in range(MAX_CHARACTER_SAVES):
+        fileName = CHARACTER_FILE_NAME + str(i) + "." + CHARACTER_FILE_EXT
+        filePath = os.path.join(DIREC_CHARACTER_SAVES, fileName)
+        if os.path.exists(filePath) and os.path.isfile(filePath):
+            info = getInfo(filePath)
+            if (info.name == name):
+                os.remove(filePath)
+                return
+            
+    fileError("Error finding save file for character")
+
+def makeCharacterFromInfo(info):
+    if info.speciesName == "Hare":
+        return hare.Hare(info.name, info.currSuperMove)
+    elif info.speciesName == "Fox":
+        return fox.Fox(info.name, info.currSuperMove)
 
 class saveCharInfo(object):
     def __init__(self, name, speciesName, currSuperMove, valid=True):
