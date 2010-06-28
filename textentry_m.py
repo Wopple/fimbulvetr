@@ -8,11 +8,12 @@ import mvc
 import string
 
 class Model(mvc.Model):
-    def __init__(self):
+    def __init__(self, banList = []):
         super(Model, self).__init__()
 
         self.font = TEXT_ENTRY_FONT
         self.response = []
+        self.banList = banList
         
         size = (200 + (TEXT_ENTRY_BORDER_SIZE * 2),
                 self.font.get_linesize() + self.font.get_height() +
@@ -57,7 +58,7 @@ class Model(mvc.Model):
         self.backNow = True        
 
     def enter(self):
-        if len(self.response) > 0:
+        if self.validResponse():
             self.advanceNow = True
 
     def convert(self):
@@ -65,4 +66,14 @@ class Model(mvc.Model):
 
     def validEntry(self, k):
         return (k in VALID_INPUT_CHARACTERS)
-    
+
+    def validResponse(self):
+        
+        if len(self.response) <= 0:
+            return False
+
+        if not self.banList is None:
+            if self.convert() in self.banList:
+                return False
+
+        return True

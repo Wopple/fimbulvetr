@@ -23,6 +23,10 @@ class View(mvc.View):
         if not self.model.characterToDisplay is None:
             self.model.characterToDisplay.draw(self.screen, (0, 0))
 
+        if not self.model.superMoveNameText is None:
+            self.screen.blit( self.model.superMoveNameText,
+                               self.model.superMoveNameTextPos)
+
 
         if tickClock:
             pygame.display.flip()

@@ -18,10 +18,13 @@ from constants import *
 class Model(mvc.Model):
     def __init__(self):
         super(Model, self).__init__()
+        self.page = None
 
         self.setStage(0, True)
 
         self.idealSize = self.buildIdealSize()
+
+        self.superMoveNameText = None
         
         self.buildCharMenu(True)
 
@@ -39,17 +42,25 @@ class Model(mvc.Model):
         pos2 = (pos1[0] + (self.idealSize[0] * 2), pos1[1])
         self.blackPanelPos = [pos1, pos2]
 
+        self.superMoveNameTextPos = [pos2[0], pos2[1]]
+        self.superMoveNameTextPos[1] += self.idealSize[1] - 20
+        
+
         if not self.page is None:
             self.loadCharacter()
 
     def buildCharMenu(self, firstTime=False):
+        if not self.page is None:
+            currPage = self.page.value
+        else:
+            currPage = 0
         numOfPages = int(len(self.savedNames) / CHAR_EDITOR_NUM_PER_PAGE)
         if ( (int(len(self.savedNames) % CHAR_EDITOR_NUM_PER_PAGE)) == 0):
             numOfPages -= 1
         if numOfPages < 0:
             self.page = None
         else:
-            self.page = incint.IncInt(0, 0, numOfPages)
+            self.page = incint.IncInt(currPage, 0, numOfPages)
         
         if not self.page is None:
             low = CHAR_EDITOR_NUM_PER_PAGE * self.page.value
@@ -77,7 +88,9 @@ class Model(mvc.Model):
             pos = (0, 0)
         else:
             pos = self.baseSurfaceRect.topleft
+            print "!"
             if not self.page is None:
+                print "??!"
                 self.loadCharacter()
         self.charMenu.rect.topleft = pos
 
@@ -121,6 +134,7 @@ class Model(mvc.Model):
         self.menu.rect.center = (SCREEN_SIZE[0]/2, SCREEN_SIZE[1]/2)
 
     def setStage(self, s, firstTime=False):
+        self.superMoveNameText = None
         self.stage = s
         self.makeMenu()
 
@@ -149,6 +163,14 @@ class Model(mvc.Model):
         self.characterToDisplay.preciseLoc = [self.menu.rect.center[0] + self.menu.rect.width,
                                               self.baseSurfaceRect.center[1] + (self.baseSurfaceRect.height / 8)]
         self.characterToDisplay.facingRight = False
+
+        self.makeSuperNameText(self.characterToDisplay.getSuper())
+
+    def makeSuperNameText(self, s):
+        self.superMoveNameText = textrect.render_textrect(s.name, CHAR_EDITOR_FONT,
+                                                          pygame.Rect((0, 0), (self.idealSize[0], 20)),
+                                                          CHAR_EDITOR_COLOR_OFF,
+                                                          CHAR_EDITOR_BLACK_PANEL_COLOR, 1)
         
         
 
@@ -237,6 +259,8 @@ class Model(mvc.Model):
                 elif self.menu.value() == 2:
                     if not self.characterToDisplay is None:
                         self.setStage(101)
+                elif self.menu.value() == 3:
+                    self.advanceNow = True
                 elif self.menu.value() == 4:
                     self.backNow = True
             elif self.stage == 1:
@@ -256,3 +280,11 @@ class Model(mvc.Model):
             self.loadCharacter()
         else:
             self.confirm()
+
+    def setCharacterSelection(self, name):
+        for i, n in enumerate(self.savedNames):
+            if n == name:
+                #self.page.value = int(i / CHAR_EDITOR_NUM_PER_PAGE)
+                self.charMenu.setVal(int(i % CHAR_EDITOR_NUM_PER_PAGE) + 1)
+                self.loadCharacter()
+                break

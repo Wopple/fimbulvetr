@@ -343,4 +343,6 @@ class BattleChar(object):
             self.setCurrMove('stun2')
         else:
             self.setCurrMove('stun3')
-        
+
+    def getSuper(self):
+        return self.superMoves[self.currSuperMove]

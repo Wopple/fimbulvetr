@@ -189,13 +189,16 @@ def goMainMenu():
             proceedMulti(clock)
             if m.advance():
                 m.advanceNow = False
-                goCreateCharacter()
+                if m.menu.value() == 1:
+                    goCreateCharacter()
+                else:
+                    goChangeSuper()
                 
     if m.menu.value() == 5:
         sys.exit()
 
 def goCreateCharacter():
-    multiMVC(textentry_m.Model(), textentry_v.View(),
+    multiMVC(textentry_m.Model(chardata.getNameList()), textentry_v.View(),
              textentry_c.Controller(), screen)
     while not m.either():
         proceedMulti(clock)
@@ -210,15 +213,20 @@ def goCreateCharacter():
         if m.back():
             m.setStage(0)
         else:
-            m.setStage(2)
-            while not m.either():
-                proceedMulti(clock)
-            if m.back():
-                m.setStage(0)
-            else:
-                m.characterToDisplay.name = characterName
-                chardata.saveCharacter(m.characterToDisplay)
-                m.setStage(0)
+            m.characterToDisplay.name = characterName
+            goChangeSuper()
+
+def goChangeSuper():
+    m.setStage(2)
+    while not m.either():
+        proceedMulti(clock)
+    if m.back():
+        m.setStage(0)
+    else:
+        cName = m.characterToDisplay.name
+        chardata.saveCharacter(m.characterToDisplay)
+        m.setStage(0)
+        m.setCharacterSelection(cName)
         
 
 
