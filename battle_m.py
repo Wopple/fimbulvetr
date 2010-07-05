@@ -9,7 +9,7 @@ import mvc
 import incint
 import energybar
 
-import hare, fox
+import hare, fox, cat
 
 from constants import *
 
@@ -346,7 +346,7 @@ class Model(mvc.Model):
             
 
 def testData():
-    heroes = [hare.Hare(), hare.Hare()]
+    heroes = [cat.Cat(), hare.Hare()]
     
     size = (1920, 1305)
     bg = pygame.Surface(size)

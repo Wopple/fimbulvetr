@@ -167,6 +167,7 @@ DIREC_BACKGROUNDS = os.path.join(DIREC_GRAPHICS, "backgrounds")
 DIREC_CHARACTER_GRAPHICS = os.path.join(DIREC_GRAPHICS, "characters")
 DIREC_HARE_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "hare")
 DIREC_FOX_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "fox")
+DIREC_CAT_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "cat")
 DIREC_INTERFACE_GRAPHICS = os.path.join(DIREC_GRAPHICS, "interface")
 DIREC_PORTRAITS = os.path.join(DIREC_GRAPHICS, "portraits")
 
@@ -299,6 +300,18 @@ temp = [ ["00.png", (43, 67)],
 FOX_IMAGES = []
 for i in temp:
     FOX_IMAGES.append([pygame.image.load(os.path.join(DIREC_FOX_GRAPHICS, i[0])).convert_alpha(), i[1]])
+
+temp = [ ["00.png", (24, 61)],
+         ["01.png", (24, 61)],
+         ["02.png", (24, 61)],
+         ["03.png", (24, 61)],
+         ["04.png", (24, 61)],
+         ["05.png", (27, 52)]]
+
+CAT_IMAGES = []
+for i in temp:
+    CAT_IMAGES.append([pygame.image.load(os.path.join(DIREC_CAT_GRAPHICS, i[0])).convert_alpha(), i[1]])
+
 
 temp = [ ['face1.png', (28, 66)],
          ['face2.png', (28, 66)],
