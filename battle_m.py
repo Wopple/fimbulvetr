@@ -28,6 +28,7 @@ class Model(mvc.Model):
         self.projectiles = []
         self.cameraPlayer = 0
         self.netPlayer = 0
+        self.catBar = None
         self.createBars()
         self.resetHitMemory()
 
@@ -66,6 +67,8 @@ class Model(mvc.Model):
         self.centerCamera(self.players[self.cameraPlayer])
 
         for b in self.bars:
+            if not self.catBar is None:
+                self.updateCatBarColors()
             b.update()
 
     def setCameraPlayer(self, c):
@@ -143,13 +146,13 @@ class Model(mvc.Model):
                         keysNow[4] = 0
             if self.wasKeyPressed(5, keysNow):
                 if u:
-                    if p.aerialCharge:
+                    if p.actTransition('attackBUp'):
+                        keysNow[5] = 0
+                    elif p.aerialCharge:
                         if p.actTransition('attackBUpCharge'):
                             keysNow[5] = 0
                             p.aerialCharge = False
-                    else:
-                        if p.actTransition('attackBUp'):
-                            keysNow[5] = 0
+                        
                 elif d:
                     if p.actTransition('attackBDown'):
                         keysNow[5] = 0
@@ -304,8 +307,26 @@ class Model(mvc.Model):
                                                  HARE_ENERGY_NAME,
                                                  HARE_ENERGY_USAGE)
                              )
-                                                 
 
+        if isinstance(p, cat.Cat):
+            self.catBar = energybar.EnergyBar(p.catEnergy,
+                                                 pygame.Rect((x, y), SPECIAL_BAR_SIZE),
+                                                 SPECIAL_BAR_BORDERS,
+                                                 SPECIAL_BAR_COLORS,
+                                                 SPECIAL_BAR_PULSE,
+                                                 CAT_ENERGY_NAME,
+                                                 CAT_ENERGY_MAX+1)
+            self.bars.append(self.catBar)
+
+    def updateCatBarColors(self):
+        x = len(CAT_ENERGY_SECTIONS)
+        for i in range(x):
+            if self.catBar.value.value <= CAT_ENERGY_SECTIONS[i]:
+                if self.catBar.fillColor is not CAT_ENERGY_BAR_COLORS[i]:
+                    self.catBar.changeColor(CAT_ENERGY_BAR_COLORS[i])
+                return
+        self.catBar.changeColor(CAT_ENERGY_BAR_COLORS[x])
+                                                 
     def resetHitMemory(self):
         self.hitMemory = [None, None]
 

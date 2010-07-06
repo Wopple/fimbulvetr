@@ -30,6 +30,7 @@ class Move(object):
         self.isStun = False
         self.liftOff = False
         self.reversable = False
+        self.chargeBlade = False
 
 
     def append(self, f, t):
@@ -102,6 +103,8 @@ def baseIdle():
           ['doDash', Transition(None, None, None, None, 'dash')],
           ['jump', Transition(None, None, None, None, 'jumping')],
           ['doDuck', Transition(None, None, None, None, 'ducking')],
+          ['attackAUp', Transition(None, None, None, None, 'upA')],
+          ['attackBUp', Transition(None, None, None, None, 'upB')],
           ['attackA', Transition(None, None, None, None, 'jabA')],
           ['attackB', Transition(None, None, None, None, 'jabB')]]
     m = Move([], t)
@@ -113,6 +116,8 @@ def baseDash():
           ['noXMove', Transition(None, None, None, None, 'idle')],
           ['jump', Transition(None, None, None, None, 'jumping')],
           ['doDuck', Transition(None, None, None, None, 'ducking')],
+          ['attackAUp', Transition(None, None, None, None, 'upA')],
+          ['attackBUp', Transition(None, None, None, None, 'upB')],
           ['attackA', Transition(None, None, None, None, 'dashAttackA')],
           ['attackB', Transition(None, None, None, None, 'dashAttackB')] ]
     m = Move([], t)

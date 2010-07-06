@@ -34,6 +34,7 @@ class EnergyBar(object):
         self.pulse = pulse
         self.currPulse = 0
         self.pulseUp = True
+        self.colorChanged = False
         self.threshold = threshold
 
         self.createPulse()
@@ -51,7 +52,10 @@ class EnergyBar(object):
         if self.currPulse == 0 or self.currPulse == self.pulse-1:
             self.pulseUp = not(self.pulseUp)
         
-        if  (self.prevVal != self.value.value) or (self.value.value >= self.threshold):
+        if  ((self.prevVal != self.value.value)
+             or (self.value.value >= self.threshold)
+             or (self.colorChanged)):
+            self.colorChanged = False
             if (self.value.value >= self.threshold) and (self.prevVal < self.threshold):
                 self.currPulse = 0
                 self.pulseUp = True
@@ -122,3 +126,7 @@ class EnergyBar(object):
                                                  pygame.Rect((0, 0), (w, h)),
                                                  self.fontColor,
                                                  (0, 0, 0), 0, True)
+
+    def changeColor(self, c):
+        self.colorChanged = True
+        self.fillColor = c

@@ -138,6 +138,18 @@ HARE_ENERGY_DELAY = 50
 HARE_ENERGY_RECHARGE = 1
 HARE_ENERGY_NAME = "Cancel"
 
+CAT_ENERGY_MAX = 1200
+CAT_ENERGY_USAGE = 3
+CAT_ENERGY_BATTLE_START = 700
+CAT_ENERGY_DELAY = 30
+CAT_ENERGY_RECHARGE = 16
+CAT_ENERGY_NAME = "Galdr Blade"
+
+CAT_ENERGY_SECTIONS = (350, 850)
+CAT_ENERGY_BAR_COLORS = ( (10, 150, 10),
+                          (255, 194, 15),
+                          (180, 10, 10) )
+
 SPECIAL_BAR_OFFSET = 15
 SPECIAL_BAR_SIZE = (250, 16)
 SPECIAL_BAR_BORDERS = (3, 2)
@@ -306,7 +318,15 @@ temp = [ ["00.png", (24, 61)],
          ["02.png", (24, 61)],
          ["03.png", (24, 61)],
          ["04.png", (24, 61)],
-         ["05.png", (27, 52)]]
+         ["05.png", (27, 52)],
+         ["06.png", (32, 62)],
+         ["07.png", (32, 62)],
+         ["08.png", (32, 62)],
+         ["09.png", (32, 62)],
+         ["10.png", (32, 71)],
+         ["11.png", (32, 71)],
+         ["12.png", (32, 71)],
+         ["13.png", (32, 71)]]
 
 CAT_IMAGES = []
 for i in temp:
