@@ -52,6 +52,8 @@ class Cat(battlechar.BattleChar):
         self.createMoveDash()
         self.createMoveAir()
         self.createMoveJumping()
+        self.createMoveDucking()
+        self.createMoveJabA()
         self.createMoveUpB()
 
     def createMoveIdle(self):
@@ -73,8 +75,41 @@ class Cat(battlechar.BattleChar):
         f = [ self.frameData(5, 2) ]
         self.moves['jumping'].append(f, [])
 
+    def createMoveDucking(self):
+        f = [ self.frameData(18, 2) ]
+        self.moves['ducking'].append(f, [])
+
+    def createMoveJabA(self):
+        f = [ self.frameData(14, 3),
+              self.frameData(15, 4),
+              self.frameData(15, 80) ]
+        t = [ ['releaseA', move.Transition(None, None, 2, None, 'jabThrust')],
+              ['exitFrame', move.Transition(-1, None, None, None, 'jabThrust')],
+              ['doDuck', move.Transition(None, None, 2, None, 'jabCancel')] ]
+        self.moves['jabA'].append(f, t)
+        self.moves['jabA'].canDI = False
+
+        self.createMoveJabThrust()
+        self.createMoveJabCancel()
+
+    def createMoveJabThrust(self):
+        f = [ self.frameData(17, 5),
+              self.frameData(16, 12) ]
+        t = []
+        self.moves['jabThrust'] = move.Move(f, t)
+        self.moves['jabThrust'].canDI = False
+        self.moves['jabThrust'].frames[0].setVelX = 45
+        self.moves['jabThrust'].frames[0].ignoreFriction = True
+        self.moves['jabThrust'].frames[0].ignoreSpeedCap = True
+        self.moves['jabThrust'].frames[1].setVelX = 0
+
+    def createMoveJabCancel(self):
+        f = [ self.frameData(14, 5),
+              self.frameData(0, 3) ]
+        self.moves['jabCancel'] = move.Move(f, [])
+        self.moves['jabCancel'].canDI = False
+
     def createMoveUpB(self):
-        print "Making this awesome move!"
         f = [ self.frameData(6, 4),
               self.frameData(7, 4),
               self.frameData(8, 4),
