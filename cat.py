@@ -56,6 +56,7 @@ class Cat(battlechar.BattleChar):
         self.createMoveDucking()
         self.createMoveJabA()
         self.createMoveJabB()
+        self.createMoveDownA()
         self.createDashAttackA()
         self.createMoveUpB()
         self.createNeutralAirB()
@@ -142,12 +143,15 @@ class Cat(battlechar.BattleChar):
 
         t = [ ['bladelv1', move.Transition(None, None, 4, 4, 'swordbeamAir1')],
               ['bladelv2', move.Transition(None, None, 4, 4, 'swordbeamAir2')],
-              ['bladelv3', move.Transition(None, None, 4, 4, 'swordbeamAir3')] ]
+              ['bladelv3', move.Transition(None, None, 4, 4, 'swordbeamAir3')],
+              ['land', move.Transition(None, None, None, None, 'neutralAirBLag')] ]
 
         self.moves['neutralAirB'].append(f, t)
         self.moves['neutralAirB'].reversable = True
 
         self.createMoveSwordBeamAirEnd()
+
+        self.createMoveNeutralAirBLag()
 
 
     def createMoveSwordBeamAirEnd(self):
@@ -155,7 +159,7 @@ class Cat(battlechar.BattleChar):
               self.frameData(40, 1),
               self.frameData(41, 12),
               self.frameData(5, 2) ]
-        t = []
+        t = [['land', move.Transition(None, None, None, None, 'neutralAirBLag')]]
 
         self.moves['swordbeamAir1'] = move.Move(f, t)
         self.moves['swordbeamAir1'].shoot.append( (0, 0, (64, -30)) )
@@ -166,6 +170,10 @@ class Cat(battlechar.BattleChar):
         self.moves['swordbeamAir3'] = move.Move(f, t)
         self.moves['swordbeamAir3'].shoot.append( (0, 2, (64, -30)) )
 
+    def createMoveNeutralAirBLag(self):
+        f = [ self.frameData(26, 8) ]
+        self.moves['neutralAirBLag'] = move.Move(f, [])
+        self.moves['neutralAirBLag'].canDI = False
 
 
     def createDashAttackA(self):
@@ -226,6 +234,15 @@ class Cat(battlechar.BattleChar):
         self.moves['chargeSword'] = move.Move(f, t)
         self.moves['chargeSword'].canDI = False
         self.moves['chargeSword'].chargeBlade = True
+
+    def createMoveDownA(self):
+        f = [ self.frameData(42, 6),
+              self.frameData(18, 5) ]
+
+        t = [ ['exitFrame', move.Transition(-1, None, None, None, 'ducking')] ]
+
+        self.moves['downA'].append(f, t)
+        self.moves['downA'].canDI = False
 
     def createProjectiles(self):
         self.createProjectileSwordBeams()
