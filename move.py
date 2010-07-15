@@ -16,7 +16,8 @@ class Move(object):
         temp = ['exitFrame', 'doDash', 'noXMove', 'noXVel', 'land', 'jump',
                 'doDuck', 'stopDuck', 'attackA', 'attackB', 'releaseA',
                 'releaseB', 'attackAUp', 'attackBUp', 'attackADown',
-                'attackBDown', 'attackBUpCharge']
+                'attackBDown', 'attackBUpCharge', 'bladelv1', 'bladelv2',
+                'bladelv3']
         self.transitions = {}
         for i in temp:
             self.transitions[i] = None

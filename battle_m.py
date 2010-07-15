@@ -167,6 +167,14 @@ class Model(mvc.Model):
             if not keys[5]:
                 p.actTransition('releaseB')
 
+            lev = p.getCatEnergyLevel()
+            if lev == 1:
+                p.actTransition('bladelv1')
+            if lev == 2:
+                p.actTransition('bladelv2')
+            if lev == 3:
+                p.actTransition('bladelv3')
+
     def checkReversable(self, l, r, p):
         if p.currFrame == 0 and p.currSubframe == 1:
             if p.currMove.reversable:
@@ -193,7 +201,7 @@ class Model(mvc.Model):
         m = p.currMove
         for s in m.shoot:
             if s[0] == p.currFrame:
-                proj = copy.copy(p.projectiles[s[1]])
+                proj = copy.copy(p.projectiles[s[1]].copySelf())
 
                 poffset = s[2]
                 temp = p.preciseLoc

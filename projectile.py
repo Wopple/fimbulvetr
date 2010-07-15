@@ -5,6 +5,7 @@ import pygame
 import incint
 
 import move
+import copy
 
 from constants import *
 
@@ -16,6 +17,7 @@ class Projectile(object):
         self.facingRight = True
         self.actLeft = True
         self.dissolveOnPhysical = False
+        self.liveTime = None
 
         temp = pygame.Surface((50, 80))
         temp.fill((2, 2, 2))
@@ -26,6 +28,13 @@ class Projectile(object):
         self.destroy = False
 
     def update(self):
+        if not self.liveTime is None:
+            if self.liveTime > 0:
+                self.liveTime -= 1
+            if (self.liveTime <= 0 and not
+                (self.currMove is self.moves['dissolve'])):
+                self.setCurrMove('dissolve')
+                
         self.proceedFrame()
         self.frameSpecial()
         
@@ -147,3 +156,9 @@ class Projectile(object):
             return True
         else:
             return False
+
+    def copySelf(self):
+        self.preciseLoc = copy.copy(self.preciseLoc)
+        self.accel = copy.copy(self.accel)
+        self.vel = copy.copy(self.vel)
+        return self

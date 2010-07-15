@@ -348,3 +348,6 @@ class BattleChar(object):
 
     def getSuper(self):
         return self.superMoves[self.currSuperMove]
+
+    def getCatEnergyLevel(self):
+        return 0
