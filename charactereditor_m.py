@@ -11,7 +11,7 @@ import textrect
 import boundint
 import incint
 
-import hare, fox
+import hare, fox, cat
 
 from constants import *
 
@@ -88,9 +88,7 @@ class Model(mvc.Model):
             pos = (0, 0)
         else:
             pos = self.baseSurfaceRect.topleft
-            print "!"
             if not self.page is None:
-                print "??!"
                 self.loadCharacter()
         self.charMenu.rect.topleft = pos
 
@@ -176,7 +174,8 @@ class Model(mvc.Model):
 
     def getSpeciesList(self):
         self.currSpeciesList = [ hare.Hare(),
-                                 fox.Fox() ]
+                                 fox.Fox(),
+                                 cat.Cat()]
         
         for s in self.currSpeciesList:
             s.preciseLoc = [self.menu.rect.center[0] + self.menu.rect.width,

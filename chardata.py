@@ -4,7 +4,7 @@ import pygame
 
 from constants import *
 
-import hare, fox
+import hare, fox, cat
 
 def saveCharacter(c):
     try:
@@ -99,6 +99,8 @@ def makeCharacterFromInfo(info):
         return hare.Hare(info.name, info.currSuperMove)
     elif info.speciesName == "Fox":
         return fox.Fox(info.name, info.currSuperMove)
+    elif info.speciesName == "Cat":
+        return cat.Cat(info.name, info.currSuperMove)
 
 class saveCharInfo(object):
     def __init__(self, name, speciesName, currSuperMove, valid=True):

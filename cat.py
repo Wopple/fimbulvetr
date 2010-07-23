@@ -31,7 +31,16 @@ class Cat(battlechar.BattleChar):
         super(Cat, self).__init__(1000)
         self.initSpecMoves()
 
-        self.speciesDesc = ("jhgjhk")
+        self.speciesDesc = ("An all-around warrior that wields a blade" +
+                            " enchanted with Galdr runes.  Capable of both" +
+                            " melee and magical ranged attacks, and" +
+                            " comfortable at many distances.  Requires time" +
+                            " to charge their slowly-depleting energy" +
+                            " in order to maintain strength.")
+
+        if (inSpecial < 0) or (inSpecial >= len(self.superMoves)):
+            inSpecial = 0
+        self.currSuperMove = inSpecial
 
     def beginBattle(self):
         self.catEnergy.change(CAT_ENERGY_BATTLE_START)
@@ -62,6 +71,12 @@ class Cat(battlechar.BattleChar):
         self.createNeutralAirB()
 
         self.createProjectiles()
+
+        self.createSuperMoves()
+
+    def createSuperMoves(self):
+        self.createSuperMove1()
+        self.createSuperMove2()
 
     def createMoveIdle(self):
         f = [ self.frameData(0, 2) ]
@@ -303,3 +318,24 @@ class Cat(battlechar.BattleChar):
             if self.energy.value <= CAT_ENERGY_SECTIONS[i]:
                 return i+1
         return x+1
+
+    def createSuperMove1(self):
+        n = "Runic Flare"
+        
+        d = ("An instantaneous explosion of power that fully charges the" +
+             " user's Galdr Blade, as well as dealing minor damage and" +
+             " knocking away any enemy who treads too closely.")
+        
+        s = move.SuperMove(n, d, [], [])
+
+        self.superMoves.append(s)
+
+    def createSuperMove2(self):
+        n = "Great Shockwave"
+        
+        d = ("A super-powered version of the user's normal protectile" +
+             " ability, capable of dealing a great deal of damage.")
+        
+        s = move.SuperMove(n, d, [], [])
+
+        self.superMoves.append(s)
