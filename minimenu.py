@@ -55,12 +55,20 @@ class MiniMenu(object):
 
     def inc(self):
         if not self.selection is None:
-            self.selection.increment()
+            if not self.noSelection:
+                self.selection.increment()
+            else:
+                self.selection.value = self.selection.minimum
+                self.noSelection = False
             self.update()
 
     def dec(self):
         if not self.selection is None:
-            self.selection.decrement()
+            if not self.noSelection:
+                self.selection.decrement()
+            else:
+                self.selection.value = self.selection.maximum
+                self.noSelection = False
             self.update()
 
     def setVal(self, val):

@@ -11,7 +11,7 @@ import netcode
 class NetClient(object):
     def __init__(self):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        host = '127.0.0.1'
+        host = '5.109.100.0'
         self.s.connect((host, MULTIPLAYER_PORT))
 
     def update(self, outMsg):

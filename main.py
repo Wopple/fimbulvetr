@@ -13,6 +13,7 @@ import textentry_m, textentry_v, textentry_c
 import cutscene_c
 import netclient, netserver
 import chardata
+import multiplayerSetup_m, multiplayerSetup_v, multiplayerSetup_c
 
 from constants import *
 
@@ -182,7 +183,19 @@ def goMainMenu():
     while not m.advance():
         proceed(clock)
 
-    if m.menu.value() == 3:
+    if m.menu.value() == 2:
+        multiMVC(multiplayerSetup_m.Model(), multiplayerSetup_v.View(),
+                 multiplayerSetup_c.Controller(), screen)
+        while not m.back():
+            proceedMulti(clock)
+            if m.advance():
+                m.advanceNow = False
+                if m.menu.value() == 1:
+                    goMultiplayerSetupServer()
+                else:
+                    goMultiplayerSetupClient()
+                
+    elif m.menu.value() == 3:
         multiMVC(charactereditor_m.Model(), charactereditor_v.View(),
                  charactereditor_c.Controller(), screen)
         while not m.back():
@@ -198,8 +211,8 @@ def goMainMenu():
         sys.exit()
 
 def goCreateCharacter():
-    multiMVC(textentry_m.Model(chardata.getNameList()), textentry_v.View(),
-             textentry_c.Controller(), screen)
+    multiMVC(textentry_m.Model("Character Name", chardata.getNameList()),
+             textentry_v.View(), textentry_c.Controller(), screen)
     while not m.either():
         proceedMulti(clock)
     if m.back():
@@ -227,7 +240,17 @@ def goChangeSuper():
         chardata.saveCharacter(m.characterToDisplay)
         m.setStage(0)
         m.setCharacterSelection(cName)
-        
+
+def goMultiplayerSetupClient():
+    multiMVC(textentry_m.Model("IP Address", [], True), textentry_v.View(),
+             textentry_c.Controller(), screen)
+    while not m.either():
+        proceedMulti(clock)
+    if m.back():
+        multiMVCBack()
+    else:
+        ipAddress = m.convert()
+        multiMVCBack()
 
 
 

@@ -12,6 +12,7 @@ class View(mvc.View):
 
     def update(self, tickClock=True):
         self.screen.blit(self.model.image, self.model.rect.topleft)
+        self.screen.blit(self.model.titlePanel, self.model.titleRect.topleft)
 
         if tickClock:
             pygame.display.flip()

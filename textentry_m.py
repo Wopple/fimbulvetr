@@ -6,11 +6,13 @@ from constants import *
 
 import mvc
 import string
+import textrect
 
 class Model(mvc.Model):
-    def __init__(self, banList = []):
+    def __init__(self, title, banList = [], ip=False):
         super(Model, self).__init__()
 
+        self.ipCheck = ip
         self.font = TEXT_ENTRY_FONT
         self.response = []
         self.banList = banList
@@ -34,6 +36,18 @@ class Model(mvc.Model):
                           size[1] - (TEXT_ENTRY_BORDER_SIZE * 2)), 1)
 
         self.updateImage()
+
+        size = (self.rect.width,
+                self.font.get_linesize() + self.font.get_height())
+        self.titleRect = pygame.Rect((0, 0), size)
+        self.titleRect.bottom = self.rect.top
+        self.titleRect.left = self.rect.left
+        temp = textrect.render_textrect(title, self.font,
+                                                   self.titleRect, WHITE,
+                                                   BLACK, 1)
+        self.titlePanel = pygame.Surface(size)
+        self.titlePanel.blit(temp, (0, (size[1]/2) -
+                                    (self.font.get_linesize()/2)))
 
     def updateImage(self):
         self.image = pygame.Surface(self.rect.size)
