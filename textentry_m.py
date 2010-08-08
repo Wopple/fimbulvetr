@@ -90,4 +90,25 @@ class Model(mvc.Model):
             if self.convert() in self.banList:
                 return False
 
+        if self.ipCheck:
+            if not self.isValidIP():
+                return False
+
+        return True
+
+    def isValidIP(self):
+        orig = self.convert()
+        sep = orig.split('.')
+        
+        if not (len(sep) == 4):
+            return False
+
+        for x in sep:
+            try:
+                i = int(x)
+                if (i < 0) or (i > 255):
+                    return False
+            except:
+                return False
+
         return True

@@ -33,6 +33,10 @@ class Model(MVCObject):
     def either(self):
         return (self.advance() or self.back())
 
+    def reset(self):
+        self.advanceNow = False
+        self.backNow = False
+
 class View(MVCObject):
     def __init__(self, model=None, screen=None):
         super(View, self).__init__()

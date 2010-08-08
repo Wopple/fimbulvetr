@@ -113,9 +113,6 @@ PAUSE_PLAY_MOVEMENT_DISTANCE = 25
 
 KEY_BUFFER = 4
 
-MULTIPLAYER_PORT = 1338
-NET_MESSAGE_SIZE = 14
-
 BATTLE_AREA_FLOOR_HEIGHT = 200
 
 PROJECTILE_SCREEN_ALLOWANCE = 100
@@ -392,7 +389,7 @@ temp = [ ["fontdata.ttf",10],
          ["fontslab.ttf", 12],
          ["fontslab.ttf", 30],
          ["fontheadline.ttf", 16],
-         ["fontapple.ttf", 22] ]
+         ["fontbio.ttf", 26] ]
 FONTS = []
 for i in temp:
     FONTS.append(pygame.font.Font(
@@ -410,7 +407,7 @@ VALID_INPUT_CHARACTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                           'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
                           'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
                           'Y', 'Z', '-', '1', '2', '3', '4', '5', '6', '7',
-                          '8', '9', '0']
+                          '8', '9', '0', '.']
 
 
 def add_points(i, j):

@@ -2,7 +2,7 @@ import os
 import sys
 import pygame
 
-from constants import *
+from constantsconcurr import *
 
 import socket
 

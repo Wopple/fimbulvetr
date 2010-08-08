@@ -1,21 +1,25 @@
-import os
-import sys
-import pygame
+if __name__ == '__main__':
+    import os
+    import sys
+    import pygame
 
-import mvc
+    from multiprocessing import Process, Value, Array
+    import time
 
-import debug_m, debug_v, menu_c, mapmode_m, mapmode_v, mapmode_c
-import battle_m, battle_v, battle_c
-import title_m, title_v
-import mainmenu_m, mainmenu_v
-import charactereditor_m, charactereditor_v, charactereditor_c
-import textentry_m, textentry_v, textentry_c
-import cutscene_c
-import netclient, netserver
-import chardata
-import multiplayerSetup_m, multiplayerSetup_v, multiplayerSetup_c
+    import mvc
 
-from constants import *
+    import debug_m, debug_v, menu_c, mapmode_m, mapmode_v, mapmode_c
+    import battle_m, battle_v, battle_c
+    import title_m, title_v
+    import mainmenu_m, mainmenu_v
+    import charactereditor_m, charactereditor_v, charactereditor_c
+    import textentry_m, textentry_v, textentry_c
+    import cutscene_c
+    import netclient, netserver
+    import chardata
+    import multiplayerSetup_m, multiplayerSetup_v, multiplayerSetup_c
+
+    from constants import *
 
 
 def changeMVC(newM, newV, newC, screen, emptyLists=True):
@@ -194,6 +198,8 @@ def goMainMenu():
                     goMultiplayerSetupServer()
                 else:
                     goMultiplayerSetupClient()
+                m.changePhase(1)
+                m.reset()
                 
     elif m.menu.value() == 3:
         multiMVC(charactereditor_m.Model(), charactereditor_v.View(),
@@ -251,45 +257,68 @@ def goMultiplayerSetupClient():
     else:
         ipAddress = m.convert()
         multiMVCBack()
+        m.changePhase(4)
+        m.reset()
+        goWaitForConnection(False, ipAddress)
+
+def goWaitForConnection(isHost, ipAddress='0.0.0.0'):
+    arr = [0]
+    if isHost:
+        p = Process(target=netserver.NetServerConcurr, args=(arr,))
+    else:
+        p = Process(target=netclient.NetClientConcurr, args=(arr, ipAddress,))
+    p.start()
+    while not m.either():
+        proceedMulti(clock)
+
+        if m.back():
+            print p.is_alive()
+            p.terminate()
+            while p.is_alive():
+                print p.is_alive()
+                time.sleep(0.1)
 
 
 
 
-m = mvc.Model()
-v = mvc.View()
-c = mvc.Controller()
+if __name__ == '__main__':
 
-mList = []
-vList = []
-cList = []
+    m = mvc.Model()
+    v = mvc.View()
+    c = mvc.Controller()
 
-if DEBUG_MODE:
-    debugLoop = True
-    while debugLoop:
-        changeMVC(debug_m.Model(), debug_v.View(), menu_c.Controller(), screen)
-        while not m.advance():
-            proceed(clock)
-        if m.debugMenu.value() == 1:
-            goBattle(battle_m.testData(), 0)
-        elif m.debugMenu.value() == 2:
-            data = mapmode_m.testData()
-            changeMVC(mapmode_m.Model(data[0], data[1], 0), mapmode_v.View(), mapmode_c.Controller(), screen)
+    mList = []
+    vList = []
+    cList = []
+
+    if DEBUG_MODE:
+        debugLoop = True
+        while debugLoop:
+            changeMVC(debug_m.Model(), debug_v.View(), menu_c.Controller(), screen)
             while not m.advance():
                 proceed(clock)
-                if not m.pendingBattle is None:
-                    result = goBattlePrompt(m.pendingBattle)
-                    m.resolveBattle(result)
-            sys.exit()
-        elif m.debugMenu.value() == 3:
-            goBattle(battle_m.testData(), 1)
-        elif m.debugMenu.value() == 4:
-            goBattle(battle_m.testData(), 2)
-        elif m.debugMenu.value() == 5:
-            debugLoop = False
-        elif m.debugMenu.value() == 6:
-            sys.exit()
+            if m.debugMenu.value() == 1:
+                goBattle(battle_m.testData(), 0)
+            elif m.debugMenu.value() == 2:
+                data = mapmode_m.testData()
+                changeMVC(mapmode_m.Model(data[0], data[1], 0), mapmode_v.View(), mapmode_c.Controller(), screen)
+                while not m.advance():
+                    proceed(clock)
+                    if not m.pendingBattle is None:
+                        result = goBattlePrompt(m.pendingBattle)
+                        m.resolveBattle(result)
+                sys.exit()
+            elif m.debugMenu.value() == 3:
+                goBattle(battle_m.testData(), 1)
+            elif m.debugMenu.value() == 4:
+                goBattle(battle_m.testData(), 2)
+            elif m.debugMenu.value() == 5:
+                debugLoop = False
+            elif m.debugMenu.value() == 6:
+                sys.exit()
 
 
-goTitle()
-while 1:
-    goMainMenu()
+    goTitle()
+    while 1:
+        goMainMenu()
+

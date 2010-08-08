@@ -2,7 +2,7 @@ import os
 import sys
 import pygame
 
-from constants import *
+from constantsconcurr import *
 
 import socket
 
@@ -27,3 +27,13 @@ class NetServer(object):
             inMsg = netcode.receiveMessage(self.conn, msgSize)
 
         return inMsg, 2
+
+
+def NetServerConcurr(flagArr):
+    try:
+        flagArr[0] = 1
+        conn = NetServer()
+        flagArr.append(conn)
+        flagArr[0] = 2
+    except:
+        flagArr[0] = -1
