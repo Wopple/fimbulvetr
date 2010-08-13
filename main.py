@@ -3,7 +3,6 @@ if __name__ == '__main__':
     import sys
     import pygame
 
-    from multiprocessing import Process, Value, Array
     import time
 
     import mvc
@@ -18,6 +17,7 @@ if __name__ == '__main__':
     import netclient, netserver
     import chardata
     import multiplayerSetup_m, multiplayerSetup_v, multiplayerSetup_c
+    #import characterSelect_m, characterSelect_v, characterSelect_c
 
     from constants import *
 
@@ -138,17 +138,14 @@ def checkError():
         print m.checkError(), v.checkError(), c.checkError()
         criticalError(1)
 
-def goBattle(data, netType):
-    if netType == 0:
-        net = None
+def goBattle(data, net):
+    if net is None:
         cp = 1
         cam = 0
-    elif netType == 1:
-        net = netserver.NetServer()
+    elif net.netID == 1:
         cp = 1
         cam = 0
-    elif netType == 2:
-        net = netclient.NetClient()
+    elif net.netID == 2:
         cp = 2
         cam = 1
         
@@ -182,24 +179,21 @@ def goTitle():
         proceed(clock)
 
 
-def goMainMenu():
-    changeMVC(mainmenu_m.Model(), mainmenu_v.View(), menu_c.Controller(), screen)
+def goMainMenu(fade):
+    changeMVC(mainmenu_m.Model(fade), mainmenu_v.View(), menu_c.Controller(), screen)
     while not m.advance():
         proceed(clock)
 
     if m.menu.value() == 2:
         multiMVC(multiplayerSetup_m.Model(), multiplayerSetup_v.View(),
                  multiplayerSetup_c.Controller(), screen)
-        while not m.back():
+        while not m.either():
             proceedMulti(clock)
-            if m.advance():
-                m.advanceNow = False
-                if m.menu.value() == 1:
-                    goMultiplayerSetupServer()
-                else:
-                    goMultiplayerSetupClient()
-                m.changePhase(1)
-                m.reset()
+        if m.advance():
+            if m.menu.value() == 1:
+                goMultiplayerSetupServer()
+            else:
+                goMultiplayerSetupClient()
                 
     elif m.menu.value() == 3:
         multiMVC(charactereditor_m.Model(), charactereditor_v.View(),
@@ -261,22 +255,50 @@ def goMultiplayerSetupClient():
         m.reset()
         goWaitForConnection(False, ipAddress)
 
-def goWaitForConnection(isHost, ipAddress='0.0.0.0'):
-    arr = [0]
-    if isHost:
-        p = Process(target=netserver.NetServerConcurr, args=(arr,))
-    else:
-        p = Process(target=netclient.NetClientConcurr, args=(arr, ipAddress,))
-    p.start()
-    while not m.either():
-        proceedMulti(clock)
+
+def goMultiplayerSetupServer():
+    mapS = '00'
+    m.changePhase(3)
+    m.reset()
+    goWaitForConnection(True, '0.0.0.0', mapS)
+
+def goWaitForConnection(isHost, ipAddress, mapS=None):
+    tryAgain = True
+    while tryAgain:
+        tryAgain = False
+        if isHost:
+            p = netserver.NetThread()
+        else:
+            p = netclient.NetThread(ipAddress)
+        p.start()
+        while not m.either():
+            proceedMulti(clock)
+            if not p.isAlive():
+                if p.flag == "success":
+                    m.advanceNow = True
+                else:
+                    m.backNow = True
 
         if m.back():
-            print p.is_alive()
-            p.terminate()
-            while p.is_alive():
-                print p.is_alive()
-                time.sleep(0.1)
+            prev = m.phase
+            m.changePhase(5)
+            m.reset()
+            while not m.advance():
+                proceedMulti(clock)
+            if m.menu.value() == 1:
+                tryAgain = True
+                m.changePhase(prev)
+                m.reset()
+        elif m.advance():
+            print "Sweet!"
+            sys.exit()
+
+def goCharacterSelection(conn, theMap):
+    changeMVC(characterSelect_m.Model(), characterSelect_v.View(),
+              characterSelect_c.Controller(), screen)
+    while not m.either():
+        proceed(clock)
+    
 
 
 
@@ -319,6 +341,8 @@ if __name__ == '__main__':
 
 
     goTitle()
+    fade = True
     while 1:
-        goMainMenu()
+        goMainMenu(fade)
+        fade = False
 

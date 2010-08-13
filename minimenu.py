@@ -45,7 +45,7 @@ class MiniMenu(object):
         self.colorOff = colorOff
         self.colorBG = colorBG
 
-        self.noSelection = False
+        self.noSelection = True
 
         
         self.slate = pygame.Surface( (self.rect.width, self.rect.height) )

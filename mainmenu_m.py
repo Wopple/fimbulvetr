@@ -11,7 +11,7 @@ import boundint
 from constants import *
 
 class Model(mvc.Model):
-    def __init__(self):
+    def __init__(self, fade):
         super(Model, self).__init__()
 
         self.bg = pygame.Surface(SCREEN_SIZE)
@@ -42,6 +42,10 @@ class Model(mvc.Model):
         self.transAlpha = boundint.BoundInt(0, 255, 255)
         self.transChecker = True
         self.transDirection = False
+
+        if not fade:
+            self.transAlpha.value = 0
+            self.transChecker = False
 
     def confirm(self):
         if not self.menu.noSelection:

@@ -12,15 +12,23 @@ class GameMap(object):
         self.mountains = []
 
 
-def map00():
+def getMap(s):
+    try:
+        i = int(s)
+    except:
+        return None
+
     m = GameMap()
-    m.startingPoints = [ [(100, 500),
-                          (120, 520)],
-                         [(800, 200)] ]
-    m.mapSize = (1500, 1200)
-    m.mountains = [((50, 50), 25),
-                   ((125, 300), 50),
-                   ((110, 310), 45),
-                   ((115, 335), 37),
-                   ((788, 500), 80)]
+
+    if i == 0:
+        m.startingPoints = [ [(100, 500),
+                              (120, 520)],
+                             [(800, 200)] ]
+        m.mapSize = (1500, 1200)
+        m.mountains = [((50, 50), 25),
+                       ((125, 300), 50),
+                       ((110, 310), 45),
+                       ((115, 335), 37),
+                       ((788, 500), 80)]
+
     return m

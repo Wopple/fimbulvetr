@@ -5,13 +5,19 @@ import pygame
 from constantsconcurr import *
 
 import socket
+import threading
 
 import netcode
 
 class NetClient(object):
     def __init__(self, host):
+        self.netID = 2
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s.connect((host, MULTIPLAYER_PORT))
+        self.s.settimeout(8.0)
+        try:
+            self.s.connect((host, MULTIPLAYER_PORT))
+        except socket.timeout:
+            self.s = None
 
     def update(self, outMsg):
         msgSize = NET_MESSAGE_SIZE
@@ -25,12 +31,18 @@ class NetClient(object):
             
         return inMsg, 1
 
-def NetClientConcurr(flagArr, host):
-    try:
-        flagArr[0] = 1
-        conn = NetClient(host)
-        flagArr.append(conn)
-        flagArr[0] = 2
-    except:
-        flagArr[0] = -1
+class NetThread(threading.Thread):
+    def __init__(self, host):
+        super(NetThread, self).__init__()
+        self.flag = "starting"
+        self.net = None
+        self.host = host
+        
+    def run(self):
+        self.flag = "seeking"
+        self.net = NetClient(self.host)
+        if self.net.s is None:
+            self.flag = "failure"
+        else:
+            self.flag = "success"
 
