@@ -7,6 +7,7 @@ import mvc
 import minimenu
 import textrect
 import boundint
+import incint
 
 from constants import *
 
@@ -39,15 +40,23 @@ class Model(mvc.Model):
         self.textHostWaiting = textrect.render_textrect("Listening for Client...",
                                                         MAIN_MENU_FONT, self.tempRect,
                                                         MAIN_MENU_COLOR_OFF,
-                                                        MAIN_MENU_COLOR_BG, 1)
+                                                        MAIN_MENU_COLOR_BG, 2)
         self.textClientWaiting = textrect.render_textrect("Searching for Host...",
                                                         MAIN_MENU_FONT, self.tempRect,
                                                         MAIN_MENU_COLOR_OFF,
-                                                        MAIN_MENU_COLOR_BG, 1)
+                                                        MAIN_MENU_COLOR_BG, 2)
         self.textConnTimeout = textrect.render_textrect("Connection timed out",
                                                         MAIN_MENU_FONT, self.tempRect,
                                                         MAIN_MENU_COLOR_OFF,
                                                         MAIN_MENU_COLOR_BG, 1)
+
+        self.workingIconList = []
+        temp = [0, 270, 180, 90]
+        for i in temp:
+            theCopy = INTERFACE_GRAPHICS[3].copy()
+            self.workingIconList.append(pygame.transform.rotate(theCopy, i))
+        self.workingIconTick = incint.IncInt(0, 0, NET_ICON_SPEED)
+        self.workingIconCurr = incint.IncInt(0, 0, 3)
         
         self.changePhase(1)
 
@@ -58,11 +67,13 @@ class Model(mvc.Model):
             self.menu = self.menuHostClient
             self.text = None
         if n == 3:
-            self.menu = None
             self.text = self.textHostWaiting
         if n == 4:
-            self.menu = None
             self.text = self.textClientWaiting
+        if n == 3 or n == 4:
+            self.workingIconTick.value = 0
+            self.workingIconCurr.value = 0
+            self.menu = None
         if n == 5:
             self.menu = self.menuTryAgain
             self.text = self.textConnTimeout
@@ -76,7 +87,11 @@ class Model(mvc.Model):
             
 
     def update(self):
-        pass
+        self.workingIconTick.inc()
+        if self.workingIconTick.isMin():
+            self.workingIconCurr.inc()
+
+        self.workingIconImage = self.workingIconList[self.workingIconCurr.value]
   
     def mouseMoved(self, pos):
         if not self.menu is None:

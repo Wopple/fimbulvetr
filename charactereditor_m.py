@@ -16,9 +16,11 @@ import hare, fox, cat
 from constants import *
 
 class Model(mvc.Model):
-    def __init__(self):
+    def __init__(self, isSelection=False):
         super(Model, self).__init__()
         self.page = None
+
+        self.isSelectionScreen = isSelection
 
         self.setStage(0, True)
 
@@ -83,6 +85,7 @@ class Model(mvc.Model):
                                           CHAR_EDITOR_FONT, CHAR_EDITOR_COLOR_ON,
                                           CHAR_EDITOR_COLOR_OFF,
                                           CHAR_EDITOR_BLACK_PANEL_COLOR)
+        self.charMenu.setVal(1)
                     
         if firstTime:
             pos = (0, 0)
@@ -108,7 +111,10 @@ class Model(mvc.Model):
 
     def makeMenu(self):
         if self.stage == 0:
-            menuOptions = ["New", "Delete", "Change Power", "Done"]
+            if self.isSelectionScreen:
+                menuOptions = ["New", "Delete", "Change Power", "Select"]
+            else:
+                menuOptions = ["New", "Delete", "Change Power", "Done"]
 
         elif self.stage == 1:
             menuOptions = []
@@ -240,7 +246,7 @@ class Model(mvc.Model):
         if not self.page is None:
             self.page.inc()
             self.buildCharMenu()
-            self.charMenu.setVal(0)
+            self.charMenu.setVal(1)
             self.loadCharacter()
 
     def decPage(self):
@@ -254,7 +260,11 @@ class Model(mvc.Model):
         if not self.menu.noSelection:
             if self.stage == 0:
                 if self.menu.value() == 1:
-                    self.advanceNow = True
+                    if self.isSelectionMenu:
+                        if not self.characterToDisplay is None:
+                            self.advanceNow = True
+                    else:
+                        self.advanceNow = True
                 elif self.menu.value() == 2:
                     if not self.characterToDisplay is None:
                         self.setStage(101)

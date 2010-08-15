@@ -17,5 +17,8 @@ class View(mvc.View):
         if not self.model.text is None:
             self.screen.blit(self.model.text, self.model.textLoc)
 
+        if self.model.phase == 3 or self.model.phase == 4:
+            self.screen.blit(self.model.workingIconImage, self.model.textLoc)
+
         if tickClock:
             pygame.display.flip()

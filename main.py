@@ -1,25 +1,25 @@
-if __name__ == '__main__':
-    import os
-    import sys
-    import pygame
+import os
+import sys
+import pygame
 
-    import time
+import time
 
-    import mvc
+import mvc
 
-    import debug_m, debug_v, menu_c, mapmode_m, mapmode_v, mapmode_c
-    import battle_m, battle_v, battle_c
-    import title_m, title_v
-    import mainmenu_m, mainmenu_v
-    import charactereditor_m, charactereditor_v, charactereditor_c
-    import textentry_m, textentry_v, textentry_c
-    import cutscene_c
-    import netclient, netserver
-    import chardata
-    import multiplayerSetup_m, multiplayerSetup_v, multiplayerSetup_c
-    #import characterSelect_m, characterSelect_v, characterSelect_c
+import debug_m, debug_v, menu_c, mapmode_m, mapmode_v, mapmode_c
+import battle_m, battle_v, battle_c
+import title_m, title_v
+import mainmenu_m, mainmenu_v
+import charactereditor_m, charactereditor_v, charactereditor_c
+import textentry_m, textentry_v, textentry_c
+import cutscene_c
+import netclient, netserver
+import chardata
+import multiplayerSetup_m, multiplayerSetup_v, multiplayerSetup_c
+import characterSelect_m, characterSelect_v, characterSelect_c
+import gamemap
 
-    from constants import *
+from constants import *
 
 
 def changeMVC(newM, newV, newC, screen, emptyLists=True):
@@ -207,7 +207,7 @@ def goMainMenu(fade):
                 else:
                     goChangeSuper()
                 
-    if m.menu.value() == 5:
+    elif m.menu.value() == 5:
         sys.exit()
 
 def goCreateCharacter():
@@ -290,15 +290,22 @@ def goWaitForConnection(isHost, ipAddress, mapS=None):
                 m.changePhase(prev)
                 m.reset()
         elif m.advance():
-            print "Sweet!"
-            sys.exit()
+            theMap = gamemap.getMap(mapS)
+            goCharacterSelection(p.net, theMap)
 
 def goCharacterSelection(conn, theMap):
-    changeMVC(characterSelect_m.Model(), characterSelect_v.View(),
+    changeMVC(characterSelect_m.Model(theMap), characterSelect_v.View(),
               characterSelect_c.Controller(), screen)
     while not m.either():
         proceed(clock)
-    
+        if m.openEditor:
+            m.openEditor = False
+            multiMVC(charactereditor_m.Model(True), charactereditor_v.View(),
+                 charactereditor_c.Controller(), screen)
+            while not m.back():
+                proceedMulti(clock)
+            multiMVCBack()
+
 
 
 
@@ -331,12 +338,10 @@ if __name__ == '__main__':
                         m.resolveBattle(result)
                 sys.exit()
             elif m.debugMenu.value() == 3:
-                goBattle(battle_m.testData(), 1)
+                goCharacterSelection(None, gamemap.getMap("00"))
             elif m.debugMenu.value() == 4:
-                goBattle(battle_m.testData(), 2)
-            elif m.debugMenu.value() == 5:
                 debugLoop = False
-            elif m.debugMenu.value() == 6:
+            elif m.debugMenu.value() == 5:
                 sys.exit()
 
 

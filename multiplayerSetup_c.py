@@ -31,4 +31,5 @@ class Controller(mvc.Controller):
                 self.model.mouseMoved(pygame.mouse.get_pos())
                     
             elif event.type == pygame.QUIT:
-                sys.exit(0)
+                if not (self.model.phase == 3 or self.model.phase == 4):
+                    sys.exit(0)
