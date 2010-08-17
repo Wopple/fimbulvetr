@@ -13,11 +13,18 @@ class View(mvc.View):
     def update(self, tickClock=True):
         self.screen.blit(self.model.bg, (0, 0))
 
-        pos = self.model.getSelectionBorderPos()
+        border, pos = self.model.getSelectionBorder()
         if not pos is None:
-            self.screen.blit(self.model.selectionBorder, pos)
+            self.screen.blit(border, pos)
 
         self.model.group.draw(self.screen)
+
+        self.model.hostPanel.draw(self.screen)
+        self.model.clientPanel.draw(self.screen)
+
+        self.model.readyButton.draw(self.screen)
+        if not self.model.startButton is None:
+            self.model.startButton.draw(self.screen)
 
         if tickClock:
             pygame.display.flip()

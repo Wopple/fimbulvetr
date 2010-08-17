@@ -293,8 +293,8 @@ def goWaitForConnection(isHost, ipAddress, mapS=None):
             theMap = gamemap.getMap(mapS)
             goCharacterSelection(p.net, theMap)
 
-def goCharacterSelection(conn, theMap):
-    changeMVC(characterSelect_m.Model(theMap), characterSelect_v.View(),
+def goCharacterSelection(conn, theMap, isHost):
+    changeMVC(characterSelect_m.Model(theMap, isHost), characterSelect_v.View(),
               characterSelect_c.Controller(), screen)
     while not m.either():
         proceed(clock)
@@ -304,7 +304,9 @@ def goCharacterSelection(conn, theMap):
                  charactereditor_c.Controller(), screen)
             while not m.back():
                 proceedMulti(clock)
+            temp = m.returnCharacter()
             multiMVCBack()
+            m.setCharacter(temp)
 
 
 
@@ -338,7 +340,7 @@ if __name__ == '__main__':
                         m.resolveBattle(result)
                 sys.exit()
             elif m.debugMenu.value() == 3:
-                goCharacterSelection(None, gamemap.getMap("00"))
+                goCharacterSelection(None, gamemap.getMap("00"), True)
             elif m.debugMenu.value() == 4:
                 debugLoop = False
             elif m.debugMenu.value() == 5:

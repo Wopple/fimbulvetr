@@ -3,13 +3,14 @@ import sys
 import pygame
 
 import mvc
+import textrect
 
 import math
 
 from constants import *
 
 class Model(mvc.Model):
-    def __init__(self, theMap):
+    def __init__(self, theMap, isHost):
         super(Model, self).__init__()
 
         self.theMap = theMap
@@ -19,7 +20,7 @@ class Model(mvc.Model):
         self.bg = pygame.Surface(SCREEN_SIZE)
         self.bg.fill(CHARACTER_SELECT_BG_COLOR)
 
-        self.group = CharacterPanelGroup(10)
+        self.group = CharacterPanelGroup(3)
         self.currSelected = None
 
         x = ((CHARACTER_SELECT_PANEL_SELECTION_BORDER_WIDTH * 2) +
@@ -30,6 +31,48 @@ class Model(mvc.Model):
         self.selectionBorder = pygame.Surface((x, y))
         self.selectionBorder.fill(CHARACTER_SELECT_PANEL_SELECTION_BORDER_COLOR)
 
+        tempRect = pygame.Rect((0, 0), CHARACTER_SELECT_PLAYER_SIZE)
+        tempRect.bottom = SCREEN_SIZE[1] - CHARACTER_SELECT_GROUP_FROM_TOP
+        tempRect.centerx = SCREEN_SIZE[0] / 2
+        self.clientPanel = PlayerPanel(tempRect, "Client", self.group.num)
+
+        tempRect = pygame.Rect((0, 0), CHARACTER_SELECT_PLAYER_SIZE)
+        tempRect.bottom = (self.clientPanel.rect.top -
+                           CHARACTER_SELECT_GROUP_SPACING)
+        tempRect.centerx = SCREEN_SIZE[0] / 2
+        self.hostPanel = PlayerPanel(tempRect, "Host", self.group.num)
+
+        if isHost:
+            self.myPanel = self.hostPanel
+            self.theirPanel = self.clientPanel
+        else:
+            self.myPanel = self.clientPanel
+            self.theirPanel = self.hostPanel
+
+
+        tempRect = pygame.Rect((0, 0), CHARACTER_SELECT_BUTTON_SIZE)
+        tempRect.left = self.myPanel.rect.right + CHARACTER_SELECT_GROUP_SPACING
+        tempRect.top = self.myPanel.rect.top
+        self.readyButton = Button(tempRect, "Ready")
+
+        if isHost:
+            tempRect = pygame.Rect((0, 0), CHARACTER_SELECT_BUTTON_SIZE)
+            tempRect.left = (self.theirPanel.rect.right +
+                             CHARACTER_SELECT_GROUP_SPACING)
+            tempRect.top = self.theirPanel.rect.top
+            self.startButton = Button(tempRect, "Start")
+        else:
+            self.startButton = None
+
+        x = ((CHARACTER_SELECT_PANEL_SELECTION_BORDER_WIDTH * 2) +
+             CHARACTER_SELECT_BUTTON_SIZE[0])
+        y = ((CHARACTER_SELECT_PANEL_SELECTION_BORDER_WIDTH * 2) +
+             CHARACTER_SELECT_BUTTON_SIZE[1])
+        self.selectionBorderButton = pygame.Surface((x, y))
+        self.selectionBorderButton.fill(
+            CHARACTER_SELECT_PANEL_SELECTION_BORDER_COLOR)
+
+
     def update(self):
         pass
 
@@ -39,40 +82,191 @@ class Model(mvc.Model):
             if p.rect.collidepoint(pos):
                 self.currSelected = p
                 test = True
-                break
+                return
+
+        temp = [self.readyButton, self.startButton]
+        for b in temp:
+            if not b is None:
+                if b.enabled:
+                    if b.rect.collidepoint(pos):
+                        self.currSelected = b
+                        test = True
+                        return
 
         if not test:
             self.currSelected = None
 
     def click(self):
         if not self.currSelected is None:
-            self.openEditor = True
+            if isinstance(self.currSelected, CharacterPanel):
+                self.openEditor = True
 
-    def getSelectionBorderPos(self):
+    def click2(self):
+        if not self.currSelected is None:
+            if isinstance(self.currSelected, CharacterPanel):
+                self.setCharacter(None)
+
+    def getSelectionBorder(self):
+        if isinstance(self.currSelected, Button):
+            border = self.selectionBorderButton
+        else:
+            border = self.selectionBorder
+
         if self.currSelected is None:
-            return None
-        
-        x = (self.currSelected.rect.left -
-             CHARACTER_SELECT_PANEL_SELECTION_BORDER_WIDTH)
-        y = (self.currSelected.rect.top -
-             CHARACTER_SELECT_PANEL_SELECTION_BORDER_WIDTH)
-        return (x, y)
+            loc = None
+        else:
+            x = (self.currSelected.rect.left -
+                 CHARACTER_SELECT_PANEL_SELECTION_BORDER_WIDTH)
+            y = (self.currSelected.rect.top -
+                 CHARACTER_SELECT_PANEL_SELECTION_BORDER_WIDTH)
+            loc = (x, y)
+        return border, loc
 
+    def setCharacter(self, c):
+        if not (self.alreadyUsed(c)):
+            self.currSelected.setCharacter(c)
+            num = self.group.getNumActive()
+            self.myPanel.changeVal(num)
+            self.readyButton.setButton(num == self.group.num)
+
+    def alreadyUsed(self, c):
+        if not c is None:
+            for p in self.group.characterPanels:
+                if not p.character is None:
+                    if p.character.name == c.name:
+                        return True
+
+        return False
+
+class PlayerPanel(object):
+    def __init__(self, rect, name, maxVal):
+        self.rect = rect
+        self.name = name
+        self.maxVal = maxVal
+        self.backPanel = pygame.Surface(self.rect.size)
+        self.backPanel.fill(CHARACTER_SELECT_PANEL_COLOR_FILL)
+        pygame.draw.rect(self.backPanel, CHARACTER_SELECT_PANEL_COLOR_BORDER,
+                         (0 + CHARACTER_SELECT_PANEL_BORDER_SIZE,
+                          0 + CHARACTER_SELECT_PANEL_BORDER_SIZE,
+                          (self.rect.width -
+                           (CHARACTER_SELECT_PANEL_BORDER_SIZE * 2)),
+                          (self.rect.height -
+                           (CHARACTER_SELECT_PANEL_BORDER_SIZE * 2)) ),
+                         CHARACTER_SELECT_PANEL_BORDER_WIDTH)
+
+        self.changeVal(0)
+
+    def changeVal(self, val):
+        self.val = val
+        self.panel = pygame.Surface(self.rect.size)
+        self.panel.blit(self.backPanel, (0,0))
+
+        font = CHARACTER_SELECTION_FONT
+        textHeight = font.get_linesize() + 2
+        tempRect = pygame.Rect( (0, 0), (self.rect.width, textHeight) )
+
+        text = textrect.render_textrect(self.name, font, tempRect,
+                                        CHARACTER_SELECTION_FONT_COLOR,
+                                        ALMOST_BLACK, 0, True)
+        tempRect = pygame.Rect((0, 0), text.get_size())
+        tempRect.top = ((CHARACTER_SELECT_PANEL_SIZE[1] / 2) -
+                         (tempRect.height / 2))
+        loc = (tempRect.left + CHARACTER_SELECT_PANEL_BORDER_WIDTH +
+               CHARACTER_SELECT_PANEL_BORDER_SIZE,
+               tempRect.top)
+        self.panel.blit(text, loc)
+
+        msg = str(self.val) + "/" + str(self.maxVal)
+        text = textrect.render_textrect(msg, font, tempRect,
+                                        CHARACTER_SELECTION_FONT_COLOR,
+                                        ALMOST_BLACK, 2, True)
+        loc = (tempRect.left - CHARACTER_SELECT_PANEL_BORDER_WIDTH -
+               CHARACTER_SELECT_PANEL_BORDER_SIZE,
+               tempRect.top)
+        self.panel.blit(text, loc)
+
+    def draw(self, screen):
+        screen.blit(self.panel, self.rect.topleft)
+
+
+class Button(object):
+    def __init__(self, rect, msg):
+        self.rect = rect
+        self.msg = msg
+        self.enabled = True
+        self.backPanel = pygame.Surface(self.rect.size)
+        self.backPanel.fill(CHARACTER_SELECT_PANEL_COLOR_FILL)
+
+        self.setButton(False)
+
+    def setButton(self, val):
+        if not (val == self.enabled):
+            self.enabled = val
+        
+            self.panel = pygame.Surface(self.rect.size)
+            self.panel.blit(self.backPanel, (0,0))
+
+            if self.enabled:
+                color = CHARACTER_SELECTION_BUTTON_COLOR_ON
+            else:
+                color = CHARACTER_SELECTION_BUTTON_COLOR_OFF
+
+            font = CHARACTER_SELECTION_FONT
+            textHeight = font.get_linesize() + 2
+            tempRect = pygame.Rect( (0, 0), (self.rect.width, textHeight) )
+
+            text = textrect.render_textrect(self.msg, font, tempRect,
+                                            color,
+                                            ALMOST_BLACK, 1, True)
+            tempRect = pygame.Rect((0, 0), text.get_size())
+            tempRect.top = ((CHARACTER_SELECT_PANEL_SIZE[1] / 2) -
+                             (tempRect.height / 2))
+            self.panel.blit(text, tempRect.topleft)
+
+    def draw(self, screen):
+        screen.blit(self.panel, self.rect.topleft)
+             
 
 class CharacterPanel(object):
     def __init__(self, rect, character):
         self.rect = rect
-        self.character = character
-        self.panel = pygame.Surface(CHARACTER_SELECT_PANEL_SIZE)
-        self.panel.fill(CHARACTER_SELECT_PANEL_COLOR_FILL)
-        pygame.draw.rect(self.panel, CHARACTER_SELECT_PANEL_COLOR_BORDER,
+        self.backPanel = pygame.Surface(self.rect.size)
+        self.backPanel.fill(CHARACTER_SELECT_PANEL_COLOR_FILL)
+        pygame.draw.rect(self.backPanel, CHARACTER_SELECT_PANEL_COLOR_BORDER,
                          (0 + CHARACTER_SELECT_PANEL_BORDER_SIZE,
                           0 + CHARACTER_SELECT_PANEL_BORDER_SIZE,
-                          (CHARACTER_SELECT_PANEL_SIZE[0] -
+                          (self.rect.width -
                            (CHARACTER_SELECT_PANEL_BORDER_SIZE * 2)),
-                          (CHARACTER_SELECT_PANEL_SIZE[1] -
+                          (self.rect.height -
                            (CHARACTER_SELECT_PANEL_BORDER_SIZE * 2)) ),
                          CHARACTER_SELECT_PANEL_BORDER_WIDTH)
+
+        self.setCharacter(None)
+
+    def setCharacter(self, c):
+        self.character = c
+
+        self.panel = pygame.Surface(CHARACTER_SELECT_PANEL_SIZE)
+        self.panel.blit(self.backPanel, (0, 0))
+
+        if not self.character is None:
+            font = CHARACTER_SELECTION_FONT
+            msg = self.character.name
+            textHeight = font.get_linesize() + 2
+            tempRect = pygame.Rect( (0, 0),
+                                    (CHARACTER_SELECT_PANEL_SIZE[0],
+                                     textHeight) )
+
+            text = textrect.render_textrect(msg, font, tempRect,
+                                            CHARACTER_SELECTION_FONT_COLOR,
+                                            ALMOST_BLACK, 1, True)
+            tempRect = pygame.Rect((0, 0), text.get_size())
+            tempRect.left = ((CHARACTER_SELECT_PANEL_SIZE[0] / 2) -
+                             (tempRect.width / 2))
+            tempRect.top = ((CHARACTER_SELECT_PANEL_SIZE[1] / 2) -
+                             (tempRect.height / 2))
+            self.panel.blit(text, tempRect.topleft)
+            
                          
 
 class CharacterPanelGroup(object):
@@ -108,6 +302,14 @@ class CharacterPanelGroup(object):
                              * j))
 
                 self.characterPanels.append(CharacterPanel(rect, None))
+
+    def getNumActive(self):
+        count = 0
+        for i in self.characterPanels:
+            if not i.character is None:
+                count += 1
+
+        return count
 
     def draw(self, screen):
         for p in self.characterPanels:

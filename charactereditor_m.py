@@ -297,3 +297,6 @@ class Model(mvc.Model):
                 self.charMenu.setVal(int(i % CHAR_EDITOR_NUM_PER_PAGE) + 1)
                 self.loadCharacter()
                 break
+
+    def returnCharacter(self):
+        return self.characterToDisplay

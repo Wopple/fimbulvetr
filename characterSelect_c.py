@@ -17,6 +17,8 @@ class Controller(mvc.Controller):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     self.model.click()
+                elif event.button == 3:
+                    self.model.click2()
 
             elif event.type == pygame.MOUSEMOTION:
                 self.model.mouseMoved(pygame.mouse.get_pos())
