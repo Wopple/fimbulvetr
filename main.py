@@ -199,25 +199,32 @@ def goMainMenu(fade):
                 goMultiplayerSetupClient()
                 
     elif m.menu.value() == 3:
-        multiMVC(charactereditor_m.Model(), charactereditor_v.View(),
-                 charactereditor_c.Controller(), screen)
-        while not m.back():
-            proceedMulti(clock)
-            if m.advance():
-                m.advanceNow = False
-                if m.menu.value() == 1:
-                    goCreateCharacter()
-                else:
-                    goChangeSuper()
+        goCharacterEditorMain()
                 
     elif m.menu.value() == 5:
         sys.exit()
 
-def goCreateCharacter():
+def goCharacterEditorMain(oldM = None, conn=None):
+    multiMVC(charactereditor_m.Model(), charactereditor_v.View(),
+                 charactereditor_c.Controller(), screen)
+    while not m.back():
+        proceedMulti(clock)
+        if not oldM is None:
+            proceedOnNet(oldM, conn)
+        if m.advance():
+            m.advanceNow = False
+            if m.menu.value() == 1:
+                goCreateCharacter(oldM, conn)
+            else:
+                goChangeSuper(oldM, conn)
+
+def goCreateCharacter(oldM = None, conn=None):
     multiMVC(textentry_m.Model("Character Name", chardata.getNameList()),
              textentry_v.View(), textentry_c.Controller(), screen)
     while not m.either():
         proceedMulti(clock)
+        if not oldM is None:
+            proceedOnNet(oldM, conn)
     if m.back():
         multiMVCBack()
     else:
@@ -226,16 +233,20 @@ def goCreateCharacter():
         m.setStage(1)
         while not m.either():
             proceedMulti(clock)
+            if not oldM is None:
+                proceedOnNet(oldM, conn)
         if m.back():
             m.setStage(0)
         else:
             m.characterToDisplay.name = characterName
-            goChangeSuper()
+            goChangeSuper(oldM, conn)
 
-def goChangeSuper():
+def goChangeSuper(oldM = None, conn=None):
     m.setStage(2)
     while not m.either():
         proceedMulti(clock)
+        if not oldM is None:
+            proceedOnNet(oldM, conn)
     if m.back():
         m.setStage(0)
     else:
@@ -304,11 +315,7 @@ def goCharacterSelection(conn, theMap, isHost):
         if m.openEditor:
             m.openEditor = False
             oldM = m
-            multiMVC(charactereditor_m.Model(True), charactereditor_v.View(),
-                 charactereditor_c.Controller(), screen)
-            while not m.back():
-                proceedMulti(clock)
-                proceedOnNet(oldM, conn)
+            goCharacterEditorMain(oldM, conn)
             temp = m.returnCharacter()
             multiMVCBack()
             m.setCharacter(temp)

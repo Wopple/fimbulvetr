@@ -260,7 +260,7 @@ class Model(mvc.Model):
         if not self.menu.noSelection:
             if self.stage == 0:
                 if self.menu.value() == 1:
-                    if self.isSelectionMenu:
+                    if self.isSelectionScreen:
                         if not self.characterToDisplay is None:
                             self.advanceNow = True
                     else:
