@@ -19,15 +19,15 @@ class NetServer(object):
             self.s.listen(1)
             self.conn, addr = self.s.accept()
             print "Connected to client at " + str(addr)
+            self.conn.settimeout(None)
         except socket.timeout:
             self.conn = None
 
-    def update(self, outMsg):
+    def update(self, outMsg, msgSize=None):
         sent = 0
         while (sent == 0):
             sent = netcode.sendMessage(self.conn, outMsg)
-
-        msgSize = NET_MESSAGE_SIZE
+            
         inMsg = ''
         while (inMsg == ''):
             inMsg = netcode.receiveMessage(self.conn, msgSize)

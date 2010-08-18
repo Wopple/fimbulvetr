@@ -16,6 +16,7 @@ class Model(mvc.Model):
         self.theMap = theMap
 
         self.openEditor = False
+        self.sendNetMessage = False
 
         self.bg = pygame.Surface(SCREEN_SIZE)
         self.bg.fill(CHARACTER_SELECT_BG_COLOR)
@@ -100,11 +101,24 @@ class Model(mvc.Model):
         if not self.currSelected is None:
             if isinstance(self.currSelected, CharacterPanel):
                 self.openEditor = True
+                self.sendNetMessage = True
+            elif (self.currSelected is self.readyButton):
+                if self.myPanel.ready:
+                    self.myPanel.ready = False
+                    self.myPanel.changeVal()
+                    self.sendNetMessage = True
+                else:
+                    if self.group.isMax():
+                        self.myPanel.ready = True
+                        self.myPanel.changeVal()
+                        self.sendNetMessage = True
 
     def click2(self):
         if not self.currSelected is None:
             if isinstance(self.currSelected, CharacterPanel):
-                self.setCharacter(None)
+                if not self.myPanel.ready:
+                    self.setCharacter(None)
+                    self.sendNetMessage = True
 
     def getSelectionBorder(self):
         if isinstance(self.currSelected, Button):
@@ -127,7 +141,7 @@ class Model(mvc.Model):
             self.currSelected.setCharacter(c)
             num = self.group.getNumActive()
             self.myPanel.changeVal(num)
-            self.readyButton.setButton(num == self.group.num)
+            self.readyButton.setButton(self.group.isMax())
 
     def alreadyUsed(self, c):
         if not c is None:
@@ -138,10 +152,51 @@ class Model(mvc.Model):
 
         return False
 
+
+    def buildNetMessage(self):
+        if self.sendNetMessage:
+            self.sendNetMessage = False
+            print "Sending an Important Message!"
+            msg = str(self.group.getNumActive())
+            if self.group.getNumActive() < 10:
+                msg = "0" + msg
+
+            if self.myPanel.ready:
+                msg = msg + "r"
+            else:
+                msg = msg + "0"
+        else:
+            msg = "-00"
+
+        if len(msg) != CHARACTER_SELECT_NET_MESSAGE_SIZE:
+            raise Exception()
+
+        return msg
+
+    def netMessageSize(self):
+        return CHARACTER_SELECT_NET_MESSAGE_SIZE
+
+    def parseNetMessage(self, msg, p):
+        if msg[0] != "-":
+            
+            try:
+                num = int(msg[0:2])
+            except:
+                raise
+
+            if msg[2] == "r":
+                ready = True
+            else:
+                ready = False
+
+            self.theirPanel.ready = ready
+            self.theirPanel.changeVal(num)
+
 class PlayerPanel(object):
     def __init__(self, rect, name, maxVal):
         self.rect = rect
         self.name = name
+        self.ready = False
         self.maxVal = maxVal
         self.backPanel = pygame.Surface(self.rect.size)
         self.backPanel.fill(CHARACTER_SELECT_PANEL_COLOR_FILL)
@@ -156,8 +211,9 @@ class PlayerPanel(object):
 
         self.changeVal(0)
 
-    def changeVal(self, val):
-        self.val = val
+    def changeVal(self, val=None):
+        if not val is None:
+            self.val = val
         self.panel = pygame.Surface(self.rect.size)
         self.panel.blit(self.backPanel, (0,0))
 
@@ -176,10 +232,14 @@ class PlayerPanel(object):
                tempRect.top)
         self.panel.blit(text, loc)
 
-        msg = str(self.val) + "/" + str(self.maxVal)
+        if self.ready:
+            msg = "READY"
+            color = CHARACTER_SELECTION_READY_COLOR
+        else:
+            msg = str(self.val) + "/" + str(self.maxVal)
+            color = CHARACTER_SELECTION_FONT_COLOR
         text = textrect.render_textrect(msg, font, tempRect,
-                                        CHARACTER_SELECTION_FONT_COLOR,
-                                        ALMOST_BLACK, 2, True)
+                                        color, ALMOST_BLACK, 2, True)
         loc = (tempRect.left - CHARACTER_SELECT_PANEL_BORDER_WIDTH -
                CHARACTER_SELECT_PANEL_BORDER_SIZE,
                tempRect.top)
@@ -310,6 +370,9 @@ class CharacterPanelGroup(object):
                 count += 1
 
         return count
+
+    def isMax(self):
+        return (self.getNumActive() == self.num)
 
     def draw(self, screen):
         for p in self.characterPanels:

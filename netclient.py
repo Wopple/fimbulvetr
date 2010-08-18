@@ -13,14 +13,14 @@ class NetClient(object):
     def __init__(self, host):
         self.netID = 2
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s.settimeout(8.0)
+        #self.s.settimeout(8.0)
         try:
             self.s.connect((host, MULTIPLAYER_PORT))
+            self.s.settimeout(None)
         except socket.timeout:
             self.s = None
 
-    def update(self, outMsg):
-        msgSize = NET_MESSAGE_SIZE
+    def update(self, outMsg, msgSize=None):
         inMsg = ''
         while (inMsg == ''):
             inMsg = netcode.receiveMessage(self.s, msgSize)

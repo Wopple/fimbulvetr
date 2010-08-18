@@ -104,8 +104,7 @@ def proceed(clock, net=None):
     c.update()
     checkError()
     if not net is None:
-        recvMsg, p = net.update(m.buildNetMessage())
-        m.parseNetMessage(recvMsg, p)
+        proceedOnNet(m, net)
     clock.tick(FRAME_RATE)
 
 def proceedMulti(clock, net=None):
@@ -128,10 +127,14 @@ def proceedMulti(clock, net=None):
             vList[i].update(False)
         checkError()
         
-    if not net is None:
-        recvMsg, p = net.update(m.buildNetMessage())
-        m.parseNetMessage(recvMsg, p)
+    proceedOnNet(m, net)
+    
     clock.tick(FRAME_RATE)
+
+def proceedOnNet(m, net):
+    if not net is None:
+        recvMsg, p = net.update(m.buildNetMessage(), m.netMessageSize())
+        m.parseNetMessage(recvMsg, p)
 
 def checkError():
     if (m.checkError()) or (v.checkError()) or (c.checkError()):
@@ -291,23 +294,25 @@ def goWaitForConnection(isHost, ipAddress, mapS=None):
                 m.reset()
         elif m.advance():
             theMap = gamemap.getMap(mapS)
-            goCharacterSelection(p.net, theMap)
+            goCharacterSelection(p.net, theMap, isHost)
 
 def goCharacterSelection(conn, theMap, isHost):
     changeMVC(characterSelect_m.Model(theMap, isHost), characterSelect_v.View(),
               characterSelect_c.Controller(), screen)
     while not m.either():
-        proceed(clock)
+        proceed(clock, conn)
         if m.openEditor:
             m.openEditor = False
+            oldM = m
             multiMVC(charactereditor_m.Model(True), charactereditor_v.View(),
                  charactereditor_c.Controller(), screen)
             while not m.back():
                 proceedMulti(clock)
+                proceedOnNet(oldM, conn)
             temp = m.returnCharacter()
             multiMVCBack()
             m.setCharacter(temp)
-
+            m.sendNetMessage = True
 
 
 

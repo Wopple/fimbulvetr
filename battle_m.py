@@ -372,6 +372,10 @@ class Model(mvc.Model):
 
             p.getHit(damage, stun, (xVel, yVel))
 
+
+    def netMessageSize(self):
+        return NET_MESSAGE_SIZE
+
             
 
 def testData():
