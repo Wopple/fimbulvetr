@@ -341,7 +341,7 @@ if __name__ == '__main__':
             while not m.advance():
                 proceed(clock)
             if m.debugMenu.value() == 1:
-                goBattle(battle_m.testData(), 0)
+                goBattle(battle_m.testData(), None)
             elif m.debugMenu.value() == 2:
                 data = mapmode_m.testData()
                 changeMVC(mapmode_m.Model(data[0], data[1], 0), mapmode_v.View(), mapmode_c.Controller(), screen)

@@ -330,4 +330,4 @@ def testData():
     chars = [mapchar.Hare(0, "Awesomez", HARE_PORTRAITS[0]),
              mapchar.Hare(1, "Bob"),
              mapchar.Hare(0, "Dude")]
-    return [gamemap.map00(), chars]
+    return [gamemap.getMap("00"), chars]
