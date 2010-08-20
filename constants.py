@@ -51,7 +51,7 @@ INTRO_SPEEDS = [4, 30, 5, 50, 5, 15]
 SHOW_RED_DOT = True
 SHOW_HURTBOXES = True
 SHOW_HITBOXES = True
-SHOW_BATTLE_TRIGGER_AREA = True
+SHOW_BATTLE_TRIGGER_AREA = False
 
 MAP_INTERFACE_ALPHA_MIN = 100
 MAP_INTERFACE_ALPHA_TICK = 10
@@ -214,6 +214,8 @@ STUN_THRESHOLD_1 = 50
 STUN_THRESHOLD_2 = 100
 
 HARE_MAP_SPEED_BASE = 2.5
+FOX_MAP_SPEED_BASE = 2.0
+CAT_MAP_SPEED_BASE = 1.6
 
 #Terrain types
 #0 = PLAINS
@@ -223,8 +225,18 @@ HARE_MAP_SPEED_BASE = 2.5
 
 HARE_MAP_SPEED_MODIFIERS = [1.0,
                             0.8,
-                            0.2,
-                            0.2]
+                            0.3,
+                            0.3]
+
+FOX_MAP_SPEED_MODIFIERS = [1.0,
+                           0.85,
+                           0.3,
+                           0.34]
+
+CAT_MAP_SPEED_MODIFIERS = [1.0,
+                            0.8,
+                            0.28,
+                            0.18]
 
 temp = []
 BACKGROUNDS = []
@@ -392,6 +404,25 @@ temp = [ ['face1.png', (28, 66)],
 HARE_TOKENS = []
 for i in temp:
     HARE_TOKENS.append([pygame.image.load(os.path.join(DIREC_HARE_GRAPHICS, i[0])).convert_alpha(), i[1]])
+
+
+temp = [ ['face1.png', (40, 46)],
+         ['face2.png', (40, 46)],
+         ['face2.png', (40, 46)] ]
+
+FOX_TOKENS = []
+for i in temp:
+    FOX_TOKENS.append([pygame.image.load(os.path.join(DIREC_FOX_GRAPHICS, i[0])).convert_alpha(), i[1]])
+
+
+temp = [ ['face1.png', (27, 30)],
+         ['face2.png', (27, 30)],
+         ['face2.png', (27, 30)] ]
+
+CAT_TOKENS = []
+for i in temp:
+    CAT_TOKENS.append([pygame.image.load(os.path.join(DIREC_CAT_GRAPHICS, i[0])).convert_alpha(), i[1]])
+    
 
 temp = ['pauseicon.png',
         'playicon.png',

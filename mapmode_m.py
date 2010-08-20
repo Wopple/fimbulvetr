@@ -329,5 +329,5 @@ class Model(mvc.Model):
 def testData():
     chars = [mapchar.Hare(0, "Awesomez", HARE_PORTRAITS[0]),
              mapchar.Hare(1, "Bob"),
-             mapchar.Hare(0, "Dude")]
+             mapchar.Cat(0, "Dude")]
     return [gamemap.getMap("00"), chars]

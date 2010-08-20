@@ -85,13 +85,13 @@ class MapChar(object):
 
     def modifyImages(self):
         colorSwap(self.images[0][0], TOKEN_BORDER_NEUTRAL,
-                  TOKEN_BORDER_OFF[self.team], 100)
+                  TOKEN_BORDER_OFF[self.team], 60)
 
         colorSwap(self.images[1][0], TOKEN_BORDER_NEUTRAL,
-                  TOKEN_BORDER_HIGHLIGHTED[self.team], 100)
+                  TOKEN_BORDER_HIGHLIGHTED[self.team], 60)
 
         colorSwap(self.images[2][0], TOKEN_BORDER_NEUTRAL,
-                  TOKEN_BORDER_SELECTED, 100)
+                  TOKEN_BORDER_SELECTED, 60)
 
     def startMovement(self, target):
         self.target = target
@@ -124,5 +124,18 @@ class MapChar(object):
 def Hare(team, name="Unnamed Hare", portrait=None):
     c = MapChar(HARE_TOKENS, HARE_MAP_SPEED_BASE,
                 HARE_MAP_SPEED_MODIFIERS, team,
+                name, portrait)
+    return c
+
+
+def Fox(team, name="Unnamed Fox", portrait=None):
+    c = MapChar(FOX_TOKENS, FOX_MAP_SPEED_BASE,
+                FOX_MAP_SPEED_MODIFIERS, team,
+                name, portrait)
+    return c
+
+def Cat(team, name="Unnamed Cat", portrait=None):
+    c = MapChar(CAT_TOKENS, CAT_MAP_SPEED_BASE,
+                CAT_MAP_SPEED_MODIFIERS, team,
                 name, portrait)
     return c
