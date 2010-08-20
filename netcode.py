@@ -26,3 +26,15 @@ def receiveMessage(sock, msgSize):
         msg = msg + chunk
     return msg
 
+
+def updateSend(conn, outMsg):
+    sent = 0
+    while (sent == 0):
+        sent = sendMessage(conn, outMsg)
+
+def updateRecv(conn, msgSize):
+    inMsg = ''
+    while (inMsg == ''):
+        inMsg = receiveMessage(conn, msgSize)
+
+    return inMsg

@@ -9,6 +9,8 @@ import threading
 
 import netcode
 
+import chardata
+
 class NetClient(object):
     def __init__(self, host):
         self.netID = 2
@@ -21,15 +23,23 @@ class NetClient(object):
             self.s = None
 
     def update(self, outMsg, msgSize=None):
-        inMsg = ''
-        while (inMsg == ''):
-            inMsg = netcode.receiveMessage(self.s, msgSize)
-            
-        sent = 0
-        while (sent == 0):
-            sent = netcode.sendMessage(self.s, outMsg)
-            
+        inMsg = netcode.updateRecv(self.s, msgSize)
+        netcode.updateSend(self.s, outMsg)
+
         return inMsg, 1
+
+    def transferPregameData(self, playerChars, expected):
+        enemyData = []
+        for i in range(expected):
+            inMsg = netcode.updateRecv(self.s,
+                                       CHARACTER_TRANSFER_NET_MESSAGE_SIZE)
+            enemyData.append(inMsg)
+
+        for i in playerChars:
+           netcode.updateSend(self.s, chardata.getTextString(i, True))
+
+        return chardata.convertNetData(enemyData)
+
 
 class NetThread(threading.Thread):
     def __init__(self, host):

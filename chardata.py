@@ -49,25 +49,42 @@ def fileError(m):
 
 def writeToCharacterFile(c, filePath):
 
-    text = c.name + "#" + c.speciesName + "#" + str(c.currSuperMove) 
+    text = getTextString(c)
     fh = open(filePath, "w")
     fh.write(text)
     fh.close()
+
+def getTextString(c, expand=False):
+    text = c.name + "#" + c.speciesName + "#" + str(c.currSuperMove) + "#"
+
+    if expand:
+        size = len(text)
+        if size > CHARACTER_TRANSFER_NET_MESSAGE_SIZE:
+            raise
+        add = CHARACTER_TRANSFER_NET_MESSAGE_SIZE - size
+
+        for i in range(add):
+            text = text + "-"
+
+    return text
     
 def getInfo(filePath):
 
     try:
         fh = open(filePath)
         text = fh.readline()
-        vals = text.split('#')
-        name = vals[0]
-        speciesName = vals[1]
-        currSuperMove = int(vals[2])
-        info = saveCharInfo(name, speciesName, currSuperMove)
+        info = turnStringIntoInfo(text)
     except:
         info = saveCharInfo("", "", 0, False)
 
     return info
+
+def turnStringIntoInfo(text):
+    vals = text.split('#')
+    name = vals[0]
+    speciesName = vals[1]
+    currSuperMove = int(vals[2])
+    return saveCharInfo(name, speciesName, currSuperMove)
 
 def loadCharacter(name):
     for i in range(MAX_CHARACTER_SAVES):
@@ -101,6 +118,18 @@ def makeCharacterFromInfo(info):
         return fox.Fox(info.name, info.currSuperMove)
     elif info.speciesName == "Cat":
         return cat.Cat(info.name, info.currSuperMove)
+
+def convertNetData(dataList):
+    charList = []
+    for d in dataList:
+        #try:
+        info = turnStringIntoInfo(d)
+        #except:
+            #info = saveCharInfo("", "", 0, False)
+
+        charList.append(makeCharacterFromInfo(info))
+
+    return charList
 
 class saveCharInfo(object):
     def __init__(self, name, speciesName, currSuperMove, valid=True):

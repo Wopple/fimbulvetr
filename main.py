@@ -13,7 +13,7 @@ import mainmenu_m, mainmenu_v
 import charactereditor_m, charactereditor_v, charactereditor_c
 import textentry_m, textentry_v, textentry_c
 import cutscene_c
-import netclient, netserver
+import netclient, netserver, netcode
 import chardata
 import multiplayerSetup_m, multiplayerSetup_v, multiplayerSetup_c
 import characterSelect_m, characterSelect_v, characterSelect_c
@@ -304,6 +304,10 @@ def goWaitForConnection(isHost, ipAddress, mapS=None):
                 m.changePhase(prev)
                 m.reset()
         elif m.advance():
+            if isHost:
+                netcode.updateSend(p.net.conn, mapS)
+            else:
+                mapS = netcode.updateRecv(p.net.s, 2)
             theMap = gamemap.getMap(mapS)
             goCharacterSelection(p.net, theMap, isHost)
 
@@ -320,6 +324,34 @@ def goCharacterSelection(conn, theMap, isHost):
             multiMVCBack()
             m.setCharacter(temp)
             m.sendNetMessage = True
+        if m.starting:
+            m.advanceNow = True
+
+    playerChars = m.getCharacters()
+    enemyChars = conn.transferPregameData(playerChars, m.numEnemiesExpected())
+
+    if isHost:
+        hostChars = playerChars
+        clientChars = enemyChars
+        playerNum = 0
+    else:
+        hostChars = enemyChars
+        clientChars = playerChars
+        playerNum = 1
+
+    goGame(theMap, hostChars, clientChars, playerNum, conn)
+
+def goGame(theMap, hostChars, clientChars, playerNum, conn):
+    chars = mapmode_m.ConvertBattleCharsToMapChars(hostChars, clientChars)
+    changeMVC(mapmode_m.Model(theMap, chars, playerNum), mapmode_v.View(),
+              mapmode_c.Controller(), screen)
+    while not m.advance():
+        proceed(clock)
+        if not m.pendingBattle is None:
+            result = goBattlePrompt(m.pendingBattle)
+            m.resolveBattle(result)
+    sys.exit()
+    
 
 
 

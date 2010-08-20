@@ -11,6 +11,8 @@ import pauseplayicon
 import mapcharacterbar
 import targetmarker
 
+import hare, fox, cat
+
 from constants import *
 
 class Model(mvc.Model):
@@ -331,3 +333,22 @@ def testData():
              mapchar.Hare(1, "Bob"),
              mapchar.Cat(0, "Dude")]
     return [gamemap.getMap("00"), chars]
+
+def ConvertBattleCharsToMapChars(hostChars, clientChars):
+    masterList = [hostChars, clientChars]
+
+    returnList = []
+    for i, l in enumerate(masterList):
+        for c in l:
+            if isinstance(c, hare.Hare):
+                mod = mapchar.Hare
+            elif isinstance(c, fox.Fox):
+                mod = mapchar.Fox
+            elif isinstance(c, cat.Cat):
+                mod = mapchar.Cat
+            else:
+                raise
+
+            returnList.append(mod(i, c.name))
+
+    return returnList

@@ -9,6 +9,8 @@ import threading
 
 import netcode
 
+import chardata
+
 class NetServer(object):
     def __init__(self):
         self.netID = 1
@@ -23,16 +25,24 @@ class NetServer(object):
         except socket.timeout:
             self.conn = None
 
-    def update(self, outMsg, msgSize=None):
-        sent = 0
-        while (sent == 0):
-            sent = netcode.sendMessage(self.conn, outMsg)
-            
-        inMsg = ''
-        while (inMsg == ''):
-            inMsg = netcode.receiveMessage(self.conn, msgSize)
+    def update(self, outMsg, msgSize=None):            
+        netcode.updateSend(self.conn, outMsg)
+        inMsg = netcode.updateRecv(self.conn, msgSize)
 
         return inMsg, 2
+    
+    def transferPregameData(self, playerChars, expected):
+        for i in playerChars:
+            outMsg = chardata.getTextString(i, True)
+            netcode.updateSend(self.conn, outMsg)
+
+        enemyData = []
+        for i in range(expected):
+            inMsg = netcode.updateRecv(self.conn,
+                                       CHARACTER_TRANSFER_NET_MESSAGE_SIZE)
+            enemyData.append(inMsg)
+
+        return chardata.convertNetData(enemyData)
 
 
 class NetThread(threading.Thread):

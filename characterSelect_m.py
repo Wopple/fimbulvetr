@@ -17,6 +17,7 @@ class Model(mvc.Model):
 
         self.openEditor = False
         self.sendNetMessage = False
+        self.starting = False
 
         self.bg = pygame.Surface(SCREEN_SIZE)
         self.bg.fill(CHARACTER_SELECT_BG_COLOR)
@@ -100,8 +101,9 @@ class Model(mvc.Model):
     def click(self):
         if not self.currSelected is None:
             if isinstance(self.currSelected, CharacterPanel):
-                self.openEditor = True
-                self.sendNetMessage = True
+                if not self.myPanel.ready:
+                    self.openEditor = True
+                    self.sendNetMessage = True
             elif (self.currSelected is self.readyButton):
                 if self.myPanel.ready:
                     self.myPanel.ready = False
@@ -112,6 +114,13 @@ class Model(mvc.Model):
                         self.myPanel.ready = True
                         self.myPanel.changeVal()
                         self.sendNetMessage = True
+                if not self.startButton is None:
+                    self.startButton.setButton((self.myPanel.ready )
+                                               and (self.theirPanel.ready))
+            elif (self.currSelected is self.startButton):
+                if (self.myPanel.ready and self.theirPanel.ready):
+                    self.starting = True
+                    self.sendNetMessage = True
 
     def click2(self):
         if not self.currSelected is None:
@@ -156,12 +165,13 @@ class Model(mvc.Model):
     def buildNetMessage(self):
         if self.sendNetMessage:
             self.sendNetMessage = False
-            print "Sending an Important Message!"
             msg = str(self.group.getNumActive())
             if self.group.getNumActive() < 10:
                 msg = "0" + msg
 
-            if self.myPanel.ready:
+            if self.starting:
+                msg = msg + "s"
+            elif self.myPanel.ready:
                 msg = msg + "r"
             else:
                 msg = msg + "0"
@@ -186,11 +196,29 @@ class Model(mvc.Model):
 
             if msg[2] == "r":
                 ready = True
+            elif msg[2] == "s":
+                self.starting = True
+                return
             else:
                 ready = False
 
             self.theirPanel.ready = ready
             self.theirPanel.changeVal(num)
+
+            if not self.startButton is None:
+                self.startButton.setButton((self.myPanel.ready )
+                                           and (self.theirPanel.ready))
+
+    def getCharacters(self):
+        chars = []
+
+        for i in self.group.characterPanels:
+            chars.append(i.character)
+
+        return chars
+
+    def numEnemiesExpected(self):
+        return self.theirPanel.maxVal
 
 class PlayerPanel(object):
     def __init__(self, rect, name, maxVal):
