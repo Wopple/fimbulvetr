@@ -36,5 +36,4 @@ def updateRecv(conn, msgSize):
     inMsg = ''
     while (inMsg == ''):
         inMsg = receiveMessage(conn, msgSize)
-
     return inMsg

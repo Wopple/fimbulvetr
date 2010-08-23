@@ -38,10 +38,13 @@ class Model(mvc.Model):
         self.pendingBattle = None
         self.pause = [False, False]
         self.keys = [False, False, False, False]
+        self.currentFrameOrder = None
 
         self.buildInterface()
 
     def update(self):
+        self.currentFrameOrder = None
+        
         self.checkForBattle()
 
         self.mousePos = pygame.mouse.get_pos()
@@ -172,7 +175,9 @@ class Model(mvc.Model):
 
     def rightClick(self):
         if (not self.currSelected is None) and (not self.paused()):
-            self.currSelected.startMovement(self.absMousePos())
+            pos = self.absMousePos()
+            self.currSelected.startMovement(pos)
+            self.currentFrameOrder = [self.currSelected, pos]
 
     def absMousePos(self):
         temp = []
@@ -327,6 +332,58 @@ class Model(mvc.Model):
 
         self.mapRect.topleft = newLoc
         self.adjustMap()
+
+    def netMessageSize(self):
+        return MAP_MODE_NET_MESSAGE_SIZE
+
+    def buildNetMessage(self):
+        if self.pause[self.team]:
+            msg = "p#"
+        else:
+            msg = "n#"
+
+        if not self.currentFrameOrder is None:
+            charNum = None
+            for i, c in enumerate(self.charactersInTeams[self.team]):
+                if c is self.currentFrameOrder[0]:
+                    charNum = i
+                    break
+
+            if charNum is None:
+                raise
+
+            msg = msg + str(charNum) + "#"
+            msg = (msg + str(self.currentFrameOrder[1][0]) + "#" +
+                   str(self.currentFrameOrder[1][1]) + "#")
+
+        size = len(msg)
+
+        if size > MAP_MODE_NET_MESSAGE_SIZE:
+            raise
+
+        add = MAP_MODE_NET_MESSAGE_SIZE - size
+
+        for i in range(add):
+            msg = msg + "-"
+
+        return msg
+
+
+    def parseNetMessage(self, msg, p):
+        p = p-1
+        
+        vals = msg.split('#')
+
+        pause = (vals[0] == "p")
+        self.pause[p] = pause
+
+        if len(vals) > 2:
+            charNum = int(vals[1])
+            x = float(vals[2])
+            y = float(vals[3])
+
+            self.charactersInTeams[p][charNum].startMovement((x, y))
+
 
 def testData():
     chars = [mapchar.Hare(0, "Awesomez", HARE_PORTRAITS[0]),

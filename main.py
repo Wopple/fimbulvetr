@@ -346,10 +346,7 @@ def goGame(theMap, hostChars, clientChars, playerNum, conn):
     changeMVC(mapmode_m.Model(theMap, chars, playerNum), mapmode_v.View(),
               mapmode_c.Controller(), screen)
     while not m.advance():
-        proceed(clock)
-        if not m.pendingBattle is None:
-            result = goBattlePrompt(m.pendingBattle)
-            m.resolveBattle(result)
+        proceed(clock, conn)
     sys.exit()
     
 
