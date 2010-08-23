@@ -10,6 +10,7 @@ import incint
 import pauseplayicon
 import mapcharacterbar
 import targetmarker
+import countdown
 
 import hare, fox, cat
 
@@ -39,10 +40,21 @@ class Model(mvc.Model):
         self.pause = [False, False]
         self.keys = [False, False, False, False]
         self.currentFrameOrder = None
+        self.countdown = countdown.Countdown(MAP_COUNTDOWN_LENGTH)
+
+        self.setCountdown()
 
         self.buildInterface()
 
     def update(self):
+        if self.countdown.isGoing():
+            if (not self.pause[0]) and (not self.pause[1]):
+                self.countdown.setTime(0)
+        self.countdown.update()
+
+        if self.countdown.checkStartFlag():
+            self.pause = [False, False]
+        
         self.currentFrameOrder = None
         
         self.checkForBattle()
@@ -174,7 +186,7 @@ class Model(mvc.Model):
         self.currSelected = None
 
     def rightClick(self):
-        if (not self.currSelected is None) and (not self.paused()):
+        if (not self.currSelected is None):
             pos = self.absMousePos()
             self.currSelected.startMovement(pos)
             self.currentFrameOrder = [self.currSelected, pos]
@@ -264,10 +276,11 @@ class Model(mvc.Model):
                     self.pendingBattle[i].precisePos[j] += retreat[j]
 
     def paused(self):
-        return ((self.pause[0]) or (self.pause[1]))
+        return (self.pause[0] or self.pause[1])
 
     def pausePressed(self):
-        self.pause[self.team] = not(self.pause[self.team])
+        if self.countdown.isGoing():
+            self.pause[self.team] = not(self.pause[self.team])
 
     def buildInterface(self):
         self.bigPausePlayIcon = pauseplayicon.PausePlayIcon(2)
@@ -332,6 +345,10 @@ class Model(mvc.Model):
 
         self.mapRect.topleft = newLoc
         self.adjustMap()
+
+    def setCountdown(self):
+        self.pause = [True, True]
+        self.countdown.setTime(MAP_COUNTDOWN_LENGTH)
 
     def netMessageSize(self):
         return MAP_MODE_NET_MESSAGE_SIZE

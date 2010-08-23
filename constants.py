@@ -197,6 +197,9 @@ CHARACTER_SELECT_GROUP_SPACING = 25
 CHARACTER_SELECT_NET_MESSAGE_SIZE = 3
 CHARACTER_TRANSFER_NET_MESSAGE_SIZE = 30
 
+COUNTDOWN_COLOR = (244, 210, 11)
+MAP_COUNTDOWN_LENGTH = 5
+
 DIREC_FONTS = "fonts"
 DIREC_GRAPHICS = "graphics"
 DIREC_DATA = "data"
@@ -451,7 +454,8 @@ temp = [ ["fontdata.ttf",10],
          ["fontslab.ttf", 30],
          ["fontheadline.ttf", 16],
          ["fontbio.ttf", 26],
-         ["fontheadline.ttf", 20]]
+         ["fontheadline.ttf", 20],
+         ["fontheadline.ttf", 50]]
 FONTS = []
 for i in temp:
     FONTS.append(pygame.font.Font(
@@ -463,6 +467,7 @@ MAIN_MENU_FONT = FONTS[4]
 CHAR_EDITOR_FONT = FONTS[4]
 TEXT_ENTRY_FONT = FONTS[5]
 CHARACTER_SELECTION_FONT = FONTS[6]
+COUNTDOWN_FONT = FONTS[7]
 
 VALID_INPUT_CHARACTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                           'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
