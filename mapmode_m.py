@@ -403,9 +403,9 @@ class Model(mvc.Model):
 
 
 def testData():
-    chars = [mapchar.Hare(0, "Awesomez", HARE_PORTRAITS[0]),
-             mapchar.Hare(1, "Bob"),
-             mapchar.Cat(0, "Dude")]
+    chars = [mapchar.Hare(0, None, "Awesomez", HARE_PORTRAITS[0]),
+             mapchar.Hare(1, None, "Bob"),
+             mapchar.Cat(0, None, "Dude")]
     return [gamemap.getMap("00"), chars]
 
 def ConvertBattleCharsToMapChars(hostChars, clientChars):
@@ -423,6 +423,6 @@ def ConvertBattleCharsToMapChars(hostChars, clientChars):
             else:
                 raise
 
-            returnList.append(mod(i, c.name))
+            returnList.append(mod(i, c, c.name))
 
     return returnList

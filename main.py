@@ -373,7 +373,9 @@ if __name__ == '__main__':
                 goBattle(battle_m.testData(), None)
             elif m.debugMenu.value() == 2:
                 data = mapmode_m.testData()
-                changeMVC(mapmode_m.Model(data[0], data[1], 0), mapmode_v.View(), mapmode_c.Controller(), screen)
+                changeMVC(mapmode_m.Model(data[0], data[1], 0),
+                          mapmode_v.View(), mapmode_c.Controller(), screen)
+                m.pause[1] = False
                 while not m.advance():
                     proceed(clock)
                     if not m.pendingBattle is None:

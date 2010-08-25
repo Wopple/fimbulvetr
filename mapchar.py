@@ -11,10 +11,12 @@ import util
 from constants import *
 
 class MapChar(object):
-    def __init__(self, inImages, speedBase, speedModifiers, team, name, portrait):
+    def __init__(self, inImages, speedBase, speedModifiers, team, name,
+                 battleChar, portrait):
         self.team = team
         self.name = name
         self.initPortrait(portrait)
+        self.battleChar = battleChar
         self.images = []
         for i in inImages:
             self.images.append([copy.copy(i[0]), i[1]])
@@ -121,21 +123,21 @@ class MapChar(object):
         self.portrait = q
         
 
-def Hare(team, name="Unnamed Hare", portrait=None):
+def Hare(team, battleChar, name="Unnamed Hare", portrait=None):
     c = MapChar(HARE_TOKENS, HARE_MAP_SPEED_BASE,
                 HARE_MAP_SPEED_MODIFIERS, team,
-                name, portrait)
+                name, battleChar, portrait)
     return c
 
 
-def Fox(team, name="Unnamed Fox", portrait=None):
+def Fox(team, battleChar, name="Unnamed Fox", portrait=None):
     c = MapChar(FOX_TOKENS, FOX_MAP_SPEED_BASE,
                 FOX_MAP_SPEED_MODIFIERS, team,
-                name, portrait)
+                name, battleChar, portrait)
     return c
 
-def Cat(team, name="Unnamed Cat", portrait=None):
+def Cat(team, battleChar, name="Unnamed Cat", portrait=None):
     c = MapChar(CAT_TOKENS, CAT_MAP_SPEED_BASE,
                 CAT_MAP_SPEED_MODIFIERS, team,
-                name, portrait)
+                name, battleChar, portrait)
     return c

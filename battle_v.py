@@ -23,5 +23,7 @@ class View(mvc.View):
         for b in self.model.bars:
             b.draw(self.screen)
 
+        self.model.countdown.draw(self.screen)
+
         if tickClock:
             pygame.display.flip()

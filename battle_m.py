@@ -8,6 +8,7 @@ import mvc
 
 import incint
 import energybar
+import countdown
 
 import hare, fox, cat
 
@@ -32,10 +33,19 @@ class Model(mvc.Model):
         self.createBars()
         self.resetHitMemory()
 
+        self.countdown = countdown.Countdown(BATTLE_COUNTDOWN_LENGTH)
+
     def update(self):
+
+        self.countdown.update()
+        
         for i, p in enumerate(self.players):
-            keys = self.keys[i]
-            keysNow = self.keysNow[i]
+            if self.countdown.isGoing():
+                keys = [False, False, False, False, False, False, False]
+                keysNow = [0, 0, 0, 0, 0, 0, 0]
+            else:
+                keys = self.keys[i]
+                keysNow = self.keysNow[i]
             l, r = self.exclusiveKeys(keys[2], keys[3])
             self.resetKeysNow(keysNow)
             self.act(p, keys, keysNow)
