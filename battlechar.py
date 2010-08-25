@@ -21,6 +21,7 @@ class BattleChar(object):
         self.aerialCharge = True
         self.projectiles = []
         self.attackCanHit = True
+        self.retreat = boundint.BoundInt(0, RETREAT_HOLD_TIME, 0)
 
         self.superMoves = []
         self.currSuperMove = None
@@ -33,7 +34,7 @@ class BattleChar(object):
         self.setCurrMove('idle')
 
     def beginBattle(self):
-        pass
+        self.retreat.change(0)
 
     def countdownComplete(self):
         pass

@@ -128,6 +128,22 @@ HEALTH_BAR_COLORS = ( (5, 120, 10),
                       (200, 200, 10),
                       (10, 10, 10))
 HEALTH_BAR_PULSE = 2
+RETREAT_BAR_SIZE = (100, 25)
+RETREAT_BAR_BORDERS = (6, 4)
+RETREAT_BAR_COLORS = ( (236, 209, 13),
+                       (236, 209, 13),
+                       (236, 209, 13),
+                       (20, 20, 20),
+                       (200, 200, 10),
+                       (10, 10, 10))
+
+RETREAT_PROHIBIT_TIME = FRAME_RATE * 12
+RETREAT_HOLD_TIME = int(FRAME_RATE * 1.5)
+RETREAT_RECEED = 3
+RETREAT_TEAM_COLORS = [(10, 80, 200, 255),
+                            (210, 20, 20, 255)]
+
+BATTLE_EDGE_COLLISION_WIDTH = 20
 
 HARE_ENERGY_MAX = 200
 HARE_ENERGY_USAGE = 100
@@ -173,7 +189,7 @@ MULTIPLAYER_PORT = 1338
 NET_MESSAGE_SIZE = 14
 NET_ICON_SPEED = 8
 
-MAP_MODE_NET_MESSAGE_SIZE = 20
+MAP_MODE_NET_MESSAGE_SIZE = 30
 
 CHARACTER_SELECT_BG_COLOR = (40, 40, 40)
 CHARACTER_SELECT_PANEL_COLOR_FILL = (165, 130, 50)

@@ -43,6 +43,7 @@ class Cat(battlechar.BattleChar):
         self.currSuperMove = inSpecial
 
     def beginBattle(self):
+        super(Cat, self).beginBattle()
         self.catEnergy.change(CAT_ENERGY_BATTLE_START)
         self.energyDelayTick = 0
         self.energyIsChangable = False

@@ -36,6 +36,9 @@ class Fox(battlechar.BattleChar):
             inSpecial = 0
         self.currSuperMove = inSpecial
 
+    def beginBattle(self):
+        super(Fox, self).beginBattle()
+
     def initSpecMoves(self):
         self.createMoveIdle()
         self.createMoveDash()

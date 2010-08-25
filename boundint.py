@@ -28,3 +28,9 @@ class BoundInt(object):
 
     def atBound(self):
         return ((self.value == self.minimum) or (self.value == self.maximum))
+
+    def isMax(self):
+        return (self.value == self.maximum)
+
+    def isMin(self):
+        return (self.value == self.minimum)

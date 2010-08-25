@@ -40,6 +40,7 @@ class Hare(battlechar.BattleChar):
         self.currSuperMove = inSpecial
 
     def beginBattle(self):
+        super(Hare, self).beginBattle()
         self.hareEnergy.change(HARE_ENERGY_BATTLE_START)
 
     def update(self):

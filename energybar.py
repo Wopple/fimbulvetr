@@ -9,7 +9,7 @@ from constants import *
 
 class EnergyBar(object):
     def __init__(self, inVal, inRect, inBorders, inColors, pulse,
-                 text=None, threshold=None):
+                 text=None, threshold=None, textJust=0):
         if not isinstance(inVal, boundint.BoundInt):
             raise RuntimeError, "EnergyBar must be given BoundInt"
 
@@ -40,7 +40,7 @@ class EnergyBar(object):
         self.createPulse()
         self.createBackground()
         self.createForeground()
-        self.createText(text)
+        self.createText(text, textJust)
         self.createFinish()
 
     def update(self):
@@ -116,7 +116,7 @@ class EnergyBar(object):
 
         self.pulseColors.append(self.fullHighColor)
 
-    def createText(self, t):
+    def createText(self, t, just):
         if t is None:
             self.text = None
         else:
@@ -125,7 +125,7 @@ class EnergyBar(object):
             self.text = textrect.render_textrect(t, ENERGY_BAR_FONT,
                                                  pygame.Rect((0, 0), (w, h)),
                                                  self.fontColor,
-                                                 (0, 0, 0), 0, True)
+                                                 (0, 0, 0), just, True)
 
     def changeColor(self, c):
         self.colorChanged = True

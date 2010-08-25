@@ -7,6 +7,7 @@ import math
 import mvc
 
 import incint
+import boundint
 import energybar
 import countdown
 
@@ -36,7 +37,12 @@ class Model(mvc.Model):
                      [False, False, False, False, False, False, False]]
         self.keysNow = [[0, 0, 0, 0, 0, 0, 0],
                         [0, 0, 0, 0, 0, 0, 0]]
+        self.returnCode = [0, 0]
         self.projectiles = []
+        self.retreatProhibitTime = boundint.BoundInt(0, RETREAT_PROHIBIT_TIME,
+                                                     RETREAT_PROHIBIT_TIME)
+        self.retreatPhase = 0
+        
         self.cameraPlayer = 0
         self.netPlayer = 0
         self.catBar = None
@@ -47,11 +53,19 @@ class Model(mvc.Model):
 
     def update(self):
 
+        self.checkForEnd()
         self.countdown.update()
 
         if self.countdown.checkStartFlag():
             for p in self.players:
                 p.countdownComplete()
+            self.retreatPhase = 1
+
+        if self.retreatPhase == 1:
+            self.retreatProhibitTime.add(-1)
+            if self.retreatProhibitTime.value == 0:
+                self.retreatPhase = 2
+                self.retreatBar.createText("Retreat", 1)
         
         for i, p in enumerate(self.players):
             if self.countdown.isGoing():
@@ -65,7 +79,9 @@ class Model(mvc.Model):
             self.act(p, keys, keysNow)
             self.checkReversable(l, r, p)
             self.checkForGround(p)
+            self.checkForEdge(l, r, p)
 
+        self.checkRetreat()
         self.resetHitMemory()
         self.checkForHits()
         for i, p in enumerate(self.players):
@@ -199,6 +215,20 @@ class Model(mvc.Model):
             if lev == 3:
                 p.actTransition('bladelv3')
 
+    def checkForEnd(self):
+        if self.players[0].retreat.isMax():
+            self.returnCode[0] = 1
+            if self.players[1].retreat.value > 0:
+                self.returnCode[1] = 1
+        elif self.players[1].retreat.isMax():
+            self.returnCode[1] = 1
+            if self.players[0].retreat.value > 0:
+                self.returnCode[0] = 1
+
+
+        if (self.returnCode[0] != 0) or (self.returnCode[1] != 0):
+            self.advanceNow = True
+
     def checkReversable(self, l, r, p):
         if p.currFrame == 0 and p.currSubframe == 1:
             if p.currMove.reversable:
@@ -221,6 +251,33 @@ class Model(mvc.Model):
             if not old:
                 c.transToAir()
 
+    def checkForEdge(self, l, r, p):
+        check = False
+        if p.preciseLoc[0] < BATTLE_EDGE_COLLISION_WIDTH:
+            p.preciseLoc[0] = BATTLE_EDGE_COLLISION_WIDTH
+            check = True
+        if p.preciseLoc[0] > self.rect.width - BATTLE_EDGE_COLLISION_WIDTH:
+            p.preciseLoc[0] = self.rect.width - BATTLE_EDGE_COLLISION_WIDTH
+            check = True
+
+        if self.retreatPhase == 2:
+            if check:
+                p.retreat.add(1)
+            else:
+                p.retreat.add(-RETREAT_RECEED)
+
+    def checkRetreat(self):
+        high = 0
+        highestP = None
+        for i, p in enumerate(self.players):
+            if p.retreat.value > high:
+                high = p.retreat.value
+                highestP = i
+
+        if high > 0:
+            self.retreatBar.changeColor(RETREAT_TEAM_COLORS[highestP])
+            self.retreatBar.value = self.players[highestP].retreat
+            
     def checkShoot(self, p):
         m = p.currMove
         for s in m.shoot:
@@ -327,6 +384,18 @@ class Model(mvc.Model):
                                              HEALTH_BAR_PULSE,
                                              self.players[self.cameraPlayer].name)
             )
+
+        x = (SCREEN_SIZE[0] / 2) - (RETREAT_BAR_SIZE[0] / 2)
+        y = HEALTH_BAR_POSITION[1]
+
+        self.retreatBar = energybar.EnergyBar(self.retreatProhibitTime,
+                                             pygame.Rect((x, y),
+                                                         RETREAT_BAR_SIZE),
+                                             RETREAT_BAR_BORDERS,
+                                             RETREAT_BAR_COLORS,
+                                             5, "Battle", None, 1)
+        self.bars.append(self.retreatBar)
+        
 
         x = HEALTH_BAR_POSITION[0]
         y = HEALTH_BAR_POSITION[1] + HEALTH_BAR_SIZE[1] + SPECIAL_BAR_OFFSET

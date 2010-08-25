@@ -1,6 +1,7 @@
 import os
 import sys
 import pygame
+import math
 
 import mvc
 import gamemap
@@ -194,7 +195,8 @@ class Model(mvc.Model):
     def absMousePos(self):
         temp = []
         for i in range(2):
-            temp.append((self.mousePos[i] - self.mapRect.topleft[i]) / self.zoomVal)
+            temp.append(round(
+                (self.mousePos[i] - self.mapRect.topleft[i]) / self.zoomVal, 3))
 
         return temp
 
@@ -367,7 +369,7 @@ class Model(mvc.Model):
                     break
 
             if charNum is None:
-                raise
+                raise Exception()
 
             msg = msg + str(charNum) + "#"
             msg = (msg + str(self.currentFrameOrder[1][0]) + "#" +
@@ -376,7 +378,8 @@ class Model(mvc.Model):
         size = len(msg)
 
         if size > MAP_MODE_NET_MESSAGE_SIZE:
-            raise
+            print msg
+            raise Exception()
 
         add = MAP_MODE_NET_MESSAGE_SIZE - size
 
@@ -433,7 +436,7 @@ def ConvertBattleCharsToMapChars(hostChars, clientChars):
             elif isinstance(c, cat.Cat):
                 mod = mapchar.Cat
             else:
-                raise
+                raise Exception()
 
             returnList.append(mod(i, c, c.name))
 
