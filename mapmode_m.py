@@ -401,6 +401,18 @@ class Model(mvc.Model):
 
             self.charactersInTeams[p][charNum].startMovement((x, y))
 
+    def getBattleData(self):
+        data = []
+
+        chars = []
+        for i in self.pendingBattle:
+            chars.append(i.battleChar)
+
+        data.append(chars)
+
+        return data
+
+
 
 def testData():
     chars = [mapchar.Hare(0, None, "Awesomez", HARE_PORTRAITS[0]),

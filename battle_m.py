@@ -399,7 +399,6 @@ class Model(mvc.Model):
 
     def netMessageSize(self):
         return NET_MESSAGE_SIZE
-
             
 
 def testData():

@@ -158,7 +158,6 @@ def goBattle(data, net):
     m.setCameraPlayer(cam)
     while not m.advance():
         proceed(clock, net)
-    sys.exit()
 
 def goBattlePrompt(data):
     chars = [data[0], data[1]]
@@ -347,8 +346,17 @@ def goGame(theMap, hostChars, clientChars, playerNum, conn):
               mapmode_c.Controller(), screen)
     while not m.advance():
         proceed(clock, conn)
+        if not m.pendingBattle is None:
+            oldM = m
+            testData = battle_m.testData()
+            realData = m.getBattleData()
+            data = [realData[0], testData[1], testData[2]]
+            goBattle(data, conn)
+            changeMVC(oldM, mapmode_v.View(), mapmode_c.Controller(), screen)
+            m.pendingBattle = None
+            
     sys.exit()
-    
+
 
 
 
