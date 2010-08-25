@@ -44,18 +44,24 @@ class Cat(battlechar.BattleChar):
 
     def beginBattle(self):
         self.catEnergy.change(CAT_ENERGY_BATTLE_START)
+        self.energyDelayTick = 0
+        self.energyIsChangable = False
+
+    def countdownComplete(self):
+        self.energyIsChangable = True
 
     def update(self):
         super(Cat, self).update()
 
-        if self.currMove.chargeBlade:
-            self.catEnergy.add(CAT_ENERGY_RECHARGE)
-            self.energyDelayTick = 0
-        else:
-            if self.energyDelayTick < CAT_ENERGY_DELAY:
-                self.energyDelayTick += 1
+        if self.energyIsChangable:
+            if self.currMove.chargeBlade:
+                self.catEnergy.add(CAT_ENERGY_RECHARGE)
+                self.energyDelayTick = 0
             else:
-                self.catEnergy.add(-CAT_ENERGY_USAGE)
+                if self.energyDelayTick < CAT_ENERGY_DELAY:
+                    self.energyDelayTick += 1
+                else:
+                    self.catEnergy.add(-CAT_ENERGY_USAGE)
 
     def initSpecMoves(self):
         self.createMoveIdle()

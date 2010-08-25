@@ -35,6 +35,13 @@ class BattleChar(object):
     def beginBattle(self):
         pass
 
+    def countdownComplete(self):
+        pass
+
+    def setLoc(self, loc):
+        self.preciseLoc[0] = float(loc[0])
+        self.preciseLoc[1] = float(loc[1])
+
     def update(self):
         self.proceedFrame()
         self.frameSpecial()

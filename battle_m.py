@@ -17,11 +17,21 @@ from constants import *
 class Model(mvc.Model):
     def __init__(self, inChars, areaSize, bg):
         super(Model, self).__init__()
+        self.background = bg
+        self.rect = pygame.Rect((0, 0), areaSize)
+        
         self.players = inChars
         for p in self.players:
             p.beginBattle()
-        self.background = bg
-        self.rect = pygame.Rect((0, 0), areaSize)
+            pos = (self.rect.centerx,
+                   self.rect.height - BATTLE_AREA_FLOOR_HEIGHT)
+            self.players[0].setLoc(add_points(pos,
+                            ((-BATTLE_PLAYER_START_DISTANCE / 2), 0)))
+            self.players[0].facingRight = True
+            self.players[1].setLoc(add_points(pos,
+                            ((BATTLE_PLAYER_START_DISTANCE / 2), 0)))
+            self.players[1].facingRight = False
+            
         self.keys = [[False, False, False, False, False, False, False],
                      [False, False, False, False, False, False, False]]
         self.keysNow = [[0, 0, 0, 0, 0, 0, 0],
@@ -38,6 +48,10 @@ class Model(mvc.Model):
     def update(self):
 
         self.countdown.update()
+
+        if self.countdown.checkStartFlag():
+            for p in self.players:
+                p.countdownComplete()
         
         for i, p in enumerate(self.players):
             if self.countdown.isGoing():
@@ -391,7 +405,7 @@ class Model(mvc.Model):
 def testData():
     heroes = [cat.Cat(), hare.Hare()]
     
-    size = (1920, 1305)
+    size = (1600, 800)
     bg = pygame.Surface(size)
     bg.fill((220, 220, 220))
     barSpace = 200
