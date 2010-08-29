@@ -20,6 +20,12 @@ class EnergyBar(object):
         if threshold is None:
             threshold = inVal.maximum
 
+        if textJust > 2:
+            textJust -= 3
+            self.textOnBottom = False
+        else:
+            self.textOnBottom = True
+
         self.value = inVal
         self.rect = inRect
         self.horizBorderSize = inBorders[0]
@@ -69,7 +75,10 @@ class EnergyBar(object):
 
         if not self.text is None:
             x = self.rect.left
-            y = self.rect.top + self.rect.height - self.vertBorderSize
+            if self.textOnBottom:
+                y = self.rect.top + self.rect.height - self.vertBorderSize
+            else:
+                y = self.rect.top - (ENERGY_BAR_FONT.get_height() + 2)
             screen.blit(self.text, (x, y))
 
     def createBackground(self):

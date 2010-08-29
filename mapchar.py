@@ -121,6 +121,15 @@ class MapChar(object):
             q.blit(p, (0, 0))
         q.convert()
         self.portrait = q
+
+    def getHP(self):
+        return self.battleChar.hp.value
+
+    def getMaxHP(self):
+        return self.battleChar.hp.maximum
+
+    def getSuperEnergy(self):
+        return 50
         
 
 def Hare(team, battleChar, name="Unnamed Hare", portrait=None):

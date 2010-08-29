@@ -13,6 +13,7 @@ class MapInterfaceItem(drawable.Drawable):
         self.alphaUp = True
         self.tick = MAP_INTERFACE_ALPHA_TICK
         self.pastImage = None
+        self.pastHP = None
 
         self.image = pygame.Surface((1, 1))
 
