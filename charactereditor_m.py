@@ -19,6 +19,8 @@ class Model(mvc.Model):
     def __init__(self, isSelection=False):
         super(Model, self).__init__()
         self.page = None
+        self.leftPageArrow = None
+        self.rightPageArrow = None
 
         self.isSelectionScreen = isSelection
 
@@ -37,8 +39,14 @@ class Model(mvc.Model):
         self.baseSurfaceRect.center = (SCREEN_SIZE[0]/2, SCREEN_SIZE[1]/2)
         self.charMenu.rect.topleft = self.baseSurfaceRect.topleft
 
-        self.blackPanel = pygame.Surface((self.menu.rect.width,
-                                          self.baseSurfaceRect.height))
+        singlePanelSize = (self.menu.rect.width,
+                           self.baseSurfaceRect.height)
+        self.leftPageArrow.setRect(self.charMenu.rect.topleft,
+                                   singlePanelSize)
+        self.rightPageArrow.setRect(self.charMenu.rect.topleft,
+                                    singlePanelSize)
+
+        self.blackPanel = pygame.Surface(singlePanelSize)
         self.blackPanel.fill(CHAR_EDITOR_BLACK_PANEL_COLOR)
         pos1 = self.charMenu.rect.topleft
         pos2 = (pos1[0] + (self.idealSize[0] * 2), pos1[1])
@@ -94,6 +102,17 @@ class Model(mvc.Model):
             if not self.page is None:
                 self.loadCharacter()
         self.charMenu.rect.topleft = pos
+
+        if not self.page is None:
+            self.leftPageArrow = PageArrow(False, self.page)
+            self.rightPageArrow = PageArrow(True, self.page)
+
+            if not firstTime:
+                self.leftPageArrow.setRect(self.charMenu.rect.topleft,
+                                           self.blackPanel.get_size())
+                self.rightPageArrow.setRect(self.charMenu.rect.topleft,
+                                            self.blackPanel.get_size())
+            
 
     def buildIdealSize(self):
         tempList = []
@@ -279,7 +298,19 @@ class Model(mvc.Model):
                 self.characterToDisplay.currSuperMove = self.menu.value() - 1
             elif self.stage == 101:
                 if self.menu.value() == 1:
+                    checker = False
+                    if len(self.charMenu.options) == 1:
+                        checker = True
                     chardata.deleteCharacter(self.characterToDisplay.name)
+                    if checker:
+                        if ((not self.page is None)
+                            and (self.page.value > 0)):
+                            self.page.dec()
+                            self.buildCharMenu()
+                            self.charMenu.setToMax()
+                        else:
+                            self.page = None
+                    
                 self.setStage(0)
 
     def click(self, pos):
@@ -300,3 +331,35 @@ class Model(mvc.Model):
 
     def returnCharacter(self):
         return self.characterToDisplay
+
+
+class PageArrow(object):
+    def __init__(self, isRight, page):
+        self.image = INTERFACE_GRAPHICS[4].copy()
+        self.isRight = isRight
+
+        if not isRight:
+            self.image = pygame.transform.flip(self.image, True, False)
+
+        self.visible = (page.maximum > 0)
+
+    def setRect(self, pos, size):
+        oldRect = pygame.Rect(pos, size)
+        
+        if self.isRight:
+            xRef = oldRect.right
+        else:
+            xRef = oldRect.left
+
+        self.rect = pygame.Rect((0, 0), self.image.get_size())
+        self.rect.center = (xRef, oldRect.centery)
+
+    def draw(self, screen):
+        if self.visible:
+            screen.blit(self.image, self.rect.topleft)
+
+    def mouseIsOver(self, mousePos):
+        if not self.visible:
+            return False
+
+        return self.rect.collidepoint(mousePos)

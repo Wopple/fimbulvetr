@@ -17,7 +17,7 @@ class Model(mvc.Model):
         self.response = []
         self.banList = banList
         
-        size = (200 + (TEXT_ENTRY_BORDER_SIZE * 2),
+        size = (TEXT_ENTRY_LINE_WIDTH + (TEXT_ENTRY_BORDER_SIZE * 2),
                 self.font.get_linesize() + self.font.get_height() +
                 (TEXT_ENTRY_BORDER_SIZE * 2))
         pos = [0, 0]

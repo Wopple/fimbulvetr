@@ -26,17 +26,15 @@ class IncInt:
         self.restricted = False
 
         if self.minimum > self.maximum:
-            print "Error in IncInt - Maximum value greater or equal to minimum value"
-            print str(self.value) + " is not between " + str(self.minimum) + " and " + str(self.maximum)
-            sys.exit()
+            raise Exception
 
         if (self.value < self.minimum) or (self.value > self.maximum):
-            print "Error in IncInt - Value not in range"
-            sys.exit()
+            raise Exception, ("Value is not between bounds: " +
+                              str(self.minimum) + " <-- " + str(self.value) +
+                              " --> " + str(self.maximum))
 
         if self.doesBob != True and self.doesBob != False:
-            print "Error in IncInt - Bobbing variable not set to boolean"
-            sys.exit()
+            raise Exception
 
     def increment(self):
         if self.restricted:

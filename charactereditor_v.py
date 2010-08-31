@@ -27,6 +27,11 @@ class View(mvc.View):
             self.screen.blit( self.model.superMoveNameText,
                                self.model.superMoveNameTextPos)
 
+        if ((not self.model.leftPageArrow is None) and
+            (not self.model.rightPageArrow is None)):
+            self.model.leftPageArrow.draw(screen)
+            self.model.rightPageArrow.draw(screen)
+
 
         if tickClock:
             pygame.display.flip()

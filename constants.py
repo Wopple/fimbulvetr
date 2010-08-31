@@ -40,7 +40,8 @@ CHAR_EDITOR_COLOR_BG = (96, 75, 55)
 CHAR_EDITOR_NUM_PER_PAGE = 12
 CHAR_EDITOR_BLACK_PANEL_COLOR = (30, 30, 30)
 
-TEXT_ENTRY_LENGTH_MAX = 16
+TEXT_ENTRY_LENGTH_MAX = 14
+TEXT_ENTRY_LINE_WIDTH = 350
 
 MAIN_MENU_TITLE_POS = [ ((SCREEN_SIZE[0] / 6), 10),
                         ((SCREEN_SIZE[0] / 6), 50) ]
@@ -67,7 +68,7 @@ MAP_CHAR_BAR_PADDING_SMALL = 4
 MAP_CHAR_BAR_SPACING = 20
 MAP_CHAR_BAR_INIT_POS = (20, 20)
 MAP_CHAR_BAR_PORTRAIT_SIZE = (40, 40)
-MAP_CHAR_BAR_ENERGY_BAR_SIZE = (80, 12)
+MAP_CHAR_BAR_ENERGY_BAR_SIZE = (120, 12)
 MAP_CHAR_BAR_ENERGY_BAR_BORDERS = (2, 2)
 
 TEXT_ENTRY_BORDER_SIZE = 10
@@ -464,7 +465,8 @@ for i in temp:
 temp = ['pauseicon.png',
         'playicon.png',
         'target.png',
-        'networking.png']
+        'networking.png',
+        'pagearrow.png']
 
 INTERFACE_GRAPHICS = []
 for i in temp:

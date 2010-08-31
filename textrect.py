@@ -32,6 +32,19 @@ def render_textrect(string, font, rect, text_color, background_color, justificat
 
     requested_lines = string.splitlines()
 
+    surface = pygame.Surface(rect.size)
+    if transparent:
+        background_color = []
+        for i in range(3):
+            tempVal = text_color[i] - 3
+            if tempVal < 0:
+                tempVal = 0
+            background_color.append(tempVal)
+        surface.set_colorkey(background_color)
+    surface.fill(background_color)
+
+    safeBlank = surface.copy()
+
     # Create a series of lines that will fit on the provided
     # rectangle.
 
@@ -41,7 +54,8 @@ def render_textrect(string, font, rect, text_color, background_color, justificat
             # if any of our words are too long to fit, return.
             for word in words:
                 if font.size(word)[0] >= rect.width:
-                    raise TextRectException, "The word " + word + " is too long to fit in the rect passed."
+                    #Error
+                    return safeBlank
             # Start a new line
             accumulated_line = ""
             for word in words:
@@ -56,23 +70,11 @@ def render_textrect(string, font, rect, text_color, background_color, justificat
         else:
             final_lines.append(requested_line)
 
-    # Let's try to write the text out on the surface.
-
-    surface = pygame.Surface(rect.size)
-    if transparent:
-        background_color = []
-        for i in range(3):
-            tempVal = text_color[i] - 3
-            if tempVal < 0:
-                tempVal = 0
-            background_color.append(tempVal)
-        surface.set_colorkey(background_color)
-    surface.fill(background_color)
-
     accumulated_height = 0
     for line in final_lines:
         if accumulated_height + font.size(line)[1] >= rect.height:
-            raise TextRectException, "Once word-wrapped, the text string was too tall to fit in the rect."
+            #Error
+            return safeBlank
         if line != "":
             tempsurface = font.render(line, 1, text_color)
             if justification == 0:
@@ -82,7 +84,8 @@ def render_textrect(string, font, rect, text_color, background_color, justificat
             elif justification == 2:
                 surface.blit(tempsurface, (rect.width - tempsurface.get_width(), accumulated_height))
             else:
-                raise TextRectException, "Invalid justification argument: " + str(justification)
+                #Error
+                return safeBlank
         accumulated_height += font.size(line)[1]
 
     return surface
