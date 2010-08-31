@@ -314,12 +314,17 @@ class Model(mvc.Model):
                 self.setStage(0)
 
     def click(self, pos):
-        val = self.charMenu.isAreaRect(pos)
-        if (val > 0) and (self.stage == 0):
-            self.charMenu.setVal(val)
-            self.loadCharacter()
+        if (self.leftPageArrow.mouseIsOver(pos)):
+            self.decPage()
+        elif (self.rightPageArrow.mouseIsOver(pos)):
+            self.incPage()
         else:
-            self.confirm()
+            val = self.charMenu.isAreaRect(pos)
+            if (val > 0) and (self.stage == 0):
+                self.charMenu.setVal(val)
+                self.loadCharacter()
+            else:
+                self.confirm()
 
     def setCharacterSelection(self, name):
         for i, n in enumerate(self.savedNames):
