@@ -16,7 +16,7 @@ class Model(mvc.Model):
         super(Model, self).__init__()
 
         self.tempRect = pygame.Rect( (50, 50), (200, 0) )
-        menuOptions = ["Host", "Client"]
+        menuOptions = ["Host", "Client", "Cancel"]
         self.menuHostClient = minimenu.MiniMenu(self.tempRect, menuOptions,
                                            MAIN_MENU_FONT, MAIN_MENU_COLOR_ON,
                                            MAIN_MENU_COLOR_OFF,
@@ -111,7 +111,10 @@ class Model(mvc.Model):
         if not self.menu is None:
             if not self.menu.noSelection:
                 if self.phase == 1 or self.phase == 5:
-                    self.advanceNow = True
+                    if (self.phase == 1) and (self.menu.value() == 3):
+                        self.cancel()
+                    else:
+                        self.advanceNow = True
 
     def click(self, pos):
         self.confirm()

@@ -147,7 +147,7 @@ class Model(mvc.Model):
                 menuOptions.append(i.name)
 
         elif self.stage == 101:
-            menuOptions = ["Delete", "Nevermind..."]
+            menuOptions = ["Nevermind...", "Delete"]
 
         tempRect = pygame.Rect( (50, 50), (200, 0) )
         self.menu = minimenu.MiniMenu(tempRect, menuOptions,
@@ -297,7 +297,7 @@ class Model(mvc.Model):
                 self.advanceNow = True
                 self.characterToDisplay.currSuperMove = self.menu.value() - 1
             elif self.stage == 101:
-                if self.menu.value() == 1:
+                if self.menu.value() == 2:
                     checker = False
                     if len(self.charMenu.options) == 1:
                         checker = True
