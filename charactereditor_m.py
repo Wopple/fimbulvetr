@@ -41,10 +41,11 @@ class Model(mvc.Model):
 
         singlePanelSize = (self.menu.rect.width,
                            self.baseSurfaceRect.height)
-        self.leftPageArrow.setRect(self.charMenu.rect.topleft,
-                                   singlePanelSize)
-        self.rightPageArrow.setRect(self.charMenu.rect.topleft,
-                                    singlePanelSize)
+        if not (self.leftPageArrow is None or self.rightPageArrow is None):
+            self.leftPageArrow.setRect(self.charMenu.rect.topleft,
+                                       singlePanelSize)
+            self.rightPageArrow.setRect(self.charMenu.rect.topleft,
+                                        singlePanelSize)
 
         self.blackPanel = pygame.Surface(singlePanelSize)
         self.blackPanel.fill(CHAR_EDITOR_BLACK_PANEL_COLOR)
@@ -314,9 +315,11 @@ class Model(mvc.Model):
                 self.setStage(0)
 
     def click(self, pos):
-        if (self.leftPageArrow.mouseIsOver(pos)):
+        if ((not self.leftPageArrow is None) and
+            (self.leftPageArrow.mouseIsOver(pos))):
             self.decPage()
-        elif (self.rightPageArrow.mouseIsOver(pos)):
+        elif ((not self.rightPageArrow is None) and
+            (self.rightPageArrow.mouseIsOver(pos))):
             self.incPage()
         else:
             val = self.charMenu.isAreaRect(pos)

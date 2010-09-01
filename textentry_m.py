@@ -9,8 +9,13 @@ import string
 import textrect
 
 class Model(mvc.Model):
-    def __init__(self, title, banList = [], ip=False):
+    def __init__(self, title, banList = [], ip=False, maxLength=None):
         super(Model, self).__init__()
+
+        if maxLength is None:
+            self.maxLength = TEXT_ENTRY_LENGTH_MAX
+        else:
+            self.maxLength = maxLength
 
         self.ipCheck = ip
         self.font = TEXT_ENTRY_FONT
@@ -60,7 +65,7 @@ class Model(mvc.Model):
         pass
 
     def key(self, k):
-        if len(self.response) < TEXT_ENTRY_LENGTH_MAX:
+        if len(self.response) < self.maxLength:
             self.response.append(k)
             self.updateImage()
 

@@ -218,7 +218,8 @@ def goCharacterEditorMain(oldM = None, conn=None):
                 goChangeSuper(oldM, conn)
 
 def goCreateCharacter(oldM = None, conn=None):
-    multiMVC(textentry_m.Model("Character Name", chardata.getNameList()),
+    multiMVC(textentry_m.Model("Character Name", chardata.getNameList(),
+                               False, CHARACTER_NAME_MAX_LENGTH),
              textentry_v.View(), textentry_c.Controller(), screen)
     while not m.either():
         proceedMulti(clock)
