@@ -165,6 +165,10 @@ class Model(mvc.Model):
         self.advanceNow = False
         self.backNow = False
 
+        if not (self.leftPageArrow is None or self.rightPageArrow is None):
+            self.leftPageArrow.visible = (self.stage == 0)
+            self.rightPageArrow.visible = (self.stage == 0)
+
         self.createDescription(None)
 
         self.mouseMoved(pygame.mouse.get_pos())
