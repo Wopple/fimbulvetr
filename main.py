@@ -203,9 +203,11 @@ def goMainMenu(fade):
     elif m.menu.value() == 5:
         sys.exit()
 
-def goCharacterEditorMain(oldM = None, conn=None):
+def goCharacterEditorMain(oldM = None, conn=None, initialChar=None):
     multiMVC(charactereditor_m.Model(), charactereditor_v.View(),
                  charactereditor_c.Controller(), screen)
+    if not initialChar is None:
+        m.setCharacterSelection(initialChar)
     while not m.back():
         proceedMulti(clock)
         if not oldM is None:
@@ -319,7 +321,7 @@ def goCharacterSelection(conn, theMap, isHost):
         if m.openEditor:
             m.openEditor = False
             oldM = m
-            goCharacterEditorMain(oldM, conn)
+            goCharacterEditorMain(oldM, conn, oldM.getCurrSelectedName())
             temp = m.returnCharacter()
             multiMVCBack()
             m.setCharacter(temp)

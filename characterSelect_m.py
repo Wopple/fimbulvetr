@@ -220,6 +220,13 @@ class Model(mvc.Model):
     def numEnemiesExpected(self):
         return self.theirPanel.maxVal
 
+    def getCurrSelectedName(self):
+        if ((not self.currSelected is None) and
+            (not self.currSelected.character is None)):
+            return self.currSelected.character.name
+        else:
+            return None
+
 class PlayerPanel(object):
     def __init__(self, rect, name, maxVal):
         self.rect = rect
