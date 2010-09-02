@@ -88,11 +88,7 @@ class Model(mvc.Model):
 
     def drawOrigMap(self):
         
-        self.mapOrigImage = pygame.Surface(self.map.mapSize)
-        self.mapOrigImage.fill(TERRAIN_COLORS[self.map.primaryTerrain])
-        for i in self.map.mountains:
-            pygame.draw.circle(self.mapOrigImage, MOUNTAIN_FILL_COLOR, i[0], i[1])
-
+        self.mapOrigImage = gamemap.drawMap(self.map)
         self.drawZoomMap()
 
     def drawZoomMap(self):
@@ -415,13 +411,6 @@ class Model(mvc.Model):
 
         return data
 
-
-
-def testData():
-    chars = [mapchar.Hare(0, None, "Awesomez", HARE_PORTRAITS[0]),
-             mapchar.Hare(1, None, "Bob"),
-             mapchar.Cat(0, None, "Dude")]
-    return [gamemap.getMap("00"), chars]
 
 def ConvertBattleCharsToMapChars(hostChars, clientChars):
     masterList = [hostChars, clientChars]

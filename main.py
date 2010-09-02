@@ -17,6 +17,7 @@ import netclient, netserver, netcode
 import chardata
 import multiplayerSetup_m, multiplayerSetup_v, multiplayerSetup_c
 import characterSelect_m, characterSelect_v, characterSelect_c
+import mapdebug_m, mapdebug_v, mapdebug_c
 import gamemap
 
 from constants import *
@@ -385,16 +386,11 @@ if __name__ == '__main__':
             if m.debugMenu.value() == 1:
                 goBattle(battle_m.testData(), None)
             elif m.debugMenu.value() == 2:
-                data = mapmode_m.testData()
-                changeMVC(mapmode_m.Model(data[0], data[1], 0),
-                          mapmode_v.View(), mapmode_c.Controller(), screen)
-                m.pause[1] = False
+                currMap = gamemap.getMap("00")
+                changeMVC(mapdebug_m.Model(currMap), mapdebug_v.View(),
+                          mapdebug_c.Controller(), screen)
                 while not m.advance():
                     proceed(clock)
-                    if not m.pendingBattle is None:
-                        result = goBattlePrompt(m.pendingBattle)
-                        m.resolveBattle(result)
-                sys.exit()
             elif m.debugMenu.value() == 3:
                 goCharacterSelection(None, gamemap.getMap("00"), True)
             elif m.debugMenu.value() == 4:
