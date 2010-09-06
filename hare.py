@@ -109,6 +109,25 @@ class Hare(battlechar.BattleChar):
         f = [ self.frameData(66, 1),
               self.frameData(0, 1),
               self.frameData(66, 1) ]
+        r = [
+                [
+                    (-13, -44, 1, -35),
+                    (-13, -52, -2, -44),
+                    (-12, -35, 1, -19),
+                    (0, -33, 5, -29),
+                    (-18, -32, -11, -26),
+                    (-24, -29, -17, -24),
+                    (-12, -19, -5, 0),
+                    (-8, -19, 1, -12),
+                    (0, -16, 7, -11),
+                    (3, -12, 8, 0),
+                    (5, -4, 17, 1)
+                 ]
+            ]
+        
+        f = [ self.frameData(66, 1, r[0]),
+              self.frameData(0, 1, r[0]),
+              self.frameData(66, 1, r[0]) ]
         self.moves['idleLike'].append(f, [])
         self.moves['idleLike'].frames[0].ignoreFriction = True
         self.moves['idleLike'].frames[0].ignoreSpeedCap = True
@@ -158,12 +177,40 @@ class Hare(battlechar.BattleChar):
 
     def createMoveAir(self):
         f = [ self.frameData(8, 2) ]
+        r = [
+                [
+                    (-1, -58, 10, -52),
+                    (-1, -52, 12, -41),
+                    (-7, -40, 16, -33),
+                    (-14, -39, -3, -34),
+                    (-6, -34, 10, -24),
+                    (-3, -25, 12, -13),
+                    (-5, -13, 10, 2)
+                ]
+            ]
+
+        f = [ self.frameData(8, 2, r[0]) ]
         self.moves['air'].append(f, [])
 
     def createMoveAirLike(self):
         f = [ self.frameData(67, 1),
               self.frameData(8, 1),
               self.frameData(67, 1) ]
+        r = [
+                [
+                    (-1, -58, 10, -52),
+                    (-1, -52, 12, -41),
+                    (-7, -40, 16, -33),
+                    (-14, -39, -3, -34),
+                    (-6, -34, 10, -24),
+                    (-3, -25, 12, -13),
+                    (-5, -13, 10, 2)
+                ]
+            ]
+        
+        f = [ self.frameData(67, 1, r[0]),
+              self.frameData(8, 1, r[0]),
+              self.frameData(67, 1, r[0]) ]
         self.moves['airLike'].append(f, [])
         self.moves['airLike'].frames[0].ignoreFriction = True
         self.moves['airLike'].frames[0].ignoreSpeedCap = True
@@ -172,10 +219,36 @@ class Hare(battlechar.BattleChar):
 
     def createMoveLanding(self):
         f = [ self.frameData(9, 3) ]
+        r = [
+                [
+                    (4, -48, 17, -32),
+                    (-2, -34, 16, -24),
+                    (0, -26, 15, -14),
+                    (12, -27, 21, -20),
+                    (-13, -41, -1, -33),
+                    (-1, -17, 19, -7),
+                    (-10, -8, 0, -1),
+                    (12, -8, 23, 2)
+                ]
+            ]
+        f = [ self.frameData(9, 3, r[0]) ]
         self.moves['landing'].append(f, [])
 
     def createMoveJumping(self):
         f = [ self.frameData(9, 3) ]
+        r = [
+                [
+                    (4, -48, 17, -32),
+                    (-2, -34, 16, -24),
+                    (0, -26, 15, -14),
+                    (12, -27, 21, -20),
+                    (-13, -41, -1, -33),
+                    (-1, -17, 19, -7),
+                    (-10, -8, 0, -1),
+                    (12, -8, 23, 2)
+                ]
+            ]
+        f = [ self.frameData(9, 3, r[0]) ]
         self.moves['jumping'].append(f, [])
 
     def createMoveDucking(self):
@@ -209,7 +282,8 @@ class Hare(battlechar.BattleChar):
 
         h = [
                 [
-                    (22, -34, 52, -20, 40, 40, 8, 8, [])
+                    (22, -34, 52, -20, 40, 40, 8, 8, []),
+                    (22, -34, 52, -20, 40, 40, 4, 0, [])
                 ]
             ]
                     
@@ -261,7 +335,8 @@ class Hare(battlechar.BattleChar):
 
         h = [
                 [
-                    (22, -34, 52, -20, 40, 60, 8, 8, [])
+                    (22, -34, 52, -20, 40, 60, 8, 8, []),
+                    (22, -34, 52, -20, 40, 60, 11, 0, [])
                 ]
             ]
         

@@ -471,7 +471,7 @@ class Model(mvc.Model):
             
 
 def testData():
-    heroes = [cat.Cat(), hare.Hare()]
+    heroes = [hare.Hare(), hare.Hare()]
     
     size = (1600, 800)
     bg = pygame.Surface(size)
