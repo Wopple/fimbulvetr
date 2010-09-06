@@ -19,6 +19,13 @@ class Model(mvc.Model):
         self.mousePos = pygame.mouse.get_pos()
         self.drawOrigMap()
 
+        while (self.zoomVal > ZOOM_MIN) and (not self.canSeeEntireMap()):
+            self.scrollOut()
+
+    def canSeeEntireMap(self):
+        return ((self.mapRect.width < SCREEN_SIZE[0]) and
+                (self.mapRect.height < SCREEN_SIZE[1]))
+
     def drawOrigMap(self):
         self.mapOrigImage = gamemap.drawMap(self.map)
         self.drawZoomMap()
