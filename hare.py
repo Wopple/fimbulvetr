@@ -78,6 +78,7 @@ class Hare(battlechar.BattleChar):
 
         self.createMoveStun1()
         self.createMoveStun2()
+        self.createMoveStun3()
 
         self.createSuperMoves()
 
@@ -493,23 +494,27 @@ class Hare(battlechar.BattleChar):
                     (20, -15, 27, -8)
                 ]
             ]
+        dam1 = 150
+        stun1 = 120
+        force1 = 24
+        angle1 = 45
         h = [
                 [
-                    (19, -62, 35, -36, 50, 100, 12, 75, []),
-                    (34, -62, 41, -41, 50, 100, 12, 75, []),
-                    (41, -60, 46, -45, 50, 100, 12, 75, []),
-                    (46, -58, 51, -47, 50, 100, 12, 75, []),
-                    (50, -54, 56, -49, 50, 100, 12, 75, [])
+                    (19, -62, 35, -36, dam1, stun1, force1, angle1, []),
+                    (34, -62, 41, -41, dam1, stun1, force1, angle1, []),
+                    (41, -60, 46, -45, dam1, stun1, force1, angle1, []),
+                    (46, -58, 51, -47, dam1, stun1, force1, angle1, []),
+                    (50, -54, 56, -49, dam1, stun1, force1, angle1, [])
                 ],
                 [
-                    (41, -35, 53, -26, 50, 100, 12, 75, []),
-                    (46, -40, 65, -24, 50, 100, 12, 75, []),
-                    (53, -46, 71, -22, 50, 100, 12, 75, []),
-                    (59, -50, 77, -22, 50, 100, 12, 75, []),
-                    (64, -54, 73, -49, 50, 100, 12, 75, []),
-                    (75, -45, 81, -19, 50, 100, 12, 75, []),
-                    (78, -39, 84, -22, 50, 100, 12, 75, []),
-                    (62, -22, 75, -20, 50, 100, 12, 75, [])
+                    (41, -35, 53, -26, dam1, stun1, force1, angle1, []),
+                    (46, -40, 65, -24, dam1, stun1, force1, angle1, []),
+                    (53, -46, 71, -22, dam1, stun1, force1, angle1, []),
+                    (59, -50, 77, -22, dam1, stun1, force1, angle1, []),
+                    (64, -54, 73, -49, dam1, stun1, force1, angle1, []),
+                    (75, -45, 81, -19, dam1, stun1, force1, angle1, []),
+                    (78, -39, 84, -22, dam1, stun1, force1, angle1, []),
+                    (62, -22, 75, -20, dam1, stun1, force1, angle1, [])
                 ]
             ]
         f = [ self.frameData(59, 3, r[0]),
@@ -785,6 +790,18 @@ class Hare(battlechar.BattleChar):
 
         for i in range(len(self.moves['stun2'].frames)):
             self.moves['stun2'].frames[i].ignoreSpeedCap = True
+
+    def createMoveStun3(self):
+        f = [ self.frameData(70, 8),
+              self.frameData(71, 5),
+              self.frameData(72, 2),
+              self.frameData(73, 2),
+              self.frameData(74, 10)]
+
+        self.moves['stun3'].append(f, [])
+
+        for i in range(len(self.moves['stun3'].frames)):
+            self.moves['stun3'].frames[i].ignoreSpeedCap = True
 
 
     def createSuperMove1(self):

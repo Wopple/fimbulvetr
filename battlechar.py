@@ -228,6 +228,7 @@ class BattleChar(object):
 
         self.moves['stun1'] = move.baseStun()
         self.moves['stun2'] = move.baseStun()
+        self.moves['stun3'] = move.baseStun()
 
     def setCurrMove(self, index, frame=0):
         self.currMove = self.moves[index]
