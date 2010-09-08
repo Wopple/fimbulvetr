@@ -565,10 +565,33 @@ class Hare(battlechar.BattleChar):
         self.createMoveRollingSlash()
 
     def createMoveRollingSlash(self):
-        f = [ self.frameData(25, 2),
-              self.frameData(26, 2),
-              self.frameData(27, 3),
-              self.frameData(28, 10)]
+        r = [
+                [
+                    (9, -37, 32, -20),
+                    (-1, -29, 27, -11),
+                    (-8, -21, 24, 3),
+                    (-23, -5, -5, 1)
+                ]
+            ]
+        hit_1 = [40, 60, 30, 45, []]
+        hit_2 = [40, 60, 30, 135, []]
+        h = [
+                [
+                    [48, -39, 57, -30] + hit_1,
+                    [53, -35, 66, -15] + hit_1,
+                    [48, -18, 58, -9] + hit_1,
+                    [36, -36, 56, -12] + hit_1,
+                    [28, -32, 43, -16] + hit_1,
+                ],
+                [
+                    [-18, -44, 35, -37] + hit_2,
+                    [19, -41, 46, -34] + hit_2
+                ]
+            ]
+        f = [ self.frameData(25, 2, r[0]),
+              self.frameData(26, 2, r[0], h[0]),
+              self.frameData(27, 3, r[0], h[1]),
+              self.frameData(28, 10, r[0])]
         self.moves['rollingSlash'] = move.Move(f, [])
         self.moves['rollingSlash'].canDI = False
         self.moves['rollingSlash'].frames[0].setVelX = 0
