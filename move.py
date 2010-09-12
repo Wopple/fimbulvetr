@@ -129,6 +129,7 @@ def baseAir():
           ['land', Transition(None, None, None, None, 'landing')],
           ['attackA', Transition(None, None, None, None, 'neutralAirA')],
           ['attackB', Transition(None, None, None, None, 'neutralAirB')],
+          ['attackAUp', Transition(None, None, None, None, 'upAirA')],
           ['attackBUpCharge', Transition(None, None, None, None, 'upAirB')],
           ['attackBDown', Transition(None, None, None, None, 'downAirB')]]
     m = Move([], t)

@@ -73,6 +73,7 @@ class Hare(battlechar.BattleChar):
         self.createMoveDownB()
         self.createNeutralAirA()
         self.createNeutralAirB()
+        self.createUpAirA()
         self.createUpAirB()
         self.createDownAirB()
 
@@ -385,16 +386,20 @@ class Hare(battlechar.BattleChar):
                     (9, -18, 19, -1)
                 ]
             ]
+        dam1 = 80
+        stun1 = 60
+        force1 = 15
+        angle1 = 30
         h = [
                 [
-                    (22, -43, 56, -27, 60, 60, 6, 45, []),
-                    (21, -33, 35, -21, 60, 60, 6, 45, [])
+                    (22, -43, 56, -27, dam1, stun1, force1, angle1, []),
+                    (21, -33, 35, -21, dam1, stun1, force1, angle1, [])
                 ],
                 [
-                    (39, -47, 67, -36, 60, 60, 6, 45, []),
-                    (30, -42, 58, -32, 60, 60, 6, 45, []),
-                    (25, -37, 47, -25, 60, 60, 6, 45, []),
-                    (54, -50, 70, -42, 60, 60, 6, 45, [])
+                    (39, -47, 67, -36, dam1, stun1, force1, angle1, []),
+                    (30, -42, 58, -32, dam1, stun1, force1, angle1, []),
+                    (25, -37, 47, -25, dam1, stun1, force1, angle1, []),
+                    (54, -50, 70, -42, dam1, stun1, force1, angle1, [])
                 ]
             ]
 
@@ -804,6 +809,16 @@ class Hare(battlechar.BattleChar):
         for i in range(len(self.moves['neutralAirB'].frames)):
             self.moves['neutralAirB'].frames[i].ignoreFriction = True
 
+    def createUpAirA(self):
+        f = [ self.frameData(75, 4),
+              self.frameData(76, 1),
+              self.frameData(77, 1),
+              self.frameData(78, 1),
+              self.frameData(79, 2),
+              self.frameData(80, 4) ]
+
+        self.moves['upAirA'].append(f, [])
+
     def createUpAirB(self):
         f = [ self.frameData(51, 3),
               self.frameData(52, 1),
@@ -841,7 +856,7 @@ class Hare(battlechar.BattleChar):
         self.moves['upAirB'].frames[20].setVelX = None
 
     def createDownAirB(self):
-        f = [ self.frameData(55, 5),
+        f = [ self.frameData(55, 6),
               self.frameData(56, 1),
               self.frameData(57, 1),
               self.frameData(58, 1),
