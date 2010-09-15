@@ -822,27 +822,73 @@ class Hare(battlechar.BattleChar):
         self.moves['upAirA'].append(f, [])
 
     def createUpAirB(self):
-        f = [ self.frameData(51, 3),
-              self.frameData(52, 1),
-              self.frameData(53, 1),
-              self.frameData(54, 1),
-              self.frameData(52, 1),
-              self.frameData(53, 1),
-              self.frameData(54, 1),
-              self.frameData(52, 1),
-              self.frameData(53, 1),
-              self.frameData(54, 1),
-              self.frameData(52, 1),
-              self.frameData(53, 1),
-              self.frameData(54, 1),
-              self.frameData(52, 1),
-              self.frameData(53, 1),
-              self.frameData(54, 1),
-              self.frameData(52, 1),
-              self.frameData(53, 1),
-              self.frameData(54, 1),
-              self.frameData(8, 2),
-              self.frameData(8, 5)]
+        r = [
+                [
+                    (-11, -59, 8, -44),
+                    (-20, -50, 19, -38),
+                    (-11, -39, 9, -18),
+                    (4, -24, 12, -18),
+                    (-21, -20, -11, -9),
+                    (-5, -19, 10, -5)
+                ],
+                [
+                    (-9, -60, 9, -45),
+                    (-18, -50, 12, -42),
+                    (-8, -42, 11, -34),
+                    (-11, -36, 9, -23),
+                    (5, -28, 14, -21),
+                    (-8, -26, 8, -13),
+                    (-21, -24, -5, -19),
+                    (-21, -22, -14, -12)
+                ],
+                [
+                    (-2, -58, 15, -41),
+                    (-15, -43, 19, -31),
+                    (-7, -32, 12, -22),
+                    (-4, -24, 15, -9),
+                    (-9, -10, 13, 7)
+                ],
+            ]
+        h = [
+                [
+                    [-35, -68, -18, -58],
+                    [-27, -72, -7, -64],
+                    [-18, -77, 1, -68],
+                    [-4, -77, 21, -69],
+                    [13, -74, 26, -64],
+                    [20, -69, 30, -35],
+                    [19, -37, 27, -28],
+                    [13, -32, 22, -24],
+                    [8, -29, 18, -20],
+                    [1, -24, 13, -16],
+                    [-4, -20, 5, -13],
+                    [-19, -70, 22, -56],
+                    [4, -68, 21, -28]
+                ],
+            ]
+
+        h[0] = [i + [28, 40, 20, 45, []] for i in h[0]]
+        f = [ self.frameData(51, 3, r[0]),
+              self.frameData(52, 1, r[1], h[0]),
+              self.frameData(53, 1, r[1], h[0]),
+              self.frameData(54, 1, r[1], h[0]),
+              self.frameData(52, 1, r[1], h[0]),
+              self.frameData(53, 1, r[1], h[0]),
+              self.frameData(54, 1, r[1], h[0]),
+              self.frameData(52, 1, r[1], h[0]),
+              self.frameData(53, 1, r[1], h[0]),
+              self.frameData(54, 1, r[1], h[0]),
+              self.frameData(52, 1, r[1], h[0]),
+              self.frameData(53, 1, r[1], h[0]),
+              self.frameData(54, 1, r[1], h[0]),
+              self.frameData(52, 1, r[1], h[0]),
+              self.frameData(53, 1, r[1], h[0]),
+              self.frameData(54, 1, r[1], h[0]),
+              self.frameData(52, 1, r[1], h[0]),
+              self.frameData(53, 1, r[1], h[0]),
+              self.frameData(54, 1, r[1], h[0]),
+              self.frameData(8, 2, r[1], h[0]),
+              self.frameData(8, 5, r[2])]
         t = [ ['doDuck', move.Transition(2, HARE_ENERGY_USAGE, 1, 17, 'airLike')] ]
         self.moves['upAirB'].append(f, t)
         self.moves['upAirB'].canDI = False
