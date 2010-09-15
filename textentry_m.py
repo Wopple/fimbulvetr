@@ -8,7 +8,7 @@ import mvc
 import string
 import textrect
 
-import win32clipboard, win32con
+#import win32clipboard, win32con
 
 class Model(mvc.Model):
     def __init__(self, title, banList = [], ip=False, maxLength=None):
@@ -121,12 +121,13 @@ class Model(mvc.Model):
         return True
 
     def pasteFromClipboard(self):
-        win32clipboard.OpenClipboard()
-        text = win32clipboard.GetClipboardData(win32con.CF_TEXT)
-        win32clipboard.CloseClipboard()
+        pass
+        #win32clipboard.OpenClipboard()
+        #text = win32clipboard.GetClipboardData(win32con.CF_TEXT)
+        #win32clipboard.CloseClipboard()
 
-        for i in range(len(text)):
-            if len(self.response) >= self.maxLength:
-                break
-            if self.validEntry(text[i]):
-                self.key(text[i])
+        #for i in range(len(text)):
+        #    if len(self.response) >= self.maxLength:
+        #        break
+        #    if self.validEntry(text[i]):
+        #        self.key(text[i])
