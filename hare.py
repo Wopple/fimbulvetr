@@ -9,6 +9,8 @@ import move
 
 from constants import *
 
+# DAMAGE STUN KNOCKBACK ANGLE
+
 class Hare(battlechar.BattleChar):
     def __init__(self, name="Unnamed Hare", inSpecial=0):
         self.name = name
@@ -856,26 +858,61 @@ class Hare(battlechar.BattleChar):
         self.moves['upAirB'].frames[20].setVelX = None
 
     def createDownAirB(self):
-        f = [ self.frameData(55, 6),
-              self.frameData(56, 1),
-              self.frameData(57, 1),
-              self.frameData(58, 1),
-              self.frameData(56, 1),
-              self.frameData(57, 1),
-              self.frameData(58, 1),
-              self.frameData(56, 1),
-              self.frameData(57, 1),
-              self.frameData(58, 1),
-              self.frameData(56, 1),
-              self.frameData(57, 1),
-              self.frameData(58, 1),
-              self.frameData(56, 1),
-              self.frameData(57, 1),
-              self.frameData(58, 1),
-              self.frameData(58, 1),
-              self.frameData(56, 1),
-              self.frameData(57, 1),
-              self.frameData(58, 1)]
+        r = [
+                [
+                    (-6, -57, 12, -43),
+                    (-9, -43, 15, -36),
+                    (-4, -36, 12, -31),
+                    (-7, -31, 9, -26),
+                    (-4, -26, 19, -16),
+                    (4, -16, 17, -12),
+                    (-2, -12, 14, -5)
+                ],
+                [
+                    (1, -54, 18, -39),
+                    (-1, -39, 30, -29),
+                    (-2, -29, 13, -23),
+                    (-5, -23, 18, -15),
+                    (-6, -17, 4, -12),
+                    (-1, -14, 8, -8),
+                    (12, -21, 23, -13),
+                    (16, -18, 29, -11),
+                    (22, -15, 33, -8),
+                    (26, -13, 42, -6)
+                ],
+            ]
+        h = [
+                [
+                    [-6, -43, 4, -34],
+                    [-1, -38, 19, -21],
+                    [6, -32, 26, -17],
+                    [12, -29, 34, -13],
+                    [16, -26, 40, -10],
+                    [19, -24, 44, -7],
+                    [25, -19, 48, -2]
+                ],
+            ]
+        h[0] = [i + [28, 40, 20, 315, []] for i in h[0]]
+        f = [ self.frameData(55, 6, r[0]),
+              self.frameData(56, 1, r[1], h[0]),
+              self.frameData(57, 1, r[1], h[0]),
+              self.frameData(58, 1, r[1], h[0]),
+              self.frameData(56, 1, r[1], h[0]),
+              self.frameData(57, 1, r[1], h[0]),
+              self.frameData(58, 1, r[1], h[0]),
+              self.frameData(56, 1, r[1], h[0]),
+              self.frameData(57, 1, r[1], h[0]),
+              self.frameData(58, 1, r[1], h[0]),
+              self.frameData(56, 1, r[1], h[0]),
+              self.frameData(57, 1, r[1], h[0]),
+              self.frameData(58, 1, r[1], h[0]),
+              self.frameData(56, 1, r[1], h[0]),
+              self.frameData(57, 1, r[1], h[0]),
+              self.frameData(58, 1, r[1], h[0]),
+              self.frameData(58, 1, r[1], h[0]),
+              self.frameData(56, 1, r[1], h[0]),
+              self.frameData(57, 1, r[1], h[0]),
+              self.frameData(58, 1, r[1], h[0])]
         
         t = [ ['land', move.Transition(None, None, None, None, 'downBAirLag')] ]
         
