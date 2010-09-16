@@ -778,18 +778,38 @@ class Hare(battlechar.BattleChar):
                     (3, 0, 14, 5)
                 ]
             ]
+        dam1 = 30
+        stun1 = 5
+        force1 = 8
+        angle1 = 20
+        dam2 = 50
+        stun2 = 60
+        force2 = 14
+        angle2 = 25
         h = [
                 [
-                    (26, -50, 43, -40, 30, 0, 4, 4, []),
-                    (20, -45, 36, -36, 30, 0, 4, 4, []),
-                    (13, -40, 28, -33, 30, 0, 4, 4, []),
-                    (8, -37, 21, -30, 30, 0, 4, 4, []),
-                    (8, -34, 16, -28, 30, 0, 4, 4, [])
+                    (26, -50, 43, -40, dam1, stun1, force1, angle1, []),
+                    (20, -45, 36, -36, dam1, stun1, force1, angle1, []),
+                    (13, -40, 28, -33, dam1, stun1, force1, angle1, []),
+                    (8, -37, 21, -30, dam1, stun1, force1, angle1, []),
+                    (8, -34, 16, -28, dam1, stun1, force1, angle1, [])
                 ],
                 [
-                    (8, -35, 26, -26, 30, 0, 4, 4, []),
-                    (20, -37, 35, -31, 30, 0, 4, 4, []),
-                    (30, -39, 45, -33, 30, 0, 4, 4, [])
+                    (8, -35, 26, -26, dam1, stun1, force1, angle1, []),
+                    (20, -37, 35, -31, dam1, stun1, force1, angle1, []),
+                    (30, -39, 45, -33, dam1, stun1, force1, angle1, [])
+                ],
+                [
+                    (26, -50, 43, -40, dam2, stun2, force2, angle2, []),
+                    (20, -45, 36, -36, dam2, stun2, force2, angle2, []),
+                    (13, -40, 28, -33, dam2, stun2, force2, angle2, []),
+                    (8, -37, 21, -30, dam2, stun2, force2, angle2, []),
+                    (8, -34, 16, -28, dam2, stun2, force2, angle2, [])
+                ],
+                [
+                    (8, -35, 26, -26, dam2, stun2, force2, angle2, []),
+                    (20, -37, 35, -31, dam2, stun2, force2, angle2, []),
+                    (30, -39, 45, -33, dam2, stun2, force2, angle2, [])
                 ]
             ]
         f = [ self.frameData(35, 3, r[0]),
@@ -799,8 +819,8 @@ class Hare(battlechar.BattleChar):
               self.frameData(39, 1, r[4], h[0]),
               self.frameData(40, 4, r[5], h[1]),
               self.frameData(35, 3, r[0]),
-              self.frameData(36, 1, r[1], h[0]),
-              self.frameData(37, 5, r[2], h[1]),
+              self.frameData(36, 1, r[1], h[2]),
+              self.frameData(37, 5, r[2], h[3]),
               self.frameData(8, 4, r[6])]
         self.moves['neutralAirB'].append(f, [])
         self.moves['neutralAirB'].canDI = False
@@ -808,6 +828,8 @@ class Hare(battlechar.BattleChar):
         self.moves['neutralAirB'].frames[1].setVelYIfDrop = -3.0
         self.moves['neutralAirB'].frames[4].setVelYIfDrop = -1.5
         self.moves['neutralAirB'].frames[7].setVelYIfDrop = -1.5
+        self.moves['neutralAirB'].frames[4].resetHitPotential = True
+        self.moves['neutralAirB'].frames[7].resetHitPotential = True
         for i in range(len(self.moves['neutralAirB'].frames)):
             self.moves['neutralAirB'].frames[i].ignoreFriction = True
 

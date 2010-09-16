@@ -33,10 +33,10 @@ class Model(mvc.Model):
                             ((BATTLE_PLAYER_START_DISTANCE / 2), 0)))
             self.players[1].facingRight = False
             
-        self.keys = [[False, False, False, False, False, False, False],
-                     [False, False, False, False, False, False, False]]
-        self.keysNow = [[0, 0, 0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0, 0, 0]]
+        self.keys = [[False, False, False, False, False, False, False, False],
+                     [False, False, False, False, False, False, False, False]]
+        self.keysNow = [[0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0]]
         self.returnCode = [0, 0]
         self.projectiles = []
         self.retreatProhibitTime = boundint.BoundInt(0, RETREAT_PROHIBIT_TIME,

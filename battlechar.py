@@ -97,6 +97,9 @@ class BattleChar(object):
                 self.vel[1] = f.setVelYIfDrop
                 self.accelToZero()
 
+        if self.currSubframe == 0 and f.resetHitPotential:
+            self.attackCanHit = True
+
     def accelToZero(self):
         self.accel = [0.0, 0.0]
 

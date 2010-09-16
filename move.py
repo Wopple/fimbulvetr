@@ -59,6 +59,7 @@ class Frame(object):
         self.setVelYIfDrop = None
         self.ignoreSpeedCap = False
         self.ignoreFriction = False
+        self.resetHitPotential = False
         self.buildHurtboxes(hurtboxData)
         self.buildHitboxes(hitboxData)
 
