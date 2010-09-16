@@ -286,8 +286,8 @@ class Hare(battlechar.BattleChar):
 
         h = [
                 [
-                    (22, -34, 52, -20, 40, 40, 4, 0, []),
-                    (22, -34, 52, -20, 40, 40, 4, 0, [])
+                    (22, -34, 52, -20, 40, 40, 4, 0, [], 2),
+                    (22, -34, 52, -20, 40, 40, 4, 0, [], 2)
                 ]
             ]
                     
@@ -339,8 +339,8 @@ class Hare(battlechar.BattleChar):
 
         h = [
                 [
-                    (22, -34, 52, -20, 40, 60, 8, 8, []),
-                    (22, -34, 52, -20, 40, 60, 8, 8, [])
+                    (22, -34, 52, -20, 40, 60, 8, 8, [], 2),
+                    (22, -34, 52, -20, 40, 60, 8, 8, [], 2)
                 ]
             ]
         
@@ -394,14 +394,14 @@ class Hare(battlechar.BattleChar):
         angle1 = 30
         h = [
                 [
-                    (22, -43, 56, -27, dam1, stun1, force1, angle1, []),
-                    (21, -33, 35, -21, dam1, stun1, force1, angle1, [])
+                    (22, -43, 56, -27, dam1, stun1, force1, angle1, [], 0),
+                    (21, -33, 35, -21, dam1, stun1, force1, angle1, [], 0)
                 ],
                 [
-                    (39, -47, 67, -36, dam1, stun1, force1, angle1, []),
-                    (30, -42, 58, -32, dam1, stun1, force1, angle1, []),
-                    (25, -37, 47, -25, dam1, stun1, force1, angle1, []),
-                    (54, -50, 70, -42, dam1, stun1, force1, angle1, [])
+                    (39, -47, 67, -36, dam1, stun1, force1, angle1, [], 0),
+                    (30, -42, 58, -32, dam1, stun1, force1, angle1, [], 0),
+                    (25, -37, 47, -25, dam1, stun1, force1, angle1, [], 0),
+                    (54, -50, 70, -42, dam1, stun1, force1, angle1, [], 0)
                 ]
             ]
 
@@ -505,23 +505,24 @@ class Hare(battlechar.BattleChar):
         stun1 = 120
         force1 = 24
         angle1 = 45
+        freeze1 = 5
         h = [
                 [
-                    (19, -62, 35, -36, dam1, stun1, force1, angle1, []),
-                    (34, -62, 41, -41, dam1, stun1, force1, angle1, []),
-                    (41, -60, 46, -45, dam1, stun1, force1, angle1, []),
-                    (46, -58, 51, -47, dam1, stun1, force1, angle1, []),
-                    (50, -54, 56, -49, dam1, stun1, force1, angle1, [])
+                    (19, -62, 35, -36, dam1, stun1, force1, angle1, [], freeze1),
+                    (34, -62, 41, -41, dam1, stun1, force1, angle1, [], freeze1),
+                    (41, -60, 46, -45, dam1, stun1, force1, angle1, [], freeze1),
+                    (46, -58, 51, -47, dam1, stun1, force1, angle1, [], freeze1),
+                    (50, -54, 56, -49, dam1, stun1, force1, angle1, [], freeze1)
                 ],
                 [
-                    (41, -35, 53, -26, dam1, stun1, force1, angle1, []),
-                    (46, -40, 65, -24, dam1, stun1, force1, angle1, []),
-                    (53, -46, 71, -22, dam1, stun1, force1, angle1, []),
-                    (59, -50, 77, -22, dam1, stun1, force1, angle1, []),
-                    (64, -54, 73, -49, dam1, stun1, force1, angle1, []),
-                    (75, -45, 81, -19, dam1, stun1, force1, angle1, []),
-                    (78, -39, 84, -22, dam1, stun1, force1, angle1, []),
-                    (62, -22, 75, -20, dam1, stun1, force1, angle1, [])
+                    (41, -35, 53, -26, dam1, stun1, force1, angle1, [], freeze1),
+                    (46, -40, 65, -24, dam1, stun1, force1, angle1, [], freeze1),
+                    (53, -46, 71, -22, dam1, stun1, force1, angle1, [], freeze1),
+                    (59, -50, 77, -22, dam1, stun1, force1, angle1, [], freeze1),
+                    (64, -54, 73, -49, dam1, stun1, force1, angle1, [], freeze1),
+                    (75, -45, 81, -19, dam1, stun1, force1, angle1, [], freeze1),
+                    (78, -39, 84, -22, dam1, stun1, force1, angle1, [], freeze1),
+                    (62, -22, 75, -20, dam1, stun1, force1, angle1, [], freeze1)
                 ]
             ]
         f = [ self.frameData(59, 3, r[0]),
@@ -593,8 +594,8 @@ class Hare(battlechar.BattleChar):
                     [19, -41, 46, -34]
                 ]
             ]
-        h[0] = [i + [40, 60, 30, 45, []] for i in h[0]]
-        h[1] = [i + [40, 60, 30, 135, []] for i in h[1]]
+        h[0] = [i + [40, 60, 30, 45, [], 0] for i in h[0]]
+        h[1] = [i + [40, 60, 30, 135, [], 0] for i in h[1]]
         f = [ self.frameData(25, 2, r[0]),
               self.frameData(26, 2, r[0], h[0]),
               self.frameData(27, 3, r[0], h[1]),
@@ -679,28 +680,28 @@ class Hare(battlechar.BattleChar):
         angle1 = 20
         h = [
                 [
-                    (-16, -74, 9, -49, dam1, stun1, force1, angle1, []),
-                    (2, -77, 14, -52, dam1, stun1, force1, angle1, []),
-                    (11, -75, 19, -56, dam1, stun1, force1, angle1, []),
-                    (16, -73, 24, -60, dam1, stun1, force1, angle1, []),
-                    (23, -71, 28, -62, dam1, stun1, force1, angle1, []),
-                    (25, -67, 30, -63, dam1, stun1, force1, angle1, [])
+                    (-16, -74, 9, -49, dam1, stun1, force1, angle1, [], 0),
+                    (2, -77, 14, -52, dam1, stun1, force1, angle1, [], 0),
+                    (11, -75, 19, -56, dam1, stun1, force1, angle1, [], 0),
+                    (16, -73, 24, -60, dam1, stun1, force1, angle1, [], 0),
+                    (23, -71, 28, -62, dam1, stun1, force1, angle1, [], 0),
+                    (25, -67, 30, -63, dam1, stun1, force1, angle1, [], 0)
                 ],
                 [
-                    (4, -71, 33, -45, dam1, stun1, force1, angle1, []),
-                    (25, -68, 39, -38, dam1, stun1, force1, angle1, []),
-                    (36, -63, 46, -22, dam1, stun1, force1, angle1, []),
-                    (10, -45, 37, -30, dam1, stun1, force1, angle1, []),
-                    (18, -30, 37, -25, dam1, stun1, force1, angle1, []),
-                    (28, -26, 38, -20, dam1, stun1, force1, angle1, [])
+                    (4, -71, 33, -45, dam1, stun1, force1, angle1, [], 0),
+                    (25, -68, 39, -38, dam1, stun1, force1, angle1, [], 0),
+                    (36, -63, 46, -22, dam1, stun1, force1, angle1, [], 0),
+                    (10, -45, 37, -30, dam1, stun1, force1, angle1, [], 0),
+                    (18, -30, 37, -25, dam1, stun1, force1, angle1, [], 0),
+                    (28, -26, 38, -20, dam1, stun1, force1, angle1, [], 0)
                 ],
                 [
-                    (16, -34, 25, -24, dam1, stun1, force1, angle1, []),
-                    (22, -28, 27, -22, dam1, stun1, force1, angle1, []),
-                    (25, -25, 29, -20, dam1, stun1, force1, angle1, []),
-                    (27, -23, 31, -18, dam1, stun1, force1, angle1, []),
-                    (28, -22, 33, -16, dam1, stun1, force1, angle1, []),
-                    (30, -20, 35, -14, dam1, stun1, force1, angle1, [])
+                    (16, -34, 25, -24, dam1, stun1, force1, angle1, [], 0),
+                    (22, -28, 27, -22, dam1, stun1, force1, angle1, [], 0),
+                    (25, -25, 29, -20, dam1, stun1, force1, angle1, [], 0),
+                    (27, -23, 31, -18, dam1, stun1, force1, angle1, [], 0),
+                    (28, -22, 33, -16, dam1, stun1, force1, angle1, [], 0),
+                    (30, -20, 35, -14, dam1, stun1, force1, angle1, [], 0)
                 ]
             ]
         f = [ self.frameData(14, 3, r[0]),
@@ -780,36 +781,38 @@ class Hare(battlechar.BattleChar):
             ]
         dam1 = 30
         stun1 = 5
-        force1 = 8
-        angle1 = 20
+        force1 = 6
+        angle1 = 80
+        freeze1 = 3
         dam2 = 50
         stun2 = 60
         force2 = 14
         angle2 = 25
+        freeze2 = 2
         h = [
                 [
-                    (26, -50, 43, -40, dam1, stun1, force1, angle1, []),
-                    (20, -45, 36, -36, dam1, stun1, force1, angle1, []),
-                    (13, -40, 28, -33, dam1, stun1, force1, angle1, []),
-                    (8, -37, 21, -30, dam1, stun1, force1, angle1, []),
-                    (8, -34, 16, -28, dam1, stun1, force1, angle1, [])
+                    (26, -50, 43, -40, dam1, stun1, force1, angle1, [], freeze1),
+                    (20, -45, 36, -36, dam1, stun1, force1, angle1, [], freeze1),
+                    (13, -40, 28, -33, dam1, stun1, force1, angle1, [], freeze1),
+                    (8, -37, 21, -30, dam1, stun1, force1, angle1, [], freeze1),
+                    (8, -34, 16, -28, dam1, stun1, force1, angle1, [], freeze1)
                 ],
                 [
-                    (8, -35, 26, -26, dam1, stun1, force1, angle1, []),
-                    (20, -37, 35, -31, dam1, stun1, force1, angle1, []),
-                    (30, -39, 45, -33, dam1, stun1, force1, angle1, [])
+                    (8, -35, 26, -26, dam1, stun1, force1, angle1, [], freeze1),
+                    (20, -37, 35, -31, dam1, stun1, force1, angle1, [], freeze1),
+                    (30, -39, 45, -33, dam1, stun1, force1, angle1, [], freeze1)
                 ],
                 [
-                    (26, -50, 43, -40, dam2, stun2, force2, angle2, []),
-                    (20, -45, 36, -36, dam2, stun2, force2, angle2, []),
-                    (13, -40, 28, -33, dam2, stun2, force2, angle2, []),
-                    (8, -37, 21, -30, dam2, stun2, force2, angle2, []),
-                    (8, -34, 16, -28, dam2, stun2, force2, angle2, [])
+                    (26, -50, 43, -40, dam2, stun2, force2, angle2, [], freeze2),
+                    (20, -45, 36, -36, dam2, stun2, force2, angle2, [], freeze2),
+                    (13, -40, 28, -33, dam2, stun2, force2, angle2, [], freeze2),
+                    (8, -37, 21, -30, dam2, stun2, force2, angle2, [], freeze2),
+                    (8, -34, 16, -28, dam2, stun2, force2, angle2, [], freeze2)
                 ],
                 [
-                    (8, -35, 26, -26, dam2, stun2, force2, angle2, []),
-                    (20, -37, 35, -31, dam2, stun2, force2, angle2, []),
-                    (30, -39, 45, -33, dam2, stun2, force2, angle2, [])
+                    (8, -35, 26, -26, dam2, stun2, force2, angle2, [], freeze2),
+                    (20, -37, 35, -31, dam2, stun2, force2, angle2, [], freeze2),
+                    (30, -39, 45, -33, dam2, stun2, force2, angle2, [], freeze2)
                 ]
             ]
         f = [ self.frameData(35, 3, r[0]),
@@ -907,10 +910,10 @@ class Hare(battlechar.BattleChar):
                     [-46, -47, -18, -35]
                 ],
             ]
-        h[0] = [i + [50, 60, 25, 60, []] for i in h[0]]
-        h[1] = [i + [50, 60, 25, 90, []] for i in h[1]]
-        h[2] = [i + [50, 60, 25, 120, []] for i in h[2]]
-        h[3] = [i + [50, 60, 25, 180, []] for i in h[3]]
+        h[0] = [i + [50, 60, 25, 60, [], 0] for i in h[0]]
+        h[1] = [i + [50, 60, 25, 90, [], 0] for i in h[1]]
+        h[2] = [i + [50, 60, 25, 120, [], 0] for i in h[2]]
+        h[3] = [i + [50, 60, 25, 180, [], 0] for i in h[3]]
         f = [ self.frameData(75, 4, r[0]),
               self.frameData(76, 1, r[1], h[0]),
               self.frameData(77, 1, r[2], h[1]),
@@ -966,7 +969,7 @@ class Hare(battlechar.BattleChar):
                 ],
             ]
 
-        h[0] = [i + [28, 40, 20, 45, []] for i in h[0]]
+        h[0] = [i + [28, 40, 20, 60, [], 3] for i in h[0]]
         f = [ self.frameData(51, 3, r[0]),
               self.frameData(52, 1, r[1], h[0]),
               self.frameData(53, 1, r[1], h[0]),
@@ -1001,6 +1004,13 @@ class Hare(battlechar.BattleChar):
         self.moves['upAirB'].frames[19].setVelX = None
         self.moves['upAirB'].frames[20].setVelY = None
         self.moves['upAirB'].frames[20].setVelX = None
+
+        self.moves['upAirB'].frames[4].resetHitPotential = True
+        self.moves['upAirB'].frames[7].resetHitPotential = True
+        self.moves['upAirB'].frames[10].resetHitPotential = True
+        self.moves['upAirB'].frames[13].resetHitPotential = True
+        self.moves['upAirB'].frames[16].resetHitPotential = True
+        self.moves['upAirB'].frames[19].resetHitPotential = True
 
     def createDownAirB(self):
         r = [
@@ -1037,7 +1047,7 @@ class Hare(battlechar.BattleChar):
                     [25, -19, 48, -2]
                 ],
             ]
-        h[0] = [i + [28, 40, 20, 315, []] for i in h[0]]
+        h[0] = [i + [28, 60, 25, 315, [], 2] for i in h[0]]
         f = [ self.frameData(55, 6, r[0]),
               self.frameData(56, 1, r[1], h[0]),
               self.frameData(57, 1, r[1], h[0]),

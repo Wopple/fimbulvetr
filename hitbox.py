@@ -7,7 +7,7 @@ from constants import *
 
 class Hitbox(object):
     def __init__(self, inRect, damage, stun, knockback, angle, properties,
-                 hitstunSelf = DEFAULT_HITSTUN, hitstunTarget = DEFAULT_HITSTUN):
+                 freezeFrame):
 
         self.rect = inRect
         self.damage = damage
@@ -15,8 +15,7 @@ class Hitbox(object):
         self.knockback = knockback
         self.angle = angle
         self.properties = properties
-        self.hitstunSelf = hitstunSelf
-        self.hitstunTarget = hitstunTarget
+        self.freezeFrame = freezeFrame
 
         self.image = pygame.Surface(self.rect.size)
         self.image.fill(HITBOX_COLOR)

@@ -53,6 +53,9 @@ class Model(mvc.Model):
 
     def update(self):
 
+        self.keys[1][6] = True
+        self.keysNow[1][6] = 5
+
         self.checkForEnd()
         self.countdown.update()
 
@@ -241,11 +244,12 @@ class Model(mvc.Model):
         old = c.inAir
         if c.preciseLoc[1] >= self.rect.height - BATTLE_AREA_FLOOR_HEIGHT:
             c.preciseLoc[1] = self.rect.height - BATTLE_AREA_FLOOR_HEIGHT
-            c.inAir = False
-            c.vel[1] = 0.0
-            c.aerialCharge = True
-            if old:
-                c.transToGround()
+            if c.vel[1] > 0:
+                c.inAir = False
+                c.vel[1] = 0.0
+                c.aerialCharge = True
+                if old:
+                    c.transToGround()
         else:
             c.inAir = True
             if not old:
@@ -464,6 +468,9 @@ class Model(mvc.Model):
                 xVel *= -1
 
             p.getHit(damage, stun, (xVel, yVel))
+
+            p.freezeFrame = mem.freezeFrame
+            hitter.freezeFrame = mem.freezeFrame
 
 
     def netMessageSize(self):

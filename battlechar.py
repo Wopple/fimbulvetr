@@ -22,6 +22,7 @@ class BattleChar(object):
         self.projectiles = []
         self.attackCanHit = True
         self.retreat = boundint.BoundInt(0, RETREAT_HOLD_TIME, 0)
+        self.freezeFrame = 0
 
         self.superMoves = []
         self.currSuperMove = None
@@ -44,23 +45,27 @@ class BattleChar(object):
         self.preciseLoc[1] = float(loc[1])
 
     def update(self):
-        self.proceedFrame()
-        self.frameSpecial()
-        
-        if self.inAir:
-            speedCap = self.airVelMax
-        else:
-            speedCap = self.groundVelMax
-        
-        for i in range(2):
-            self.vel[i] += self.accel[i]
-            self.speedCap([speedCap, self.vertVelMax], i)
-            self.preciseLoc[i] += self.vel[i]
+        if self.freezeFrame == 0:
+            self.proceedFrame()
+            self.frameSpecial()
+            
+            if self.inAir:
+                speedCap = self.airVelMax
+            else:
+                speedCap = self.groundVelMax
+
+            for i in range(2):
+                self.vel[i] += self.accel[i]
+                self.speedCap([speedCap, self.vertVelMax], i)
+                self.preciseLoc[i] += self.vel[i]
 
         self.rect.topleft = self.getRectPos()
 
         frame = self.getCurrentFrame()
         self.setImage(frame.image, frame.offset)
+
+        if self.freezeFrame > 0:
+            self.freezeFrame -= 1
 
     #Updates the character for non-battle viewing, such as
     #in the character editor.
@@ -152,48 +157,50 @@ class BattleChar(object):
             return -1
 
     def DI(self, l, r):
-        if not self.inAir:
-            f = self.facingMultiplier()
-        else:
-            f = 0
-            if l:
-                f = -1
-            if r:
-                f = 1
-            
-        if not self.canDI():
-            f = 0
-        if not self.inAir:
-            if not self.keyTowardFacing(l, r):
+        if self.freezeFrame == 0:
+            if not self.inAir:
+                f = self.facingMultiplier()
+            else:
                 f = 0
-            accel = self.groundAccel
-        else:
-            accel = self.airAccel
+                if l:
+                    f = -1
+                if r:
+                    f = 1
+                
+            if not self.canDI():
+                f = 0
+            if not self.inAir:
+                if not self.keyTowardFacing(l, r):
+                    f = 0
+                accel = self.groundAccel
+            else:
+                accel = self.airAccel
 
-        if f == 0 or ((l and self.vel[0] > 0) or(r and self.vel[0] < 0)):
-            if not self.getCurrentFrame().ignoreFriction:
-                self.friction()
-        else:
-            self.accel[0] = accel * f
+            if f == 0 or ((l and self.vel[0] > 0) or(r and self.vel[0] < 0)):
+                if not self.getCurrentFrame().ignoreFriction:
+                    self.friction()
+            else:
+                self.accel[0] = accel * f
 
-        if self.inAir:
-            self.accel[1] = self.vertAccel
-        else:
-            self.accel[1] = 0
+            if self.inAir:
+                self.accel[1] = self.vertAccel
+            else:
+                self.accel[1] = 0
 
     def friction(self):
-        if self.inAir:
-            friction = self.airFriction
-        else:
-            friction = self.groundFriction
-        
-        if self.vel[0] > friction:
-            self.accel[0] = -friction
-        elif self.vel[0] < -friction:
-            self.accel[0] = friction
-        else:
-            self.accel[0] = 0
-            self.vel[0] = 0
+        if self.freezeFrame == 0:
+            if self.inAir:
+                friction = self.airFriction
+            else:
+                friction = self.groundFriction
+            
+            if self.vel[0] > friction:
+                self.accel[0] = -friction
+            elif self.vel[0] < -friction:
+                self.accel[0] = friction
+            else:
+                self.accel[0] = 0
+                self.vel[0] = 0
 
     def keyTowardFacing(self, l, r):
         if l and not self.facingRight:

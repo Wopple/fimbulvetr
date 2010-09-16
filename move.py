@@ -88,8 +88,9 @@ class Frame(object):
             knockback = d[6]
             angle = d[7]
             properties = d[8]
+            freezeFrame = d[9]
             self.hitboxes.append(hitbox.Hitbox(rect, damage, stun, knockback,
-                                               angle, properties))
+                                               angle, properties, freezeFrame))
 
 class Transition(object):
     def __init__(self, var1, var2, rangeMin, rangeMax, dest):
