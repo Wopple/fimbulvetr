@@ -18,19 +18,19 @@ class Controller(mvc.Controller):
     def update(self):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
-                if event.key == K_w:
+                if event.key == K_UP:
                     self.model.key(0, True, self.player)
-                elif event.key == K_s:
+                elif event.key == K_DOWN:
                     self.model.key(1, True, self.player)
-                elif event.key == K_a:
+                elif event.key == K_LEFT:
                     self.model.key(2, True, self.player)
-                elif event.key == K_d:
+                elif event.key == K_RIGHT:
                     self.model.key(3, True, self.player)
-                elif event.key == K_l:
+                elif event.key == K_e:
                     self.model.key(4, True, self.player)
-                elif event.key == K_k:
+                elif event.key == K_w:
                     self.model.key(5, True, self.player)
-                elif event.key == K_SPACE:
+                elif event.key == K_q:
                     self.model.key(6, True, self.player)
                 elif event.key == K_F1:
                     self.model.testKey(1)
@@ -43,19 +43,19 @@ class Controller(mvc.Controller):
                 elif event.key == K_ESCAPE:
                     sys.exit(0)
             elif event.type == pygame.KEYUP:
-                if event.key == K_w:
+                if event.key == K_UP:
                     self.model.key(0, False, self.player)
-                elif event.key == K_s:
+                elif event.key == K_DOWN:
                     self.model.key(1, False, self.player)
-                elif event.key == K_a:
+                elif event.key == K_LEFT:
                     self.model.key(2, False, self.player)
-                elif event.key == K_d:
+                elif event.key == K_RIGHT:
                     self.model.key(3, False, self.player)
-                elif event.key == K_l:
+                elif event.key == K_e:
                     self.model.key(4, False, self.player)
-                elif event.key == K_k:
+                elif event.key == K_w:
                     self.model.key(5, False, self.player)
-                elif event.key == K_SPACE:
+                elif event.key == K_q:
                     self.model.key(6, False, self.player)
             elif event.type == pygame.QUIT:
                 sys.exit(0)
