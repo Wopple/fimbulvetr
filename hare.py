@@ -693,7 +693,7 @@ class Hare(battlechar.BattleChar):
                     (36, -63, 46, -22, dam1, stun1, force1, angle1, [], 0),
                     (10, -45, 37, -30, dam1, stun1, force1, angle1, [], 0),
                     (18, -30, 37, -25, dam1, stun1, force1, angle1, [], 0),
-                    (28, -26, 38, -20, dam1, stun1, force1, angle1, [], 0)
+                    (28, -26, 44, -14, dam1, stun1, force1, angle1, [], 0)
                 ],
                 [
                     (16, -34, 25, -24, dam1, stun1, force1, angle1, [], 0),
@@ -705,10 +705,10 @@ class Hare(battlechar.BattleChar):
                 ]
             ]
         f = [ self.frameData(14, 3, r[0]),
-              self.frameData(15, 1, r[0], h[0]),
-              self.frameData(16, 1, r[0], h[1]),
+              self.frameData(15, 2, r[0], h[0]),
+              self.frameData(16, 2, r[0], h[1]),
               self.frameData(17, 3, r[0], h[2]),
-              self.frameData(18, 5, r[0]) ]
+              self.frameData(18, 3, r[0]) ]
         self.moves['neutralAirA'].append(f, [])
         self.moves['neutralAirA'].reversable = True
 
