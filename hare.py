@@ -63,6 +63,7 @@ class Hare(battlechar.BattleChar):
         self.createMoveIdleLike()
         self.createMoveDash()
         self.createMoveAir()
+        self.createMoveFlipping()
         self.createMoveAirLike()
         self.createMoveLanding()
         self.createMoveJumping()
@@ -180,7 +181,6 @@ class Hare(battlechar.BattleChar):
         self.moves['dash'].append(f, [])
 
     def createMoveAir(self):
-        f = [ self.frameData(8, 2) ]
         r = [
                 [
                     (-1, -58, 10, -52),
@@ -195,6 +195,18 @@ class Hare(battlechar.BattleChar):
 
         f = [ self.frameData(8, 2, r[0]) ]
         self.moves['air'].append(f, [])
+
+    def createMoveFlipping(self):
+        flippingSpeed = 3
+        f = [ self.frameData(34, flippingSpeed),
+              self.frameData(23, flippingSpeed),
+              self.frameData(33, flippingSpeed),
+              self.frameData(24, flippingSpeed),
+              self.frameData(34, flippingSpeed),
+              self.frameData(23, flippingSpeed),
+              self.frameData(33, flippingSpeed),
+              self.frameData(24, flippingSpeed) ]
+        self.moves['flipping'].append(f, [])
 
     def createMoveAirLike(self):
         f = [ self.frameData(67, 1),
@@ -696,12 +708,11 @@ class Hare(battlechar.BattleChar):
                     (28, -26, 44, -14, dam1, stun1, force1, angle1, [], 0)
                 ],
                 [
-                    (16, -34, 25, -24, dam1, stun1, force1, angle1, [], 0),
-                    (22, -28, 27, -22, dam1, stun1, force1, angle1, [], 0),
-                    (25, -25, 29, -20, dam1, stun1, force1, angle1, [], 0),
-                    (27, -23, 31, -18, dam1, stun1, force1, angle1, [], 0),
-                    (28, -22, 33, -16, dam1, stun1, force1, angle1, [], 0),
-                    (30, -20, 35, -14, dam1, stun1, force1, angle1, [], 0)
+                    (13, -32, 30, -25, dam1, stun1, force1, angle1, [], 0),
+                    (16, -25, 34, -22, dam1, stun1, force1, angle1, [], 0),
+                    (19, -22, 37, -19, dam1, stun1, force1, angle1, [], 0),
+                    (22, -19, 40, -16, dam1, stun1, force1, angle1, [], 0),
+                    (24, -16, 42, -12, dam1, stun1, force1, angle1, [], 0)
                 ]
             ]
         f = [ self.frameData(14, 3, r[0]),
@@ -919,7 +930,7 @@ class Hare(battlechar.BattleChar):
               self.frameData(77, 1, r[2], h[1]),
               self.frameData(78, 1, r[3], h[2]),
               self.frameData(79, 2, r[4], h[3]),
-              self.frameData(80, 4, r[4]) ]
+              self.frameData(80, 5, r[4]) ]
 
         self.moves['upAirA'].append(f, [])
 

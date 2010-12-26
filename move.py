@@ -113,7 +113,7 @@ def baseIdle():
     m = Move([], t)
     m.canDI = False
     return m
-
+    
 def baseDash():
     t = [ ['exitFrame', Transition(-1, 0, None, None, 'dash')],
           ['noXMove', Transition(None, None, None, None, 'idle')],

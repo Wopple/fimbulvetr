@@ -219,6 +219,7 @@ class BattleChar(object):
         self.moves['idleLike'] = move.baseBlank()
         self.moves['dash'] = move.baseDash()
         self.moves['air'] = move.baseAir()
+        self.moves['flipping'] = move.baseAir()
         self.moves['airLike'] = move.baseBlank()
         self.moves['landing'] = move.baseLanding()
         self.moves['jumping'] = move.baseJumping()
@@ -272,7 +273,8 @@ class BattleChar(object):
         if self.currFrame >= len(self.currMove.frames):
             if self.currMove.isJump:
                 self.jump()
-            if self.inAir:
+                self.setCurrMove('flipping')
+            elif self.inAir:
                 self.setCurrMove('air')
             else:
                 self.setCurrMove('idle')
@@ -336,7 +338,7 @@ class BattleChar(object):
 
     def transToAir(self):
         if (not self.currMove.liftOff) and (not self.currMove.isStun):
-            self.setCurrMove('air')
+            self.setCurrMove('flipping')
 
     def transToGround(self):
         c = self.actTransition('land')
