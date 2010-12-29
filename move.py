@@ -133,6 +133,7 @@ def baseAir():
           ['attackB', Transition(None, None, None, None, 'neutralAirB')],
           ['attackAUp', Transition(None, None, None, None, 'upAirA')],
           ['attackBUpCharge', Transition(None, None, None, None, 'upAirB')],
+          ['attackADown', Transition(None, None, None, None, 'downAirA')],
           ['attackBDown', Transition(None, None, None, None, 'downAirB')]]
     m = Move([], t)
     return m

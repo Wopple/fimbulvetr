@@ -78,6 +78,7 @@ class Hare(battlechar.BattleChar):
         self.createNeutralAirB()
         self.createUpAirA()
         self.createUpAirB()
+        self.createDownAirA()
         self.createDownAirB()
 
         self.createMoveStun1()
@@ -1022,6 +1023,17 @@ class Hare(battlechar.BattleChar):
         self.moves['upAirB'].frames[13].resetHitPotential = True
         self.moves['upAirB'].frames[16].resetHitPotential = True
         self.moves['upAirB'].frames[19].resetHitPotential = True
+
+    def createDownAirA(self):
+        f = [ self.frameData(85, 8),
+              self.frameData(82, 1),
+              self.frameData(83, 1),
+              self.frameData(84, 12) ]
+
+        t = []
+
+        self.moves['downAirA'].append(f, t)
+        self.moves['downAirA'].frames[0].addVelY = -0.6
 
     def createDownAirB(self):
         r = [

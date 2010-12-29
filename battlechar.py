@@ -236,6 +236,7 @@ class BattleChar(object):
         self.moves['neutralAirB'] = move.baseBlank()
         self.moves['upAirA'] = move.baseBlank()
         self.moves['upAirB'] = move.baseBlank()
+        self.moves['downAirA'] = move.baseBlank()
         self.moves['downAirB'] = move.baseBlank()
 
         self.moves['stun1'] = move.baseStun()
