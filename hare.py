@@ -1028,12 +1028,23 @@ class Hare(battlechar.BattleChar):
         f = [ self.frameData(85, 8),
               self.frameData(82, 1),
               self.frameData(83, 1),
-              self.frameData(84, 12) ]
+              self.frameData(84, 10) ]
 
-        t = []
+        t = [['land', move.Transition(None, None, None, None, 'downAAirLag')]]
+
+        
 
         self.moves['downAirA'].append(f, t)
         self.moves['downAirA'].frames[0].addVelY = -0.6
+
+        self.createLagDownAAir()
+
+    def createLagDownAAir(self):
+        f = [ self.frameData(86, 12) ]
+
+        self.moves['downAAirLag'] = move.Move(f, [])
+        self.moves['downAAirLag'].canDI = False
+        
 
     def createDownAirB(self):
         r = [
