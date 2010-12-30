@@ -170,6 +170,8 @@ class Model(mvc.Model):
         if p.holdJump:
             if p.vel[1] > 0 or (not keys[6]):
                 p.unholdJump()
+        if p.onHitTrigger:
+            p.actTransition('onHit')
         if p.canAct():
             if d:
                 p.actTransition('doDuck')
@@ -448,6 +450,7 @@ class Model(mvc.Model):
                                 if hRect.colliderect(rRect):
                                     self.hitMemory[j] = [h, p]
                                     p.attackCanHit = False
+                                    p.onHitTrigger = True
 
     def actOnHit(self, i, p):
         if not self.hitMemory[i] is None:
@@ -475,8 +478,6 @@ class Model(mvc.Model):
 
             p.freezeFrame = mem.freezeFrame
             hitter.freezeFrame = mem.freezeFrame
-
-            p.actTransition('onHit')
 
 
     def netMessageSize(self):

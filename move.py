@@ -56,10 +56,13 @@ class Frame(object):
         self.setVelY = None
         self.addVelX = None
         self.addVelY = None
+        self.setAccelX = None
         self.setVelYIfDrop = None
         self.addVelYIfDrop = None
         self.ignoreSpeedCap = False
+        self.setSpeedCapX = None
         self.ignoreFriction = False
+        self.setFrictionX = None
         self.resetHitPotential = False
         self.buildHurtboxes(hurtboxData)
         self.buildHitboxes(hitboxData)

@@ -1056,18 +1056,14 @@ class Hare(battlechar.BattleChar):
                 ]
             ]
 
-                
-
-                
-
-        
         f = [ self.frameData(85, 8, r[0]),
               self.frameData(82, 1, r[1]),
               self.frameData(83, 1, r[2], h[0]),
               self.frameData(84, 6, r[2], h[0]),
               self.frameData(84, 8, r[2]) ]
 
-        t = [['land', move.Transition(None, None, None, None, 'downAAirLag')]]
+        t = [['land', move.Transition(None, None, None, None, 'downAAirLag')],
+             ['onHit', move.Transition(None, None, None, None, 'headBounce')]]
 
         
 
@@ -1075,6 +1071,7 @@ class Hare(battlechar.BattleChar):
         self.moves['downAirA'].frames[0].addVelYIfDrop = -0.6
 
         self.createLagDownAAir()
+        self.createHeadBounce()
 
     def createLagDownAAir(self):
         r = [
@@ -1090,6 +1087,26 @@ class Hare(battlechar.BattleChar):
 
         self.moves['downAAirLag'] = move.Move(f, [])
         self.moves['downAAirLag'].canDI = False
+
+    def createHeadBounce(self):
+        flippingSpeed = 3
+        f = [ self.frameData(84, 3),
+              self.frameData(34, flippingSpeed),
+              self.frameData(23, flippingSpeed),
+              self.frameData(33, flippingSpeed),
+              self.frameData(24, flippingSpeed),
+              self.frameData(87, 8),
+              self.frameData(87, 4)]
+
+        self.moves['headBounce'] = move.Move(f, [])
+        self.moves['headBounce'].frames[0].setVelY = -25
+
+        for i in range(len(f)-1):
+            self.moves['headBounce'].frames[i].setAccelX = 2.2
+            self.moves['headBounce'].frames[i].setFrictionX = self.airFriction * 10.0
+            self.moves['headBounce'].frames[i].setSpeedCapX = self.vertVelMax * 1.2
+
+              
         
 
     def createDownAirB(self):

@@ -23,6 +23,8 @@ class BattleChar(object):
         self.attackCanHit = True
         self.retreat = boundint.BoundInt(0, RETREAT_HOLD_TIME, 0)
         self.freezeFrame = 0
+        self.onHitTrigger = False
+
 
         self.superMoves = []
         self.currSuperMove = None
@@ -45,11 +47,15 @@ class BattleChar(object):
         self.preciseLoc[1] = float(loc[1])
 
     def update(self):
+        frame = self.getCurrentFrame()
         if self.freezeFrame == 0:
+            self.onHitTrigger = False
             self.proceedFrame()
             self.frameSpecial()
-            
-            if self.inAir:
+
+            if not frame.setSpeedCapX is None:
+                speedCap = frame.setSpeedCapX
+            elif self.inAir:
                 speedCap = self.airVelMax
             else:
                 speedCap = self.groundVelMax
@@ -61,7 +67,6 @@ class BattleChar(object):
 
         self.rect.topleft = self.getRectPos()
 
-        frame = self.getCurrentFrame()
         self.setImage(frame.image, frame.offset)
 
         if self.freezeFrame > 0:
@@ -179,6 +184,9 @@ class BattleChar(object):
             else:
                 accel = self.airAccel
 
+            if not self.getCurrentFrame().setAccelX is None:
+                accel = self.getCurrentFrame().setAccelX
+
             if f == 0 or ((l and self.vel[0] > 0) or(r and self.vel[0] < 0)):
                 if not self.getCurrentFrame().ignoreFriction:
                     self.friction()
@@ -191,8 +199,11 @@ class BattleChar(object):
                 self.accel[1] = 0
 
     def friction(self):
+        c = self.getCurrentFrame()
         if self.freezeFrame == 0:
-            if self.inAir:
+            if not c.setFrictionX is None:
+                friction = c.setFrictionX
+            elif self.inAir:
                 friction = self.airFriction
             else:
                 friction = self.groundFriction
