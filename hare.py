@@ -1025,22 +1025,68 @@ class Hare(battlechar.BattleChar):
         self.moves['upAirB'].frames[19].resetHitPotential = True
 
     def createDownAirA(self):
-        f = [ self.frameData(85, 8),
-              self.frameData(82, 1),
-              self.frameData(83, 1),
-              self.frameData(84, 10) ]
+        r = [
+                [
+                    (-11, -43, 3, -31),
+                    (-10, -48, 1, -43),
+                    (-17, -34, 5, -28),
+                    (-11, -28, 7, -11),
+                    (-8, -11, 5, -6),
+                    (0, -6, 5, -1)
+                ],
+                [
+                    (-11, -43, 3, -31),
+                    (-10, -48, 1, -43),
+                    (-18, -30, 14, -24),
+                    (-10, -24, 5, -13),
+                    (-6, -13, 5, -7)
+                ],
+                [
+                    (-11, -43, 3, -31),
+                    (-10, -48, 1, -43),
+                    (-16, -34, -10, -28),
+                    (-11, -32, 6, -11),
+                    (-6, -11, -1, -8)
+                ]
+            ]
+
+        h = [
+                [
+                    (-1, -9, 7, 18, 75, 105, 23, 270, [], 4)
+                ]
+            ]
+
+                
+
+                
+
+        
+        f = [ self.frameData(85, 8, r[0]),
+              self.frameData(82, 1, r[1]),
+              self.frameData(83, 1, r[2], h[0]),
+              self.frameData(84, 6, r[2], h[0]),
+              self.frameData(84, 8, r[2]) ]
 
         t = [['land', move.Transition(None, None, None, None, 'downAAirLag')]]
 
         
 
         self.moves['downAirA'].append(f, t)
-        self.moves['downAirA'].frames[0].addVelY = -0.6
+        self.moves['downAirA'].frames[0].addVelYIfDrop = -0.6
 
         self.createLagDownAAir()
 
     def createLagDownAAir(self):
-        f = [ self.frameData(86, 12) ]
+        r = [
+                [
+                    (-9, -27, 6, -15),
+                    (-14, -16, 8, -10),
+                    (-7, -10, 9, 5)
+                ]
+            ]
+
+        
+        f = [ self.frameData(86, 12, r[0]) ]
 
         self.moves['downAAirLag'] = move.Move(f, [])
         self.moves['downAAirLag'].canDI = False

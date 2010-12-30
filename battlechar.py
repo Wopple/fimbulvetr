@@ -101,6 +101,9 @@ class BattleChar(object):
             if self.vel[1] > 0:
                 self.vel[1] = f.setVelYIfDrop
                 self.accelToZero()
+        if not f.addVelYIfDrop is None:
+            if self.vel[1] > 0:
+                self.vel[1] += f.addVelYIfDrop
 
         if self.currSubframe == 0 and f.resetHitPotential:
             self.attackCanHit = True

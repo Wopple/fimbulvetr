@@ -17,7 +17,7 @@ class Move(object):
                 'doDuck', 'stopDuck', 'attackA', 'attackB', 'releaseA',
                 'releaseB', 'attackAUp', 'attackBUp', 'attackADown',
                 'attackBDown', 'attackBUpCharge', 'bladelv1', 'bladelv2',
-                'bladelv3']
+                'bladelv3', 'onHit']
         self.transitions = {}
         for i in temp:
             self.transitions[i] = None
@@ -57,6 +57,7 @@ class Frame(object):
         self.addVelX = None
         self.addVelY = None
         self.setVelYIfDrop = None
+        self.addVelYIfDrop = None
         self.ignoreSpeedCap = False
         self.ignoreFriction = False
         self.resetHitPotential = False

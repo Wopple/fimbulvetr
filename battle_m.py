@@ -467,10 +467,16 @@ class Model(mvc.Model):
             if p.facingRight:
                 xVel *= -1
 
+            if not p.inAir:
+                if mem.angle > 180:
+                    yVel *= -1
+
             p.getHit(damage, stun, (xVel, yVel))
 
             p.freezeFrame = mem.freezeFrame
             hitter.freezeFrame = mem.freezeFrame
+
+            p.actTransition('onHit')
 
 
     def netMessageSize(self):
