@@ -198,21 +198,53 @@ class Hare(battlechar.BattleChar):
         self.moves['air'].append(f, [])
 
     def createMoveFlipping(self):
+        r = [
+                [
+                    (-19, -20, -3, -10),
+                    (-12, -10, -5, -1),
+                    (-14, -32, 4, -19),
+                    (-7, -22, 7, -13),
+                    (-7, -15, 0, -12),
+                    (0, -40, 17, -23)
+                ],
+                [
+                    (-13, -35, 5, -22),
+                    (-21, -32, -8, -26),
+                    (-11, -24, 11, -15),
+                    (0, -29, 12, -21),
+                    (-2, -17, 18, -2)
+                ],
+                [
+                    (-21, -19, -2, -3),
+                    (-4, -27, 12, -10),
+                    (-2, -35, 18, -25),
+                    (9, -27, 16, -22),
+                    (-7, -32, 1, -22),
+                    (4, -43, 13, -35),
+                    (-9, -26, 3, -18)
+                ],
+                [
+                    (-19, -40, 0, -26),
+                    (-15, -27, 5, -14),
+                    (-6, -17, 12, -6),
+                    (3, -25, 15, -12),
+                    (12, -16, 21, -10)
+                ]
+            ]
+
+        
         flippingSpeed = 3
-        f = [ self.frameData(34, flippingSpeed),
-              self.frameData(23, flippingSpeed),
-              self.frameData(33, flippingSpeed),
-              self.frameData(24, flippingSpeed),
-              self.frameData(34, flippingSpeed),
-              self.frameData(23, flippingSpeed),
-              self.frameData(33, flippingSpeed),
-              self.frameData(24, flippingSpeed) ]
+        f = [ self.frameData(34, flippingSpeed, r[0]),
+              self.frameData(23, flippingSpeed, r[1]),
+              self.frameData(33, flippingSpeed, r[2]),
+              self.frameData(24, flippingSpeed, r[3]),
+              self.frameData(34, flippingSpeed, r[0]),
+              self.frameData(23, flippingSpeed, r[1]),
+              self.frameData(33, flippingSpeed, r[2]),
+              self.frameData(24, flippingSpeed, r[3]) ]
         self.moves['flipping'].append(f, [])
 
     def createMoveAirLike(self):
-        f = [ self.frameData(67, 1),
-              self.frameData(8, 1),
-              self.frameData(67, 1) ]
         r = [
                 [
                     (-1, -58, 10, -52),
@@ -269,7 +301,20 @@ class Hare(battlechar.BattleChar):
         self.moves['jumping'].append(f, [])
 
     def createMoveDucking(self):
-        f = [ self.frameData(10, 2) ]
+        r = [
+                [
+                    (-1, -32, 16, -24),
+                    (-7, -26, 24, -8),
+                    (16, -9, 21, 1),
+                    (-22, -4, -2, 0),
+                    (-7, -9, -2, -3),
+                    (2, -9, 15, 1),
+                    (16, -34, 30, -23),
+                    (16, -39, 28, -34)
+                ]
+            ]
+
+        f = [ self.frameData(10, 2, r[0]) ]
         self.moves['ducking'].append(f, [])
 
     def createMoveJabA(self):
@@ -643,7 +688,15 @@ class Hare(battlechar.BattleChar):
         self.createLagDownB()
 
     def createLagDownB(self):
-        f = [ self.frameData(9, 8) ]
+        r = [
+                [
+                    (-9, -27, 6, -15),
+                    (-14, -16, 8, -10),
+                    (-7, -10, 9, 5)
+                ]
+            ]
+        
+        f = [ self.frameData(86, 8, r[0]) ]
         self.moves['downBLag'] = move.Move(f, [])
         self.moves['downBLag'].canDI = False
 
@@ -1089,21 +1142,71 @@ class Hare(battlechar.BattleChar):
         self.moves['downAAirLag'].canDI = False
 
     def createHeadBounce(self):
+        r = [
+                [
+                    (-19, -20, -3, -10),
+                    (-12, -10, -5, -1),
+                    (-14, -32, 4, -19),
+                    (-7, -22, 7, -13),
+                    (-7, -15, 0, -12),
+                    (0, -40, 17, -23)
+                ],
+                [
+                    (-13, -35, 5, -22),
+                    (-21, -32, -8, -26),
+                    (-11, -24, 11, -15),
+                    (0, -29, 12, -21),
+                    (-2, -17, 18, -2)
+                ],
+                [
+                    (-21, -19, -2, -3),
+                    (-4, -27, 12, -10),
+                    (-2, -35, 18, -25),
+                    (9, -27, 16, -22),
+                    (-7, -32, 1, -22),
+                    (4, -43, 13, -35),
+                    (-9, -26, 3, -18)
+                ],
+                [
+                    (-19, -40, 0, -26),
+                    (-15, -27, 5, -14),
+                    (-6, -17, 12, -6),
+                    (3, -25, 15, -12),
+                    (12, -16, 21, -10)
+                ],
+                [
+                    (-11, -51, 0, -46),
+                    (-11, -46, 4, -36),
+                    (-24, -47, -16, -41),
+                    (-19, -42, -6, -34),
+                    (-12, -40, 7, -30),
+                    (3, -48, 10, -38),
+                    (-11, -30, 5, -23),
+                    (-13, -24, 14, -18),
+                    (-10, -18, -1, -1),
+                    (-10, -1, -4, 4),
+                    (-12, 4, -6, 14),
+                    (8, -18, 13, -3),
+                    (8, -4, 14, 5),
+                    (-4, -19, 9, -15)
+                ]
+            ]
+        
         flippingSpeed = 3
         f = [ self.frameData(84, 3),
-              self.frameData(34, flippingSpeed),
-              self.frameData(23, flippingSpeed),
-              self.frameData(33, flippingSpeed),
-              self.frameData(24, flippingSpeed),
-              self.frameData(87, 8),
-              self.frameData(87, 4)]
+              self.frameData(34, flippingSpeed, r[0]),
+              self.frameData(23, flippingSpeed, r[1]),
+              self.frameData(33, flippingSpeed, r[2]),
+              self.frameData(24, flippingSpeed, r[3]),
+              self.frameData(87, 8, r[4]),
+              self.frameData(87, 4, r[4])]
 
         self.moves['headBounce'] = move.Move(f, [])
         self.moves['headBounce'].frames[0].setVelY = -25
 
         for i in range(len(f)-1):
-            self.moves['headBounce'].frames[i].setAccelX = 2.2
-            self.moves['headBounce'].frames[i].setFrictionX = self.airFriction * 10.0
+            self.moves['headBounce'].frames[i].setAccelX = 1.8
+            self.moves['headBounce'].frames[i].setFrictionX = self.airFriction * 8.0
             self.moves['headBounce'].frames[i].setSpeedCapX = self.vertVelMax * 1.2
 
               
