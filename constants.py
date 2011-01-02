@@ -50,8 +50,8 @@ INTRO_MAX_FADE = 240
 INTRO_SPEEDS = [4, 30, 5, 50, 5, 15]
 
 SHOW_RED_DOT = True
-SHOW_HURTBOXES = False
-SHOW_HITBOXES = False
+SHOW_HURTBOXES = True
+SHOW_HITBOXES = True
 SHOW_BATTLE_TRIGGER_AREA = False
 
 MAP_INTERFACE_ALPHA_MIN = 50
@@ -372,7 +372,12 @@ temp = [ ["00.png", (24, 62)],
          ["84.png", (17, 58)],
          ["85.png", (17, 58)],
          ["86.png", (16, 48)],
-         ["87.png", (23, 68)]]
+         ["87.png", (23, 68)],
+         ["88.png", (20, 63)],
+         ["89.png", (20, 63)],
+         ["90.png", (20, 63)],
+         ["91.png", (20, 63)],
+         ["92.png", (20, 63)]]
 
 HARE_IMAGES = []
 for i in temp:
