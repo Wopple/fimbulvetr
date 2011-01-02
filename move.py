@@ -17,7 +17,7 @@ class Move(object):
                 'doDuck', 'stopDuck', 'attackA', 'attackB', 'releaseA',
                 'releaseB', 'attackAUp', 'attackBUp', 'attackADown',
                 'attackBDown', 'attackBUpCharge', 'bladelv1', 'bladelv2',
-                'bladelv3', 'onHit']
+                'bladelv3', 'onHit', 'attackAAtMax', 'attackBAtMax']
         self.transitions = {}
         for i in temp:
             self.transitions[i] = None
@@ -125,8 +125,10 @@ def baseDash():
           ['doDuck', Transition(None, None, None, None, 'ducking')],
           ['attackAUp', Transition(None, None, None, None, 'upA')],
           ['attackBUp', Transition(None, None, None, None, 'upB')],
+          ['attackAAtMax', Transition(None, None, None, None, 'jabA')],
+          ['attackBAtMax', Transition(None, None, None, None, 'jabB')],
           ['attackA', Transition(None, None, None, None, 'dashAttackA')],
-          ['attackB', Transition(None, None, None, None, 'dashAttackB')] ]
+          ['attackB', Transition(None, None, None, None, 'dashAttackB')]]
     m = Move([], t)
     return m
 

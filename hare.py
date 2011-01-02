@@ -708,15 +708,16 @@ class Hare(battlechar.BattleChar):
             ]
 
         dam1 = 80
-        stun1 = 120
-        force1 = 22
+        stun1 = 90
+        force1 = 21
         angle1 = 78
 
         h = [
                 [
-                    [36, -66, 61, -46],
-                    [32, -46, 57, -27],
-                    [26, -30, 52, -13]
+                    [16, -43, 56, -15],
+                    [22, -62, 67, -43],
+                    [39, -75, 61, -62],
+                    [56, -43, 63, -27]
                 ]
             ]
         h[0] = [i + [dam1, stun1, force1, angle1, [], 0] for i in h[0]]
@@ -740,6 +741,7 @@ class Hare(battlechar.BattleChar):
 
         self.moves['upA'].append(f, t)
         self.moves['upA'].canDI = False
+        self.moves['upA'].frames[0].setVelX = 10
 
     def createMoveDownB(self):
         f = [ self.frameData(11, 7),

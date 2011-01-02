@@ -187,8 +187,14 @@ class Model(mvc.Model):
                     if p.actTransition('attackADown'):
                         keysNow[4] = 0
                 else:
-                    if p.actTransition('attackA'):
-                        keysNow[4] = 0
+                    check = False
+                    if abs(p.vel[0]) < p.groundVelMax:
+                        if p.actTransition('attackAAtMax'):
+                            keysNow[4] = 0
+                            check = True
+                    if not check:
+                        if p.actTransition('attackA'):
+                            keysNow[4] = 0
             if self.wasKeyPressed(5, keysNow):
                 if u:
                     if p.actTransition('attackBUp'):
@@ -202,8 +208,14 @@ class Model(mvc.Model):
                     if p.actTransition('attackBDown'):
                         keysNow[5] = 0
                 else:
-                    if p.actTransition('attackB'):
-                        keysNow[5] = 0
+                    check = False
+                    if abs(p.vel[0]) < p.groundVelMax:
+                        if p.actTransition('attackBAtMax'):
+                            keysNow[4] = 0
+                            check = True
+                    if not check:
+                        if p.actTransition('attackB'):
+                            keysNow[4] = 0
             if self.wasKeyPressed(6, keysNow):
                 if p.actTransitionFacing('jump', l, r):
                     keysNow[6] = 0
