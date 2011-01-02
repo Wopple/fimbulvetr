@@ -356,7 +356,9 @@ class Hare(battlechar.BattleChar):
               self.frameData(42, 2, r[1], h[0]),
               self.frameData(43, 2, r[1]),
               self.frameData(43, 10, r[1])]
-        t = [ ['attackA', move.Transition(None, None, 3, None, 'jab2')] ]
+        t = [ ['attackA', move.Transition(None, None, 3, None, 'jab2')],
+              ['attackAUp', move.Transition(None, None, 3, None, 'jab2')],
+              ['attackADown', move.Transition(None, None, 3, None, 'jab2')]]
         self.moves['jabA'].append(f, t)
         self.moves['jabA'].canDI = False
 
@@ -656,10 +658,69 @@ class Hare(battlechar.BattleChar):
         self.moves['rollingSlash'].frames[0].setVelX = 0
 
     def createMoveDownA(self):
-        f = [ self.frameData(29, 2),
-              self.frameData(30, 3),
-              self.frameData(31, 6),
-              self.frameData(32, 4) ]
+        r = [
+                [
+                    (-6, -42, 8, -36),
+                    (-4, -36, 10, -28),
+                    (-1, -28, 17, -5),
+                    (-6, -21, -1, -13),
+                    (8, -6, 15, 4),
+                    (16, -15, 29, -10)
+                ],
+                [
+                    (-19, -25, -5, -14),
+                    (-24, -24, -19, -18),
+                    (-22, -29, -15, -24),
+                    (-10, -15, 17, 4),
+                    (-6, -20, 15, -15),
+                    (15, -8, 30, 0),
+                    (29, -5, 51, 1)
+                ],
+                [
+                    (-17, -30, -3, -18),
+                    (-23, -29, -16, -24),
+                    (-19, -35, -12, -29),
+                    (-11, -18, 9, 1),
+                    (-4, -23, 12, -12),
+                    (7, -12, 15, 4),
+                    (12, -11, 23, 0),
+                    (21, -4, 37, 2),
+                    (35, -2, 49, 4)
+                ],
+                [
+                    (-5, -39, 11, -28),
+                    (-6, -42, 6, -39),
+                    (-2, -28, 15, -17),
+                    (1, -17, 17, -11),
+                    (3, -12, 25, -6),
+                    (7, -6, 15, 4),
+                    (14, -7, 26, -1),
+                    (-6, -21, -1, -13),
+                    (11, -31, 16, -25)
+                ],
+            ]
+
+        dam1 = 40
+        stun1 = 35
+        force1 = 16
+        angle1 = 320
+
+        h = [
+                [
+                    [22, -18, 62, 7],
+                    [25, 7, 57, 12]
+                ]
+            ]
+
+        h[0] = [i + [dam1, stun1, force1, angle1, [], 0] for i in h[0]]
+
+
+
+
+        f = [ self.frameData(29, 2, r[0]),
+              self.frameData(30, 3, r[1], h[0]),
+              self.frameData(31, 6, r[2]),
+              self.frameData(32, 4, r[3]) ]
         self.moves['downA'].append(f, [])
         self.moves['downA'].canDI = False
 
@@ -737,7 +798,7 @@ class Hare(battlechar.BattleChar):
               self.frameData(89, 1, r[1]),
               self.frameData(88, 1, r[0]) ]
 
-        t = [['doDuck', move.Transition(2, HARE_ENERGY_USAGE, 5, None, 'idleLike')]]
+        t = [['doDuck', move.Transition(2, HARE_ENERGY_USAGE, 5, 6, 'idleLike')]]
 
         self.moves['upA'].append(f, t)
         self.moves['upA'].canDI = False
