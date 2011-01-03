@@ -22,6 +22,7 @@ class Hare(battlechar.BattleChar):
         self.airAccel = 1.2
         self.airVelMax = 7.0
         self.airFriction = 0.9
+        self.airFrictionStunned = self.airFriction * 0.3
         self.vertAccel = 1.2
         self.vertVelMax = 13.0
         self.jumpVel = -24.0
@@ -75,6 +76,7 @@ class Hare(battlechar.BattleChar):
         self.createMoveDownA()
         self.createMoveDownB()
         self.createMoveUpA()
+        self.createMoveUpB()
         self.createNeutralAirA()
         self.createNeutralAirB()
         self.createUpAirA()
@@ -772,6 +774,7 @@ class Hare(battlechar.BattleChar):
         stun1 = 90
         force1 = 21
         angle1 = 78
+        freeze1 = 4
 
         h = [
                 [
@@ -781,7 +784,7 @@ class Hare(battlechar.BattleChar):
                     [56, -43, 63, -27]
                 ]
             ]
-        h[0] = [i + [dam1, stun1, force1, angle1, [], 0] for i in h[0]]
+        h[0] = [i + [dam1, stun1, force1, angle1, [], freeze1] for i in h[0]]
 
                 
 
@@ -834,6 +837,117 @@ class Hare(battlechar.BattleChar):
         f = [ self.frameData(86, 8, r[0]) ]
         self.moves['downBLag'] = move.Move(f, [])
         self.moves['downBLag'].canDI = False
+
+    def createMoveUpB(self):
+        r = [
+                [
+                    (4, -48, 17, -32),
+                    (-2, -34, 16, -24),
+                    (0, -26, 15, -14),
+                    (12, -27, 21, -20),
+                    (-13, -41, -1, -33),
+                    (-1, -17, 19, -7),
+                    (-10, -8, 0, -1),
+                    (12, -8, 23, 2)
+                ]
+            ]
+
+        dam1 = 3
+        stun1 = 90
+        force1 = 20
+        force2 = 14
+        angle1 = 50
+        angle2 = 130
+        freeze1 = 1
+
+        h = [
+                [
+                    (-35, -61, 2, 3, dam1, stun1, force1, angle1, [], freeze1),
+                    (2, -61, 29, 3, dam1, stun1, force1, angle2, [], freeze1)
+                ],
+                [
+                    (-35, -61, 2, 3, dam1, stun1, force2, angle1, [], freeze1),
+                    (2, -61, 29, 3, dam1, stun1, force2, angle2, [], freeze1)
+                ]
+            ]
+
+
+        f = [ self.frameData(9, 3, r[0]),
+              self.frameData(93, 1, [], h[0]),
+              self.frameData(94, 1, [], h[0]),
+              self.frameData(95, 1, [], h[0]),
+              self.frameData(96, 1, [], h[0]),
+              self.frameData(97, 1, [], h[0]),
+              self.frameData(98, 1, [], h[0]),
+              self.frameData(99, 1, [], h[0]),
+              self.frameData(100, 1, [], h[0]),
+              self.frameData(93, 1, [], h[1]),
+              self.frameData(94, 1, [], h[1]),
+              self.frameData(95, 1, [], h[1]),
+              self.frameData(96, 1, [], h[1]),
+              self.frameData(97, 1, [], h[1]),
+              self.frameData(98, 1, [], h[1]),
+              self.frameData(99, 1, [], h[1]),
+              self.frameData(100, 1, [], h[1]) ]
+
+        t = [['exitFrame', move.Transition(-1, None, None, None, 'rotateKick')]]
+
+        self.moves['upB'].append(f, t)
+        self.moves['upB'].canDI = False
+        self.moves['upB'].liftOff = True
+
+        self.moves['upB'].frames[0].setAccelX = 0
+        for i in range(1,4):
+            self.moves['upB'].frames[i].setVelY = -18.0
+            self.moves['upB'].frames[i].setAccelY = 0
+
+        for i in range(17):
+            self.moves['upB'].frames[i].resetHitPotential = True
+
+        self.createMoveRotateKick()
+
+
+    def createMoveRotateKick(self):
+        dam1 = 40
+        stun1 = 110
+        force1 = 18
+        angle1 = 135
+        angle2 = 45
+        freeze1 = 1
+
+        r = [
+                [
+                    
+                ]
+            ]
+        
+        h = [
+                [
+                    (-46, -31, -2, -15, dam1, stun1, force1, angle1, [], freeze1),
+                    (-2, -31, 44, -15, dam1, stun1, force1, angle2, [], freeze1)
+                ]
+            ]
+
+        
+        f = [ self.frameData(101, 5, r[0], h[0]),
+              self.frameData(102, 3, r[0], h[0]),
+              self.frameData(103, 3, r[0], h[0]),
+              self.frameData(104, 2, r[0]),
+              self.frameData(105, 2, r[0]),
+              self.frameData(106, 2, r[0]) ]
+
+        
+        self.moves['rotateKick'] = move.Move(f, [])
+        self.moves['rotateKick'].canDI = True
+        
+        for i in range(6):
+            self.moves['rotateKick'].frames[i].setVelY = 0
+            self.moves['rotateKick'].frames[i].setSpeedCapX = self.airVelMax * 1.2
+            self.moves['rotateKick'].frames[i].setAccelX = self.airAccel * 2.0
+            self.moves['rotateKick'].frames[i].setFrictionX = self.airFriction * 2.0
+
+        
+              
 
     def createNeutralAirA(self):
         r = [
@@ -1207,8 +1321,8 @@ class Hare(battlechar.BattleChar):
 
         h = [
                 [
-                    (-12, -28, 11, -10, 75, 105, 23, 270, [], 4),
-                    (-8, -13, 15, 22, 75, 105, 23, 270, [], 4)
+                    (-12, -28, 11, -10, 75, 105, 23, 270, [], 3),
+                    (-8, -13, 15, 22, 75, 105, 23, 270, [], 3)
                 ]
             ]
 

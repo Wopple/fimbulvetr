@@ -94,10 +94,10 @@ class BattleChar(object):
         f = self.getCurrentFrame()
         if not f.setVelX is None:
             self.vel[0] = f.setVelX * self.facingMultiplier()
-            self.accelToZero()
+            self.accel[0] = 0.0
         if not f.setVelY is None:
             self.vel[1] = f.setVelY
-            self.accelToZero()
+            self.accel[1] = 0.0
         if not f.addVelX is None:
             self.vel[0] += f.addVelX * self.facingMultiplier()
         if not f.addVelY is None:
@@ -105,7 +105,7 @@ class BattleChar(object):
         if not f.setVelYIfDrop is None:
             if self.vel[1] > 0:
                 self.vel[1] = f.setVelYIfDrop
-                self.accelToZero()
+                self.accel[1] = 0.0
         if not f.addVelYIfDrop is None:
             if self.vel[1] > 0:
                 self.vel[1] += f.addVelYIfDrop
@@ -204,7 +204,10 @@ class BattleChar(object):
             if not c.setFrictionX is None:
                 friction = c.setFrictionX
             elif self.inAir:
-                friction = self.airFriction
+                if self.currMove.isStun:
+                    friction = self.airFrictionStunned
+                else:
+                    friction = self.airFriction
             else:
                 friction = self.groundFriction
             
