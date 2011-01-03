@@ -194,7 +194,11 @@ class BattleChar(object):
                 self.accel[0] = accel * f
 
             if self.inAir:
-                self.accel[1] = self.vertAccel
+                if not self.getCurrentFrame().setAccelY is None:
+                    accel = self.getCurrentFrame().setAccelY
+                else:
+                    accel = self.vertAccel
+                self.accel[1] = accel
             else:
                 self.accel[1] = 0
 

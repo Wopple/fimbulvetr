@@ -57,6 +57,7 @@ class Frame(object):
         self.addVelX = None
         self.addVelY = None
         self.setAccelX = None
+        self.setAccelY = None
         self.setVelYIfDrop = None
         self.addVelYIfDrop = None
         self.ignoreSpeedCap = False

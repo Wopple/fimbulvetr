@@ -872,7 +872,7 @@ class Hare(battlechar.BattleChar):
             ]
 
 
-        f = [ self.frameData(9, 3, r[0]),
+        f = [ self.frameData(9, 6, r[0]),
               self.frameData(93, 1, [], h[0]),
               self.frameData(94, 1, [], h[0]),
               self.frameData(95, 1, [], h[0]),
@@ -941,7 +941,7 @@ class Hare(battlechar.BattleChar):
         self.moves['rotateKick'].canDI = True
         
         for i in range(6):
-            self.moves['rotateKick'].frames[i].setVelY = 0
+            self.moves['rotateKick'].frames[i].setAccelY = 0.55
             self.moves['rotateKick'].frames[i].setSpeedCapX = self.airVelMax * 1.2
             self.moves['rotateKick'].frames[i].setAccelX = self.airAccel * 2.0
             self.moves['rotateKick'].frames[i].setFrictionX = self.airFriction * 2.0
