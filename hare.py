@@ -854,11 +854,11 @@ class Hare(battlechar.BattleChar):
 
         dam1 = 3
         stun1 = 90
-        force1 = 20
-        force2 = 14
+        force1 = 18
+        force2 = 11
         angle1 = 50
         angle2 = 130
-        freeze1 = 1
+        freeze1 = 0
 
         h = [
                 [
@@ -913,7 +913,7 @@ class Hare(battlechar.BattleChar):
         force1 = 18
         angle1 = 135
         angle2 = 45
-        freeze1 = 1
+        freeze1 = 6
 
         r = [
                 [
@@ -929,7 +929,8 @@ class Hare(battlechar.BattleChar):
             ]
 
         
-        f = [ self.frameData(101, 5, r[0], h[0]),
+        f = [ self.frameData(107, 4, r[0]),
+              self.frameData(101, 4, r[0], h[0]),
               self.frameData(102, 3, r[0], h[0]),
               self.frameData(103, 3, r[0], h[0]),
               self.frameData(104, 2, r[0]),
