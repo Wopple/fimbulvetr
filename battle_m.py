@@ -37,6 +37,9 @@ class Model(mvc.Model):
                      [False, False, False, False, False, False, False]]
         self.keysNow = [[0, 0, 0, 0, 0, 0, 0],
                         [0, 0, 0, 0, 0, 0, 0]]
+
+        self.frameByFrame = [0, 0]
+        
         self.returnCode = [0, 0]
         self.projectiles = []
         self.retreatProhibitTime = boundint.BoundInt(0, RETREAT_PROHIBIT_TIME,
@@ -51,63 +54,75 @@ class Model(mvc.Model):
 
         self.countdown = countdown.Countdown(BATTLE_COUNTDOWN_LENGTH)
 
+    def checkFrameByFrame(self):
+        highest = 0
+
+        for i in range(len(self.frameByFrame)):
+            if self.frameByFrame[i] > highest:
+                highest = self.frameByFrame[i]
+            if self.frameByFrame[i] == 2:
+                self.frameByFrame[i] = 1
+
+        return (highest == 1)
+
     def update(self):
 
-        #self.keys[1][6] = True
-        #self.keysNow[1][6] = 5
+        fbf = self.checkFrameByFrame()
 
-        self.checkForEnd()
-        self.countdown.update()
+        if not fbf:
 
-        if self.countdown.checkStartFlag():
-            for p in self.players:
-                p.countdownComplete()
-            self.retreatPhase = 1
+            self.checkForEnd()
+            self.countdown.update()
 
-        if self.retreatPhase == 1:
-            self.retreatProhibitTime.add(-1)
-            if self.retreatProhibitTime.value == 0:
-                self.retreatPhase = 2
-                self.retreatBar.createText("Retreat", 1)
-        
-        for i, p in enumerate(self.players):
-            if self.countdown.isGoing():
-                keys = [False, False, False, False, False, False, False]
-                keysNow = [0, 0, 0, 0, 0, 0, 0]
-            else:
+            if self.countdown.checkStartFlag():
+                for p in self.players:
+                    p.countdownComplete()
+                self.retreatPhase = 1
+
+            if self.retreatPhase == 1:
+                self.retreatProhibitTime.add(-1)
+                if self.retreatProhibitTime.value == 0:
+                    self.retreatPhase = 2
+                    self.retreatBar.createText("Retreat", 1)
+            
+            for i, p in enumerate(self.players):
+                if self.countdown.isGoing():
+                    keys = [False, False, False, False, False, False, False]
+                    keysNow = [0, 0, 0, 0, 0, 0, 0]
+                else:
+                    keys = self.keys[i]
+                    keysNow = self.keysNow[i]
+                l, r = self.exclusiveKeys(keys[2], keys[3])
+                self.resetKeysNow(keysNow)
+                self.act(p, keys, keysNow)
+                self.checkReversable(l, r, p)
+                self.checkForGround(p)
+                self.checkForEdge(l, r, p)
+
+            self.checkRetreat()
+            self.resetHitMemory()
+            self.checkForHits()
+            for i, p in enumerate(self.players):
+                self.actOnHit(i, p)
+
+            for i, p in enumerate(self.players):
                 keys = self.keys[i]
                 keysNow = self.keysNow[i]
-            l, r = self.exclusiveKeys(keys[2], keys[3])
-            self.resetKeysNow(keysNow)
-            self.act(p, keys, keysNow)
-            self.checkReversable(l, r, p)
-            self.checkForGround(p)
-            self.checkForEdge(l, r, p)
+                l, r = self.exclusiveKeys(keys[2], keys[3])
+                p.update()
+                self.checkShoot(p)
+                p.DI(l, r)
 
-        self.checkRetreat()
-        self.resetHitMemory()
-        self.checkForHits()
-        for i, p in enumerate(self.players):
-            self.actOnHit(i, p)
+            temp = []
+            for i in range(len(self.projectiles)):
+                self.projectiles[i].update()
+                self.checkProjForEdge(self.projectiles[i])
+                self.checkProjForDissolve(self.projectiles[i])
+                if not self.projectiles[i].destroy:
+                    temp.append(self.projectiles[i])
+            self.projectiles = temp
 
-        for i, p in enumerate(self.players):
-            keys = self.keys[i]
-            keysNow = self.keysNow[i]
-            l, r = self.exclusiveKeys(keys[2], keys[3])
-            p.update()
-            self.checkShoot(p)
-            p.DI(l, r)
-
-        temp = []
-        for i in range(len(self.projectiles)):
-            self.projectiles[i].update()
-            self.checkProjForEdge(self.projectiles[i])
-            self.checkProjForDissolve(self.projectiles[i])
-            if not self.projectiles[i].destroy:
-                temp.append(self.projectiles[i])
-        self.projectiles = temp
-
-        self.centerCamera(self.players[self.cameraPlayer])
+            self.centerCamera(self.players[self.cameraPlayer])
 
         for b in self.bars:
             if not self.catBar is None:
@@ -319,10 +334,17 @@ class Model(mvc.Model):
 
     def testKey(self, k):
         p = self.players[self.cameraPlayer]
-        
+
         if k == 1:
-            p.hp.add(-100)
+            if self.frameByFrame[self.cameraPlayer] == 0:
+                self.frameByFrame[self.cameraPlayer] = 1
+            elif self.frameByFrame[self.cameraPlayer] == 1:
+                self.frameByFrame[self.cameraPlayer] = 0
         elif k == 2:
+            self.frameByFrame[self.cameraPlayer] = 2
+        elif k == 3:
+            p.hp.add(-100)
+        elif k == 4:
             p.hp.add(100)
 
 
@@ -356,6 +378,8 @@ class Model(mvc.Model):
         for i in self.keysNow[p]:
             msg += str(i)
 
+        msg += str(self.frameByFrame[p])
+
         return msg
 
     def parseNetMessage(self, msg, p):
@@ -367,11 +391,18 @@ class Model(mvc.Model):
             
         msg1 = msg[0:7]
         if len(msg1) != 7:
-            print "!!!!"
+            print "!"
+            print msg1
             sys.exit()
-        msg2 = msg[7:]
+        msg2 = msg[7:14]
         if len(msg2) != 7:
-            print "!!!!"
+            print "!!"
+            print msg2
+            sys.exit()
+        msg3 = msg[14:]
+        if len(msg3) != 1:
+            print "!!!"
+            print msg3
             sys.exit()
         
         for i, c in enumerate(msg1):
@@ -389,6 +420,13 @@ class Model(mvc.Model):
             except:
                 print "Error in message parsing"
                 sys.exit()
+
+        try:
+            self.frameByFrame[p-1] = int(msg3)
+        except:
+            print "Error in message parsing"
+            print "Message:", msg3
+            sys.exit()
 
     def createBars(self):
         self.bars = []
