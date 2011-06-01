@@ -32,6 +32,8 @@ class Controller(mvc.Controller):
                     self.model.key(5, True, self.player)
                 elif event.key == K_q:
                     self.model.key(6, True, self.player)
+                elif event.key == K_d:
+                    self.model.key(7, True, self.player)
                 elif event.key == K_F1:
                     self.model.testKey(1)
                 elif event.key == K_F2:
@@ -57,5 +59,7 @@ class Controller(mvc.Controller):
                     self.model.key(5, False, self.player)
                 elif event.key == K_q:
                     self.model.key(6, False, self.player)
+                elif event.key == K_d:
+                    self.model.key(7, False, self.player)
             elif event.type == pygame.QUIT:
                 sys.exit(0)

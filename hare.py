@@ -71,22 +71,25 @@ class Hare(battlechar.BattleChar):
         self.createMoveDucking()
         self.createMoveJabA()
         self.createMoveJabB()
-        self.createDashAttackA()
-        self.createDashAttackB()
+        self.createMoveDashAttackA()
+        self.createMoveDashAttackB()
         self.createMoveDownA()
         self.createMoveDownB()
         self.createMoveUpA()
         self.createMoveUpB()
-        self.createNeutralAirA()
-        self.createNeutralAirB()
-        self.createUpAirA()
-        self.createUpAirB()
-        self.createDownAirA()
-        self.createDownAirB()
+        self.createMoveNeutralAirA()
+        self.createMoveNeutralAirB()
+        self.createMoveUpAirA()
+        self.createMoveUpAirB()
+        self.createMoveDownAirA()
+        self.createMoveDownAirB()
 
         self.createMoveStun1()
         self.createMoveStun2()
         self.createMoveStun3()
+
+        self.createMoveBlock()
+        self.createMoveLowBlock()
 
         self.createSuperMoves()
 
@@ -113,6 +116,18 @@ class Hare(battlechar.BattleChar):
         f = [ self.frameData(0, 10, r[0]),
               self.frameData(1, 9, r[0])]
         self.moves['idle'].append(f, [])
+
+    def createMoveBlock(self):
+
+        f = [ self.frameData(81, 2) ]
+
+        self.moves['blocking'].append(f, [])
+
+    def createMoveLowBlock(self):
+
+        f = [ self.frameData(108, 2) ]
+
+        self.moves['lowBlocking'].append(f, [])
 
     def createMoveIdleLike(self):
         f = [ self.frameData(66, 1),
@@ -478,7 +493,7 @@ class Hare(battlechar.BattleChar):
         self.moves['jabB'].append(f, [])
         self.moves['jabB'].canDI = False
 
-    def createDashAttackA(self):
+    def createMoveDashAttackA(self):
         r = [
                 [
                     (-3, -50, 13, -35),
@@ -602,7 +617,7 @@ class Hare(battlechar.BattleChar):
         self.moves['dashAttackA'].frames[2].ignoreSpeedCap = True
 
 
-    def createDashAttackB(self):
+    def createMoveDashAttackB(self):
         f = [ self.frameData(19, 2),
               self.frameData(23, 2),
               self.frameData(20, 1),
@@ -950,7 +965,7 @@ class Hare(battlechar.BattleChar):
         
               
 
-    def createNeutralAirA(self):
+    def createMoveNeutralAirA(self):
         r = [
                 [
                     (-7, -58, 11, -38),
@@ -1021,7 +1036,7 @@ class Hare(battlechar.BattleChar):
         self.moves['neutralAirA'].append(f, [])
         self.moves['neutralAirA'].reversable = True
 
-    def createNeutralAirB(self):
+    def createMoveNeutralAirB(self):
         r = [
                 [
                     (1, -61, 18, -45),
@@ -1131,7 +1146,7 @@ class Hare(battlechar.BattleChar):
         for i in range(len(self.moves['neutralAirB'].frames)):
             self.moves['neutralAirB'].frames[i].ignoreFriction = True
 
-    def createUpAirA(self):
+    def createMoveUpAirA(self):
         r = [
                 [
                     (-10, -56, 7, -41),
@@ -1213,7 +1228,7 @@ class Hare(battlechar.BattleChar):
 
         self.moves['upAirA'].append(f, [])
 
-    def createUpAirB(self):
+    def createMoveUpAirB(self):
         r = [
                 [
                     (-11, -59, 8, -44),
@@ -1294,7 +1309,7 @@ class Hare(battlechar.BattleChar):
         self.moves['upAirB'].frames[16].resetHitPotential = True
         self.moves['upAirB'].frames[19].resetHitPotential = True
 
-    def createDownAirA(self):
+    def createMoveDownAirA(self):
         r = [
                 [
                     (-11, -43, 3, -31),
@@ -1430,7 +1445,7 @@ class Hare(battlechar.BattleChar):
               
         
 
-    def createDownAirB(self):
+    def createMoveDownAirB(self):
         r = [
                 [
                     (-6, -57, 12, -43),

@@ -201,7 +201,7 @@ HITBOX_ALPHA = 100
 DEFAULT_HITSTUN = 2
 
 MULTIPLAYER_PORT = 1338
-NET_MESSAGE_SIZE = 15
+NET_MESSAGE_SIZE = 17
 NET_ICON_SPEED = 8
 
 MAP_MODE_NET_MESSAGE_SIZE = 30
@@ -392,7 +392,8 @@ temp = [ ["00.png", (24, 62)],
          ["104.png", (39, 64)],
          ["105.png", (39, 64)],
          ["106.png", (39, 64)],
-         ["107.png", (39, 64)]]
+         ["107.png", (39, 64)],
+         ["108.png", (21, 57)]]
 
 HARE_IMAGES = []
 for i in temp:

@@ -17,7 +17,8 @@ class Move(object):
                 'doDuck', 'stopDuck', 'attackA', 'attackB', 'releaseA',
                 'releaseB', 'attackAUp', 'attackBUp', 'attackADown',
                 'attackBDown', 'attackBUpCharge', 'bladelv1', 'bladelv2',
-                'bladelv3', 'onHit', 'attackAAtMax', 'attackBAtMax']
+                'bladelv3', 'onHit', 'attackAAtMax', 'attackBAtMax',
+                'block', 'releaseBlock', 'downBlock']
         self.transitions = {}
         for i in temp:
             self.transitions[i] = None
@@ -114,7 +115,9 @@ def baseIdle():
           ['attackAUp', Transition(None, None, None, None, 'upA')],
           ['attackBUp', Transition(None, None, None, None, 'upB')],
           ['attackA', Transition(None, None, None, None, 'jabA')],
-          ['attackB', Transition(None, None, None, None, 'jabB')]]
+          ['attackB', Transition(None, None, None, None, 'jabB')],
+          ['block', Transition(None, None, None, None, 'blocking')],
+          ['downBlock', Transition(None, None, None, None, 'lowBlocking')]]
     m = Move([], t)
     m.canDI = False
     return m
@@ -129,7 +132,9 @@ def baseDash():
           ['attackAAtMax', Transition(None, None, None, None, 'jabA')],
           ['attackBAtMax', Transition(None, None, None, None, 'jabB')],
           ['attackA', Transition(None, None, None, None, 'dashAttackA')],
-          ['attackB', Transition(None, None, None, None, 'dashAttackB')]]
+          ['attackB', Transition(None, None, None, None, 'dashAttackB')],
+          ['block', Transition(None, None, None, None, 'blocking')],
+          ['downBlock', Transition(None, None, None, None, 'lowBlocking')]]
     m = Move([], t)
     return m
 
@@ -162,7 +167,28 @@ def baseDucking():
           ['stopDuck', Transition(None, None, None, None, 'idle')],
           ['jump', Transition(None, None, None, None, 'jumping')],
           ['attackADown', Transition(None, None, None, None, 'downA')],
-          ['attackBDown', Transition(None, None, None, None, 'downB')] ]
+          ['attackBDown', Transition(None, None, None, None, 'downB')],
+          ['downBlock', Transition(None, None, None, None, 'lowBlocking')]]
+    m = Move([], t)
+    m.canDI = False
+    return m
+
+def baseBlocking():
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'blocking')],
+          ['jump', Transition(None, None, None, None, 'jumping')],
+          ['releaseBlock', Transition(None, None, None, None, 'idle')],
+          ['doDuck', Transition(None, None, None, None, 'lowBlocking')]]
+
+    m = Move([], t)
+    m.canDI = False
+    return m
+
+def baseLowBlocking():
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'lowBlocking')],
+          ['jump', Transition(None, None, None, None, 'jumping')],
+          ['releaseBlock', Transition(None, None, None, None, 'ducking')],
+          ['stopDuck', Transition(None, None, None, None, 'blocking')]]
+
     m = Move([], t)
     m.canDI = False
     return m

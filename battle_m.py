@@ -33,10 +33,10 @@ class Model(mvc.Model):
                             ((BATTLE_PLAYER_START_DISTANCE / 2), 0)))
             self.players[1].facingRight = False
             
-        self.keys = [[False, False, False, False, False, False, False],
-                     [False, False, False, False, False, False, False]]
-        self.keysNow = [[0, 0, 0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0, 0, 0]]
+        self.keys = [[False, False, False, False, False, False, False, False],
+                     [False, False, False, False, False, False, False, False]]
+        self.keysNow = [[0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0]]
 
         self.frameByFrame = [0, 0]
         
@@ -87,8 +87,8 @@ class Model(mvc.Model):
             
             for i, p in enumerate(self.players):
                 if self.countdown.isGoing():
-                    keys = [False, False, False, False, False, False, False]
-                    keysNow = [0, 0, 0, 0, 0, 0, 0]
+                    keys = [False, False, False, False, False, False, False, False]
+                    keysNow = [0, 0, 0, 0, 0, 0, 0, 0]
                 else:
                     keys = self.keys[i]
                     keysNow = self.keysNow[i]
@@ -234,10 +234,19 @@ class Model(mvc.Model):
             if self.wasKeyPressed(6, keysNow):
                 if p.actTransitionFacing('jump', l, r):
                     keysNow[6] = 0
+            if keys[7]:
+                if d:
+                    if p.actTransition('downBlock'):
+                        keysNow[7] = 0
+                else:
+                    if p.actTransition('block'):
+                        keysNow[7] = 0
             if not keys[4]:
                 p.actTransition('releaseA')
             if not keys[5]:
                 p.actTransition('releaseB')
+            if not keys[7]:
+                p.actTransition('releaseBlock')
 
             lev = p.getCatEnergyLevel()
             if lev == 1:
@@ -389,17 +398,17 @@ class Model(mvc.Model):
             keys = self.keys[p-1]
             keysNow = self.keysNow[p-1]
             
-        msg1 = msg[0:7]
-        if len(msg1) != 7:
+        msg1 = msg[0:8]
+        if len(msg1) != 8:
             print "!"
             print msg1
             sys.exit()
-        msg2 = msg[7:14]
-        if len(msg2) != 7:
+        msg2 = msg[8:16]
+        if len(msg2) != 8:
             print "!!"
             print msg2
             sys.exit()
-        msg3 = msg[14:]
+        msg3 = msg[16:]
         if len(msg3) != 1:
             print "!!!"
             print msg3
