@@ -119,13 +119,51 @@ class Hare(battlechar.BattleChar):
 
     def createMoveBlock(self):
 
-        f = [ self.frameData(81, 2) ]
+        r = [
+                [
+                    (-9, -47, 6, -32),
+                    (-11, -34, 5, -15),
+                    (-21, -32, -10, -24),
+                    (3, -38, 11, -24),
+                    (3, -24, 16, -7),
+                    (-11, -16, -1, 3)
+                ]
+            ]
+
+        b = [
+                [
+                    (3, -56, 12, -25)
+                ]
+            ]
+
+
+        f = [ self.frameData(81, 2, r[0], [], b[0]) ]
 
         self.moves['blocking'].append(f, [])
 
     def createMoveLowBlock(self):
 
-        f = [ self.frameData(108, 2) ]
+        r = [
+                [
+                    (16, -38, 31, -24),
+                    (3, -27, 29, -19),
+                    (-2, -25, 13, -15),
+                    (-7, -18, -1, 0),
+                    (-3, -20, 11, -10),
+                    (2, -12, 15, 1),
+                    (-22, -5, -2, 0)
+                ]
+            ]
+
+        b = [
+                [
+                   (28, -26, 34, 1),
+                   (12, -11, 34, 1)
+                ]
+            ]
+
+
+        f = [ self.frameData(108, 2, r[0], [], b[0]) ]
 
         self.moves['lowBlocking'].append(f, [])
 
@@ -724,8 +762,7 @@ class Hare(battlechar.BattleChar):
 
         h = [
                 [
-                    [22, -18, 62, 7],
-                    [25, 7, 57, 12]
+                    [-3, -8, 68, 7],
                 ]
             ]
 

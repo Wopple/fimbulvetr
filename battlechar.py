@@ -136,6 +136,8 @@ class BattleChar(object):
             self.drawBoxes(self.getCurrentFrame().hurtboxes, screen, inOffset)
         if SHOW_HITBOXES:
             self.drawBoxes(self.getCurrentFrame().hitboxes, screen, inOffset)
+        if SHOW_BLOCKBOXES:
+            self.drawBoxes(self.getCurrentFrame().blockboxes, screen, inOffset)
         
         if SHOW_RED_DOT:
             screen.blit(RED_DOT, add_points(self.preciseLoc, inOffset))
@@ -370,8 +372,8 @@ class BattleChar(object):
         if not c:
             self.setCurrMove('idle')
 
-    def frameData(self, i, j, r=[], h=[]):
-        return [self.spriteSet[i][0], self.spriteSet[i][1], j, r, h]
+    def frameData(self, i, j, r=[], h=[], b=[]):
+        return [self.spriteSet[i][0], self.spriteSet[i][1], j, r, h, b]
 
     def getHitboxes(self):
         return self.getCurrentFrame().hitboxes

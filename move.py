@@ -6,6 +6,7 @@ import incint
 
 import hitbox
 import hurtbox
+import blockbox
 
 from constants import *
 
@@ -37,7 +38,7 @@ class Move(object):
 
     def append(self, f, t):
         for i in f:
-            self.frames.append(Frame(i[0], i[1], i[2], i[3], i[4]))
+            self.frames.append(Frame(i[0], i[1], i[2], i[3], i[4], i[5]))
 
         for i in t:
             self.transitions[i[0]] = i[1]
@@ -49,7 +50,8 @@ class SuperMove(Move):
         self.desc = inDesc
 
 class Frame(object):
-    def __init__(self, inImage, inOffset, inLength, hurtboxData, hitboxData):
+    def __init__(self, inImage, inOffset, inLength, hurtboxData,
+                 hitboxData, blockboxData):
         self.image = inImage
         self.offset = inOffset
         self.length = inLength
@@ -68,6 +70,18 @@ class Frame(object):
         self.resetHitPotential = False
         self.buildHurtboxes(hurtboxData)
         self.buildHitboxes(hitboxData)
+        self.buildBlockboxes(blockboxData)
+
+    def buildBlockboxes(self, data):
+        self.blockboxes = []
+
+        for d in data:
+            topleft = (d[0], d[1])
+            width = d[2] - d[0]
+            height = d[3] - d[1]
+            size = (width, height)
+            rect = pygame.Rect(topleft, size)
+            self.blockboxes.append(blockbox.Blockbox(rect))
 
     def buildHurtboxes(self, data):
         self.hurtboxes = []

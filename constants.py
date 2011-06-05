@@ -50,8 +50,9 @@ INTRO_MAX_FADE = 240
 INTRO_SPEEDS = [4, 30, 5, 50, 5, 15]
 
 SHOW_RED_DOT = True
-SHOW_HURTBOXES = False
-SHOW_HITBOXES = False
+SHOW_HURTBOXES = True
+SHOW_HITBOXES = True
+SHOW_BLOCKBOXES = True
 SHOW_BATTLE_TRIGGER_AREA = False
 
 MAP_INTERFACE_ALPHA_MIN = 50
@@ -197,6 +198,8 @@ HURTBOX_COLOR = (255, 242, 5)
 HURTBOX_ALPHA = 100
 HITBOX_COLOR = (255, 10, 10)
 HITBOX_ALPHA = 100
+BLOCKBOX_COLOR = (100, 149, 237)
+BLOCKBOX_ALPHA = 120
 
 DEFAULT_HITSTUN = 2
 
@@ -366,7 +369,7 @@ temp = [ ["00.png", (24, 62)],
          ["78.png", (43, 74)],
          ["79.png", (43, 74)],
          ["80.png", (43, 74)],
-         ["81.png", (22, 56)],
+         ["81.png", (22, 60)],
          ["82.png", (17, 58)],
          ["83.png", (17, 58)],
          ["84.png", (17, 58)],
@@ -393,7 +396,7 @@ temp = [ ["00.png", (24, 62)],
          ["105.png", (39, 64)],
          ["106.png", (39, 64)],
          ["107.png", (39, 64)],
-         ["108.png", (21, 57)]]
+         ["108.png", (21, 50)]]
 
 HARE_IMAGES = []
 for i in temp:
