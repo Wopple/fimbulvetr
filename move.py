@@ -34,6 +34,7 @@ class Move(object):
         self.liftOff = False
         self.reversable = False
         self.chargeBlade = False
+        self.needTech = False
 
 
     def append(self, f, t):
@@ -160,7 +161,8 @@ def baseAir():
           ['attackAUp', Transition(None, None, None, None, 'upAirA')],
           ['attackBUpCharge', Transition(None, None, None, None, 'upAirB')],
           ['attackADown', Transition(None, None, None, None, 'downAirA')],
-          ['attackBDown', Transition(None, None, None, None, 'downAirB')]]
+          ['attackBDown', Transition(None, None, None, None, 'downAirB')],
+          ['block', Transition(None, None, None, None, 'airBlocking')]]
     m = Move([], t)
     return m
 
@@ -205,6 +207,14 @@ def baseLowBlocking():
 
     m = Move([], t)
     m.canDI = False
+    return m
+
+def baseAirBlocking():
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'airBlocking')],
+          ['releaseBlock', Transition(None, None, None, None, 'air')],
+          ['land', Transition(None, None, None, None, 'blocking')]]
+
+    m = Move([], t)
     return m
 
 def baseStun():

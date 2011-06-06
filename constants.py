@@ -3,7 +3,7 @@ import pygame
 import sys
 
 FULL_SCREEN = False
-FRAME_RATE = 40
+FRAME_RATE = 8
 SCREEN_SIZE = (800, 600)
 ENTIRE_SCREEN = pygame.Rect( (0,0), SCREEN_SIZE )
 DEBUG_MODE = True
@@ -152,7 +152,7 @@ SUPER_BAR_COLORS = ( (90, 30, 172),
                      (10, 10, 10) )
 
 RETREAT_PROHIBIT_TIME = FRAME_RATE * 12
-RETREAT_HOLD_TIME = int(FRAME_RATE * 1.5)
+RETREAT_HOLD_TIME = 60
 RETREAT_RECEED = 3
 RETREAT_TEAM_COLORS = [(10, 80, 200, 255),
                             (210, 20, 20, 255)]
@@ -204,7 +204,7 @@ BLOCKBOX_ALPHA = 120
 DEFAULT_HITSTUN = 2
 BLOCKED_KNOCKBACK_FACTOR = 0.9
 BLOCKED_LIFT_RESIST = 0.6
-BLOCKSTUN_FACTOR = 0.12
+BLOCKSTUN_FACTOR = 0.10
 
 MULTIPLAYER_PORT = 1338
 NET_MESSAGE_SIZE = 17
@@ -399,7 +399,8 @@ temp = [ ["00.png", (24, 62)],
          ["105.png", (39, 64)],
          ["106.png", (39, 64)],
          ["107.png", (39, 64)],
-         ["108.png", (21, 50)]]
+         ["108.png", (21, 50)],
+         ["109.png", (21, 67)]]
 
 HARE_IMAGES = []
 for i in temp:

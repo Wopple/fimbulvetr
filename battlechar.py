@@ -50,12 +50,14 @@ class BattleChar(object):
         self.preciseLoc[1] = float(loc[1])
 
     def update(self):
-        frame = self.getCurrentFrame()
         if self.freezeFrame == 0:
             self.onHitTrigger = False
             self.proceedFrame()
             self.frameSpecial()
 
+        frame = self.getCurrentFrame()
+
+        if self.freezeFrame == 0:
             if not frame.setSpeedCapX is None:
                 speedCap = frame.setSpeedCapX
             elif self.inAir:
@@ -272,6 +274,7 @@ class BattleChar(object):
 
         self.moves['blocking'] = move.baseBlocking()
         self.moves['lowBlocking'] = move.baseLowBlocking()
+        self.moves['airBlocking'] = move.baseAirBlocking()
 
         self.moves['stun1'] = move.baseStun()
         self.moves['stun2'] = move.baseStun()
@@ -374,10 +377,16 @@ class BattleChar(object):
         return c
 
     def transToAir(self):
-        if (not self.currMove.liftOff) and (not self.currMove.isStun):
+        if (self.blockstun > 0):
+            self.setCurrMove('airBlocking')
+        elif (not self.currMove.liftOff) and (not self.currMove.isStun):
             self.setCurrMove('flipping')
 
     def transToGround(self):
+        if self.currMove.isStun:
+            if self.currMove.needTech:
+                pass
+            return
         c = self.actTransition('land')
         if not c:
             self.setCurrMove('idle')

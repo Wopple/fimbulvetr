@@ -90,6 +90,7 @@ class Hare(battlechar.BattleChar):
 
         self.createMoveBlock()
         self.createMoveLowBlock()
+        self.createMoveAirBlock()
 
         self.createSuperMoves()
 
@@ -167,6 +168,35 @@ class Hare(battlechar.BattleChar):
         f = [ self.frameData(108, 2, r[0], [], b[0]) ]
 
         self.moves['lowBlocking'].append(f, [])
+
+    def createMoveAirBlock(self):
+
+        r = [
+                [
+                    (-7, -50, 6, -37),
+                    (-9, -37, 6, -16),
+                    (5, -39, 9, -30),
+                    (-20, -33, -6, -29),
+                    (-16, -36, -7, -33),
+                    (-9, -18, -2, 4),
+                    (5, -24, 13, -18),
+                    (8, -18, 11, -6),
+                    (9, -8, 17, -4)
+                ]
+            ]
+
+        b = [
+                [
+                    (11, -55, 17, 3),
+                    (-4, -54, 16, -50)
+                ]
+            ]
+
+
+
+        f = [ self.frameData(109, 2, r[0], [], b[0]) ]
+
+        self.moves['airBlocking'].append(f, [])
 
     def createMoveIdleLike(self):
         f = [ self.frameData(66, 1),
@@ -458,10 +488,10 @@ class Hare(battlechar.BattleChar):
 
         h = [
                 [
-                    (1, -36, 38, -20, 40, 60, 8, 8, [], 2),
-                    (30, -40, 60, -16, 40, 60, 8, 8, [], 2),
-                    (-4, -22, 30, -10, 40, 60, 8, 8, [], 2),
-                    (-24, -43, 31, -33, 40, 60, 8, 8, [], 2)
+                    (1, -36, 38, -20, 40, 51, 8, 8, [], 2),
+                    (30, -40, 60, -16, 40, 51, 8, 8, [], 2),
+                    (-4, -22, 30, -10, 40, 51, 8, 8, [], 2),
+                    (-24, -43, 31, -33, 40, 51, 8, 8, [], 2)
                 ]
             ]
         
@@ -1058,7 +1088,7 @@ class Hare(battlechar.BattleChar):
                     (47, -65, 56, -31, dam1, stun1, force1, angle1, [], 0),
                     (5, -48, 23, -34, dam1, stun1, force1, angle1, [], 0),
                     (5, -73, 22, -48, dam1, stun1, force1, angle1, [], 0),
-                    (21, -22, 45, -15, dam1, stun1, force1, angle1, [], 0)
+                    (21, -22, 45, -10, dam1, stun1, force1, angle1, [], 0)
                 ],
                 [
                     (7, -46, 51, -29, dam1, stun1, force1, angle1, [], 0),
@@ -1067,7 +1097,7 @@ class Hare(battlechar.BattleChar):
                 ]
             ]
         f = [ self.frameData(14, 3, r[0]),
-              self.frameData(15, 2, r[0], h[0]),
+              self.frameData(15, 1, r[0], h[0]),
               self.frameData(16, 2, r[0], h[1]),
               self.frameData(17, 4, r[0], h[2]),
               self.frameData(18, 2, r[0]) ]
@@ -1571,7 +1601,7 @@ class Hare(battlechar.BattleChar):
                 ]
             ]
 
-        f = [ self.frameData(68, 8, r[0]) ]
+        f = [ self.frameData(68, 9, r[0]) ]
 
         self.moves['stun1'].append(f, [])
 
@@ -1678,6 +1708,7 @@ class Hare(battlechar.BattleChar):
               self.frameData(74, 12, r[4])]
 
         self.moves['stun3'].append(f, [])
+        self.moves['stun3'].needTech = True
 
         for i in range(len(self.moves['stun3'].frames)):
             self.moves['stun3'].frames[i].ignoreSpeedCap = True

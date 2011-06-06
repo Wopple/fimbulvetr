@@ -67,8 +67,6 @@ class Model(mvc.Model):
 
     def update(self):
 
-        self.keys[1][7] = True
-
         fbf = self.checkFrameByFrame()
 
         if not fbf:
@@ -293,11 +291,11 @@ class Model(mvc.Model):
                 c.inAir = False
                 c.vel[1] = 0.0
                 c.aerialCharge = True
-                if old and c.canAct():
+                if old:
                     c.transToGround()
         else:
             c.inAir = True
-            if not old and c.canAct():
+            if not old:
                 c.transToAir()
 
     def checkForEdge(self, l, r, p):
