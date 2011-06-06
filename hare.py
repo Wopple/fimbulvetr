@@ -132,7 +132,8 @@ class Hare(battlechar.BattleChar):
 
         b = [
                 [
-                    (3, -56, 12, -25)
+                    (15, -56, 17, -25),
+                    (6, -50, 16, -48)
                 ]
             ]
 
@@ -157,8 +158,8 @@ class Hare(battlechar.BattleChar):
 
         b = [
                 [
-                   (28, -26, 34, 1),
-                   (12, -11, 34, 1)
+                   (32, -26, 34, 1),
+                   (24, -11, 34, 1)
                 ]
             ]
 
@@ -622,7 +623,7 @@ class Hare(battlechar.BattleChar):
         dam1 = 150
         stun1 = 120
         force1 = 24
-        angle1 = 45
+        angle1 = 25
         freeze1 = 5
         h = [
                 [
@@ -1141,7 +1142,7 @@ class Hare(battlechar.BattleChar):
                 ]
             ]
         dam1 = 30
-        stun1 = 5
+        stun1 = 30
         force1 = 6
         angle1 = 80
         freeze1 = 3

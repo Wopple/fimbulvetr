@@ -23,6 +23,7 @@ class BattleChar(object):
         self.attackCanHit = True
         self.retreat = boundint.BoundInt(0, RETREAT_HOLD_TIME, 0)
         self.freezeFrame = 0
+        self.blockstun = 0
         self.onHitTrigger = False
 
 
@@ -38,6 +39,8 @@ class BattleChar(object):
 
     def beginBattle(self):
         self.retreat.change(0)
+        self.freezeFrame = 0
+        self.blockstun = 0
 
     def countdownComplete(self):
         pass
@@ -71,6 +74,11 @@ class BattleChar(object):
 
         if self.freezeFrame > 0:
             self.freezeFrame -= 1
+        elif self.blockstun > 0:
+            self.blockstun -= 1
+
+        if self.blockstun > 0:
+            print self.blockstun
 
     #Updates the character for non-battle viewing, such as
     #in the character editor.
@@ -206,7 +214,7 @@ class BattleChar(object):
 
     def friction(self):
         c = self.getCurrentFrame()
-        if self.freezeFrame == 0:
+        if self.freezeFrame == 0 and self.blockstun == 0:
             if not c.setFrictionX is None:
                 friction = c.setFrictionX
             elif self.inAir:
@@ -282,6 +290,8 @@ class BattleChar(object):
         return self.currMove.frames[self.currFrame]
 
     def canAct(self):
+        if self.blockstun > 0:
+            return False
         return True
 
     def canDI(self):
@@ -381,10 +391,12 @@ class BattleChar(object):
     def getHurtboxes(self):
         return self.getCurrentFrame().hurtboxes
 
+    def getBlockboxes(self):
+        return self.getCurrentFrame().blockboxes
+
     def getHit(self, damage, stun, vel):
         self.hp.add(-damage)
 
-        print vel
         self.vel[0] = vel[0]
         self.vel[1] = vel[1]
 
@@ -394,6 +406,13 @@ class BattleChar(object):
             self.setCurrMove('stun2')
         else:
             self.setCurrMove('stun3')
+
+    def getBlockstun(self, damage, stun, vel, properties):
+        self.blockstun = int(stun * BLOCKSTUN_FACTOR)
+
+        self.vel[0] = vel[0]
+        self.vel[1] = vel[1]
+        
 
     def getSuper(self):
         return self.superMoves[self.currSuperMove]

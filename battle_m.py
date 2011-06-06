@@ -67,6 +67,8 @@ class Model(mvc.Model):
 
     def update(self):
 
+        self.keys[1][7] = True
+
         fbf = self.checkFrameByFrame()
 
         if not fbf:
@@ -101,6 +103,11 @@ class Model(mvc.Model):
 
             self.checkRetreat()
             self.resetHitMemory()
+
+            self.checkForBlock()
+            for i, p in enumerate(self.players):
+                self.actOnBlock(i, p)
+            
             self.checkForHits()
             for i, p in enumerate(self.players):
                 self.actOnHit(i, p)
@@ -286,11 +293,11 @@ class Model(mvc.Model):
                 c.inAir = False
                 c.vel[1] = 0.0
                 c.aerialCharge = True
-                if old:
+                if old and c.canAct():
                     c.transToGround()
         else:
             c.inAir = True
-            if not old:
+            if not old and c.canAct():
                 c.transToAir()
 
     def checkForEdge(self, l, r, p):
@@ -495,6 +502,22 @@ class Model(mvc.Model):
                                                  
     def resetHitMemory(self):
         self.hitMemory = [None, None]
+        self.blockMemory = [None, None]
+
+    def checkForBlock(self):
+        offset = self.rect.topleft
+        for i, p in enumerate(self.players):
+            for j, q in enumerate(self.players):
+                if not q is p:
+                    for h in p.getHitboxes():
+                        for r in q.getBlockboxes():
+                            if (self.blockMemory[j] is None) and (p.attackCanHit):
+                                hRect = p.getBoxAbsRect(h, offset)
+                                rRect = q.getBoxAbsRect(r, offset)
+                                if hRect.colliderect(rRect):
+                                    self.blockMemory[j] = [h, p]
+                                    p.attackCanHit = False
+                                    p.onHitTrigger = True
 
     def checkForHits(self):
         offset = self.rect.topleft
@@ -511,32 +534,54 @@ class Model(mvc.Model):
                                     p.attackCanHit = False
                                     p.onHitTrigger = True
 
-    def actOnHit(self, i, p):
-        if not self.hitMemory[i] is None:
-            mem = self.hitMemory[i][0]
-            hitter = self.hitMemory[i][1]
+    def actOnBlock(self, i, p):
+        self.actOnHit(i, p, True)
+            
+
+    def actOnHit(self, i, p, blocked=False):
+        if blocked:
+            memory = self.blockMemory
+        else:
+            memory = self.hitMemory
+        
+        if not memory[i] is None:
+            mem = memory[i][0]
+            hitter = memory[i][1]
             print "Player " + str(i+1) + " got hit!"
 
             p.facingRight = not hitter.facingRight
 
             damage = mem.damage
             stun = mem.stun
+            prop = mem.properties
 
-            xVel = math.cos(math.radians(mem.angle)) * mem.knockback
-            yVel = math.sin(math.radians(mem.angle)) * mem.knockback
+            kb = mem.knockback
+            if blocked:
+                kb *= BLOCKED_KNOCKBACK_FACTOR
+
+            xVel = math.cos(math.radians(mem.angle)) * kb
+            yVel = math.sin(math.radians(mem.angle)) * kb
+
+            if blocked:
+                yVel *= BLOCKED_LIFT_RESIST
 
             yVel *= -1
             if p.facingRight:
                 xVel *= -1
 
             if not p.inAir:
-                if mem.angle > 180:
+                if (mem.angle > 180) and (not blocked):
                     yVel *= -1
 
-            p.getHit(damage, stun, (xVel, yVel))
+            if not blocked:
+                p.getHit(damage, stun, (xVel, yVel))
 
             p.freezeFrame = mem.freezeFrame
             hitter.freezeFrame = mem.freezeFrame
+
+            if blocked:
+                print "Yo!"
+                p.getBlockstun(damage, stun, (xVel, yVel), prop)
 
 
     def netMessageSize(self):
