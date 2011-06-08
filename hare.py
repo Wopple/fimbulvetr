@@ -84,6 +84,8 @@ class Hare(battlechar.BattleChar):
         self.createMoveDownAirA()
         self.createMoveDownAirB()
 
+        self.createMoveGrab()
+
         self.createMoveStun1()
         self.createMoveStun2()
         self.createMoveStun3()
@@ -1581,6 +1583,18 @@ class Hare(battlechar.BattleChar):
         self.moves['downAirB'].frames[0].setVelX = 0
 
         self.createLagDownBAir()
+
+    def createMoveGrab(self):
+        f = [ self.frameData(110, 3),
+              self.frameData(111, 1),
+              self.frameData(112, 1),
+              self.frameData(113, 1),
+              self.frameData(114, 10),
+              self.frameData(111, 2)]
+
+        self.moves['grabbing'].append(f, [])
+        self.moves['grabbing'].frames[1].setVelX = 21.0
+        self.moves['grabbing'].frames[5].setVelX = -9.0
 
     def createLagDownBAir(self):
         f = [ self.frameData(9, 10) ]

@@ -189,11 +189,19 @@ def baseDucking():
     m.canDI = False
     return m
 
+def baseGrabbing():
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'idle')],
+          ['block', Transition(None, None, -1, -1, 'blocking')]]
+    m = Move([], t)
+    m.canDI = False
+    return m
+
 def baseBlocking():
     t = [ ['exitFrame', Transition(-1, 0, None, None, 'blocking')],
           ['jump', Transition(None, None, None, None, 'jumping')],
           ['releaseBlock', Transition(None, None, None, None, 'idle')],
-          ['doDuck', Transition(None, None, None, None, 'lowBlocking')]]
+          ['doDuck', Transition(None, None, None, None, 'lowBlocking')],
+          ['attackB', Transition(None, None, None, None, 'grabbing')]]
 
     m = Move([], t)
     m.canDI = False
@@ -203,7 +211,8 @@ def baseLowBlocking():
     t = [ ['exitFrame', Transition(-1, 0, None, None, 'lowBlocking')],
           ['jump', Transition(None, None, None, None, 'jumping')],
           ['releaseBlock', Transition(None, None, None, None, 'ducking')],
-          ['stopDuck', Transition(None, None, None, None, 'blocking')]]
+          ['stopDuck', Transition(None, None, None, None, 'blocking')],
+          ['attackB', Transition(None, None, None, None, 'grabbing')]]
 
     m = Move([], t)
     m.canDI = False

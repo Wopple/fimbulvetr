@@ -272,6 +272,8 @@ class BattleChar(object):
         self.moves['downAirA'] = move.baseBlank()
         self.moves['downAirB'] = move.baseBlank()
 
+        self.moves['grabbing'] = move.baseGrabbing()
+
         self.moves['blocking'] = move.baseBlocking()
         self.moves['lowBlocking'] = move.baseLowBlocking()
         self.moves['airBlocking'] = move.baseAirBlocking()
@@ -334,11 +336,17 @@ class BattleChar(object):
             return False
 
         if not t.rangeMin is None:
-            if self.currFrame < t.rangeMin:
+            rMin = t.rangeMin
+            if rMin == -1:
+                rMin = len(self.currMove.frames)-1
+            if self.currFrame < rMin:
                 return False
 
         if not t.rangeMax is None:
-            if self.currFrame > t.rangeMax:
+            rMax = t.rangeMax
+            if rMax == -1:
+                rMax = len(self.currMove.frames)-1
+            if self.currFrame > rMax:
                 return False
 
         if (key == 'exitFrame'):
