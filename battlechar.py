@@ -273,6 +273,8 @@ class BattleChar(object):
         self.moves['downAirB'] = move.baseBlank()
 
         self.moves['grabbing'] = move.baseGrabbing()
+        self.moves['grabHold'] = move.baseGrabHold()
+        self.moves['grabbed'] = move.baseGrabbed()
 
         self.moves['blocking'] = move.baseBlocking()
         self.moves['lowBlocking'] = move.baseLowBlocking()

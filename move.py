@@ -35,6 +35,8 @@ class Move(object):
         self.reversable = False
         self.chargeBlade = False
         self.needTech = False
+        self.grabVal = 0
+        self.grabPos = None
 
 
     def append(self, f, t):
@@ -43,6 +45,12 @@ class Move(object):
 
         for i in t:
             self.transitions[i[0]] = i[1]
+
+    def isGrab(self):
+        return (self.grabVal == 1)
+
+    def isGrabbed(self):
+        return (self.grabVal == -1)
 
 class SuperMove(Move):
     def __init__(self, inName, inDesc, f, t):
@@ -194,6 +202,22 @@ def baseGrabbing():
           ['block', Transition(None, None, -1, -1, 'blocking')]]
     m = Move([], t)
     m.canDI = False
+    return m
+
+def baseGrabHold():
+    t = [ ['exitFrame', Transition(-1, None, None, None, 'idle')] ]
+    m = Move([], t)
+    m.canDI = False
+    m.grabVal = 1
+    m.grabPos = (0, 0)
+    return m
+
+def baseGrabbed():
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'grabbed')] ]
+    m = Move([], t)
+    m.canDI = False
+    m.grabVal = -1
+    m.grabPos = (0, 0)
     return m
 
 def baseBlocking():

@@ -508,6 +508,8 @@ class Model(mvc.Model):
             for j, q in enumerate(self.players):
                 if not q is p:
                     for h in p.getHitboxes():
+                        if h.ignoreBlock():
+                            continue
                         for r in q.getBlockboxes():
                             if (self.blockMemory[j] is None) and (p.attackCanHit):
                                 hRect = p.getBoxAbsRect(h, offset)
@@ -549,6 +551,11 @@ class Model(mvc.Model):
 
             p.facingRight = not hitter.facingRight
 
+            grab = mem.getGrabData()
+            if grab is not None:
+                self.actOnGrab(i, p, mem, hitter, grab)
+                return
+
             damage = mem.damage
             stun = mem.stun
             prop = mem.properties
@@ -581,6 +588,24 @@ class Model(mvc.Model):
                 print "Yo!"
                 p.getBlockstun(damage, stun, (xVel, yVel), prop)
 
+    def actOnGrab(self, i, p, mem, hitter, grab):
+        hitter.setCurrMove(grab[1])
+        p.setCurrMove(grab[2])
+
+        if hitter.facingRight:
+            mult = 1
+        else:
+            mult = -1
+
+        offset = [ hitter.moves[grab[1]].grabPos[0] * mult,
+                   hitter.moves[grab[1]].grabPos[1] ]
+
+        temp = [ p.moves[grab[2]].grabPos[0] * (mult * -1),
+                 p.moves[grab[2]].grabPos[1] ]
+
+        offset = sub_points(offset, temp)
+
+        p.preciseLoc = add_points(offset, hitter.preciseLoc)        
 
     def netMessageSize(self):
         return NET_MESSAGE_SIZE

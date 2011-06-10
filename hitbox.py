@@ -20,3 +20,15 @@ class Hitbox(object):
         self.image = pygame.Surface(self.rect.size)
         self.image.fill(HITBOX_COLOR)
         self.image.set_alpha(HITBOX_ALPHA)
+
+    def ignoreBlock(self):
+        for p in self.properties:
+            if p[0] == 'grab' or p[0] == 'unblockable':
+                return True
+        return False
+
+    def getGrabData(self):
+        for p in self.properties:
+            if p[0] == 'grab':
+                return p
+        return None

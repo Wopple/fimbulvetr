@@ -569,17 +569,17 @@ VALID_INPUT_CHARACTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
 def add_points(i, j):
     i = (int(i[0]), int(i[1]))
     j = (int(j[0]), int(j[1]))
-    return ( (i[0] + j[0]), (i[1] + j[1]) )
+    return [ (i[0] + j[0]), (i[1] + j[1]) ]
 
 def mirror_points(i, j):
     i = (int(i[0]), int(i[1]))
     j = (int(j[0]), int(j[1]))
-    return ( (i[0] - j[0]), (i[1] + j[1]) )
+    return [ (i[0] - j[0]), (i[1] + j[1]) ]
 
 def sub_points(i, j):
     i = (int(i[0]), int(i[1]))
     j = (int(j[0]), int(j[1]))
-    return ( (i[0] - j[0]), (i[1] - j[1]) )
+    return [ (i[0] - j[0]), (i[1] - j[1]) ]
 
 def flipRect(i):
     return ( ((i.left * -1) - i.width), i.top )
