@@ -110,6 +110,8 @@ class Model(mvc.Model):
             for i, p in enumerate(self.players):
                 self.actOnHit(i, p)
 
+            self.checkGrabPair()
+
             for i, p in enumerate(self.players):
                 keys = self.keys[i]
                 keysNow = self.keysNow[i]
@@ -502,6 +504,42 @@ class Model(mvc.Model):
         self.hitMemory = [None, None]
         self.blockMemory = [None, None]
 
+    def checkGrabPair(self):
+        for i in range(2):
+            if i == 0:
+                a = 0
+                b = 1
+            else:
+                a = 1
+                b = 0
+                
+            if ( ((self.players[a].currMove.isGrab()) and (not self.players[b].currMove.isGrabbed()))
+                 or ((not self.players[a].currMove.isGrab()) and (self.players[b].currMove.isGrabbed())) ):
+                self.players[a].setCurrMove('grabRelease')
+                self.players[b].setCurrMove('grabbedRelease')
+                return
+
+            if self.players[a].currMove.isGrab() and self.players[b].currMove.isGrabbed():
+                offset = self.getGrabOffset(self.players[a], self.players[b])
+                
+                self.players[a].preciseLoc = sub_points(self.players[b].preciseLoc, offset)
+                self.players[b].preciseLoc = add_points(self.players[a].preciseLoc, offset)
+
+    def getGrabOffset(self, p1, p2):
+        if p1.facingRight:
+            mult = 1
+        else:
+            mult = -1
+
+        offset = [ p1.currMove.grabPos[0] * mult,
+                   p1.currMove.grabPos[1] ]
+
+        temp = [ p2.currMove.grabPos[0] * (mult * -1),
+                 p2.currMove.grabPos[1] ]
+
+        return sub_points(offset, temp)
+            
+
     def checkForBlock(self):
         offset = self.rect.topleft
         for i, p in enumerate(self.players):
@@ -592,20 +630,9 @@ class Model(mvc.Model):
         hitter.setCurrMove(grab[1])
         p.setCurrMove(grab[2])
 
-        if hitter.facingRight:
-            mult = 1
-        else:
-            mult = -1
-
-        offset = [ hitter.moves[grab[1]].grabPos[0] * mult,
-                   hitter.moves[grab[1]].grabPos[1] ]
-
-        temp = [ p.moves[grab[2]].grabPos[0] * (mult * -1),
-                 p.moves[grab[2]].grabPos[1] ]
-
-        offset = sub_points(offset, temp)
-
-        p.preciseLoc = add_points(offset, hitter.preciseLoc)        
+        offset = self.getGrabOffset(hitter, p)
+                
+        p.preciseLoc = add_points(hitter.preciseLoc, offset)
 
     def netMessageSize(self):
         return NET_MESSAGE_SIZE

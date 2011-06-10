@@ -275,6 +275,8 @@ class BattleChar(object):
         self.moves['grabbing'] = move.baseGrabbing()
         self.moves['grabHold'] = move.baseGrabHold()
         self.moves['grabbed'] = move.baseGrabbed()
+        self.moves['grabRelease'] = move.baseGrabRelease()
+        self.moves['grabbedRelease'] = move.baseGrabbedRelease()
 
         self.moves['blocking'] = move.baseBlocking()
         self.moves['lowBlocking'] = move.baseLowBlocking()

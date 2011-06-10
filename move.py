@@ -205,7 +205,7 @@ def baseGrabbing():
     return m
 
 def baseGrabHold():
-    t = [ ['exitFrame', Transition(-1, None, None, None, 'idle')] ]
+    t = [ ['exitFrame', Transition(-1, None, None, None, 'grabRelease')] ]
     m = Move([], t)
     m.canDI = False
     m.grabVal = 1
@@ -218,6 +218,18 @@ def baseGrabbed():
     m.canDI = False
     m.grabVal = -1
     m.grabPos = (0, 0)
+    return m
+
+def baseGrabRelease():
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'idle')] ]
+    m = Move([], t)
+    m.canDI = False
+    return m
+
+def baseGrabbedRelease():
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'idle')] ]
+    m = Move([], t)
+    m.canDI = False
     return m
 
 def baseBlocking():

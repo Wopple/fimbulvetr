@@ -87,6 +87,8 @@ class Hare(battlechar.BattleChar):
         self.createMoveGrabbing()
         self.createMoveGrabHold()
         self.createMoveGrabbed()
+        self.createMoveGrabRelease()
+        self.createMoveGrabbedRelease()
 
         self.createMoveStun1()
         self.createMoveStun2()
@@ -1729,6 +1731,59 @@ class Hare(battlechar.BattleChar):
 
         self.moves['grabbed'].append(f, [])
         self.moves['grabbed'].grabPos = (15, 0)
+
+    def createMoveGrabRelease(self):
+
+        r = [
+                [
+                    (-6, -49, 5, -43),
+                    (-8, -45, 6, -33),
+                    (-12, -33, 2, -20),
+                    (-12, -21, 2, -13),
+                    (-18, -32, -10, -27),
+                    (1, -31, 11, -26),
+                    (-12, -14, -6, 0),
+                    (-2, -16, 8, -10),
+                    (3, -11, 9, 0),
+                    (7, -3, 17, 0)
+                ]
+            ]
+
+        f = [ self.frameData(110, 2, r[0]),
+              self.frameData(110, 1, r[0]),
+              self.frameData(110, 22, r[0])]
+
+        self.moves['grabRelease'].append(f, [])
+        self.moves['grabRelease'].frames[1].setVelX = -20.0
+        self.moves['grabRelease'].frames[1].setFrictionX = 0.5
+        self.moves['grabRelease'].frames[2].setFrictionX = 0.75
+
+    def createMoveGrabbedRelease(self):
+
+        r = [
+                [
+                    (-7, -46, 4, -35),
+                    (-4, -49, 4, -45),
+                    (-9, -36, 0, -29),
+                    (-14, -33, -8, -29),
+                    (-14, -29, 0, -16),
+                    (-2, -33, 12, -29),
+                    (-13, -17, -3, -8),
+                    (-6, -19, 4, -9),
+                    (-7, -8, 2, 2),
+                    (-1, -11, 10, 1),
+                    (-5, -11, 2, -7)
+                ]
+            ]
+
+        f = [ self.frameData(69, 2, r[0]),
+              self.frameData(69, 1, r[0]),
+              self.frameData(69, 22, r[0])]
+
+        self.moves['grabbedRelease'].append(f, [])
+        self.moves['grabbedRelease'].frames[1].setVelX = -20.0
+        self.moves['grabbedRelease'].frames[1].setFrictionX = 0.5
+        self.moves['grabbedRelease'].frames[2].setFrictionX = 0.75
 
     def createLagDownBAir(self):
         f = [ self.frameData(9, 10) ]
