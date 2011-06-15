@@ -91,6 +91,7 @@ class Hare(battlechar.BattleChar):
         self.createMoveGrabbedRelease()
 
         self.createMoveThrowBackward()
+        self.createMoveThrowForward()
 
         self.createMoveStun1()
         self.createMoveStun2()
@@ -1810,9 +1811,64 @@ class Hare(battlechar.BattleChar):
               self.frameData(118, 2, [], h[0]),
               self.frameData(119, 14),
               self.frameData(120, 3),
-              self.frameData(10, 4) ]
+              self.frameData(10, 6) ]
 
         self.moves['throwBackward'].append(f, [])
+
+    def createMoveThrowForward(self):
+
+        damage1 = 0
+        stun1 = 52
+        knockback1 = 20
+        angle1 = 0
+
+        damage2 = 100
+        stun2 = 155
+        knockback2 = 20
+        angle2 = 28
+
+        h = [
+                [
+                    (-1, -44, 36, -19, damage1, stun1, knockback1, angle1,
+                     [('untechable')], 0)
+                ],
+                [
+                    (-12, -47, 59, -23, damage2, stun2, knockback2, angle2,
+                     [('untechable')], 0)
+                ]
+            ]
+
+        f = [ self.frameData(35, 2, [], h[0]),
+              self.frameData(35, 6),
+              self.frameData(35, 2),
+              self.frameData(121, 1),
+              self.frameData(122, 1, [], h[1]),
+              self.frameData(123, 5),
+              self.frameData(123, 1),
+              self.frameData(124, 10)]
+
+        t = [ ['land', move.Transition(None, None, None, None, 'lagForwardThrow')] ]
+
+        self.moves['throwForward'].append(f, t)
+        self.moves['throwForward'].liftOff = True
+        self.moves['throwForward'].frames[0].setVelY = -5.0
+        self.moves['throwForward'].frames[2].setVelY = 0
+        self.moves['throwForward'].frames[3].setVelY = 0
+        self.moves['throwForward'].frames[4].setVelY = 0
+        self.moves['throwForward'].frames[5].setVelY = 0
+
+        self.moves['throwForward'].frames[2].resetHitPotential = True
+
+        self.moves['throwForward'].frames[0].setVelX = 13
+        for i in range(3):
+            self.moves['throwForward'].frames[i].setFrictionX = 0
+
+        self.createLagForwardThrow()
+
+    def createLagForwardThrow(self):
+        f = [ self.frameData(10, 8) ]
+        self.moves['lagForwardThrow'] = move.Move(f, [])
+        self.moves['lagForwardThrow'].canDI = False
 
     def createLagDownBAir(self):
         f = [ self.frameData(9, 10) ]

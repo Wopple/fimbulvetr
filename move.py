@@ -209,7 +209,8 @@ def baseGrabbing():
 
 def baseGrabHold():
     t = [ ['exitFrame', Transition(-1, None, None, None, 'grabRelease')],
-          ['backward', Transition(None, None, 1, 1, 'throwBackward')] ]
+          ['backward', Transition(None, None, 1, 1, 'throwBackward')],
+          ['forward', Transition(None, None, 1, 1, 'throwForward')]]
     m = Move([], t)
     m.canDI = False
     m.grabVal = 1

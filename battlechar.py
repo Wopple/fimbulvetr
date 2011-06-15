@@ -279,6 +279,7 @@ class BattleChar(object):
         self.moves['grabbedRelease'] = move.baseGrabbedRelease()
 
         self.moves['throwBackward'] = move.baseThrow()
+        self.moves['throwForward'] = move.baseThrow()
 
         self.moves['blocking'] = move.baseBlocking()
         self.moves['lowBlocking'] = move.baseLowBlocking()
