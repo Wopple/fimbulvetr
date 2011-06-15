@@ -260,6 +260,7 @@ MAX_CHARACTER_SAVES = 100
 
 STUN_THRESHOLD_1 = 50
 STUN_THRESHOLD_2 = 100
+STUN_THRESHOLD_3 = 150
 
 HARE_MAP_SPEED_BASE = 2.5
 FOX_MAP_SPEED_BASE = 2.0
@@ -405,7 +406,13 @@ temp = [ ["00.png", (24, 62)],
          ["111.png", (26, 62)],
          ["112.png", (26, 62)],
          ["113.png", (26, 62)],
-         ["114.png", (26, 62)]]
+         ["114.png", (26, 62)],
+         ["115.png", (40, 60)],
+         ["116.png", (40, 60)],
+         ["117.png", (40, 60)],
+         ["118.png", (40, 60)],
+         ["119.png", (40, 60)],
+         ["120.png", (40, 60)]]
 
 HARE_IMAGES = []
 for i in temp:

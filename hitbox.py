@@ -32,3 +32,15 @@ class Hitbox(object):
             if p[0] == 'grab':
                 return p
         return None
+
+    def reverseUserFacing(self):
+        for p in self.properties:
+            if p[0] == 'reverseFacing':
+                return p[1]
+        return False
+
+    def reverseTargetFacing(self):
+        for p in self.properties:
+            if p[0] == 'reverseFacing':
+                return p[2]
+        return False

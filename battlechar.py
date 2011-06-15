@@ -278,6 +278,8 @@ class BattleChar(object):
         self.moves['grabRelease'] = move.baseGrabRelease()
         self.moves['grabbedRelease'] = move.baseGrabbedRelease()
 
+        self.moves['throwBackward'] = move.baseThrow()
+
         self.moves['blocking'] = move.baseBlocking()
         self.moves['lowBlocking'] = move.baseLowBlocking()
         self.moves['airBlocking'] = move.baseAirBlocking()
@@ -285,6 +287,7 @@ class BattleChar(object):
         self.moves['stun1'] = move.baseStun()
         self.moves['stun2'] = move.baseStun()
         self.moves['stun3'] = move.baseStun()
+        self.moves['stun4'] = move.baseStun()
 
     def setCurrMove(self, index, frame=0):
         self.currMove = self.moves[index]
@@ -425,8 +428,10 @@ class BattleChar(object):
             self.setCurrMove('stun1')
         elif stun <= STUN_THRESHOLD_2:
             self.setCurrMove('stun2')
-        else:
+        elif stun <= STUN_THRESHOLD_3:
             self.setCurrMove('stun3')
+        else:
+            self.setCurrMove('stun4')
 
     def getBlockstun(self, damage, stun, vel, properties):
         self.blockstun = int(stun * BLOCKSTUN_FACTOR)

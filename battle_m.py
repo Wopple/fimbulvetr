@@ -199,6 +199,16 @@ class Model(mvc.Model):
                 p.actTransition('doDuck')
             if l or r:
                 p.actTransitionFacing('doDash', l, r)
+                if l:
+                    if p.facingRight:
+                        p.actTransition('backward')
+                    else:
+                        p.actTransition('forward')
+                elif r:
+                    if p.facingRight:
+                        p.actTransition('forward')
+                    else:
+                        p.actTransition('backward')
             if not d:
                 p.actTransition('stopDuck')
             if self.wasKeyPressed(4, keysNow):
@@ -512,12 +522,13 @@ class Model(mvc.Model):
             else:
                 a = 1
                 b = 0
-                
-            if ( ((self.players[a].currMove.isGrab()) and (not self.players[b].currMove.isGrabbed()))
-                 or ((not self.players[a].currMove.isGrab()) and (self.players[b].currMove.isGrabbed())) ):
-                self.players[a].setCurrMove('grabRelease')
-                self.players[b].setCurrMove('grabbedRelease')
-                return
+
+            if not self.players[a].currMove.isThrow():
+                if ( ((self.players[a].currMove.isGrab()) and (not self.players[b].currMove.isGrabbed()))
+                     or ((not self.players[a].currMove.isGrab()) and (self.players[b].currMove.isGrabbed())) ):
+                    self.players[a].setCurrMove('grabRelease')
+                    self.players[b].setCurrMove('grabbedRelease')
+                    return
 
             if self.players[a].currMove.isGrab() and self.players[b].currMove.isGrabbed():
                 offset = self.getGrabOffset(self.players[a], self.players[b])
@@ -625,6 +636,12 @@ class Model(mvc.Model):
             if blocked:
                 print "Yo!"
                 p.getBlockstun(damage, stun, (xVel, yVel), prop)
+
+            if mem.reverseUserFacing():
+                hitter.facingRight = (not hitter.facingRight)
+
+            if mem.reverseTargetFacing():
+                p.facingRight = (not p.facingRight)
 
     def actOnGrab(self, i, p, mem, hitter, grab):
         hitter.setCurrMove(grab[1])

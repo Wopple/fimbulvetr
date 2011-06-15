@@ -90,9 +90,12 @@ class Hare(battlechar.BattleChar):
         self.createMoveGrabRelease()
         self.createMoveGrabbedRelease()
 
+        self.createMoveThrowBackward()
+
         self.createMoveStun1()
         self.createMoveStun2()
         self.createMoveStun3()
+        self.createMoveStun4()
 
         self.createMoveBlock()
         self.createMoveLowBlock()
@@ -1704,7 +1707,9 @@ class Hare(battlechar.BattleChar):
                 ]
             ]
 
-        f = [ self.frameData(114, 50, r[0]) ]
+        f = [ self.frameData(114, 10, r[0]),
+              self.frameData(114, 42, r[0]),
+              self.frameData(114, 2, r[0])]
 
         self.moves['grabHold'].append(f, [])
         self.moves['grabHold'].grabPos = (13, 0)
@@ -1730,7 +1735,7 @@ class Hare(battlechar.BattleChar):
         f = [ self.frameData(70, 2, r[0]) ]
 
         self.moves['grabbed'].append(f, [])
-        self.moves['grabbed'].grabPos = (15, 0)
+        self.moves['grabbed'].grabPos = (12, 0)
 
     def createMoveGrabRelease(self):
 
@@ -1784,6 +1789,30 @@ class Hare(battlechar.BattleChar):
         self.moves['grabbedRelease'].frames[1].setVelX = -20.0
         self.moves['grabbedRelease'].frames[1].setFrictionX = 0.5
         self.moves['grabbedRelease'].frames[2].setFrictionX = 0.75
+
+    def createMoveThrowBackward(self):
+
+        damage1 = 60
+        stun1 = 155
+        knockback1 = 23
+        angle1 = 155
+
+        h = [
+                [
+                    (-2, -42, 36, -3, damage1, stun1, knockback1, angle1,
+                     [('reverseFacing', False, True), ('untechable')], 0)
+                ]
+            ]
+
+        f = [ self.frameData(115, 3),
+              self.frameData(116, 2),
+              self.frameData(117, 6),
+              self.frameData(118, 2, [], h[0]),
+              self.frameData(119, 14),
+              self.frameData(120, 3),
+              self.frameData(10, 4) ]
+
+        self.moves['throwBackward'].append(f, [])
 
     def createLagDownBAir(self):
         f = [ self.frameData(9, 10) ]
@@ -1915,6 +1944,87 @@ class Hare(battlechar.BattleChar):
 
         for i in range(len(self.moves['stun3'].frames)):
             self.moves['stun3'].frames[i].ignoreSpeedCap = True
+
+    def createMoveStun4(self):
+        r = [
+                [
+                    (-12, -50, -3, -48),
+                    (-12, -48, 1, -39),
+                    (-10, -40, 2, -23),
+                    (0, -36, 10, -33),
+                    (-11, -24, 2, -19),
+                    (-8, -20, 6, -14),
+                    (-5, -14, -1, 5),
+                    (-3, -17, 4, 2),
+                    (1, -16, 9, -4),
+                    (-6, 2, 10, 5),
+                    (-1, 5, 4, 7)
+                ],
+                [
+                    (0, -46, 13, -35),
+                    (3, -49, 13, -46),
+                    (-1, -35, 9, -28),
+                    (-7, -27, 6, -21),
+                    (-6, -31, 6, -27),
+                    (2, -29, 7, -23),
+                    (-8, -21, 8, -15),
+                    (-3, -15, 13, -9),
+                    (9, -9, 15, 0),
+                    (5, -32, 14, -28),
+                    (11, -30, 18, -27),
+                    (11, -12, 19, 0),
+                    (14, -5, 21, -2)
+                ],
+                [
+                    (-5, -45, 8, -36),
+                    (-5, -49, 6, -45),
+                    (-5, -36, 6, -21),
+                    (-7, -20, 8, -13),
+                    (0, -14, 11, -12),
+                    (8, -18, 12, -15),
+                    (10, -17, 16, -10),
+                    (13, -12, 20, -5),
+                    (18, -10, 23, -4),
+                    (5, -33, 14, -31)
+                ],
+                [
+                    (-8, -45, 5, -35),
+                    (-7, -35, 6, -20),
+                    (-7, -20, 11, -12),
+                    (8, -18, 18, -11),
+                    (15, -12, 25, -7),
+                    (15, -15, 21, -12),
+                    (22, -13, 28, -8),
+                    (20, -8, 27, -6)
+                ],
+                [
+                    (-15, -42, 0, -34),
+                    (-16, -46, -4, -42),
+                    (-10, -34, -1, -32),
+                    (-8, -32, 4, -23),
+                    (-3, -34, 5, -32),
+                    (-8, -24, 7, -16),
+                    (-6, -17, 13, -13),
+                    (2, -22, 13, -17),
+                    (10, -21, 26, -16),
+                    (9, -17, 28, -13),
+                    (26, -20, 30, -14),
+                    (4, -36, 10, -33)
+                ]
+            ]
+
+        
+        f = [ self.frameData(70, 15, r[0]),
+              self.frameData(71, 2, r[1]),
+              self.frameData(72, 1, r[2]),
+              self.frameData(73, 1, r[3]),
+              self.frameData(74, 24, r[4])]
+
+        self.moves['stun4'].append(f, [])
+        self.moves['stun4'].needTech = True
+
+        for i in range(len(self.moves['stun4'].frames)):
+            self.moves['stun4'].frames[i].ignoreSpeedCap = True
 
 
     def createSuperMove1(self):

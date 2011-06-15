@@ -19,7 +19,7 @@ class Move(object):
                 'releaseB', 'attackAUp', 'attackBUp', 'attackADown',
                 'attackBDown', 'attackBUpCharge', 'bladelv1', 'bladelv2',
                 'bladelv3', 'onHit', 'attackAAtMax', 'attackBAtMax',
-                'block', 'releaseBlock', 'downBlock']
+                'block', 'releaseBlock', 'downBlock', 'forward', 'backward']
         self.transitions = {}
         for i in temp:
             self.transitions[i] = None
@@ -51,6 +51,9 @@ class Move(object):
 
     def isGrabbed(self):
         return (self.grabVal == -1)
+
+    def isThrow(self):
+        return (self.grabVal == 2)
 
 class SuperMove(Move):
     def __init__(self, inName, inDesc, f, t):
@@ -205,7 +208,8 @@ def baseGrabbing():
     return m
 
 def baseGrabHold():
-    t = [ ['exitFrame', Transition(-1, None, None, None, 'grabRelease')] ]
+    t = [ ['exitFrame', Transition(-1, None, None, None, 'grabRelease')],
+          ['backward', Transition(None, None, 1, 1, 'throwBackward')] ]
     m = Move([], t)
     m.canDI = False
     m.grabVal = 1
@@ -230,6 +234,14 @@ def baseGrabbedRelease():
     t = [ ['exitFrame', Transition(-1, 0, None, None, 'idle')] ]
     m = Move([], t)
     m.canDI = False
+    return m
+
+def baseThrow():
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'idle')] ]
+    m = Move([], t)
+    m.canDI = False
+    m.grabVal = 2
+    m.grabPos = (0, 0)
     return m
 
 def baseBlocking():
