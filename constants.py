@@ -49,10 +49,10 @@ MAIN_MENU_TITLE_POS = [ ((SCREEN_SIZE[0] / 6), 10),
 INTRO_MAX_FADE = 240
 INTRO_SPEEDS = [4, 30, 5, 50, 5, 15]
 
-SHOW_RED_DOT = True
-SHOW_HURTBOXES = True
-SHOW_HITBOXES = True
-SHOW_BLOCKBOXES = True
+SHOW_RED_DOT = False
+SHOW_HURTBOXES = False
+SHOW_HITBOXES = False
+SHOW_BLOCKBOXES = False
 SHOW_BATTLE_TRIGGER_AREA = False
 
 MAP_INTERFACE_ALPHA_MIN = 50
@@ -416,7 +416,16 @@ temp = [ ["00.png", (24, 62)],
          ["121.png", (24, 76)],
          ["122.png", (24, 76)],
          ["123.png", (24, 76)],
-         ["124.png", (24, 76)]]
+         ["124.png", (24, 76)],
+         ["125.png", (24, 62)],
+         ["126.png", (24, 62)],
+         ["127.png", (24, 62)],
+         ["128.png", (24, 62)],
+         ["129.png", (24, 62)],
+         ["130.png", (24, 62)],
+         ["131.png", (24, 62)],
+         ["132.png", (14, 67)],
+         ["133.png", (72, 65)]]
 
 HARE_IMAGES = []
 for i in temp:

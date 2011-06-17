@@ -822,6 +822,323 @@ class Hare(battlechar.BattleChar):
     def createMoveUpA(self):
         r = [
                 [
+                    (-9, -50, 1, -45),
+                    (-9, -45, 4, -35),
+                    (-9, -35, 1, -19),
+                    (-22, -34, -7, -28),
+                    (0, -32, 8, -27),
+                    (-12, -27, -8, -15),
+                    (-13, -20, 2, -15),
+                    (0, -16, 7, -10),
+                    (3, -12, 8, -1),
+                    (5, -2, 17, 0),
+                    (-18, -18, -10, -12),
+                    (-23, -14, -12, -8),
+                    (-25, -10, -19, -5)
+                ],
+                [
+                    (-9, -49, 1, -45),
+                    (-9, -45, 4, -35),
+                    (-9, -35, 4, -19),
+                    (-13, -31, -8, -22),
+                    (3, -32, 10, -23),
+                    (-9, -20, 6, -12),
+                    (0, -13, 6, -5),
+                    (-6, -7, 2, -1),
+                    (-9, -3, -2, 3),
+                    (-4, 0, 3, 5)
+                ],
+                [
+                    (-8, -49, 2, -45),
+                    (-9, -45, 4, -36),
+                    (-9, -36, 3, -21),
+                    (1, -35, 5, -31),
+                    (-14, -33, -8, -24),
+                    (-9, -23, 4, -17),
+                    (-6, -17, 5, -12),
+                    (2, -25, 11, -19),
+                    (0, -12, 5, -6),
+                    (-13, -9, 6, -5),
+                    (-13, -5, -6, -2),
+                    (-10, -2, -3, 3),
+                    (11, -27, 27, -24),
+                    (10, -25, 14, -22),
+                    (22, -35, 28, -27)
+                ],
+                [
+                    (-10, -48, 0, -44),
+                    (-10, -44, 3, -35),
+                    (-9, -35, 4, -19),
+                    (-14, -32, -9, -23),
+                    (-10, -22, 5, -17),
+                    (3, -24, 11, -17),
+                    (-9, -19, 6, -12),
+                    (-2, -13, 4, -7),
+                    (-13, -10, 4, -7),
+                    (-13, -7, -7, -2),
+                    (-10, -2, -5, 2),
+                    (8, -27, 16, -23),
+                    (13, -29, 26, -25),
+                    (20, -36, 25, -27)
+                ]
+            ]
+
+        dam1 = 25
+        stun1 = 102
+        force1 = 8
+        angle1 = 65
+        force2 = 16
+
+        h = [
+                [
+                    [-12, -45, 40, -2],
+                ],
+                [
+                    [-12, -45, 40, -2],
+                ]
+            ]
+
+        h[0] = [i + [dam1, stun1, force1, angle1, [], 3] for i in h[0]]
+        h[1] = [i + [dam1, stun1, force2, angle1, [], 3] for i in h[1]]
+
+        t = [['onHit', move.Transition(None, None, 4, 4, 'upAConfirm')]]
+
+        
+        f = [ self.frameData(125, 4, r[0]),
+              self.frameData(126, 2, r[1], h[0]),
+              self.frameData(127, 1, r[2]),
+              self.frameData(128, 3, r[3]),
+              self.frameData(129, 3, r[1], h[1]),
+              self.frameData(130, 1, r[2]),
+              self.frameData(131, 20, r[3])]
+        self.moves['upA'].append(f, t)
+        self.moves['upA'].canDI = False
+        self.moves['upA'].liftOff = True
+
+        self.moves['upA'].frames[1].setVelY = -5.0
+        self.moves['upA'].frames[1].setVelX = 4.0
+        self.moves['upA'].frames[1].ignoreFriction = True
+        self.moves['upA'].frames[4].setVelY = -5.5
+        self.moves['upA'].frames[4].setVelX = 4.0
+        self.moves['upA'].frames[4].ignoreFriction = True
+
+        self.moves['upA'].frames[5].setAccelY = self.airAccel * 0.75
+        self.moves['upA'].frames[6].setAccelY = self.airAccel * 0.75
+
+        self.moves['upA'].frames[3].resetHitPotential = True
+
+        self.createMoveUpAConfirm()
+
+    def createMoveUpAConfirm(self):
+        r = [
+                [
+                    (-9, -49, 1, -45),
+                    (-9, -45, 4, -35),
+                    (-9, -35, 4, -19),
+                    (-13, -31, -8, -22),
+                    (3, -32, 10, -23),
+                    (-9, -20, 6, -12),
+                    (0, -13, 6, -5),
+                    (-6, -7, 2, -1),
+                    (-9, -3, -2, 3),
+                    (-4, 0, 3, 5)
+                ],
+                [
+                    (-8, -49, 2, -45),
+                    (-9, -45, 4, -36),
+                    (-9, -36, 3, -21),
+                    (1, -35, 5, -31),
+                    (-14, -33, -8, -24),
+                    (-9, -23, 4, -17),
+                    (-6, -17, 5, -12),
+                    (2, -25, 11, -19),
+                    (0, -12, 5, -6),
+                    (-13, -9, 6, -5),
+                    (-13, -5, -6, -2),
+                    (-10, -2, -3, 3),
+                    (11, -27, 27, -24),
+                    (10, -25, 14, -22),
+                    (22, -35, 28, -27)
+                ],
+                [
+                    (-10, -48, 0, -44),
+                    (-10, -44, 3, -35),
+                    (-9, -35, 4, -19),
+                    (-14, -32, -9, -23),
+                    (-10, -22, 5, -17),
+                    (3, -24, 11, -17),
+                    (-9, -19, 6, -12),
+                    (-2, -13, 4, -7),
+                    (-13, -10, 4, -7),
+                    (-13, -7, -7, -2),
+                    (-10, -2, -5, 2),
+                    (8, -27, 16, -23),
+                    (13, -29, 26, -25),
+                    (20, -36, 25, -27)
+                ]
+            ]
+                
+        f = [ self.frameData(129, 3, r[0]),
+              self.frameData(130, 1, r[1]),
+              self.frameData(131, 3, r[2]),
+              self.frameData(131, 20, r[2])]
+
+        t = [['attackBUpCharge', move.Transition(None, None, 0, 2, 'upAirB')],
+             ['attackB', move.Transition(None, None, 0, 2, 'upASideKick')],
+             ['attackA', move.Transition(None, None, 0, 2, 'upADropSlash')],
+             ['attackADown', move.Transition(None, None, 0, 2, 'upADropSlash')],
+             ['attackAUp', move.Transition(None, None, 0, 2, 'upADropSlash')] ]
+
+        self.moves['upAConfirm'] = move.Move(f, t)
+        self.moves['upAConfirm'].canDI = False
+
+        self.moves['upAConfirm'].frames[0].setVelY = -5.5
+        self.moves['upAConfirm'].frames[0].setVelX = 4.0
+        self.moves['upAConfirm'].frames[0].ignoreFriction = True
+
+        self.moves['upAConfirm'].frames[1].setAccelY = self.airAccel * 0.75
+        self.moves['upAConfirm'].frames[2].setAccelY = self.airAccel * 0.75
+        self.moves['upAConfirm'].frames[3].setAccelY = self.airAccel * 0.75
+
+        self.createMoveUpASideKick()
+        self.createMoveUpADropSlash()
+
+    def createMoveUpASideKick(self):
+        r = [
+                [
+                    (1, -61, 18, -45),
+                    (-12, -47, 21, -36),
+                    (-5, -36, 16, -19),
+                    (-17, -28, -5, -20),
+                    (4, -20, 15, -11),
+                    (-3, -11, 8, -2),
+                    (5, -6, 13, 0)
+                ],
+                [
+                    (-12, -59, 7, -43),
+                    (-15, -40, -6, -30),
+                    (-8, -45, 19, -25),
+                    (19, -46, 31, -31),
+                    (31, -44, 38, -39),
+                    (0, -25, 13, 5),
+                    (27, -50, 37, -44),
+                    (37, -47, 41, -40)
+                ],
+                [
+                    (-10, -60, 8, -44),
+                    (-17, -41, -5, -32),
+                    (-7, -45, 19, -25),
+                    (19, -37, 44, -28),
+                    (-2, -25, 11, 5)
+                ]
+            ]
+
+        dam1 = 40
+        stun1 = 80
+        force1 = 14
+        angle1 = 30
+
+        h = [
+                [
+                    [14, -50, 75, -15],
+                    [-7, -35, 17, -23]
+                ]
+            ]
+
+        h[0] = [i + [dam1, stun1, force1, angle1, [], 5] for i in h[0]]
+
+        
+        f = [ self.frameData(35, 9, r[0]),
+              self.frameData(36, 1, r[1], h[0]),
+              self.frameData(37, 3, r[2], h[0]),
+              self.frameData(37, 7, r[2]),
+              self.frameData(124, 20)]
+
+        self.moves['upASideKick'] = move.Move(f, [])
+        self.moves['upASideKick'].canDI = False
+
+        self.moves['upASideKick'].frames[0].setVelY = -6
+        self.moves['upASideKick'].frames[0].setVelX = -0.5
+        self.moves['upASideKick'].frames[0].ignoreFriction = True
+        self.moves['upASideKick'].frames[2].setVelY = -1.0
+        self.moves['upASideKick'].frames[2].setVelX = -1.2
+
+    def createMoveUpADropSlash(self):
+        dam1 = 80
+        stun1 = 140
+        force1 = 20
+        angle1 = 270
+
+        h = [
+                [
+                    [9, -75, 69, -4]
+                ]
+            ]
+
+        h[0] = [i + [dam1, stun1, force1, angle1, [], 4] for i in h[0]]
+
+
+
+        f = [ self.frameData(59, 2 ),
+              self.frameData(59, 10 ),
+              self.frameData(132, 2, [], h[0] ),
+              self.frameData(132, 20 ) ]
+        t = [ ['land', move.Transition(None, None, None, None, 'dropSlashLag')] ]
+
+        
+        self.moves['upADropSlash'] = move.Move(f, t)
+        self.moves['upADropSlash'].canDI = False
+
+        self.moves['upADropSlash'].frames[0].setVelY = -8.0
+        self.moves['upADropSlash'].frames[0].setVelX = 8.0
+        self.moves['upADropSlash'].frames[2].setVelY = 20.0
+        self.moves['upADropSlash'].frames[0].setAccelY = self.airAccel * 0.6
+        self.moves['upADropSlash'].frames[1].setAccelY = self.airAccel * 0.6
+        self.moves['upADropSlash'].frames[2].setAccelY = self.airAccel * 1.5
+        self.moves['upADropSlash'].frames[3].setAccelY = self.airAccel * 1.5
+
+        self.createLagDropSlash()
+
+    def createLagDropSlash(self):
+        f = [ self.frameData(133, 10 ) ]
+
+        self.moves['dropSlashLag'] = move.Move(f, [])
+        self.moves['dropSlashLag'].canDI = False
+
+    def createMoveDownB(self):
+        f = [ self.frameData(11, 7),
+              self.frameData(11, 2),
+              self.frameData(12, 5),
+              self.frameData(13, 20)]
+        t = [ ['land', move.Transition(None, None, None, None, 'downBLag')] ]
+        self.moves['downB'].append(f, t)
+        self.moves['downB'].canDI = False
+        self.moves['downB'].liftOff = True
+        self.moves['downB'].frames[0].setVelX = -24
+        self.moves['downB'].frames[0].setVelY = -9.5
+        self.moves['downB'].frames[0].ignoreSpeedCap = True
+        self.moves['downB'].frames[0].ignoreFriction = True
+        self.moves['downB'].frames[1].ignoreFriction = True
+        self.moves['downB'].frames[2].setFrictionX = self.airFriction * 0.35
+        
+        self.createLagDownB()
+
+    def createLagDownB(self):
+        r = [
+                [
+                    (-9, -27, 6, -15),
+                    (-14, -16, 8, -10),
+                    (-7, -10, 9, 5)
+                ]
+            ]
+        
+        f = [ self.frameData(86, 8, r[0]) ]
+        self.moves['downBLag'] = move.Move(f, [])
+        self.moves['downBLag'].canDI = False
+
+    def createMoveUpB(self):
+        r = [
+                [
                     (4, -52, 17, 2)
                 ],
                 [
@@ -896,42 +1213,11 @@ class Hare(battlechar.BattleChar):
 
         t = [['doDuck', move.Transition(2, HARE_ENERGY_USAGE, 5, 6, 'idleLike')]]
 
-        self.moves['upA'].append(f, t)
-        self.moves['upA'].canDI = False
-        self.moves['upA'].frames[0].setVelX = 10
+        self.moves['upB'].append(f, t)
+        self.moves['upB'].canDI = False
+        self.moves['upB'].frames[0].setVelX = 10
 
-    def createMoveDownB(self):
-        f = [ self.frameData(11, 7),
-              self.frameData(11, 2),
-              self.frameData(12, 5),
-              self.frameData(13, 20)]
-        t = [ ['land', move.Transition(None, None, None, None, 'downBLag')] ]
-        self.moves['downB'].append(f, t)
-        self.moves['downB'].canDI = False
-        self.moves['downB'].liftOff = True
-        self.moves['downB'].frames[0].setVelX = -24
-        self.moves['downB'].frames[0].setVelY = -9.5
-        self.moves['downB'].frames[0].ignoreSpeedCap = True
-        self.moves['downB'].frames[0].ignoreFriction = True
-        self.moves['downB'].frames[1].ignoreFriction = True
-        self.moves['downB'].frames[2].setFrictionX = self.airFriction * 0.35
-        
-        self.createLagDownB()
-
-    def createLagDownB(self):
-        r = [
-                [
-                    (-9, -27, 6, -15),
-                    (-14, -16, 8, -10),
-                    (-7, -10, 9, 5)
-                ]
-            ]
-        
-        f = [ self.frameData(86, 8, r[0]) ]
-        self.moves['downBLag'] = move.Move(f, [])
-        self.moves['downBLag'].canDI = False
-
-    def createMoveUpB(self):
+    def createOldSpinAttack(self):
         r = [
                 [
                     (4, -48, 17, -32),
