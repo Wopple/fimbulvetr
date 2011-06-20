@@ -364,7 +364,6 @@ class Hare(battlechar.BattleChar):
         self.moves['airLike'].frames[1].ignoreSpeedCap = True
 
     def createMoveLanding(self):
-        f = [ self.frameData(9, 3) ]
         r = [
                 [
                     (4, -48, 17, -32),
@@ -381,7 +380,6 @@ class Hare(battlechar.BattleChar):
         self.moves['landing'].append(f, [])
 
     def createMoveJumping(self):
-        f = [ self.frameData(9, 2) ]
         r = [
                 [
                     (4, -48, 17, -32),
@@ -697,20 +695,33 @@ class Hare(battlechar.BattleChar):
 
 
     def createMoveDashAttackB(self):
+        r = [
+                [
+                    (-21, -27, 18, -11),
+                    (-18, -32, 16, -27),
+                    (-14, -36, 14, -32),
+                    (-10, -38, 8, -36),
+                    (-19, -11, 16, -8),
+                    (-17, -8, 13, -5),
+                    (-14, -5, 11, -3),
+                    (-11, -3, 8, 0)
+                ]
+            ]
+        
         f = [ self.frameData(19, 2),
               self.frameData(23, 2),
-              self.frameData(20, 1),
-              self.frameData(33, 2),
-              self.frameData(21, 1),
-              self.frameData(24, 2),
-              self.frameData(22, 1),
-              self.frameData(34, 2),
-              self.frameData(19, 1),
-              self.frameData(23, 2),
-              self.frameData(19, 1),
-              self.frameData(23, 2),
-              self.frameData(20, 1),
-              self.frameData(33, 2)]
+              self.frameData(20, 1, r[0]),
+              self.frameData(33, 2, r[0]),
+              self.frameData(21, 1, r[0]),
+              self.frameData(24, 2, r[0]),
+              self.frameData(22, 1, r[0]),
+              self.frameData(34, 2, r[0]),
+              self.frameData(19, 1, r[0]),
+              self.frameData(23, 2, r[0]),
+              self.frameData(19, 1, r[0]),
+              self.frameData(23, 2, r[0]),
+              self.frameData(20, 1, r[0]),
+              self.frameData(33, 2, r[0])]
         t = [ ['exitFrame', move.Transition(-1, None, None, None, 'rollingSlash')],
               ['releaseB', move.Transition(-1, None, 5, None, 'rollingSlash')],
               ['doDuck', move.Transition(2, HARE_ENERGY_USAGE, 4, None, 'idleLike')]]
@@ -1106,10 +1117,47 @@ class Hare(battlechar.BattleChar):
         self.moves['dropSlashLag'].canDI = False
 
     def createMoveDownB(self):
+        r = [
+                [
+                    (-20, -39, -5, -34),
+                    (-18, -34, -5, -30),
+                    (-16, -30, -4, -27),
+                    (-13, -27, 5, -22),
+                    (-6, -30, 1, -27),
+                    (-23, -24, -6, -21),
+                    (-11, -22, 8, -18),
+                    (-6, -18, 11, -15),
+                    (-2, -15, 13, -10),
+                    (2, -10, 9, -6),
+                    (11, -10, 18, -7),
+                    (13, -7, 20, -3),
+                    (16, -3, 22, 1)
+                ],
+                [
+                    (-17, -41, -4, -30),
+                    (-20, -42, -6, -39),
+                    (-11, -30, 3, -21),
+                    (-9, -22, 5, -17),
+                    (-7, -17, 8, -14),
+                    (-3, -14, 4, -5),
+                    (2, -14, 10, -8),
+                    (5, -8, 12, -1),
+                    (-25, -28, -9, -23)
+                ],
+                [
+                    (-15, -42, -2, -31),
+                    (-16, -44, -3, -42),
+                    (-12, -31, 1, -14),
+                    (-25, -29, -10, -24),
+                    (-8, -14, -3, -4),
+                    (-2, -15, 4, -2)
+                ]
+            ]
+        
         f = [ self.frameData(11, 7),
-              self.frameData(11, 2),
-              self.frameData(12, 5),
-              self.frameData(13, 20)]
+              self.frameData(11, 2, r[0]),
+              self.frameData(12, 5, r[1]),
+              self.frameData(13, 20, r[2])]
         t = [ ['land', move.Transition(None, None, None, None, 'downBLag')] ]
         self.moves['downB'].append(f, t)
         self.moves['downB'].canDI = False
@@ -1332,71 +1380,118 @@ class Hare(battlechar.BattleChar):
     def createMoveNeutralAirA(self):
         r = [
                 [
-                    (-7, -58, 11, -38),
-                    (-21, -53, -1, -41),
-                    (-4, -40, 19, -32),
-                    (-9, -33, 10, -20),
-                    (-3, -22, 11, -8),
-                    (-9, -9, 6, 0),
-                    (-5, -1, 14, 7)
+                    (-16, -52, -6, -46),
+                    (-9, -49, -1, -42),
+                    (-5, -59, 6, -54),
+                    (-5, -54, 9, -42),
+                    (-6, -43, 8, -28),
+                    (8, -40, 17, -35),
+                    (-5, -29, 10, -19),
+                    (-3, -20, 3, 3),
+                    (-6, -8, -3, -1),
+                    (5, -20, 9, 0),
+                    (8, -19, 12, -12),
+                    (2, -11, 6, 1),
+                    (4, -3, 13, 1)
+
                 ],
                 [
-                    (-6, -64, 13, -47),
-                    (-4, -48, 12, -14),
-                    (-11, -40, -1, -26),
-                    (-10, -16, 11, 1)
+                    (-3, -58, 7, -54),
+                    (-3, -54, 10, -43),
+                    (-3, -43, 7, -26),
+                    (-5, -30, 8, -18),
+                    (-4, -18, 1, 4),
+                    (-9, -9, -4, 1),
+                    (0, -21, 6, 3),
+                    (4, -19, 9, 2)
                 ],
                 [
-                    (-4, -62, 15, -46),
-                    (-18, -49, 23, -34),
-                    (-11, -38, 10, -13),
-                    (-14, -16, 6, -1)
+                    (0, -58, 11, -53),
+                    (-1, -53, 12, -42),
+                    (-2, -43, 10, -33),
+                    (-5, -35, 8, -27),
+                    (-6, -27, 8, -16),
+                    (-5, -16, 2, 2),
+                    (1, -16, 5, 3),
+                    (4, -17, 7, -11),
+                    (-9, -13, -3, 3),
+                    (-13, -10, -8, -2),
+                    (-15, -44, 0, -38)
+
                 ],
                 [
-                    (-1, -62, 16, -45),
-                    (-17, -50, 14, -41),
-                    (-10, -42, 14, -28),
-                    (12, -37, 21, -29),
-                    (16, -32, 22, -27),
-                    (-8, -29, 7, -13),
-                    (-18, -18, 4, -1)
+                    (5, -58, 14, -51),
+                    (3, -53, 16, -42),
+                    (13, -56, 15, -52),
+                    (-13, -46, 6, -40),
+                    (-4, -40, 6, -26),
+                    (5, -43, 11, -32),
+                    (9, -34, 16, -29),
+                    (13, -30, 21, -25),
+                    (17, -26, 21, -23),
+                    (10, -38, 14, -33),
+                    (-7, -28, 5, -13),
+                    (-14, -14, 3, -10),
+                    (-17, -10, -2, -8),
+                    (-17, -8, -8, -5),
+                    (-16, -5, -4, -3),
+                    (-15, -3, 0, 1)
+
                 ],
                 [
-                    (-2, -57, 16, -39),
-                    (-18, -44, 14, -34),
-                    (-11, -35, 21, -21),
-                    (-7, -23, 8, -8),
-                    (-16, -12, 5, 5)
+                    (1, -58, 12, -53),
+                    (0, -53, 13, -43),
+                    (-5, -45, 7, -27),
+                    (-16, -44, -4, -40),
+                    (5, -42, 12, -35),
+                    (5, -36, 14, -31),
+                    (11, -32, 17, -29),
+                    (14, -28, 21, -24),
+                    (14, -30, 19, -28),
+                    (-6, -29, 7, -14),
+                    (-8, -14, 5, -9),
+                    (-14, -11, -2, -5),
+                    (-13, -5, -1, -2),
+                    (-10, -2, 3, 2)
                 ],
             ]
+        
         dam1 = 80
         stun1 = 20
         force1 = 14
         angle1 = 20
         h = [
                 [
-                    (3, -78, 32, -44, dam1, stun1, force1, angle1, [], 0),
-                    (-30, -66, 5, -48, dam1, stun1, force1, angle1, [], 0),
-                    (-6, -50, 8, -35, dam1, stun1, force1, angle1, [], 0)
+                    [5, -70, 43, -58],
+                    [24, -58, 47, -50],
+                    [-36, -59, -12, -46],
+                    [-20, -65, 11, -55],
+                    [-5, -58, 24, -28],
+                    [-12, -55, -1, -41]
+
                 ],
                 [
-                    (16, -72, 48, -22, dam1, stun1, force1, angle1, [], 0),
-                    (47, -65, 56, -31, dam1, stun1, force1, angle1, [], 0),
-                    (5, -48, 23, -34, dam1, stun1, force1, angle1, [], 0),
-                    (5, -73, 22, -48, dam1, stun1, force1, angle1, [], 0),
-                    (21, -22, 45, -10, dam1, stun1, force1, angle1, [], 0)
+                    [14, -70, 54, -51],
+                    [30, -51, 70, -23],
+                    [-5, -55, 30, -18],
+                    [-12, -55, -1, -41]
                 ],
                 [
-                    (7, -46, 51, -29, dam1, stun1, force1, angle1, [], 0),
-                    (10, -29, 44, -3, dam1, stun1, force1, angle1, [], 0),
-                    (41, -30, 48, -18, dam1, stun1, force1, angle1, [], 0)
+                    [21, -23, 55, -8],
+                    [28, -41, 58, -23],
+                    [15, -8, 52, 8]
+
                 ]
             ]
+
+        for j in range(3):
+            h[j] = [i + [dam1, stun1, force1, angle1, [], 2] for i in h[j]]
+        
         f = [ self.frameData(14, 4, r[0]),
-              self.frameData(15, 1, r[0], h[0]),
-              self.frameData(16, 1, r[0], h[1]),
-              self.frameData(17, 2, r[0], h[2]),
-              self.frameData(18, 6, r[0]) ]
+              self.frameData(15, 1, r[1], h[0]),
+              self.frameData(16, 1, r[2], h[1]),
+              self.frameData(17, 2, r[3], h[2]),
+              self.frameData(18, 6, r[4]) ]
         self.moves['neutralAirA'].append(f, [])
         self.moves['neutralAirA'].reversable = True
 
@@ -1696,6 +1791,15 @@ class Hare(battlechar.BattleChar):
                     (-16, -34, -10, -28),
                     (-11, -32, 6, -11),
                     (-6, -11, -1, -8)
+                ],
+                [
+                    (-11, -43, 3, -31),
+                    (-10, -48, 1, -43),
+                    (-16, -34, -10, -28),
+                    (-11, -32, 6, -11),
+                    (-6, -11, -1, -8),
+                    (-3, -17, 5, -10),
+                    (1, -10, 5, 16)
                 ]
             ]
 
@@ -1710,7 +1814,7 @@ class Hare(battlechar.BattleChar):
               self.frameData(82, 1, r[1]),
               self.frameData(83, 1, r[2], h[0]),
               self.frameData(84, 6, r[2], h[0]),
-              self.frameData(84, 8, r[2]) ]
+              self.frameData(84, 8, r[3]) ]
 
         t = [['land', move.Transition(None, None, None, None, 'downAAirLag')],
              ['onHit', move.Transition(None, None, None, None, 'headBounce')]]
@@ -2157,7 +2261,19 @@ class Hare(battlechar.BattleChar):
         self.moves['lagForwardThrow'].canDI = False
 
     def createLagDownBAir(self):
-        f = [ self.frameData(9, 10) ]
+        r = [
+                [
+                    (4, -48, 17, -32),
+                    (-2, -34, 16, -24),
+                    (0, -26, 15, -14),
+                    (12, -27, 21, -20),
+                    (-13, -41, -1, -33),
+                    (-1, -17, 19, -7),
+                    (-10, -8, 0, -1),
+                    (12, -8, 23, 2)
+                ]
+            ]
+        f = [ self.frameData(9, 10, r[0]) ]
         self.moves['downBAirLag'] = move.Move(f, [])
         self.moves['downBAirLag'].canDI = False
 
