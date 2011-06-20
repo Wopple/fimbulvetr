@@ -745,10 +745,10 @@ class Hare(battlechar.BattleChar):
             ]
         h[0] = [i + [40, 60, 30, 45, [], 0] for i in h[0]]
         h[1] = [i + [40, 60, 30, 135, [], 0] for i in h[1]]
-        f = [ self.frameData(25, 2, r[0]),
-              self.frameData(26, 2, r[0], h[0]),
-              self.frameData(27, 3, r[0], h[1]),
-              self.frameData(28, 10, r[0])]
+        f = [ self.frameData(25, 3, r[0]),
+              self.frameData(26, 1, r[0], h[0]),
+              self.frameData(27, 2, r[0], h[1]),
+              self.frameData(28, 12, r[0])]
         self.moves['rollingSlash'] = move.Move(f, [])
         self.moves['rollingSlash'].canDI = False
         self.moves['rollingSlash'].frames[0].setVelX = 0
@@ -1392,11 +1392,11 @@ class Hare(battlechar.BattleChar):
                     (41, -30, 48, -18, dam1, stun1, force1, angle1, [], 0)
                 ]
             ]
-        f = [ self.frameData(14, 3, r[0]),
+        f = [ self.frameData(14, 4, r[0]),
               self.frameData(15, 1, r[0], h[0]),
-              self.frameData(16, 2, r[0], h[1]),
-              self.frameData(17, 4, r[0], h[2]),
-              self.frameData(18, 2, r[0]) ]
+              self.frameData(16, 1, r[0], h[1]),
+              self.frameData(17, 2, r[0], h[2]),
+              self.frameData(18, 6, r[0]) ]
         self.moves['neutralAirA'].append(f, [])
         self.moves['neutralAirA'].reversable = True
 
