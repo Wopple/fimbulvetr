@@ -20,6 +20,9 @@ class Model(mvc.Model):
         super(Model, self).__init__()
         self.background = bg
         self.rect = pygame.Rect((0, 0), areaSize)
+
+        self.testBool = False
+        self.testBool2 = False
         
         self.players = inChars
         for p in self.players:
@@ -66,6 +69,19 @@ class Model(mvc.Model):
         return (highest == 1)
 
     def update(self):
+
+        if self.testBool:
+            self.keys[1][1] = True
+            self.keysNow[1][1] = 3
+        else:
+            self.keys[1][1] = False
+            self.keysNow[1][1] = 0
+        if self.testBool2:
+            self.keys[1][7] = True
+            self.keysNow[1][7] = 3
+        else:
+            self.keys[1][7] = False
+            self.keysNow[1][7] = 0
 
         fbf = self.checkFrameByFrame()
 
@@ -369,9 +385,9 @@ class Model(mvc.Model):
         elif k == 2:
             self.frameByFrame[self.cameraPlayer] = 2
         elif k == 3:
-            p.hp.add(-100)
+            self.testBool = not self.testBool
         elif k == 4:
-            p.hp.add(100)
+            self.testBool2 = not self.testBool2
 
 
     def checkProjForEdge(self, p):
