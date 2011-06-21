@@ -388,6 +388,8 @@ class Model(mvc.Model):
             self.testBool = not self.testBool
         elif k == 4:
             self.testBool2 = not self.testBool2
+        elif k == 5:
+            self.players[0].getHit(10, 155, [-10, -8])
 
 
     def checkProjForEdge(self, p):
