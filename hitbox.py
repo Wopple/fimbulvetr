@@ -27,6 +27,12 @@ class Hitbox(object):
                 return True
         return False
 
+    def untechable(self):
+        for p in self.properties:
+            if p[0] == 'untechable':
+                return True
+        return False
+
     def getGrabData(self):
         for p in self.properties:
             if p[0] == 'grab':

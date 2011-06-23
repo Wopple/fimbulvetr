@@ -69,7 +69,6 @@ class Model(mvc.Model):
         return (highest == 1)
 
     def update(self):
-
         if self.testBool:
             self.keys[1][1] = True
             self.keysNow[1][1] = 3
@@ -164,6 +163,10 @@ class Model(mvc.Model):
         if t:
             self.keysNow[p-1][k] = KEY_BUFFER
 
+        if k == 7:
+            if self.players[p-1].techBuffer == TECH_BUFFER_MIN:
+                self.players[p-1].techBuffer = TECH_BUFFER_MAX
+
     def resetKeysNow(self, keysNow):
         for k in range(len(keysNow)):
             if keysNow[k] > 0:
@@ -210,6 +213,8 @@ class Model(mvc.Model):
                 p.unholdJump()
         if p.onHitTrigger:
             p.actTransition('onHit')
+        if p.techBuffer >= 0 and p.canTech:
+            p.actTransition('tech')
         if p.canAct():
             if d:
                 p.actTransition('doDuck')
@@ -225,6 +230,8 @@ class Model(mvc.Model):
                         p.actTransition('forward')
                     else:
                         p.actTransition('backward')
+            if u:
+                p.actTransition('up')
             if not d:
                 p.actTransition('stopDuck')
             if self.wasKeyPressed(4, keysNow):
@@ -388,8 +395,15 @@ class Model(mvc.Model):
             self.testBool = not self.testBool
         elif k == 4:
             self.testBool2 = not self.testBool2
-        elif k == 5:
-            self.players[0].getHit(10, 155, [-10, -8])
+        elif k == 5 or k == 6:
+            if self.players[0].facingRight:
+                mult = 1
+            else:
+                mult = -1
+            self.players[0].getHit(10, 155, [-10 * mult, -8])
+
+            if k == 6:
+                self.players[0].canTech = False
 
 
     def checkProjForEdge(self, p):
@@ -614,7 +628,6 @@ class Model(mvc.Model):
         if not memory[i] is None:
             mem = memory[i][0]
             hitter = memory[i][1]
-            print "Player " + str(i+1) + " got hit!"
 
             p.facingRight = not hitter.facingRight
 
@@ -651,8 +664,10 @@ class Model(mvc.Model):
             p.freezeFrame = mem.freezeFrame
             hitter.freezeFrame = mem.freezeFrame
 
+            p.canTech = not mem.untechable()
+            p.techBuffer = TECH_BUFFER_MIN
+
             if blocked:
-                print "Yo!"
                 p.getBlockstun(damage, stun, (xVel, yVel), prop)
 
             if mem.reverseUserFacing():

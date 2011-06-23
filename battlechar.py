@@ -25,6 +25,8 @@ class BattleChar(object):
         self.freezeFrame = 0
         self.blockstun = 0
         self.onHitTrigger = False
+        self.techBuffer = TECH_BUFFER_MIN
+        self.canTech = True
 
 
         self.superMoves = []
@@ -56,6 +58,12 @@ class BattleChar(object):
             self.frameSpecial()
 
         frame = self.getCurrentFrame()
+
+        if not (self.currMove.isStun or (self.currMove == self.moves['groundHit'])):
+            self.canTech = True
+
+        if self.techBuffer > TECH_BUFFER_MIN:
+            self.techBuffer -= 1
 
         if self.freezeFrame == 0:
             if not frame.setSpeedCapX is None:
@@ -287,8 +295,18 @@ class BattleChar(object):
 
         self.moves['stun1'] = move.baseStun()
         self.moves['stun2'] = move.baseStun()
-        self.moves['stun3'] = move.baseStun()
-        self.moves['stun4'] = move.baseStun()
+        self.moves['stun3'] = move.baseStunNeedTech()
+        self.moves['stun4'] = move.baseStunNeedTech()
+
+        self.moves['groundHit'] = move.baseGroundHit()
+        self.moves['standUp'] = move.baseStand()
+        self.moves['standForward'] = move.baseStand()
+        self.moves['standBackward'] = move.baseStand()
+
+        self.moves['teching'] = move.baseTeching()
+        self.moves['techUp'] = move.baseTechRoll()
+        self.moves['techForward'] = move.baseTechRoll()
+        self.moves['techBackward'] = move.baseTechRoll()
 
     def setCurrMove(self, index, frame=0):
         self.currMove = self.moves[index]
@@ -345,15 +363,15 @@ class BattleChar(object):
 
         if not t.rangeMin is None:
             rMin = t.rangeMin
-            if rMin == -1:
-                rMin = len(self.currMove.frames)-1
+            if rMin < 0:
+                rMin = len(self.currMove.frames)+rMin
             if self.currFrame < rMin:
                 return False
 
         if not t.rangeMax is None:
             rMax = t.rangeMax
-            if rMax == -1:
-                rMax = len(self.currMove.frames)-1
+            if rMax < 0:
+                rMax = len(self.currMove.frames)+rMax
             if self.currFrame > rMax:
                 return False
 
@@ -401,7 +419,7 @@ class BattleChar(object):
     def transToGround(self):
         if self.currMove.isStun:
             if self.currMove.needTech:
-                pass
+                self.setCurrMove('groundHit')
             return
         c = self.actTransition('land')
         if not c:

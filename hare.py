@@ -98,6 +98,16 @@ class Hare(battlechar.BattleChar):
         self.createMoveStun3()
         self.createMoveStun4()
 
+        self.createMoveGroundHit()
+        self.createMoveStandUp()
+        self.createMoveStandForward()
+        self.createMoveStandBackward()
+
+        self.createMoveTeching()
+        self.createMoveTechUp()
+        self.createMoveTechForward()
+        self.createMoveTechBackward()
+
         self.createMoveBlock()
         self.createMoveLowBlock()
         self.createMoveAirBlock()
@@ -671,7 +681,7 @@ class Hare(battlechar.BattleChar):
                 ],
                 [
                     (39, -56, 92, -15, dam1, stun1, force1, angle1, [], freeze1),
-                    (49, -15, 84, -9, dam1, stun1, force1, angle1, [], freeze1)
+                    (49, -15, 84, 2, dam1, stun1, force1, angle1, [], freeze1)
                 ]
             ]
         f = [ self.frameData(59, 3, r[0]),
@@ -745,6 +755,9 @@ class Hare(battlechar.BattleChar):
             ]
         h = [
                 [
+                    [14, -17, 71, -1]
+                ],
+                [
                     [12, -31, 64, -9],
                     [38, -45, 68, -3]
                 ],
@@ -754,12 +767,13 @@ class Hare(battlechar.BattleChar):
                     [-18, -50, 0, -29]
                 ]
             ]
-        h[0] = [i + [40, 60, 30, 45, [], 0] for i in h[0]]
-        h[1] = [i + [40, 60, 30, 135, [], 0] for i in h[1]]
+        for j in range(3):
+            h[j] = [i + [40, 60, 30, 45, [], 0] for i in h[j]]
         f = [ self.frameData(25, 3, r[0]),
               self.frameData(26, 1, r[0], h[0]),
-              self.frameData(27, 2, r[0], h[1]),
-              self.frameData(28, 12, r[0])]
+              self.frameData(26, 1, r[0], h[1]),
+              self.frameData(27, 2, r[0], h[2]),
+              self.frameData(28, 11, r[0])]
         self.moves['rollingSlash'] = move.Move(f, [])
         self.moves['rollingSlash'].canDI = False
         self.moves['rollingSlash'].frames[0].setVelX = 0
@@ -808,9 +822,9 @@ class Hare(battlechar.BattleChar):
             ]
 
         dam1 = 40
-        stun1 = 35
-        force1 = 16
-        angle1 = 320
+        stun1 = 101
+        force1 = 6
+        angle1 = 30
 
         h = [
                 [
@@ -818,15 +832,15 @@ class Hare(battlechar.BattleChar):
                 ]
             ]
 
-        h[0] = [i + [dam1, stun1, force1, angle1, [], 0] for i in h[0]]
+        h[0] = [i + [dam1, stun1, force1, angle1, [('untechable')], 0] for i in h[0]]
 
 
 
 
-        f = [ self.frameData(29, 2, r[0]),
+        f = [ self.frameData(29, 3, r[0]),
               self.frameData(30, 3, r[1], h[0]),
-              self.frameData(31, 6, r[2]),
-              self.frameData(32, 4, r[3]) ]
+              self.frameData(31, 7, r[2]),
+              self.frameData(32, 5, r[3]) ]
         self.moves['downA'].append(f, [])
         self.moves['downA'].canDI = False
 
@@ -895,7 +909,7 @@ class Hare(battlechar.BattleChar):
             ]
 
         dam1 = 25
-        stun1 = 102
+        stun1 = 95
         force1 = 8
         angle1 = 65
         force2 = 16
@@ -1082,7 +1096,7 @@ class Hare(battlechar.BattleChar):
 
         h = [
                 [
-                    [9, -75, 69, -4]
+                    [0, -75, 69, -4]
                 ]
             ]
 
@@ -1674,10 +1688,9 @@ class Hare(battlechar.BattleChar):
 
                 ],
             ]
-        h[0] = [i + [50, 60, 25, 60, [], 0] for i in h[0]]
-        h[1] = [i + [50, 60, 25, 90, [], 0] for i in h[1]]
-        h[2] = [i + [50, 60, 20, 120, [], 0] for i in h[2]]
-        h[3] = [i + [50, 60, 18, 130, [], 0] for i in h[3]]
+        for j in range(4):
+            h[j] = [i + [50, 60, 20, 60, [], 0] for i in h[j]]
+
         f = [ self.frameData(75, 4, r[0]),
               self.frameData(76, 2, r[1], h[0]),
               self.frameData(77, 1, r[2], h[1]),
@@ -2191,7 +2204,7 @@ class Hare(battlechar.BattleChar):
         h = [
                 [
                     (-2, -42, 36, -3, damage1, stun1, knockback1, angle1,
-                     [('reverseFacing', False, True), ('untechable')], 0)
+                     [('reverseFacing', False, True)], 0)
                 ]
             ]
 
@@ -2219,12 +2232,10 @@ class Hare(battlechar.BattleChar):
 
         h = [
                 [
-                    (-1, -44, 36, -19, damage1, stun1, knockback1, angle1,
-                     [('untechable')], 0)
+                    (-1, -44, 36, -19, damage1, stun1, knockback1, angle1, [], 0)
                 ],
                 [
-                    (-12, -47, 59, -23, damage2, stun2, knockback2, angle2,
-                     [('untechable')], 0)
+                    (-12, -47, 59, -23, damage2, stun2, knockback2, angle2, [], 0)
                 ]
             ]
 
@@ -2398,7 +2409,6 @@ class Hare(battlechar.BattleChar):
               self.frameData(74, 12, r[4])]
 
         self.moves['stun3'].append(f, [])
-        self.moves['stun3'].needTech = True
 
         for i in range(len(self.moves['stun3'].frames)):
             self.moves['stun3'].frames[i].ignoreSpeedCap = True
@@ -2479,11 +2489,139 @@ class Hare(battlechar.BattleChar):
               self.frameData(74, 24, r[4])]
 
         self.moves['stun4'].append(f, [])
-        self.moves['stun4'].needTech = True
 
         for i in range(len(self.moves['stun4'].frames)):
             self.moves['stun4'].frames[i].ignoreSpeedCap = True
 
+    def createMoveGroundHit(self):
+        r = [
+                [
+                    (-25, -12, -14, 0),
+                    (-28, -10, -25, 0),
+                    (-15, -10, 15, -1),
+                    (13, -12, 21, -7),
+                    (15, -7, 41, -1)
+                ]
+            ]
+        
+        f = [ self.frameData(134, 2),
+              self.frameData(135, 4),
+              self.frameData(136, 2),
+              self.frameData(137, 1),
+              self.frameData(136, 1),
+              self.frameData(137, 10),
+              self.frameData(137, 2),
+              self.frameData(137, 80, r[0]) ]
+
+        self.moves['groundHit'].append(f, [])
+
+    def createMoveStandUp(self):
+        f = [ self.frameData(138, 4),
+              self.frameData(139, 4),
+              self.frameData(28, 6) ]
+
+        self.moves['standUp'].append(f, [])
+
+    def createMoveStandForward(self):
+        f = [ self.frameData(138, 4),
+              self.frameData(20, 1),
+              self.frameData(33, 2),
+              self.frameData(21, 1),
+              self.frameData(24, 2),
+              self.frameData(22, 1),
+              self.frameData(34, 2),
+              self.frameData(19, 1),
+              self.frameData(28, 3) ]
+
+        self.moves['standForward'].append(f, [])
+
+        self.moves['standForward'].frames[1].setVelX = 22.8
+        self.moves['standForward'].frames[8].setVelX = 0
+
+        for i in range(len(self.moves['standForward'].frames)):
+            self.moves['standForward'].frames[i].setFrictionX = self.groundFriction * 0.42
+            self.moves['standForward'].frames[i].ignoreSpeedCap = True
+
+    def createMoveStandBackward(self):
+        f = [ self.frameData(138, 4),
+              self.frameData(19, 1),
+              self.frameData(34, 2),
+              self.frameData(22, 1),
+              self.frameData(24, 2),
+              self.frameData(21, 1),
+              self.frameData(33, 2),
+              self.frameData(20, 1),
+              self.frameData(28, 3) ]
+
+        self.moves['standBackward'].append(f, [])
+
+        self.moves['standBackward'].frames[1].setVelX = -22.8
+        self.moves['standBackward'].frames[8].setVelX = 0
+
+        for i in range(len(self.moves['standBackward'].frames)):
+            self.moves['standBackward'].frames[i].setFrictionX = self.groundFriction * 0.42
+            self.moves['standBackward'].frames[i].ignoreSpeedCap = True
+              
+
+    def createMoveTeching(self):
+        f = [ self.frameData(140, 4),
+              self.frameData(140, 1)]
+
+        self.moves['teching'].append(f, [])
+
+    def createMoveTechUp(self):
+        f = [ self.frameData(99, 3),
+              self.frameData(94, 2) ]
+
+        self.moves['techUp'].append(f, [])
+
+    def createMoveTechForward(self):
+        f = [ self.frameData(20, 1),
+              self.frameData(33, 2),
+              self.frameData(21, 1),
+              self.frameData(24, 2),
+              self.frameData(22, 1),
+              self.frameData(34, 2),
+              self.frameData(19, 1),
+              self.frameData(23, 2),
+              self.frameData(19, 1),
+              self.frameData(23, 2),
+              self.frameData(28, 6) ]
+
+
+        self.moves['techForward'].append(f, [])
+
+        self.moves['techForward'].frames[1].setVelX = 25
+        self.moves['techForward'].frames[10].setVelX = 0
+
+        for i in range(len(self.moves['techForward'].frames)):
+            self.moves['techForward'].frames[i].setFrictionX = self.groundFriction * 0.75
+            self.moves['techForward'].frames[i].ignoreSpeedCap = True
+
+    def createMoveTechBackward(self):
+
+        f = [ self.frameData(23, 2),
+              self.frameData(19, 1),
+              self.frameData(23, 2),
+              self.frameData(19, 1),
+              self.frameData(34, 2),
+              self.frameData(22, 1),
+              self.frameData(24, 2),
+              self.frameData(21, 1),
+              self.frameData(33, 2),
+              self.frameData(20, 1),
+              self.frameData(28, 6) ]
+
+
+        self.moves['techBackward'].append(f, [])
+
+        self.moves['techBackward'].frames[1].setVelX = -25
+        self.moves['techBackward'].frames[10].setVelX = 0
+
+        for i in range(len(self.moves['techBackward'].frames)):
+            self.moves['techBackward'].frames[i].setFrictionX = self.groundFriction * 0.75
+            self.moves['techBackward'].frames[i].ignoreSpeedCap = True
+        
 
     def createSuperMove1(self):
         n = "Blazing Ambush"

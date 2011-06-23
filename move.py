@@ -19,7 +19,8 @@ class Move(object):
                 'releaseB', 'attackAUp', 'attackBUp', 'attackADown',
                 'attackBDown', 'attackBUpCharge', 'bladelv1', 'bladelv2',
                 'bladelv3', 'onHit', 'attackAAtMax', 'attackBAtMax',
-                'block', 'releaseBlock', 'downBlock', 'forward', 'backward']
+                'block', 'releaseBlock', 'downBlock', 'forward', 'backward',
+                'up', 'tech']
         self.transitions = {}
         for i in temp:
             self.transitions[i] = None
@@ -173,7 +174,8 @@ def baseAir():
           ['attackBUpCharge', Transition(None, None, None, None, 'upAirB')],
           ['attackADown', Transition(None, None, None, None, 'downAirA')],
           ['attackBDown', Transition(None, None, None, None, 'downAirB')],
-          ['block', Transition(None, None, None, None, 'airBlocking')]]
+          ['block', Transition(None, None, None, None, 'airBlocking')],
+          ['downBlock', Transition(None, None, None, None, 'airBlocking')] ]
     m = Move([], t)
     return m
 
@@ -279,6 +281,41 @@ def baseStun():
     m = Move([], [])
     m.canDI = False
     m.isStun = True
+    return m
+
+def baseStunNeedTech():
+    m = baseStun()
+    m.needTech = True
+    return m
+    
+
+def baseGroundHit():
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'standUp')],
+          ['up', Transition(None, None, -2, -1, 'standUp')],
+          ['forward', Transition(None, None, -2, -1, 'standForward')],
+          ['backward', Transition(None, None, -2, -1, 'standBackward')],
+          ['tech', Transition(None, None, 0, 0, 'teching')]]
+    m = Move([], t)
+    m.canDI = False
+    return m
+
+def baseTeching():
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'techUp')],
+          ['forward', Transition(None, None, 1, 1, 'techForward')],
+          ['backward', Transition(None, None, 1, 1, 'techBackward')] ]
+
+    m = Move([], t)
+    m.canDI = False
+    return m
+
+def baseStand():
+    m = Move([], [])
+    m.canDI = False
+    return m
+
+def baseTechRoll():
+    m = Move([], [])
+    m.canDI = False
     return m
 
 def baseBlank():

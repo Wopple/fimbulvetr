@@ -241,6 +241,9 @@ COUNTDOWN_COLOR = (244, 210, 11)
 MAP_COUNTDOWN_LENGTH = 10
 BATTLE_COUNTDOWN_LENGTH = 3
 
+TECH_BUFFER_MIN = -10
+TECH_BUFFER_MAX = 8
+
 
 DIREC_FONTS = "fonts"
 DIREC_GRAPHICS = "graphics"
@@ -425,7 +428,14 @@ temp = [ ["00.png", (24, 62)],
          ["130.png", (24, 62)],
          ["131.png", (24, 62)],
          ["132.png", (14, 67)],
-         ["133.png", (72, 65)]]
+         ["133.png", (72, 65)],
+         ["134.png", (40, 26)],
+         ["135.png", (40, 26)],
+         ["136.png", (40, 26)],
+         ["137.png", (40, 26)],
+         ["138.png", (40, 27)],
+         ["139.png", (40, 27)],
+         ["140.png", (40, 67)]]
 
 HARE_IMAGES = []
 for i in temp:
