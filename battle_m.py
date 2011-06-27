@@ -10,6 +10,7 @@ import incint
 import boundint
 import energybar
 import countdown
+import fx
 
 import hare, fox, cat
 
@@ -54,6 +55,8 @@ class Model(mvc.Model):
         self.catBar = None
         self.createBars()
         self.resetHitMemory()
+
+        self.fx = []
 
         self.countdown = countdown.Countdown(BATTLE_COUNTDOWN_LENGTH)
 
@@ -545,6 +548,7 @@ class Model(mvc.Model):
     def resetHitMemory(self):
         self.hitMemory = [None, None]
         self.blockMemory = [None, None]
+        self.fxMemory = [[], []]
 
     def checkGrabPair(self):
         for i in range(2):
@@ -604,16 +608,27 @@ class Model(mvc.Model):
         offset = self.rect.topleft
         for i, p in enumerate(self.players):
             for j, q in enumerate(self.players):
-                if not q is p:
+                if (not q is p) and (p.attackCanHit):
                     for h in p.getHitboxes():
                         for r in q.getHurtboxes():
-                            if (self.hitMemory[j] is None) and (p.attackCanHit):
-                                hRect = p.getBoxAbsRect(h, offset)
-                                rRect = q.getBoxAbsRect(r, offset)
-                                if hRect.colliderect(rRect):
+                            hRect = p.getBoxRect(h)
+                            rRect = q.getBoxRect(r)
+                            if hRect.colliderect(rRect):
+                                if (self.hitMemory[j] is None):
                                     self.hitMemory[j] = [h, p]
                                     p.attackCanHit = False
                                     p.onHitTrigger = True
+
+                                self.fxMemory[j].append(average_points(
+                                    hRect.center, rRect.center))
+
+                                
+
+    def createFX(self, h, hitter, hittee, pointList):
+        fxPos = average_point_list(pointList)
+
+        self.fx.append(fx.FX(fxPos, hitter.facingRight))
+        
 
     def actOnBlock(self, i, p):
         self.actOnHit(i, p, True)
@@ -675,6 +690,8 @@ class Model(mvc.Model):
 
             if mem.reverseTargetFacing():
                 p.facingRight = (not p.facingRight)
+
+            self.createFX(mem, hitter, p, self.fxMemory[i])
 
     def actOnGrab(self, i, p, mem, hitter, grab):
         hitter.setCurrMove(grab[1])

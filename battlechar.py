@@ -28,7 +28,6 @@ class BattleChar(object):
         self.techBuffer = TECH_BUFFER_MIN
         self.canTech = True
 
-
         self.superMoves = []
         self.currSuperMove = None
         
@@ -174,6 +173,9 @@ class BattleChar(object):
         topleft = add_points(add_points(self.preciseLoc, boxPos), inOffset)
 
         return pygame.Rect(topleft, box.rect.size)
+
+    def getBoxRect(self, box):
+        return self.getBoxAbsRect(box, (0, 0))
 
     def testMove(self, t):
         self.accel[0] = self.airAccel * t

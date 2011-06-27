@@ -20,6 +20,9 @@ class View(mvc.View):
         for p in self.model.projectiles:
             p.draw(self.screen, self.model.rect.topleft)
 
+        for f in self.model.fx:
+            f.draw(self.screen, self.model.rect.topleft)
+
         for b in self.model.bars:
             b.draw(self.screen)
 

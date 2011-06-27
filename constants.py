@@ -28,6 +28,9 @@ BLACK_SCREEN.fill(BLACK, (0, 0, SCREEN_SIZE[0], SCREEN_SIZE[1]))
 RED_DOT = pygame.Surface((1, 1))
 RED_DOT.fill((250, 0, 0))
 
+TEAL_DOT = pygame.Surface((1, 1))
+TEAL_DOT.fill((40, 220, 250))
+
 MAIN_MENU_COLOR_ON = (0, 183, 239)
 MAIN_MENU_COLOR_OFF = (10, 10, 10)
 MAIN_MENU_COLOR_BG = (60, 100, 120)
@@ -50,6 +53,7 @@ INTRO_MAX_FADE = 240
 INTRO_SPEEDS = [4, 30, 5, 50, 5, 15]
 
 SHOW_RED_DOT = True
+SHOW_TEAL_DOTS = False
 SHOW_HURTBOXES = True
 SHOW_HITBOXES = True
 SHOW_BLOCKBOXES = True
@@ -610,6 +614,27 @@ def sub_points(i, j):
     i = (int(i[0]), int(i[1]))
     j = (int(j[0]), int(j[1]))
     return [ (i[0] - j[0]), (i[1] - j[1]) ]
+
+def average_points(i, j):
+    i = (int(i[0]), int(i[1]))
+    j = (int(j[0]), int(j[1]))
+
+    x = (i[0] + j[0]) / 2
+    y = (i[1] + j[1]) / 2
+
+    return [x, y]
+
+def average_point_list(points):
+    x = 0
+    y = 0
+    for p in points:
+        x += p[0]
+        y += p[1]
+    x = int(x / len(points))
+    y = int(y / len(points))
+
+    return [x, y]
+    
 
 def flipRect(i):
     return ( ((i.left * -1) - i.width), i.top )
