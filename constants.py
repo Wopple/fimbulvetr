@@ -52,11 +52,11 @@ MAIN_MENU_TITLE_POS = [ ((SCREEN_SIZE[0] / 6), 10),
 INTRO_MAX_FADE = 240
 INTRO_SPEEDS = [4, 30, 5, 50, 5, 15]
 
-SHOW_RED_DOT = True
+SHOW_RED_DOT = False
 SHOW_TEAL_DOTS = False
-SHOW_HURTBOXES = True
-SHOW_HITBOXES = True
-SHOW_BLOCKBOXES = True
+SHOW_HURTBOXES = False
+SHOW_HITBOXES = False
+SHOW_BLOCKBOXES = False
 SHOW_BATTLE_TRIGGER_AREA = False
 
 MAP_INTERFACE_ALPHA_MIN = 50
@@ -260,6 +260,7 @@ DIREC_FOX_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "fox")
 DIREC_CAT_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "cat")
 DIREC_INTERFACE_GRAPHICS = os.path.join(DIREC_GRAPHICS, "interface")
 DIREC_PORTRAITS = os.path.join(DIREC_GRAPHICS, "portraits")
+DIREC_FX_GRAPHICS = os.path.join(DIREC_GRAPHICS, "fx")
 
 CHARACTER_FILE_NAME = "char"
 CHARACTER_FILE_EXT = "dat"
@@ -550,6 +551,19 @@ CAT_TOKENS = []
 for i in temp:
     CAT_TOKENS.append([pygame.image.load(os.path.join(DIREC_CAT_GRAPHICS, i[0])).convert_alpha(), i[1]])
     
+
+temp = [ ['00.png', (25, 22)],
+         ['01.png', (25, 22)],
+         ['02.png', (25, 22)],
+         ['03.png', (25, 22)],
+         ['04.png', (-36, 21)],
+         ['05.png', (-36, 21)],
+         ['06.png', (-36, 21)],
+         ['07.png', (-36, 21)]]
+FX_IMAGES = []
+for i in temp:
+    FX_IMAGES.append([pygame.image.load(os.path.join(DIREC_FX_GRAPHICS, i[0])).convert_alpha(), i[1]])
+
 
 temp = ['pauseicon.png',
         'playicon.png',

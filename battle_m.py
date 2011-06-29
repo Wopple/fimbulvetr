@@ -149,6 +149,14 @@ class Model(mvc.Model):
 
             self.centerCamera(self.players[self.cameraPlayer])
 
+            for f in self.fx:
+                f.update()
+            newList = []
+            for i in range(len(self.fx)):
+                if not self.fx[i].removeFlag:
+                    newList.append(self.fx[i])
+            self.fx = newList
+
         for b in self.bars:
             if not self.catBar is None:
                 self.updateCatBarColors()
@@ -591,18 +599,24 @@ class Model(mvc.Model):
         offset = self.rect.topleft
         for i, p in enumerate(self.players):
             for j, q in enumerate(self.players):
-                if not q is p:
+                if (not q is p) and (p.attackCanHit):
                     for h in p.getHitboxes():
                         if h.ignoreBlock():
                             continue
                         for r in q.getBlockboxes():
-                            if (self.blockMemory[j] is None) and (p.attackCanHit):
-                                hRect = p.getBoxAbsRect(h, offset)
-                                rRect = q.getBoxAbsRect(r, offset)
-                                if hRect.colliderect(rRect):
+                            hRect = p.getBoxRect(h)
+                            rRect = q.getBoxRect(r)
+                            
+                            if hRect.colliderect(rRect):
+                                if (self.blockMemory[j] is None):
                                     self.blockMemory[j] = [h, p]
                                     p.attackCanHit = False
                                     p.onHitTrigger = True
+
+                            self.fxMemory[j].append(average_points(
+                                    hRect.center, rRect.center))
+                                
+                                
 
     def checkForHits(self):
         offset = self.rect.topleft
@@ -624,10 +638,11 @@ class Model(mvc.Model):
 
                                 
 
-    def createFX(self, h, hitter, hittee, pointList):
+    def createFX(self, h, hitter, hittee, pointList, blocked):
         fxPos = average_point_list(pointList)
 
-        self.fx.append(fx.FX(fxPos, hitter.facingRight))
+        self.fx.append(fx.FX(fxPos, hitter.facingRight, 'pow'))
+        self.fx.append(fx.FX(fxPos, hitter.facingRight, 'side'))
         
 
     def actOnBlock(self, i, p):
@@ -691,7 +706,7 @@ class Model(mvc.Model):
             if mem.reverseTargetFacing():
                 p.facingRight = (not p.facingRight)
 
-            self.createFX(mem, hitter, p, self.fxMemory[i])
+            self.createFX(mem, hitter, p, self.fxMemory[i], blocked)
 
     def actOnGrab(self, i, p, mem, hitter, grab):
         hitter.setCurrMove(grab[1])
@@ -710,12 +725,12 @@ def testData():
     
     size = (1600, 800)
     bg = pygame.Surface(size)
-    bg.fill((220, 220, 220))
+    bg.fill((190, 190, 190))
     barSpace = 200
     x = barSpace
     while x < size[0]:
         bg3 = pygame.Surface((2, size[1]))
-        bg3.fill((180, 180, 180))
+        bg3.fill((160, 160, 160))
         bg.blit(bg3, (x, 0))
         x += barSpace
     bg2 = pygame.Surface((size[0], BATTLE_AREA_FLOOR_HEIGHT))
