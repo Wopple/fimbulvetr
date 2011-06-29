@@ -613,12 +613,19 @@ class Model(mvc.Model):
                                     p.attackCanHit = False
                                     p.onHitTrigger = True
 
-                            self.fxMemory[j].append(average_points(
-                                    hRect.center, rRect.center))
+                            if q.currMove == q.moves['blocking']:
+                                ind = 0
+                            else:
+                                ind = 1
+
+                            self.fxMemory[j].append(add_points(
+                                q.preciseLoc, q.getBlockFXPoint(ind)))
                                 
                                 
 
     def checkForHits(self):
+        if self.blockMemory is None:
+            self.fxMemory = [[], []]
         offset = self.rect.topleft
         for i, p in enumerate(self.players):
             for j, q in enumerate(self.players):
@@ -641,8 +648,14 @@ class Model(mvc.Model):
     def createFX(self, h, hitter, hittee, pointList, blocked):
         fxPos = average_point_list(pointList)
 
-        self.fx.append(fx.FX(fxPos, hitter.facingRight, 'pow'))
-        self.fx.append(fx.FX(fxPos, hitter.facingRight, 'side'))
+        if blocked:
+            self.fx.append(fx.FX(fxPos, hitter.facingRight, 'block'))
+        elif hitter.currMove.isGrab():
+            self.fx.append(fx.FX(fxPos, hitter.facingRight, 'grab'))
+        else:
+            if not h.noStandardFX():
+                self.fx.append(fx.FX(fxPos, hitter.facingRight, 'pow'))
+                self.fx.append(fx.FX(fxPos, hitter.facingRight, 'side'))
         
 
     def actOnBlock(self, i, p):
@@ -715,6 +728,8 @@ class Model(mvc.Model):
         offset = self.getGrabOffset(hitter, p)
                 
         p.preciseLoc = add_points(hitter.preciseLoc, offset)
+
+        self.createFX(mem, hitter, p, self.fxMemory[i], False)
 
     def netMessageSize(self):
         return NET_MESSAGE_SIZE

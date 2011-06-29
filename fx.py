@@ -69,6 +69,14 @@ class FX(object):
                   [4, 1],
                   [5, 1],
                   [6 , 1] ]
+        elif t == 'block':
+            f = [ [8, 3],
+                  [9, 1],
+                  [10, 1],
+                  [11, 1] ]
+        elif t == 'grab':
+            f = [ [12, 2],
+                  [13, 2]]
 
         for i in f:
             self.frames.append(Frame(FX_IMAGES[i[0]][0],

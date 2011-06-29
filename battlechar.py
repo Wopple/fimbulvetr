@@ -466,3 +466,9 @@ class BattleChar(object):
 
     def getCatEnergyLevel(self):
         return 0
+
+    def getBlockFXPoint(self, i):
+        p = [self.blockFXPoints[i][0], self.blockFXPoints[i][1]]
+        if not self.facingRight:
+            p[0] *= -1
+        return add_points(self.preciseLoc, p)

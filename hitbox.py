@@ -50,3 +50,10 @@ class Hitbox(object):
             if p[0] == 'reverseFacing':
                 return p[2]
         return False
+
+    def noStandardFX(self):
+        for p in self.properties:
+            if p[0] == 'fx':
+                if p[1] is None:
+                    return True
+        return False

@@ -559,7 +559,13 @@ temp = [ ['00.png', (25, 22)],
          ['04.png', (-36, 21)],
          ['05.png', (-36, 21)],
          ['06.png', (-36, 21)],
-         ['07.png', (-36, 21)]]
+         ['07.png', (-36, 21)],
+         ['08.png', (22, 22)],
+         ['09.png', (22, 22)],
+         ['10.png', (22, 22)],
+         ['11.png', (22, 22)],
+         ['12.png', (44, 31)],
+         ['13.png', (44, 31)]]
 FX_IMAGES = []
 for i in temp:
     FX_IMAGES.append([pygame.image.load(os.path.join(DIREC_FX_GRAPHICS, i[0])).convert_alpha(), i[1]])

@@ -26,6 +26,7 @@ class Hare(battlechar.BattleChar):
         self.vertAccel = 1.2
         self.vertVelMax = 13.0
         self.jumpVel = -24.0
+        self.blockFXPoints = [ (9, -35), (33, -32) ]
         self.hareEnergy = boundint.BoundInt(0, HARE_ENERGY_MAX, 0)
         self.prevEnergy = self.hareEnergy.value
         self.energyDelayTick = HARE_ENERGY_DELAY
@@ -2204,7 +2205,7 @@ class Hare(battlechar.BattleChar):
         h = [
                 [
                     (-2, -42, 36, -3, damage1, stun1, knockback1, angle1,
-                     [('reverseFacing', False, True)], 0)
+                     [('reverseFacing', False, True), ('fx', None)], 0)
                 ]
             ]
 
@@ -2232,10 +2233,12 @@ class Hare(battlechar.BattleChar):
 
         h = [
                 [
-                    (-1, -44, 36, -19, damage1, stun1, knockback1, angle1, [], 0)
+                    (-1, -44, 36, -19, damage1, stun1, knockback1, angle1,
+                     [('fx', None)], 0)
                 ],
                 [
-                    (-12, -47, 59, -23, damage2, stun2, knockback2, angle2, [], 0)
+                    (-12, -47, 59, -23, damage2, stun2, knockback2, angle2,
+                     [], 0)
                 ]
             ]
 
