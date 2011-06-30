@@ -77,6 +77,18 @@ class FX(object):
         elif t == 'grab':
             f = [ [12, 2],
                   [13, 2]]
+        elif t == 'dust':
+            f = [ [14, 3],
+                  [15, 2],
+                  [16, 2],
+                  [17, 2],
+                  [18, 2] ]
+        elif t == 'shockwave':
+            f = [ [19, 2],
+                  [20, 1],
+                  [21, 1],
+                  [22, 1],
+                  [23, 1] ]
 
         for i in f:
             self.frames.append(Frame(FX_IMAGES[i[0]][0],

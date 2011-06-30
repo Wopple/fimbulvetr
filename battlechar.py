@@ -38,6 +38,8 @@ class BattleChar(object):
         self.initMoves()
         self.setCurrMove('idle')
 
+        self.createDust = None
+
     def beginBattle(self):
         self.retreat.change(0)
         self.freezeFrame = 0
@@ -85,9 +87,6 @@ class BattleChar(object):
             self.freezeFrame -= 1
         elif self.blockstun > 0:
             self.blockstun -= 1
-
-        if self.blockstun > 0:
-            print self.blockstun
 
     #Updates the character for non-battle viewing, such as
     #in the character editor.
@@ -388,6 +387,7 @@ class BattleChar(object):
     
     def actTransition(self, key, var1=None, var2=None):
         t = self.currMove.transitions[key]
+        
         if self.actLeft and self.checkTransition(key, var1, var2):
             
             if t.var1 == 2: #Energy cost to perform
@@ -422,6 +422,7 @@ class BattleChar(object):
         if self.currMove.isStun:
             if self.currMove.needTech:
                 self.setCurrMove('groundHit')
+                self.createDust = 0
             return
         c = self.actTransition('land')
         if not c:

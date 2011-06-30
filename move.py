@@ -84,6 +84,7 @@ class Frame(object):
         self.buildHurtboxes(hurtboxData)
         self.buildHitboxes(hitboxData)
         self.buildBlockboxes(blockboxData)
+        self.fx = []
 
     def buildBlockboxes(self, data):
         self.blockboxes = []

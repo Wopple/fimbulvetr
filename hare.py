@@ -26,7 +26,7 @@ class Hare(battlechar.BattleChar):
         self.vertAccel = 1.2
         self.vertVelMax = 13.0
         self.jumpVel = -24.0
-        self.blockFXPoints = [ (9, -35), (33, -32) ]
+        self.blockFXPoints = [ (9, -35), (33, -32), (9, -35) ]
         self.hareEnergy = boundint.BoundInt(0, HARE_ENERGY_MAX, 0)
         self.prevEnergy = self.hareEnergy.value
         self.energyDelayTick = HARE_ENERGY_DELAY
@@ -1183,6 +1183,9 @@ class Hare(battlechar.BattleChar):
         self.moves['downB'].frames[0].ignoreFriction = True
         self.moves['downB'].frames[1].ignoreFriction = True
         self.moves['downB'].frames[2].setFrictionX = self.airFriction * 0.35
+        self.moves['downB'].frames[0].fx.append(['dust', (14, 0), True])
+        self.moves['downB'].frames[0].fx.append(['dust', (-14, 0), False])
+        
         
         self.createLagDownB()
 
@@ -2517,6 +2520,9 @@ class Hare(battlechar.BattleChar):
               self.frameData(137, 80, r[0]) ]
 
         self.moves['groundHit'].append(f, [])
+        self.moves['groundHit'].frames[0].fx.append(['dust', (28, 0), True])
+        self.moves['groundHit'].frames[0].fx.append(['dust', (-28, 0), False])
+        self.moves['groundHit'].frames[1].fx.append(['shockwave', (0, 0), True])
 
     def createMoveStandUp(self):
         f = [ self.frameData(138, 4),

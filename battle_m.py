@@ -116,6 +116,7 @@ class Model(mvc.Model):
                 self.checkReversable(l, r, p)
                 self.checkForGround(p)
                 self.checkForEdge(l, r, p)
+                self.checkForFX(p)
 
             self.checkRetreat()
             self.resetHitMemory()
@@ -339,6 +340,7 @@ class Model(mvc.Model):
                 c.aerialCharge = True
                 if old:
                     c.transToGround()
+                    self.createTransitionDust(c)
         else:
             c.inAir = True
             if not old:
@@ -613,13 +615,14 @@ class Model(mvc.Model):
                                     p.attackCanHit = False
                                     p.onHitTrigger = True
 
-                            if q.currMove == q.moves['blocking']:
-                                ind = 0
-                            else:
-                                ind = 1
+                                if q.currMove == q.moves['blocking']:
+                                    ind = 0
+                                elif q.currMove == q.moves['lowBlocking']:
+                                    ind = 1
+                                else:
+                                    ind = 2
 
-                            self.fxMemory[j].append(add_points(
-                                q.preciseLoc, q.getBlockFXPoint(ind)))
+                                self.fxMemory[j].append(q.getBlockFXPoint(ind))
                                 
                                 
 
@@ -649,6 +652,7 @@ class Model(mvc.Model):
         fxPos = average_point_list(pointList)
 
         if blocked:
+            print pointList
             self.fx.append(fx.FX(fxPos, hitter.facingRight, 'block'))
         elif hitter.currMove.isGrab():
             self.fx.append(fx.FX(fxPos, hitter.facingRight, 'grab'))
@@ -733,6 +737,24 @@ class Model(mvc.Model):
 
     def netMessageSize(self):
         return NET_MESSAGE_SIZE
+
+    def checkForFX(self, p):
+        if p.currSubframe == 0:
+            for i in p.getCurrentFrame().fx:
+                facing = i[2]
+                basePos = [i[1][0], i[1][1]]
+                if not p.facingRight:
+                    facing = not facing
+                    basePos[0] *= -1
+                pos = add_points(p.preciseLoc, basePos)
+                self.fx.append(fx.FX(pos, facing, i[0]))
+
+    def createTransitionDust(self, p):
+        if p.currMove == p.moves['groundHit'] or p.currMove.isStun:
+            return
+        pos = add_points(p.preciseLoc, (0,0))
+        self.fx.append(fx.FX(pos, True, 'dust'))
+        self.fx.append(fx.FX(pos, False, 'dust'))
             
 
 def testData():
