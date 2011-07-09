@@ -11,13 +11,14 @@ import boundint
 import energybar
 import countdown
 import fx
+import platform
 
 import hare, fox, cat
 
 from constants import *
 
 class Model(mvc.Model):
-    def __init__(self, inChars, areaSize, bg):
+    def __init__(self, inChars, areaSize, bg, platforms):
         super(Model, self).__init__()
         self.background = bg
         self.rect = pygame.Rect((0, 0), areaSize)
@@ -57,6 +58,8 @@ class Model(mvc.Model):
         self.resetHitMemory()
 
         self.fx = []
+
+        self.platforms = platforms
 
         self.countdown = countdown.Countdown(BATTLE_COUNTDOWN_LENGTH)
 
@@ -332,9 +335,17 @@ class Model(mvc.Model):
 
     def checkForGround(self, c):
         old = c.inAir
-        if c.preciseLoc[1] >= self.rect.height - BATTLE_AREA_FLOOR_HEIGHT:
+        landed = False
+        p = self.checkForPlatform(c)
+        if (c.preciseLoc[1] >= self.rect.height - BATTLE_AREA_FLOOR_HEIGHT):
             c.preciseLoc[1] = self.rect.height - BATTLE_AREA_FLOOR_HEIGHT
-            if c.vel[1] > 0:
+            landed = True
+        elif (not p is None):
+            landed = True
+            c.preciseLoc[1] = p.rect.top
+
+        if landed:
+            if (c.vel[1] > 0):
                 c.inAir = False
                 c.vel[1] = 0.0
                 c.aerialCharge = True
@@ -345,6 +356,16 @@ class Model(mvc.Model):
             c.inAir = True
             if not old:
                 c.transToAir()
+
+    def checkForPlatform(self, c):
+        if c.vel[1] < 0:
+            return None
+        
+        for p in self.platforms:
+            if p.rect.colliderect(c.footRect):
+                return p
+        return None
+            
 
     def checkForEdge(self, l, r, p):
         check = False
@@ -760,7 +781,7 @@ class Model(mvc.Model):
 def testData():
     heroes = [hare.Hare(), hare.Hare()]
     
-    size = (1600, 800)
+    size = (1400, 800)
     bg = pygame.Surface(size)
     bg.fill((190, 190, 190))
     barSpace = 200
@@ -771,6 +792,15 @@ def testData():
         bg.blit(bg3, (x, 0))
         x += barSpace
     bg2 = pygame.Surface((size[0], BATTLE_AREA_FLOOR_HEIGHT))
-    bg2.fill((120, 120, 120))
+    bg2.fill(PLATFORM_COLOR)
     bg.blit(bg2, (0, size[1] - BATTLE_AREA_FLOOR_HEIGHT))
-    return [heroes, size, bg]
+
+    platforms = []
+
+    platforms.append( platform.Platform(
+        (300, size[1] - BATTLE_AREA_FLOOR_HEIGHT - 200), 300 ) )
+    
+    platforms.append( platform.Platform(
+        (800, size[1] - BATTLE_AREA_FLOOR_HEIGHT - 200), 300 ) )
+    
+    return [heroes, size, bg, platforms]

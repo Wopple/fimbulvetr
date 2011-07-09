@@ -10,7 +10,7 @@ import move
 from constants import *
 
 class BattleChar(object):
-    def __init__(self, hp):
+    def __init__(self, hp, footRectSize=30):
         self.hp = boundint.BoundInt(0, hp, hp)
         self.preciseLoc = [50.0, 50.0]
         self.accel = [0.0, 0.0]
@@ -39,6 +39,9 @@ class BattleChar(object):
         self.setCurrMove('idle')
 
         self.createDust = None
+
+        self.footRect = pygame.Rect((0, 0), ((footRectSize * 2)+1, 5))
+        self.positionFootRect()
 
     def beginBattle(self):
         self.retreat.change(0)
@@ -80,6 +83,7 @@ class BattleChar(object):
                 self.preciseLoc[i] += self.vel[i]
 
         self.rect.topleft = self.getRectPos()
+        self.positionFootRect()
 
         self.setImage(frame.image, frame.offset)
 
@@ -96,6 +100,10 @@ class BattleChar(object):
         self.frameSpecial()
         frame = self.getCurrentFrame()
         self.setImage(frame.image, frame.offset)
+
+
+    def positionFootRect(self):
+        self.footRect.center = add_points(self.preciseLoc, (0, 0))
         
 
     def speedCap(self, caps, i):
