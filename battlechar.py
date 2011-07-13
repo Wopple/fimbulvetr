@@ -294,6 +294,7 @@ class BattleChar(object):
         self.moves['grabbing'] = move.baseGrabbing()
         self.moves['grabHold'] = move.baseGrabHold()
         self.moves['grabbed'] = move.baseGrabbed()
+        self.moves['grabbed2'] = move.baseGrabbed2()
         self.moves['grabRelease'] = move.baseGrabRelease()
         self.moves['grabbedRelease'] = move.baseGrabbedRelease()
 

@@ -222,7 +222,17 @@ def baseGrabHold():
     return m
 
 def baseGrabbed():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'grabbed')] ]
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'grabbed2')],
+          ['attackA', Transition(None, None, 1, 1, 'idle')],
+          ['attackB', Transition(None, None, 1, 1, 'idle')]  ]
+    m = Move([], t)
+    m.canDI = False
+    m.grabVal = -1
+    m.grabPos = (0, 0)
+    return m
+
+def baseGrabbed2():
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'grabbed2')] ]
     m = Move([], t)
     m.canDI = False
     m.grabVal = -1

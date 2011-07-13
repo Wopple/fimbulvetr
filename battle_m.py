@@ -75,18 +75,18 @@ class Model(mvc.Model):
         return (highest == 1)
 
     def update(self):
-        if self.testBool:
-            self.keys[1][1] = True
-            self.keysNow[1][1] = 3
-        else:
-            self.keys[1][1] = False
-            self.keysNow[1][1] = 0
-        if self.testBool2:
-            self.keys[1][7] = True
-            self.keysNow[1][7] = 3
-        else:
-            self.keys[1][7] = False
-            self.keysNow[1][7] = 0
+        #if self.testBool:
+        #    self.keys[1][1] = True
+        #    self.keysNow[1][1] = 3
+        #else:
+        #    self.keys[1][1] = False
+        #    self.keysNow[1][1] = 0
+        #if self.testBool2:
+        #    self.keys[1][7] = True
+        #    self.keysNow[1][7] = 3
+        #else:
+        #    self.keys[1][7] = False
+        #    self.keysNow[1][7] = 0
 
         fbf = self.checkFrameByFrame()
 

@@ -89,6 +89,7 @@ class Hare(battlechar.BattleChar):
         self.createMoveGrabbing()
         self.createMoveGrabHold()
         self.createMoveGrabbed()
+        self.createMoveGrabbed2()
         self.createMoveGrabRelease()
         self.createMoveGrabbedRelease()
 
@@ -2146,10 +2147,35 @@ class Hare(battlechar.BattleChar):
                 ]
             ]
 
-        f = [ self.frameData(70, 2, r[0]) ]
+        f = [ self.frameData(70, 2, r[0]),
+              self.frameData(70, 5, r[0]),
+              self.frameData(70, 2, r[0]) ]
 
         self.moves['grabbed'].append(f, [])
         self.moves['grabbed'].grabPos = (12, 0)
+
+    def createMoveGrabbed2(self):
+        r = [
+                [
+                    (-12, -50, -3, -48),
+                    (-12, -48, 1, -39),
+                    (-10, -40, 2, -23),
+                    (0, -36, 10, -33),
+                    (-11, -24, 2, -19),
+                    (-8, -20, 6, -14),
+                    (-5, -14, -1, 5),
+                    (-3, -17, 4, 2),
+                    (1, -16, 9, -4),
+                    (-6, 2, 10, 5),
+                    (-1, 5, 4, 7)
+                ]
+            ]
+
+        f = [ self.frameData(70, 2, r[0]) ]
+
+        self.moves['grabbed2'].append(f, [])
+        self.moves['grabbed2'].grabPos = (12, 0)
+        
 
     def createMoveGrabRelease(self):
 
