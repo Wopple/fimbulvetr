@@ -120,6 +120,8 @@ class Model(mvc.Model):
                 self.checkForGround(p)
                 self.checkForEdge(l, r, p)
                 self.checkForFX(p)
+                if not p.dropThroughPlatform is None:
+                    p.dropThroughPlatform = self.checkForPlatform(p)
 
             self.checkRetreat()
             self.resetHitMemory()
@@ -287,6 +289,9 @@ class Model(mvc.Model):
                         if p.actTransition('attackB'):
                             keysNow[4] = 0
             if self.wasKeyPressed(6, keysNow):
+                if not self.checkForPlatform(p) is None:
+                    if p.actTransition('dropThrough'):
+                        self.dropThrough(p)
                 if p.actTransitionFacing('jump', l, r):
                     keysNow[6] = 0
             if keys[7]:
@@ -337,6 +342,8 @@ class Model(mvc.Model):
         old = c.inAir
         landed = False
         p = self.checkForPlatform(c)
+        if p == c.dropThroughPlatform:
+            p = None
         if (c.preciseLoc[1] >= self.rect.height - BATTLE_AREA_FLOOR_HEIGHT):
             c.preciseLoc[1] = self.rect.height - BATTLE_AREA_FLOOR_HEIGHT
             landed = True
@@ -356,6 +363,9 @@ class Model(mvc.Model):
             c.inAir = True
             if not old:
                 c.transToAir()
+
+    def dropThrough(self, p):
+        p.dropThroughPlatform = self.checkForPlatform(p)
 
     def checkForPlatform(self, c):
         if c.vel[1] < 0:

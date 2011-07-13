@@ -20,7 +20,7 @@ class Move(object):
                 'attackBDown', 'attackBUpCharge', 'bladelv1', 'bladelv2',
                 'bladelv3', 'onHit', 'attackAAtMax', 'attackBAtMax',
                 'block', 'releaseBlock', 'downBlock', 'forward', 'backward',
-                'up', 'tech']
+                'up', 'tech', 'dropThrough']
         self.transitions = {}
         for i in temp:
             self.transitions[i] = None
@@ -196,6 +196,7 @@ def baseDucking():
     t = [ ['exitFrame', Transition(-1, 0, None, None, 'ducking')],
           ['stopDuck', Transition(None, None, None, None, 'idle')],
           ['jump', Transition(None, None, None, None, 'jumping')],
+          ['dropThrough', Transition(None, None, None, None, 'droppingThrough')],
           ['attackADown', Transition(None, None, None, None, 'downA')],
           ['attackBDown', Transition(None, None, None, None, 'downB')],
           ['downBlock', Transition(None, None, None, None, 'lowBlocking')]]
@@ -326,4 +327,9 @@ def baseBlank():
 def baseProjFlying():
     t = [ ['exitFrame', Transition(-1, 0, None, None, 'flying')] ]
     m = Move([], t)
+    return m
+
+def baseDroppingThrough():
+    m = Move([], [])
+    m.canDI = False
     return m

@@ -84,6 +84,7 @@ class Hare(battlechar.BattleChar):
         self.createMoveUpAirB()
         self.createMoveDownAirA()
         self.createMoveDownAirB()
+        self.createMoveDroppingThrough()
 
         self.createMoveGrabbing()
         self.createMoveGrabHold()
@@ -1998,6 +1999,11 @@ class Hare(battlechar.BattleChar):
         self.moves['downAirB'].frames[0].setVelX = 0
 
         self.createLagDownBAir()
+
+    def createMoveDroppingThrough(self):
+        f = [ self.frameData(8, 3) ]
+
+        self.moves['droppingThrough'].append(f, [])
 
     def createMoveGrabbing(self):
         r = [

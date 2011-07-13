@@ -27,6 +27,7 @@ class BattleChar(object):
         self.onHitTrigger = False
         self.techBuffer = TECH_BUFFER_MIN
         self.canTech = True
+        self.dropThroughPlatform = None
 
         self.superMoves = []
         self.currSuperMove = None
@@ -288,6 +289,7 @@ class BattleChar(object):
         self.moves['upAirB'] = move.baseBlank()
         self.moves['downAirA'] = move.baseBlank()
         self.moves['downAirB'] = move.baseBlank()
+        self.moves['droppingThrough'] = move.baseDroppingThrough()
 
         self.moves['grabbing'] = move.baseGrabbing()
         self.moves['grabHold'] = move.baseGrabHold()
