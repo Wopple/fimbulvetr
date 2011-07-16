@@ -223,6 +223,12 @@ class Model(mvc.Model):
         p.actLeft = True
         u, d = self.exclusiveKeys(keys[0], keys[1])
         l, r = self.exclusiveKeys(keys[2], keys[3])
+
+        if p.hp.value <= 0 and not p.currMove.isDead:
+            p.setCurrMove('deadFalling')
+            p.inAir = True
+            return
+        
         if not self.keyTowardFacing(p, keys):
             p.actTransition('noXMove')
         if p.holdJump:

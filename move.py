@@ -38,6 +38,7 @@ class Move(object):
         self.needTech = False
         self.grabVal = 0
         self.grabPos = None
+        self.isDead = False
 
 
     def append(self, f, t):
@@ -342,4 +343,25 @@ def baseProjFlying():
 def baseDroppingThrough():
     m = Move([], [])
     m.canDI = False
+    return m
+
+def baseDeadFalling():
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'deadFalling')],
+          ['land', Transition(None, None, None, None, 'deadGroundHit')]]
+    m = Move([], t)
+    m.canDI = False
+    m.isDead = True
+    return m
+
+def baseDeadGroundHit():
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'deadLaying')] ]
+    m = Move([], t)
+    m.canDI = False
+    m.isDead = True
+    return m
+
+def baseDeadLaying():
+    m = Move([], t)
+    m.canDI = False
+    m.isDead = True
     return m

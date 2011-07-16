@@ -31,7 +31,7 @@ class Hare(battlechar.BattleChar):
         self.prevEnergy = self.hareEnergy.value
         self.energyDelayTick = HARE_ENERGY_DELAY
         self.energy = self.hareEnergy
-        super(Hare, self).__init__(850, 13)
+        super(Hare, self).__init__(100, 13)
         self.initSpecMoves()
 
         self.speciesDesc = ("A speedy light-assault unit specializing in" +
@@ -100,6 +100,10 @@ class Hare(battlechar.BattleChar):
         self.createMoveStun2()
         self.createMoveStun3()
         self.createMoveStun4()
+
+        self.createMoveDeadFalling()
+        self.createMoveDeadGroundHit()
+        self.createMoveDeadLaying()
 
         self.createMoveGroundHit()
         self.createMoveStandUp()
@@ -2530,6 +2534,24 @@ class Hare(battlechar.BattleChar):
 
         for i in range(len(self.moves['stun4'].frames)):
             self.moves['stun4'].frames[i].ignoreSpeedCap = True
+
+    def createMoveDeadFalling(self):
+        f = [ self.frameData(74, 3) ]
+
+        self.moves['deadFalling'].append(f, [])
+
+    def createMoveDeadGroundHit(self):
+        f = [ self.frameData(134, 2),
+              self.frameData(135, 4),
+              self.frameData(136, 2),
+              self.frameData(137, 1) ]
+
+        self.moves['deadGroundHit'].append(f, [])
+
+    def createMoveDeadLaying(self):
+        f = [ self.frameData(137, 3) ]
+
+        self.moves['deadLaying'].append(f, [])
 
     def createMoveGroundHit(self):
         r = [

@@ -320,6 +320,10 @@ class BattleChar(object):
         self.moves['techForward'] = move.baseTechRoll()
         self.moves['techBackward'] = move.baseTechRoll()
 
+        self.moves['deadFalling'] = move.baseDeadFalling()
+        self.moves['deadGroundHit'] = move.baseDeadGroundHit()
+        self.moves['deadLaying'] = move.baseDeadGroundHit()
+
     def setCurrMove(self, index, frame=0):
         self.currMove = self.moves[index]
         self.currFrame = frame
