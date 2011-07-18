@@ -220,6 +220,8 @@ class BattleChar(object):
             if f == 0 or ((l and self.vel[0] > 0) or(r and self.vel[0] < 0)):
                 if not self.getCurrentFrame().ignoreFriction:
                     self.friction()
+                else:
+                    self.accel = [0.0, 0.0]
             else:
                 self.accel[0] = accel * f
 

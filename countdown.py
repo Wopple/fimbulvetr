@@ -13,7 +13,7 @@ class Countdown(object):
         self.tick = incint.IncInt(0, 0, FRAME_RATE)
 
         size = (SCREEN_SIZE[0], COUNTDOWN_FONT.get_linesize() + 4)
-        pos = (0, (SCREEN_SIZE[1] / 2) - (size[1] / 2))
+        pos = (0, (SCREEN_SIZE[1] / 2) - (size[1] / 2) - 15)
         self.rect = pygame.Rect(pos, size)
         self.startFlag = False
 

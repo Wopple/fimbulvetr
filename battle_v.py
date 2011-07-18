@@ -30,6 +30,17 @@ class View(mvc.View):
             b.draw(self.screen)
 
         self.model.countdown.draw(self.screen)
+        self.drawEndingText()
 
         if tickClock:
             pygame.display.flip()
+
+    def drawEndingText(self):
+        if self.model.endingVal == 0:
+            self.screen.blit(self.model.endingText[2][0],
+                             self.model.countdown.rect.topleft)
+        elif self.model.endingVal == 2:
+            self.screen.blit(self.model.endingText[0][self.model.returnCode[0]+1],
+                             self.model.countdown.rect.topleft)
+            self.screen.blit(self.model.endingText[0][self.model.returnCode[1]+1],
+                             self.model.countdown.rect.bottomleft)

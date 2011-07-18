@@ -12,6 +12,7 @@ import energybar
 import countdown
 import fx
 import platform
+import textrect
 
 import hare, fox, cat
 
@@ -57,11 +58,16 @@ class Model(mvc.Model):
         self.createBars()
         self.resetHitMemory()
 
+        self.endingVal = -1
+        self.endingValTick = 0
+        self.endingReturnValues = [None, None]
+
         self.fx = []
 
         self.platforms = platforms
 
         self.countdown = countdown.Countdown(BATTLE_COUNTDOWN_LENGTH)
+        self.createEndingText()
 
     def checkFrameByFrame(self):
         highest = 0
@@ -92,7 +98,17 @@ class Model(mvc.Model):
 
         if not fbf:
 
-            self.checkForEnd()
+            self.checkForRetreat()
+            self.checkEnding()
+
+            if self.endingVal >= 0:
+                self.endingValTick += 1
+                if self.endingValTick >= BATTLE_ENDING_TIME_LENGTHS[self.endingVal]:
+                    self.endingValTick = 0
+                    self.endingVal += 1
+                    if self.endingVal == len(BATTLE_ENDING_TIME_LENGTHS):
+                        self.advanceNow = True
+            
             self.countdown.update()
 
             if self.countdown.checkStartFlag():
@@ -322,7 +338,7 @@ class Model(mvc.Model):
             if lev == 3:
                 p.actTransition('bladelv3')
 
-    def checkForEnd(self):
+    def checkForRetreat(self):
         if self.players[0].retreat.isMax():
             self.returnCode[0] = 1
             if self.players[1].retreat.value > 0:
@@ -331,10 +347,6 @@ class Model(mvc.Model):
             self.returnCode[1] = 1
             if self.players[0].retreat.value > 0:
                 self.returnCode[0] = 1
-
-
-        if (self.returnCode[0] != 0) or (self.returnCode[1] != 0):
-            self.advanceNow = True
 
     def checkReversable(self, l, r, p):
         if p.currFrame == 0 and p.currSubframe == 1:
@@ -792,7 +804,48 @@ class Model(mvc.Model):
         pos = add_points(p.preciseLoc, (0,0))
         self.fx.append(fx.FX(pos, True, 'dust'))
         self.fx.append(fx.FX(pos, False, 'dust'))
-            
+
+    def checkEnding(self):
+        if self.endingVal == -1:
+            temp = False
+            for p in self.players:
+                if p.currMove.isDead:
+                    temp = True
+            if temp:
+                self.endingVal = 0
+                for i, p in enumerate(self.players):
+                    p.freezeFrame += 20
+                    if p.currMove.isDead:
+                        if p.vel[1] > DEATH_FLY_VERT_VEL_MIN:
+                            p.vel[1] = DEATH_FLY_VERT_VEL_MIN
+                        self.returnCode[i] = -1
+                    else:
+                        self.returnCode[i] = 0
+
+    def createEndingText(self):
+        tempText = ["is defeated", "is victorious", "retreats"]
+        self.endingText = []
+        for i in range(2):
+            sublist = []
+            p = self.players[i]
+            for j in range(3):
+                t = p.name + " " + tempText[j]
+                image = textrect.render_textrect(t, COUNTDOWN_FONT,
+                                                self.countdown.rect,
+                                                COUNTDOWN_COLOR, ALMOST_BLACK,
+                                                1, True)
+                sublist.append(image)
+            self.endingText.append(sublist)
+
+        sublist = []
+        t = "FINISH!"
+        image = textrect.render_textrect(t, COUNTDOWN_FONT, self.countdown.rect,
+                                        COUNTDOWN_COLOR, ALMOST_BLACK, 1, True)
+        sublist.append(image)
+        self.endingText.append(sublist)
+
+
+                
 
 def testData():
     heroes = [hare.Hare(), hare.Hare()]
