@@ -3,7 +3,7 @@ import pygame
 import sys
 
 FULL_SCREEN = False
-FRAME_RATE = 40
+FRAME_RATE = 10
 SCREEN_SIZE = (800, 600)
 ENTIRE_SCREEN = pygame.Rect( (0,0), SCREEN_SIZE )
 DEBUG_MODE = True

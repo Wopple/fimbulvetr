@@ -31,7 +31,7 @@ class Hare(battlechar.BattleChar):
         self.prevEnergy = self.hareEnergy.value
         self.energyDelayTick = HARE_ENERGY_DELAY
         self.energy = self.hareEnergy
-        super(Hare, self).__init__(999999999, 13)
+        super(Hare, self).__init__(850, 13)
         self.initSpecMoves()
 
         self.speciesDesc = ("A speedy light-assault unit specializing in" +

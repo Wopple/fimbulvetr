@@ -253,7 +253,8 @@ class Model(mvc.Model):
         if p.onHitTrigger:
             p.actTransition('onHit')
         if p.techBuffer >= 0 and p.canTech:
-            p.actTransition('tech')
+            if p.actTransition('tech'):
+                p.techBuffer = TECH_BUFFER_MIN
         if p.canAct():
             if d:
                 p.actTransition('doDuck')
@@ -540,6 +541,10 @@ class Model(mvc.Model):
             except:
                 print "Error in message parsing"
                 sys.exit()
+
+        if keys[7] and (keysNow[7] == KEY_BUFFER):
+            if self.players[p-1].techBuffer == TECH_BUFFER_MIN:
+                self.players[p-1].techBuffer = TECH_BUFFER_MAX
 
         try:
             self.frameByFrame[p-1] = int(msg3)
