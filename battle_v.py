@@ -17,8 +17,9 @@ class View(mvc.View):
         for p in self.model.platforms:
             p.draw(self.screen, self.model.rect.topleft)
 
-        for p in self.model.players:
-            p.draw(self.screen, self.model.rect.topleft)
+        for i, p in enumerate(self.model.players):
+            if self.model.returnCode[i] != 1:
+                p.draw(self.screen, self.model.rect.topleft)
 
         for p in self.model.projectiles:
             p.draw(self.screen, self.model.rect.topleft)
@@ -39,7 +40,7 @@ class View(mvc.View):
         if self.model.endingVal == 0:
             self.screen.blit(self.model.endingText[2][0],
                              self.model.countdown.rect.topleft)
-        elif self.model.endingVal == 2:
+        elif self.model.endingVal == 3:
             self.screen.blit(self.model.endingText[0][self.model.returnCode[0]+1],
                              self.model.countdown.rect.topleft)
             self.screen.blit(self.model.endingText[0][self.model.returnCode[1]+1],

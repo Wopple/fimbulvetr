@@ -9,7 +9,7 @@ from constants import *
 
 class EnergyBar(object):
     def __init__(self, inVal, inRect, inBorders, inColors, pulse,
-                 text=None, threshold=None, textJust=0):
+                 text=None, threshold=None, textJust=0, barJust=True):
         if not isinstance(inVal, boundint.BoundInt):
             raise RuntimeError, "EnergyBar must be given BoundInt"
 
@@ -26,6 +26,7 @@ class EnergyBar(object):
         else:
             self.textOnBottom = True
 
+        self.barJust = barJust
         self.value = inVal
         self.rect = inRect
         self.horizBorderSize = inBorders[0]
@@ -103,6 +104,8 @@ class EnergyBar(object):
         self.image = pygame.Surface((self.rect.width, self.rect.height))
         self.image.blit(self.backImage, (0, 0))
         self.image.blit(self.foreImage, (self.horizBorderSize, self.vertBorderSize))
+        if not self.barJust:
+            self.image = pygame.transform.flip(self.image, True, False)
 
     def createPulse(self):
         self.pulseColors = []

@@ -21,7 +21,7 @@ class BattleChar(object):
         self.aerialCharge = True
         self.projectiles = []
         self.attackCanHit = True
-        self.retreat = boundint.BoundInt(0, RETREAT_HOLD_TIME, 0)
+        self.retreat = boundint.BoundInt(0, RETREAT_HOLD_TOTAL, 0)
         self.freezeFrame = 0
         self.blockstun = 0
         self.onHitTrigger = False
@@ -48,6 +48,8 @@ class BattleChar(object):
         self.retreat.change(0)
         self.freezeFrame = 0
         self.blockstun = 0
+        if self.hp.value == 0:
+            self.hp.value = 1
 
     def countdownComplete(self):
         pass

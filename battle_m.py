@@ -60,7 +60,6 @@ class Model(mvc.Model):
 
         self.endingVal = -1
         self.endingValTick = 0
-        self.endingReturnValues = [None, None]
 
         self.fx = []
 
@@ -98,7 +97,6 @@ class Model(mvc.Model):
 
         if not fbf:
 
-            self.checkForRetreat()
             self.checkEnding()
 
             if self.endingVal >= 0:
@@ -116,14 +114,16 @@ class Model(mvc.Model):
                     p.countdownComplete()
                 self.retreatPhase = 1
 
-            if self.retreatPhase == 1:
+            if self.retreatPhase == 1 and self.endingVal == -1:
                 self.retreatProhibitTime.add(-1)
                 if self.retreatProhibitTime.value == 0:
                     self.retreatPhase = 2
                     self.retreatBar.createText("Retreat", 1)
+                    self.retreatBar.value.maximum = RETREAT_HOLD_TOTAL
+                    self.retreatBar.threshold = self.retreatBar.value.maximum + 1
             
             for i, p in enumerate(self.players):
-                if self.countdown.isGoing():
+                if self.countdown.isGoing() or self.returnCode[i] == 1:
                     keys = [False, False, False, False, False, False, False, False]
                     keysNow = [0, 0, 0, 0, 0, 0, 0, 0]
                 else:
@@ -135,6 +135,8 @@ class Model(mvc.Model):
                 self.checkReversable(l, r, p)
                 self.checkForGround(p)
                 self.checkForEdge(l, r, p)
+                if self.returnCode[i] != 0:
+                    p.retreat.value = 0
                 self.checkForFX(p)
                 if not p.dropThroughPlatform is None:
                     p.dropThroughPlatform = self.checkForPlatform(p)
@@ -144,11 +146,13 @@ class Model(mvc.Model):
 
             self.checkForBlock()
             for i, p in enumerate(self.players):
-                self.actOnBlock(i, p)
+                if self.returnCode[i] != 1:
+                    self.actOnBlock(i, p)
             
             self.checkForHits()
             for i, p in enumerate(self.players):
-                self.actOnHit(i, p)
+                if self.returnCode[i] != 1:
+                    self.actOnHit(i, p)
 
             self.checkGrabPair()
 
@@ -339,16 +343,6 @@ class Model(mvc.Model):
             if lev == 3:
                 p.actTransition('bladelv3')
 
-    def checkForRetreat(self):
-        if self.players[0].retreat.isMax():
-            self.returnCode[0] = 1
-            if self.players[1].retreat.value > 0:
-                self.returnCode[1] = 1
-        elif self.players[1].retreat.isMax():
-            self.returnCode[1] = 1
-            if self.players[0].retreat.value > 0:
-                self.returnCode[0] = 1
-
     def checkReversable(self, l, r, p):
         if p.currFrame == 0 and p.currSubframe == 1:
             if p.currMove.reversable:
@@ -405,11 +399,20 @@ class Model(mvc.Model):
             p.preciseLoc[0] = self.rect.width - BATTLE_EDGE_COLLISION_WIDTH
             check = True
 
-        if self.retreatPhase == 2:
-            if check:
-                p.retreat.add(1)
+        if p.currMove.isDead:
+            p.retreat.value = 0
+        elif self.retreatPhase == 2:
+            if self.endingVal in [-1, 0, 1]: 
+                if check:
+                    if self.endingVal == -1:
+                        amount = RETREAT_ADD
+                    else:
+                        amount = RETREAT_ADD_FAST
+                    p.retreat.add(amount)
+                else:
+                    p.retreat.add(-RETREAT_RECEED)
             else:
-                p.retreat.add(-RETREAT_RECEED)
+                p.retreat.add(-RETREAT_RECEED_FAST)
 
     def checkRetreat(self):
         high = 0
@@ -553,9 +556,17 @@ class Model(mvc.Model):
             print "Message:", msg3
             sys.exit()
 
+    def reverse01(self, val):
+        if val == 0:
+            return 1
+        elif val == 1:
+            return 0
+        return val
+
     def createBars(self):
         self.bars = []
         p = self.players[self.cameraPlayer]
+        q = self.players[self.reverse01(self.cameraPlayer)]
 
         self.bars.append(energybar.EnergyBar(p.hp,
                                              pygame.Rect(HEALTH_BAR_POSITION,
@@ -563,7 +574,19 @@ class Model(mvc.Model):
                                              HEALTH_BAR_BORDERS,
                                              HEALTH_BAR_COLORS,
                                              HEALTH_BAR_PULSE,
-                                             self.players[self.cameraPlayer].name)
+                                             p.name)
+            )
+
+        x = SCREEN_SIZE[0] - HEALTH_BAR_POSITION[0] - HEALTH_BAR_SIZE[0]
+        y = HEALTH_BAR_POSITION[1]
+
+        self.bars.append(energybar.EnergyBar(q.hp,
+                                             pygame.Rect((x, y),
+                                                         HEALTH_BAR_SIZE),
+                                             HEALTH_BAR_BORDERS,
+                                             HEALTH_BAR_COLORS,
+                                             HEALTH_BAR_PULSE,
+                                             q.name, None, 2, False)
             )
 
         x = (SCREEN_SIZE[0] / 2) - (RETREAT_BAR_SIZE[0] / 2)
@@ -811,6 +834,16 @@ class Model(mvc.Model):
         self.fx.append(fx.FX(pos, False, 'dust'))
 
     def checkEnding(self):
+
+        if self.endingVal in [-1, 0, 1]:
+            for i, p in enumerate(self.players):
+                if self.players[i].retreat.isMax():
+                    self.returnCode[i] = 1
+                    self.players[i].retreat.setToMin()
+                    if self.endingVal == -1:
+                        self.endingVal = 0
+
+        
         if self.endingVal == -1:
             temp = False
             for p in self.players:

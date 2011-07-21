@@ -34,3 +34,9 @@ class BoundInt(object):
 
     def isMin(self):
         return (self.value == self.minimum)
+
+    def setToMin(self):
+        self.value = self.minimum
+
+    def setToMax(self):
+        self.value = self.maximum
