@@ -1828,8 +1828,8 @@ class Hare(battlechar.BattleChar):
 
         h = [
                 [
-                    (-12, -28, 11, -10, 75, 105, 23, 270, [], 3),
-                    (-8, -13, 15, 22, 75, 105, 23, 270, [], 3)
+                    (-12, -28, 11, -10, 75, 105, 25, 270, [], 3),
+                    (-8, -13, 15, 22, 75, 105, 25, 270, [], 3)
                 ]
             ]
 
@@ -1922,14 +1922,14 @@ class Hare(battlechar.BattleChar):
               self.frameData(23, flippingSpeed, r[1]),
               self.frameData(33, flippingSpeed, r[2]),
               self.frameData(24, flippingSpeed, r[3]),
-              self.frameData(87, 10, r[4]),
+              self.frameData(87, 12, r[4]),
               self.frameData(87, 2, r[4])]
 
         self.moves['headBounce'] = move.Move(f, [])
         self.moves['headBounce'].frames[0].setVelY = -22
 
         for i in range(len(f)-1):
-            self.moves['headBounce'].frames[i].setAccelX = 1.8
+            self.moves['headBounce'].frames[i].setAccelX = 2.8
             self.moves['headBounce'].frames[i].setFrictionX = self.airFriction * 8.0
             self.moves['headBounce'].frames[i].setSpeedCapX = self.vertVelMax * 1.2
 

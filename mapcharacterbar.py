@@ -52,15 +52,15 @@ class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
         tempRect = pygame.Rect((x, y), MAP_CHAR_BAR_ENERGY_BAR_SIZE)
         self.superBar = energybar.EnergyBar(tempVal, tempRect,
                                              MAP_CHAR_BAR_ENERGY_BAR_BORDERS,
-                                             SUPER_BAR_COLORS, 1)
+                                             SUPER_BAR_COLORS, 2)
 
         tempVal = boundint.BoundInt(0, self.character.getMaxHP(),
                                     self.character.getHP())
         y = y - ps - MAP_CHAR_BAR_ENERGY_BAR_SIZE[1]
         tempRect = pygame.Rect((x, y), MAP_CHAR_BAR_ENERGY_BAR_SIZE)
-        self.healthBar = energybar.EnergyBar(tempVal, tempRect,
+        self.healthBar = energybar.EnergyBar(self.character.battleChar.hp, tempRect,
                                              MAP_CHAR_BAR_ENERGY_BAR_BORDERS,
-                                             HEALTH_BAR_COLORS, 1,
+                                             HEALTH_BAR_COLORS, 2,
                                              self.character.name, None, 3)
 
         self.setActive(False)
@@ -69,17 +69,7 @@ class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
         self.pastSuperEnergy = -1
 
     def update(self):
-        force = False
-        if (self.pastHP != self.character.getHP()):
-            force = True
-        self.pastHP = self.character.getHP()
-
-        if (self.pastSuperEnergy != self.character.getSuperEnergy()):
-            force = True
-        self.pastSuperEnergy = self.character.getSuperEnergy()
-
-        if force:
-            self.remakeImage()
+        self.remakeImage()
 
         super(MapCharacterBar, self).update()
 
@@ -95,6 +85,8 @@ class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
 
     def remakeImage(self):
         self.image = pygame.Surface.copy(self.static)
+        self.healthBar.update()
         self.healthBar.draw(self.image)
+        self.superBar.update()
         self.superBar.draw(self.image)
         self.image.set_alpha(self.alpha.value)

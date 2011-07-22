@@ -302,6 +302,8 @@ class Model(mvc.Model):
 
     def updateInterface(self):
         self.updatePausePlayIcons()
+        for i in self.charBars:
+            i.update()
 
     def updatePausePlayIcons(self):
         self.bigPausePlayIcon.update(self.paused())

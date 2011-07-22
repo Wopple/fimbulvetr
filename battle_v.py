@@ -43,5 +43,5 @@ class View(mvc.View):
         elif self.model.endingVal == 3:
             self.screen.blit(self.model.endingText[0][self.model.returnCode[0]+1],
                              self.model.countdown.rect.topleft)
-            self.screen.blit(self.model.endingText[0][self.model.returnCode[1]+1],
+            self.screen.blit(self.model.endingText[1][self.model.returnCode[1]+1],
                              self.model.countdown.rect.bottomleft)
