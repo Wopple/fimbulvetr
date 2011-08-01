@@ -218,7 +218,10 @@ PLATFORM_COLOR = (120, 120, 120)
 
 DEATH_FLY_VERT_VEL_MIN = -12
 
+MAP_PAUSE_TIME_LENGTHS = [10, 20, 25, 10, 999, 10, 40, 10]
 BATTLE_ENDING_TIME_LENGTHS = [60, 40, 3, 100, 10]
+ENCOUNTER_START_BLINK = 3
+ENCOUNTER_END_BLINK = 5
 
 MULTIPLAYER_PORT = 1338
 NET_MESSAGE_SIZE = 17
@@ -253,6 +256,7 @@ CHARACTER_NAME_MAX_LENGTH = 10
 
 COUNTDOWN_COLOR = (244, 210, 11)
 MAP_COUNTDOWN_LENGTH = 10
+ENCOUNTER_COUNTDOWN_LENGTH = 3
 BATTLE_COUNTDOWN_LENGTH = 3
 
 TECH_BUFFER_MIN = -10
@@ -674,6 +678,9 @@ def average_point_list(points):
     y = int(y / len(points))
 
     return [x, y]
+
+def scale_point(i, s):
+    return [i[0] / s, i[1] / s]
     
 
 def flipRect(i):

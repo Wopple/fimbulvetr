@@ -30,6 +30,10 @@ class MapChar(object):
         self.oldTerrain = 0
         self.battleTriggerArea = None
         self.battleTriggerRect = None
+        self.addToPos = [0, 0]
+        self.blinkOn = True
+        self.blinkTick = 0
+        self.removed = False
 
         self.modifyImages()
 
@@ -71,6 +75,9 @@ class MapChar(object):
             self.tokenRect = pygame.Rect((0, 0), self.image.get_size())
 
     def draw(self, screen, inZoom, inOffset):
+        if (not self.blinkOn) or self.removed:
+            return
+        
         self.setImagePos(inZoom, inOffset)
         screen.blit(self.image, self.tokenRect.topleft)
         if SHOW_BATTLE_TRIGGER_AREA:
@@ -130,6 +137,9 @@ class MapChar(object):
 
     def getSuperEnergy(self):
         return 50
+
+    def isDead(self):
+        return (self.battleChar.hp.value <= 0)
         
 
 def Hare(team, battleChar, name="Unnamed Hare", portrait=None):

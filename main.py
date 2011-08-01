@@ -350,7 +350,7 @@ def goGame(theMap, hostChars, clientChars, playerNum, conn):
               mapmode_c.Controller(), screen)
     while not m.advance():
         proceed(clock, conn)
-        if not m.pendingBattle is None:
+        if m.startBattle():
             oldM = m
             testData = battle_m.testData()
             realData = m.getBattleData()

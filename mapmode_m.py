@@ -43,6 +43,9 @@ class Model(mvc.Model):
         self.currentFrameOrder = None
         self.countdown = countdown.Countdown(MAP_COUNTDOWN_LENGTH)
 
+        self.encounterPause = -1
+        self.encounterPauseTick = 0
+
         self.setCountdown()
 
         self.buildInterface()
@@ -57,11 +60,14 @@ class Model(mvc.Model):
             self.pause = [False, False]
         
         self.currentFrameOrder = None
+
+        self.updateEncounterPause()
         
         self.checkForBattle()
 
         self.mousePos = pygame.mouse.get_pos()
-        self.checkScrolling()
+        if self.encounterPause == -1:
+            self.checkScrolling()
         self.checkMouseOverObject()
         for c in self.characters:
             if c is self.currSelected:
@@ -72,13 +78,17 @@ class Model(mvc.Model):
                 c.setImage(0)
 
         self.updateInterface()
-        
-        if (self.pendingBattle is None) and (not self.paused()):
+
+        if self.runCharacters():
             for c in self.characters:
                 self.checkBounds(c)
                 self.checkTerrain(c)
                 c.update()
 
+    def runCharacters(self):
+        return ( (self.pendingBattle is None) and (not self.paused()) and
+                 (self.encounterPause == -1) )
+        
     def zoom(self):
         self.drawZoomMap()
         self.adjustMap()
@@ -175,18 +185,20 @@ class Model(mvc.Model):
                     count += 1
 
     def leftClick(self):
-        if isinstance(self.currHighlighted, mapchar.MapChar):
-            if self.currHighlighted.team == self.team:
-                self.currSelected = self.currHighlighted
-                return
+        if self.encounterPause == -1:
+            if isinstance(self.currHighlighted, mapchar.MapChar):
+                if self.currHighlighted.team == self.team:
+                    self.currSelected = self.currHighlighted
+                    return
 
-        self.currSelected = None
+            self.currSelected = None
 
     def rightClick(self):
-        if (not self.currSelected is None):
-            pos = self.absMousePos()
-            self.currSelected.startMovement(pos)
-            self.currentFrameOrder = [self.currSelected, pos]
+        if self.encounterPause == -1:
+            if (not self.currSelected is None):
+                pos = self.absMousePos()
+                self.currSelected.startMovement(pos)
+                self.currentFrameOrder = [self.currSelected, pos]
 
     def absMousePos(self):
         temp = []
@@ -247,12 +259,20 @@ class Model(mvc.Model):
             c.createBattleTriggerArea(self.zoomVal)
 
     def checkForBattle(self):
+        if self.encounterPause != -1 or self.encounterPause != -1:
+            return
+        
         self.pendingBattle = None
         for c in self.charactersInTeams[0]:
+            if c.isDead():
+                continue
             for d in self.charactersInTeams[1]:
+                if d.isDead():
+                    continue
                 dist = util.distance(c.precisePos, d.precisePos)
                 if dist <= BATTLE_TRIGGER_RANGE:
                     self.pendingBattle = [c, d]
+                    self.encounterPause = 0
                     return
 
     def resolveBattle(self, result):
@@ -271,7 +291,7 @@ class Model(mvc.Model):
             
             if result[i] == 1:
                 for j in range(2):
-                    self.pendingBattle[i].precisePos[j] += retreat[j]
+                    self.pendingBattle[i].addToPos[j] += retreat[j]
 
     def paused(self):
         return (self.pause[0] or self.pause[1])
@@ -327,6 +347,9 @@ class Model(mvc.Model):
         except:
             k = 0
 
+        if self.encounterPause != -1:
+            return
+
         k -= 1
 
         if (k >= 0) and (k < len(self.charactersInTeams[self.team])):
@@ -338,17 +361,14 @@ class Model(mvc.Model):
     def key(self, k, t):
         self.keys[k] = t
 
-    def centerOnCharacter(self, c):
-        newLoc = [0, 0]
-        for i in range(2):
-            newLoc[i] = -(int(c.precisePos[i])) + (SCREEN_SIZE[i] / 2)
 
-        self.mapRect.topleft = newLoc
-        self.adjustMap()
-
-    def setCountdown(self):
+    def setCountdown(self, t=0):
         self.pause = [True, True]
-        self.countdown.setTime(MAP_COUNTDOWN_LENGTH)
+        if t == 0:
+            time = MAP_COUNTDOWN_LENGTH
+        else:
+            time = ENCOUNTER_COUNTDOWN_LENGTH
+        self.countdown.setTime(time)
 
     def netMessageSize(self):
         return MAP_MODE_NET_MESSAGE_SIZE
@@ -412,6 +432,109 @@ class Model(mvc.Model):
         data.append(chars)
 
         return data
+
+    def startBattle(self):
+        if self.encounterPause == 4:
+            self.encounterPause += 1
+            for c in self.characters:
+                c.blinkOn = True
+                c.blinkTick = 0
+            return True
+        else:
+            return False
+
+    def updateEncounterPause(self):
+        if self.encounterPause != -1:
+
+            if self.encounterPause == 1:
+                self.zoomToEncounter()
+
+            if self.encounterPause == 2:
+                self.blinkEncounter()
+
+            if self.encounterPause == 6:
+                self.backOffEncounter()
+
+            self.encounterPauseTick += 1
+            if self.encounterPauseTick >= MAP_PAUSE_TIME_LENGTHS[self.encounterPause]:
+                self.encounterPauseTick = 0
+                self.encounterPause += 1
+                if self.encounterPause >= len(MAP_PAUSE_TIME_LENGTHS):
+                    self.encounterPause = -1
+                    self.setCountdown(1)
+                elif self.encounterPause == 7:
+                    self.backOffEncounterFinal()
+
+    def blinkEncounter(self):
+        for c in self.pendingBattle:
+            print c.blinkTick
+            c.blinkTick += 1
+            if c.blinkTick == ENCOUNTER_START_BLINK:
+                print c.blinkOn
+                c.blinkTick = 0
+                c.blinkOn = not c.blinkOn
+
+    def backOffEncounter(self):
+        for c in self.characters:
+            for i in range(2):
+                if c.addToPos[i] != 0:
+                    temp = c.addToPos[i] / 10
+                    c.addToPos[i] -= temp
+                    c.precisePos[i] += temp
+            if c.isDead():
+                c.blinkTick += 1
+                if c.blinkTick == ENCOUNTER_END_BLINK:
+                    c.blinkTick = 0
+                    c.blinkOn = not c.blinkOn
+
+    def backOffEncounterFinal(self):
+        print "done"
+        for c in self.characters:
+            c.blinkOn = True
+            c.blinkTick = 0
+            if c.isDead():
+                c.removed = True
+            for i in range(2):
+                if c.addToPos[i] != 0:
+                    c.precisePos[i] += c.addToPos[i]
+                    c.addToPos[i] = 0
+
+    def zoomToEncounter(self):
+        pos1 = self.mapRect.center
+        
+        encPos = self.getEncounterCenter()
+
+        self.mapRect.topleft = add_points(self.mapRect.topleft, encPos)
+        self.adjustMap()
+
+        pos2 = self.mapRect.center
+
+        self.mapRect.center = pos1
+        self.adjustMap()
+
+        dist = sub_points(pos1, pos2)
+        scaled = scale_point(dist, 6)
+
+        self.mapRect.center = sub_points(self.mapRect.center, scaled)
+        self.adjustMap()
+
+
+    def getEncounterCenter(self):
+        newLoc = [0, 0]
+        c = self.pendingBattle[self.team]
+        for i in range(2):
+            newLoc[i] = -(int(c.tokenRect.center[i])) + (SCREEN_SIZE[i] / 2)
+
+        return newLoc
+
+    def centerOnCharacter(self, c):
+        newLoc = [0, 0]
+        for i in range(2):
+            newLoc[i] = -(int(c.tokenRect.center[i])) + (SCREEN_SIZE[i] / 2)
+
+        self.mapRect.topleft = add_points(self.mapRect.topleft, newLoc)
+        self.adjustMap()
+            
 
 
 def ConvertBattleCharsToMapChars(hostChars, clientChars):
