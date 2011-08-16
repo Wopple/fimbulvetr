@@ -388,7 +388,7 @@ if __name__ == '__main__':
             elif m.debugMenu.value() == 2:
                 currMap = gamemap.getMap("00")
                 changeMVC(mapdebug_m.Model(currMap), mapdebug_v.View(),
-                          mapmode_c.Controller(), screen)
+                          mapdebug_c.Controller(), screen)
                 while not m.advance():
                     proceed(clock)
             elif m.debugMenu.value() == 3:

@@ -4,9 +4,13 @@ import pygame
 
 from constants import *
 
+import copy
+
+import time
+
 class GameMap(object):
     def __init__(self, startingPoints, mapSize, horizAxis, flip,
-                 mountains, water, forests):
+                 mountains, water, forests, islands, rivers):
 
         self.horizAxis = horizAxis
         self.flip = flip
@@ -18,13 +22,22 @@ class GameMap(object):
 
         self.primaryTerrain = 0
 
+        self.surfaceTemplate = pygame.Surface(self.mapSize)
+        self.surfaceTemplate.fill(TERRAIN_COLORS[self.primaryTerrain])
+
         self.mountains = mountains
         self.water = water
         self.forests = forests
+        self.islands = islands
+        self.rivers = rivers
+
+        self.testCircles = []
 
         self.mirror(self.mountains)
         self.mirror(self.water)
         self.mirror(self.forests)
+        self.mirror(self.islands)
+        self.mirror(self.rivers)
 
         self.mirrorStartingPoints(startingPoints)
 
@@ -72,38 +85,57 @@ def getMap(s):
         return None
 
     if i == 0:
-        startingPoints = [(100, 500),
-                          (120, 520)]
+        startingPoints = [(0, 0),
+                          (20, 20),
+                          (10, 35)]
         
-        mapSize = (1500, 1200)
-        horizAxis = False
+        mapSize = (4000, 1500)
+        horizAxis = True
         flip = True
         
-        mountains = [((50, 50), 25),
-                       ((125, 300), 50),
-                       ((110, 310), 45),
-                       ((115, 335), 37),
-                       ((788, 500), 80)]
-        water = [((260, 350), 70),
-                   ((265, 330), 50)]
-        forests = [((450, 120), 30)]
+        mountains = [((-20, 420), 125),
+                     ((60, 435), 80),
+                     ((50, 470), 70),
+                     ((12, 512), 45)]
+        
+        water = []
+        
+        forests = [((220, 225), 80),
+                   ((240, 200), 65),
+                   ((275, 200), 70),
+                   ((290, 200), 72),]
+
+        islands = []
+        
+        rivers = []
         
     else:
         return None
 
     return GameMap(startingPoints, mapSize, horizAxis, flip,
-                   mountains, water, forests)
+                   mountains, water, forests, islands, rivers)
 
 def drawMap(inMap):
-    mapImage = pygame.Surface(inMap.mapSize)
-    mapImage.fill(TERRAIN_COLORS[inMap.primaryTerrain])
-    for i in inMap.mountains:
-        pygame.draw.circle(mapImage, MOUNTAIN_FILL_COLOR, i[0], i[1])
+    mapImage = pygame.Surface.copy(inMap.surfaceTemplate)
     for i in inMap.water:
         pygame.draw.circle(mapImage, WATER_FILL_COLOR, i[0], i[1])
+    for i in inMap.islands:
+        pygame.draw.circle(mapImage, TERRAIN_COLORS[0], i[0], i[1])
+    for i in inMap.mountains:
+        pygame.draw.circle(mapImage, MOUNTAIN_FILL_COLOR, i[0], i[1])
     for i in inMap.forests:
         pygame.draw.circle(mapImage, FOREST_FILL_COLOR, i[0], i[1])
+    for i in inMap.rivers:
+        pygame.draw.circle(mapImage, WATER_FILL_COLOR, i[0], i[1])
 
+    if DEBUG_MODE:
+        for m in range(2):
+            for n in range(2):
+                for i in inMap.testCircles:
+                    if i[2] == m and i[3] == n:
+                        pygame.draw.circle(mapImage, TEST_CIRCLE_COLORS[m][n],
+                                           i[0], i[1])
+    
     return mapImage
     
 

@@ -89,7 +89,7 @@ TOKEN_BORDER_OFF = [(0, 0, 150, 255),
 
 TOKEN_BORDER_SELECTED = (250, 250, 250, 255)
 
-TERRAIN_COLORS = [ (39, 116, 49, 255),
+TERRAIN_COLORS = [ (15, 111, 22, 255),
                    (230, 230, 230, 255) ]
 
 
@@ -100,6 +100,12 @@ ZOOM_MIN = 0.15
 MOUNTAIN_FILL_COLOR = (87, 65, 40)
 WATER_FILL_COLOR = (37, 159, 218)
 FOREST_FILL_COLOR = (12, 69, 16)
+
+TEST_CIRCLE_COLORS = [ [ (67, 5, 5),
+                       (228, 20, 20) ],
+                       [ (226, 205, 84),
+                         (241, 231, 173) ]
+                     ]
 
 SCROLL_AREA_WIDTH = 15
 SCROLL_SPEED = 18
