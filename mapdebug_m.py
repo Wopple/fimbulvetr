@@ -40,7 +40,7 @@ class Model(mvc.Model):
 
     def leftClick(self):
         pos = self.m.absMousePos()
-        newC = [[pos[0], pos[1]], 60, 1, 0]
+        newC = [[pos[0], pos[1]], 20, 1, 0]
 
         for c in self.m.map.testCircles:
             c[2] = 0
@@ -145,6 +145,8 @@ class Model(mvc.Model):
         for c in self.m.map.testCircles:
             if c[2] == 1:
                 c[1] += val
+                if c[1] < 2:
+                    c[1] = 2
 
         self.m.drawOrigMap()
 

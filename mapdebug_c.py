@@ -35,7 +35,7 @@ class Controller(mvc.Controller):
                 elif event.key == K_LEFTBRACKET:
                     self.model.changeHighlight(False)
                 elif event.key == K_RIGHTBRACKET:
-                    self.model.changeHighlight(False)
+                    self.model.changeHighlight(True)
                 elif event.key == K_RETURN:
                     self.model.toggleSelected()
                 elif event.key == K_BACKSLASH:
