@@ -250,13 +250,15 @@ class Model(mvc.Model):
         return False
 
     def checkTerrain(self, c):
-        for i in self.map.mountains:
-            dist = util.distance(c.precisePos, i[0])
-            if dist <= i[1]:
-                c.currTerrain = 2
+        for i in self.map.terrainMasterList:
+            circle = i[0]
+            terrainType = i[1]
+            dist = util.distance(c.precisePos, circle[0])
+            if dist <= circle[1]:
+                c.currTerrain = terrainType
                 return
 
-            c.currTerrain = 0
+        c.currTerrain = PLAINS
 
     def checkBounds(self, c):
         future = [c.precisePos[0] + c.vel[0],

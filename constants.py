@@ -299,28 +299,27 @@ STUN_THRESHOLD_1 = 50
 STUN_THRESHOLD_2 = 100
 STUN_THRESHOLD_3 = 150
 
-HARE_MAP_SPEED_BASE = 2.5
-FOX_MAP_SPEED_BASE = 2.0
-CAT_MAP_SPEED_BASE = 1.6
+HARE_MAP_SPEED_BASE = 1.6
+FOX_MAP_SPEED_BASE = 1.4
+CAT_MAP_SPEED_BASE = 1.1
 
-#Terrain types
-#0 = PLAINS
-#1 = FOREST
-#2 = MOUNTAIN
-#3 = WATER
+PLAINS = 0
+FOREST = 1
+MOUNTAIN = 2
+WATER = 3
 
 HARE_MAP_SPEED_MODIFIERS = [1.0,
-                            0.8,
+                            0.5,
                             0.3,
                             0.3]
 
 FOX_MAP_SPEED_MODIFIERS = [1.0,
-                           0.85,
+                           0.6,
                            0.3,
                            0.34]
 
 CAT_MAP_SPEED_MODIFIERS = [1.0,
-                            0.8,
+                            0.5,
                             0.28,
                             0.18]
 

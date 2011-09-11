@@ -45,6 +45,8 @@ class GameMap(object):
 
         self.mirrorStartingPoints(startingPoints)
 
+        self.createTerrainMasterList()
+
     def mirror(self, inList):
         temp = []
 
@@ -84,6 +86,17 @@ class GameMap(object):
                 t = (x == p[0])
 
         return (x, y), t
+
+    def createTerrainMasterList(self):
+        self.terrainMasterList = []
+
+        orderToAdd = [[self.rivers, WATER], [self.forests, FOREST],
+                      [self.mountains, MOUNTAIN], [self.islands, PLAINS],
+                      [self.water, WATER]]
+
+        for o in orderToAdd:
+            for i in range(len(o[0])):
+                self.terrainMasterList.append([o[0][i], o[1]])
         
 
 def getMap(s):
