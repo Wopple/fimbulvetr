@@ -8,9 +8,11 @@ import copy
 
 import time
 
+import mapstructure
+
 class GameMap(object):
     def __init__(self, startingPoints, mapSize, horizAxis, flip,
-                 mountains, water, forests, islands, rivers):
+                 mountains, water, forests, islands, rivers, structures):
 
         self.horizAxis = horizAxis
         self.flip = flip
@@ -30,6 +32,7 @@ class GameMap(object):
         self.forests = forests
         self.islands = islands
         self.rivers = rivers
+        self.structures = structures
 
         self.testCircles = []
 
@@ -38,6 +41,7 @@ class GameMap(object):
         self.mirror(self.forests)
         self.mirror(self.islands)
         self.mirror(self.rivers)
+        self.mirror(self.structures)
 
         self.mirrorStartingPoints(startingPoints)
 
@@ -45,8 +49,9 @@ class GameMap(object):
         temp = []
 
         for i in inList:
-            p = self.flipPoint(i[0])
-            temp.append( (p, i[1]) )
+            p, t = self.flipPoint(i[0])
+            if not t:
+                temp.append( (p, i[1]) )
 
         for i in temp:
             inList.append(i)
@@ -62,7 +67,8 @@ class GameMap(object):
 
         temp = []
         for i in inPoints:
-            temp.append(self.flipPoint(i))
+            p, t = self.flipPoint(i)
+            temp.append(p)
 
         self.startingPoints.append(temp)
 
@@ -71,11 +77,13 @@ class GameMap(object):
             if self.horizAxis:
                 x = p[0]
                 y = self.mapSize[1] - p[1]
+                t = (y == p[1])
             else:
                 x = self.mapSize[0] - p[0]
                 y = p[1]
+                t = (x == p[0])
 
-        return (x, y)
+        return (x, y), t
         
 
 def getMap(s):
@@ -473,14 +481,20 @@ def getMap(s):
                   ((1283, 264), 5),
                   ((1282, 260), 4),
                   ((1276, 263), 7),
-                  ((1266, 265), 6)
-]
+                  ((1266, 265), 6)]
+
+        structures = [((388, 483), "F"),
+                      ((2285, 788), "F"),
+                      ((814, 191), "S"),
+                      ((151, 990), "S"),
+                      ((1600, 990), "S"),
+                      ((2875, 931), "S")]
         
     else:
         return None
 
     return GameMap(startingPoints, mapSize, horizAxis, flip,
-                   mountains, water, forests, islands, rivers)
+                   mountains, water, forests, islands, rivers, structures)
 
 def drawMap(inMap):
     mapImage = pygame.Surface.copy(inMap.surfaceTemplate)

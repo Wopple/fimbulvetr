@@ -13,6 +13,8 @@ import mapcharacterbar
 import targetmarker
 import countdown
 
+import mapstructure
+
 import hare, fox, cat
 
 from constants import *
@@ -37,6 +39,7 @@ class Model(mvc.Model):
         self.drawOrigMap()
         self.mousePos = pygame.mouse.get_pos()
         self.placeChars()
+        self.placeStructures()
         self.pendingBattle = None
         self.pause = [False, False]
         self.keys = [False, False, False, False]
@@ -183,6 +186,21 @@ class Model(mvc.Model):
                         spot = self.map.startingPoints[team][0]
                     c.setPos(spot)
                     count += 1
+
+    def placeStructures(self):
+        self.structures = []
+
+        for s in self.map.structures:
+            sType = s[1]
+            result = None
+
+            if sType == "F":
+                result = mapstructure.Fortress(s[0])
+            elif sType == "S":
+                result = mapstructure.Spire(s[0])
+
+            if not result is None:
+                self.structures.append(result)
 
     def leftClick(self):
         if self.encounterPause == -1:

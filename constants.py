@@ -89,6 +89,14 @@ TOKEN_BORDER_OFF = [(0, 0, 150, 255),
 
 TOKEN_BORDER_SELECTED = (250, 250, 250, 255)
 
+FORTRESS_TEAM_COLORS = [(114, 182, 230, 255),
+                            (196, 146, 140, 255)]
+FORTRESS_NEUTRAL = (191, 191, 191, 255)
+
+SPIRE_TEAM_COLORS = [(10, 90, 220, 255),
+                            (210, 20, 20, 255)]
+SPIRE_NEUTRAL = (210, 40, 192, 255)
+
 TERRAIN_COLORS = [ (15, 111, 22, 255),
                    (230, 230, 230, 255) ]
 
@@ -281,6 +289,7 @@ DIREC_CAT_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "cat")
 DIREC_INTERFACE_GRAPHICS = os.path.join(DIREC_GRAPHICS, "interface")
 DIREC_PORTRAITS = os.path.join(DIREC_GRAPHICS, "portraits")
 DIREC_FX_GRAPHICS = os.path.join(DIREC_GRAPHICS, "fx")
+DIREC_MAP_ITEMS = os.path.join(DIREC_GRAPHICS, "mapitems")
 
 CHARACTER_FILE_NAME = "char"
 CHARACTER_FILE_EXT = "dat"
@@ -571,6 +580,16 @@ CAT_TOKENS = []
 for i in temp:
     CAT_TOKENS.append([pygame.image.load(os.path.join(DIREC_CAT_GRAPHICS, i[0])).convert_alpha(), i[1]])
     
+
+mapItemsList = [["fortress", "fortress.png", (33, 50)],
+                ["spire", "spire.png", (14, 54)]]
+MAP_ITEMS = {}
+for i in mapItemsList:
+    MAP_ITEMS[i[0]] = []
+    for c in range(3):
+        MAP_ITEMS[i[0]].append([pygame.image.load(os.path.join(DIREC_MAP_ITEMS, i[1])).convert_alpha(), i[2]])
+
+
 
 temp = [ ['00.png', (25, 22)],
          ['01.png', (25, 22)],

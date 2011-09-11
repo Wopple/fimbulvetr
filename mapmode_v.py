@@ -22,6 +22,9 @@ class View(mvc.View):
                 self.model.targetMarker.draw(self.screen, c.target,
                                              self.model.zoomVal, self.model.mapRect.topleft)
 
+        for i in self.model.structures:
+            i.draw(self.screen, self.model.zoomVal, self.model.mapRect.topleft)
+
         for c in self.model.characters:
             if ((not c is self.model.currHighlighted) and
                 (not c is self.model.currSelected)):
