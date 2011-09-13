@@ -20,7 +20,29 @@ class MapStructure(mapitem.MapItem):
 
         super(MapStructure, self).__init__(inPos, inImages)
 
-        self.setImage(0)
+        self.changeOwnership(0)
+
+        self.triggerColor = STRUCTURE_TRIGGER_AREA_COLOR_WITH_ALPHA
+        self.triggerSize = STRUCTURE_TRIGGER_RANGE
+
+        self.emptyPlayerList()
+
+    def emptyPlayerList(self):
+        self.playersInArea = [[],[]]
+
+    def checkForOwnershipChange(self):
+        blueCount = len(self.playersInArea[0])
+        redCount = len(self.playersInArea[1])
+
+        if (blueCount > 0 and redCount == 0):
+            self.changeOwnership(1)
+
+        if (redCount > 0 and blueCount == 0):
+            self.changeOwnership(2)
+
+    def changeOwnership(self, val):
+        self.team = val
+        self.setImage(self.team)
 
 
 class Fortress(MapStructure):

@@ -21,6 +21,9 @@ class MapItem(object):
             self.images.append([copy.copy(i[0]), i[1]])
         self.imageNum = -1
 
+        self.triggerArea = None
+        self.triggerRect = None
+
         self.modifyImages()
         self.setImage(0)
         
@@ -42,8 +45,9 @@ class MapItem(object):
         self.setImagePos(inZoom, inOffset)
         screen.blit(self.image, self.tokenRect.topleft)
         
-        #if SHOW_BATTLE_TRIGGER_AREA:
-            #screen.blit(self.battleTriggerArea, self.battleTriggerRect.topleft)
+        if (SHOW_TRIGGER_AREA and (not self.triggerArea is None) and
+            (not self.triggerRect is None)):
+            screen.blit(self.triggerArea, self.triggerRect.topleft)
 
     def setImagePos(self, inZoom, inOffset):
         imageOffset = self.images[self.imageNum][1]
@@ -51,7 +55,17 @@ class MapItem(object):
                int(self.precisePos[1] * inZoom) + inOffset[1] - imageOffset[1])
         self.tokenRect.topleft = pos
         
-        #if not self.battleTriggerRect is None:
-        #    self.battleTriggerRect.center = (int(self.precisePos[0] * inZoom) + inOffset[0],
-        #                                     int(self.precisePos[1] * inZoom) + inOffset[1])
+        if not self.triggerRect is None:
+            self.triggerRect.center = (int(self.precisePos[0] * inZoom) + inOffset[0],
+                                             int(self.precisePos[1] * inZoom) + inOffset[1])
 
+
+
+    def createTriggerArea(self, zoom):
+        r = int(self.triggerSize * zoom)
+        d = int(r*2)
+        self.triggerArea = pygame.Surface((d, d), SRCALPHA)
+        self.triggerArea.fill ((0, 0, 0, 0))
+        pygame.draw.circle(self.triggerArea, self.triggerColor,
+                           (r, r), r)
+        self.triggerRect = pygame.Rect((0, 0), (d, d))

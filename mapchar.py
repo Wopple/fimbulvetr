@@ -26,12 +26,13 @@ class MapChar(mapitem.MapItem):
         self.target = None
         self.currTerrain = 0
         self.oldTerrain = 0
-        self.battleTriggerArea = None
-        self.battleTriggerRect = None
         self.addToPos = [0, 0]
         self.blinkOn = True
         self.blinkTick = 0
         self.removed = False
+
+        self.triggerColor = BATTLE_TRIGGER_AREA_COLOR_WITH_ALPHA
+        self.triggerSize = BATTLE_TRIGGER_RANGE
 
         super(MapChar, self).__init__((0, 0), inImages)
 
@@ -80,15 +81,6 @@ class MapChar(mapitem.MapItem):
 
     def getCurrSpeed(self):
         return self.speedBase * self.speedModifiers[self.currTerrain]
-
-    def createBattleTriggerArea(self, zoom):
-        r = int(BATTLE_TRIGGER_RANGE * zoom)
-        d = int(r*2)
-        self.battleTriggerArea = pygame.Surface((d, d), SRCALPHA)
-        self.battleTriggerArea.fill ((0, 0, 0, 0))
-        pygame.draw.circle(self.battleTriggerArea, BATTLE_TRIGGER_AREA_COLOR_WITH_ALPHA,
-                           (r, r), r)
-        self.battleTriggerRect = pygame.Rect((0, 0), (d, d))
 
     def initPortrait(self, p):
         q = pygame.Surface(MAP_CHAR_BAR_PORTRAIT_SIZE)

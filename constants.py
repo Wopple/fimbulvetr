@@ -57,7 +57,7 @@ SHOW_TEAL_DOTS = False
 SHOW_HURTBOXES = False
 SHOW_HITBOXES = False
 SHOW_BLOCKBOXES = False
-SHOW_BATTLE_TRIGGER_AREA = False
+SHOW_TRIGGER_AREA = True
 
 MAP_INTERFACE_ALPHA_MIN = 50
 MAP_INTERFACE_ALPHA_TICK = 10
@@ -125,6 +125,16 @@ BATTLE_TRIGGER_AREA_COLOR_WITH_ALPHA = (BATTLE_TRIGGER_AREA_COLOR[0],
                                         BATTLE_TRIGGER_AREA_COLOR[1],
                                         BATTLE_TRIGGER_AREA_COLOR[2],
                                         BATTLE_TRIGGER_AREA_ALPHA)
+
+STRUCTURE_TRIGGER_RANGE = 60
+STRUCTURE_TRIGGER_AREA_COLOR = (200, 200, 10)
+STRUCTURE_TRIGGER_AREA_ALPHA = 100
+STRUCTURE_TRIGGER_AREA_COLOR_WITH_ALPHA = (STRUCTURE_TRIGGER_AREA_COLOR[0],
+                                           STRUCTURE_TRIGGER_AREA_COLOR[1],
+                                           STRUCTURE_TRIGGER_AREA_COLOR[2],
+                                           STRUCTURE_TRIGGER_AREA_ALPHA)
+
+
 RETREAT_DISTANCE = 80
 
 PAUSE_PLAY_RESIZE_FACTOR = 0.6
@@ -580,7 +590,7 @@ for i in temp:
     CAT_TOKENS.append([pygame.image.load(os.path.join(DIREC_CAT_GRAPHICS, i[0])).convert_alpha(), i[1]])
     
 
-mapItemsList = [["fortress", "fortress.png", (33, 50)],
+mapItemsList = [["fortress", "fortress.png", (33, 37)],
                 ["spire", "spire.png", (14, 54)]]
 MAP_ITEMS = {}
 for i in mapItemsList:

@@ -30,9 +30,6 @@ class Model(mvc.Model):
         self.charactersInTeams = [[], []]
         for c in self.characters:
             self.charactersInTeams[c.team].append(c)
-        
-        if SHOW_BATTLE_TRIGGER_AREA:
-            self.setBattleTriggerAreas()
         self.mapRect = None
         self.currHighlighted = None
         self.currSelected = None
@@ -45,6 +42,9 @@ class Model(mvc.Model):
         self.keys = [False, False, False, False]
         self.currentFrameOrder = None
         self.countdown = countdown.Countdown(MAP_COUNTDOWN_LENGTH)
+
+        if SHOW_TRIGGER_AREA:
+            self.setTriggerAreas()
 
         self.encounterPause = -1
         self.encounterPauseTick = 0
@@ -67,6 +67,8 @@ class Model(mvc.Model):
         self.updateEncounterPause()
         
         self.checkForBattle()
+
+        self.checkForStructureOwnership()
 
         self.mousePos = pygame.mouse.get_pos()
         if self.encounterPause == -1:
@@ -95,8 +97,8 @@ class Model(mvc.Model):
     def zoom(self):
         self.drawZoomMap()
         self.adjustMap()
-        if SHOW_BATTLE_TRIGGER_AREA:
-            self.setBattleTriggerAreas()
+        if SHOW_TRIGGER_AREA:
+            self.setTriggerAreas()
             
 
     def drawOrigMap(self):
@@ -274,9 +276,12 @@ class Model(mvc.Model):
                 c.precisePos[i] = self.map.mapSize[i]
 
 
-    def setBattleTriggerAreas(self):
+    def setTriggerAreas(self):
         for c in self.characters:
-            c.createBattleTriggerArea(self.zoomVal)
+            c.createTriggerArea(self.zoomVal)
+
+        for s in self.structures:
+            s.createTriggerArea(self.zoomVal)
 
     def checkForBattle(self):
         if self.encounterPause != -1 or self.encounterPause != -1:
@@ -294,6 +299,27 @@ class Model(mvc.Model):
                     self.pendingBattle = [c, d]
                     self.encounterPause = 0
                     return
+
+    def checkForStructureOwnership(self):
+        for s in self.structures:
+            s.emptyPlayerList()
+        
+        for t, team in enumerate(self.charactersInTeams):
+            for c in team:
+                if c.isDead():
+                    continue
+
+                for s in self.structures:
+                    dist = util.distance(c.precisePos, s.precisePos)
+                    if dist <= STRUCTURE_TRIGGER_RANGE:
+                        s.playersInArea[t].append(c)
+
+
+        for s in self.structures:
+            s.checkForOwnershipChange()
+                        
+                
+                
 
     def resolveBattle(self, result):
         for i in range(2):
