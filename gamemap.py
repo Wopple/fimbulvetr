@@ -106,9 +106,9 @@ def getMap(s):
         return None
 
     if i == 0:
-        startingPoints = [(0, 0),
-                          (20, 20),
-                          (10, 35)]
+        startingPoints = [(334, 481),
+                          (384, 525),
+                          (411, 433)]
         
         mapSize = (3000, 990)
         horizAxis = True
