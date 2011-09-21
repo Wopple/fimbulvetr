@@ -2,6 +2,8 @@ import os
 import pygame
 import sys
 
+import math
+
 FULL_SCREEN = False
 FRAME_RATE = 40
 SCREEN_SIZE = (800, 600)
@@ -309,9 +311,12 @@ STUN_THRESHOLD_1 = 50
 STUN_THRESHOLD_2 = 100
 STUN_THRESHOLD_3 = 150
 
-HARE_MAP_SPEED_BASE = 1.6
-FOX_MAP_SPEED_BASE = 1.4
-CAT_MAP_SPEED_BASE = 1.1
+
+BASE_CHARACTER_SPEED = 1.2
+
+HARE_MAP_SPEED_BASE = 1.45 * BASE_CHARACTER_SPEED
+FOX_MAP_SPEED_BASE = 1.2 * BASE_CHARACTER_SPEED
+CAT_MAP_SPEED_BASE = 1.05 * BASE_CHARACTER_SPEED
 
 PLAINS = 0
 FOREST = 1
@@ -319,19 +324,41 @@ MOUNTAIN = 2
 WATER = 3
 
 HARE_MAP_SPEED_MODIFIERS = [1.0,
-                            0.5,
+                            0.6,
                             0.3,
                             0.3]
 
 FOX_MAP_SPEED_MODIFIERS = [1.0,
-                           0.6,
+                           0.7,
                            0.3,
                            0.34]
 
 CAT_MAP_SPEED_MODIFIERS = [1.0,
-                            0.5,
-                            0.28,
-                            0.18]
+                           0.7,
+                           0.32,
+                           0.18]
+
+
+FORTRESS_TERRITORY_RADIUS = 420
+SPIRE_TERRITORY_RADIUS = 300
+
+TERRITORY_DEGREES_PER_DOT = 3
+
+TERRITORY_DOT_OFFSET = 2
+
+TERRITORY_DOT_COLORS = [(250, 235, 215, 255),
+                        (22, 100, 250, 255),
+                        (220, 60, 60, 255)]
+
+size = TERRITORY_DOT_OFFSET * 2
+TERRITORY_DOT_IMAGES = []
+for i in range(len(TERRITORY_DOT_COLORS)):
+    temp = pygame.Surface((size, size))
+    temp.fill(TERRITORY_DOT_COLORS[i])
+    TERRITORY_DOT_IMAGES.append(temp)
+
+
+
 
 temp = []
 BACKGROUNDS = []
@@ -715,6 +742,12 @@ def average_point_list(points):
 
 def scale_point(i, s):
     return [i[0] / s, i[1] / s]
+
+def degreesToPoint(deg, mag, pos=[0,0]):
+    x = pos[0] + (math.cos(deg) * mag)
+    y = pos[1] + (math.sin(deg) * mag)
+
+    return [x, y]
     
 
 def flipRect(i):

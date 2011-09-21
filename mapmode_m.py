@@ -37,6 +37,8 @@ class Model(mvc.Model):
         self.mousePos = pygame.mouse.get_pos()
         self.placeChars()
         self.placeStructures()
+        self.checkForStructureOwnership()
+        
         self.pendingBattle = None
         self.pause = [False, False]
         self.keys = [False, False, False, False]
@@ -315,10 +317,46 @@ class Model(mvc.Model):
                         s.playersInArea[t].append(c)
 
 
+        checker = False
         for s in self.structures:
-            s.checkForOwnershipChange()
-                        
+            if (s.checkForOwnershipChange()):
+                checker = True
+
+
+        if checker:
+            self.recreateTerritory()
+
+
+    def recreateTerritory(self):
+        for s in self.structures:
+            if (s.team != 0):
+                self.createTerritoryForStructure(s)
+
+
+    def createTerritoryForStructure(self, s):
+        s.territoryPoints = []
+        
+        for i in range(360 / TERRITORY_DEGREES_PER_DOT):
+            deg = TERRITORY_DEGREES_PER_DOT * i
+            pos = degreesToPoint(deg, s.territorySize, s.precisePos)
+
+            checker = True
+            contested = False
+            for t in self.structures:
+                if (s == t) or t.team == 0:
+                    continue
                 
+                if s.team == t.team:
+                    if util.distance(t.precisePos, pos) <= t.territorySize:
+                        checker = False
+                        break
+                else:
+                   if util.distance(t.precisePos, pos) <= t.territorySize:
+                       contested = True
+
+            if checker:
+                s.territoryPoints.append([pos, contested])
+            
                 
 
     def resolveBattle(self, result):
