@@ -2,6 +2,7 @@ import os
 import sys
 import pygame
 import math
+import copy
 
 import mvc
 import gamemap
@@ -90,6 +91,7 @@ class Model(mvc.Model):
             for c in self.characters:
                 self.checkBounds(c)
                 self.checkTerrain(c)
+                self.checkTerritory(c)
                 c.update()
 
     def runCharacters(self):
@@ -263,6 +265,31 @@ class Model(mvc.Model):
                 return
 
         c.currTerrain = PLAINS
+
+    def checkTerritory(self, c):
+        c.currTerritory = "neutral"
+        for s in self.structures:
+            if s.team == 0:
+                continue
+            
+            dist = util.distance(c.precisePos, s.precisePos)
+            if dist <= s.territorySize:
+                sTeam = s.team
+                cTeam = c.team + 1
+                if sTeam == cTeam:
+                    if c.currTerritory == "enemy":
+                        c.currTerritory = "contested"
+                    else:
+                        c.currTerritory = "allied"
+                else:
+                    if c.currTerritory == "allied":
+                        c.currTerritory = "contested"
+                    else:
+                        c.currTerritory = "enemy"
+                
+                    
+            
+            
 
     def checkBounds(self, c):
         future = [c.precisePos[0] + c.vel[0],
@@ -617,7 +644,7 @@ class Model(mvc.Model):
             newLoc[i] = -(int(c.tokenRect.center[i])) + (SCREEN_SIZE[i] / 2)
 
         self.mapRect.topleft = add_points(self.mapRect.topleft, newLoc)
-        self.adjustMap()
+        self.adjustMap()            
             
 
 

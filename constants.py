@@ -312,7 +312,8 @@ STUN_THRESHOLD_2 = 100
 STUN_THRESHOLD_3 = 150
 
 
-BASE_CHARACTER_SPEED = 1.2
+#BASE_CHARACTER_SPEED = 1.2
+BASE_CHARACTER_SPEED = 3.0
 
 HARE_MAP_SPEED_BASE = 1.45 * BASE_CHARACTER_SPEED
 FOX_MAP_SPEED_BASE = 1.2 * BASE_CHARACTER_SPEED
@@ -323,20 +324,37 @@ FOREST = 1
 MOUNTAIN = 2
 WATER = 3
 
-HARE_MAP_SPEED_MODIFIERS = [1.0,
-                            0.6,
-                            0.3,
-                            0.3]
+HARE_MAP_SPEED_TERRAIN_MODIFIERS = [1.0,
+                                    0.6,
+                                    0.3,
+                                    0.3]
 
-FOX_MAP_SPEED_MODIFIERS = [1.0,
-                           0.7,
-                           0.3,
-                           0.34]
+FOX_MAP_SPEED_TERRAIN_MODIFIERS = [1.0,
+                                   0.7,
+                                   0.3,
+                                   0.34]
 
-CAT_MAP_SPEED_MODIFIERS = [1.0,
-                           0.7,
-                           0.32,
-                           0.18]
+CAT_MAP_SPEED_TERRAIN_MODIFIERS = [1.0,
+                                   0.7,
+                                   0.32,
+                                   0.18]
+
+
+
+HARE_MAP_SPEED_TERRITORY_MODIFIERS = {"neutral"   : 1.00,
+                                      "allied"    : 1.15,
+                                      "enemy"     : 0.90,
+                                      "contested" : 0.75 }
+
+FOX_MAP_SPEED_TERRITORY_MODIFIERS  = {"neutral"   : 1.00,
+                                      "allied"    : 1.15,
+                                      "enemy"     : 0.90,
+                                      "contested" : 0.75 }
+
+CAT_MAP_SPEED_TERRITORY_MODIFIERS  = {"neutral"   : 1.00,
+                                      "allied"    : 1.15,
+                                      "enemy"     : 0.90,
+                                      "contested" : 0.75 }
 
 
 FORTRESS_TERRITORY_RADIUS = 420
@@ -349,6 +367,18 @@ TERRITORY_DOT_OFFSET = 2
 TERRITORY_DOT_COLORS = [(250, 235, 215, 255),
                         (22, 100, 250, 255),
                         (220, 60, 60, 255)]
+
+FLAG_NEUTRAL_COLOR = (215, 22, 227, 255)
+
+TERRITORY_FLAG_COLORS = [(250, 235, 215, 255),
+                        (22, 100, 250, 255),
+                        (220, 60, 60, 255)]
+
+EFFECT_COLORS = {"good"   : (0, 180, 0),
+                 "bad"     : (180, 0, 0),
+                 "neutral" : (100, 100, 100)}
+
+EFFECT_ICON_SIZE = (20, 20)
 
 size = TERRITORY_DOT_OFFSET * 2
 TERRITORY_DOT_IMAGES = []
@@ -660,7 +690,8 @@ temp = ['pauseicon.png',
         'playicon.png',
         'target.png',
         'networking.png',
-        'pagearrow.png']
+        'pagearrow.png',
+        'territoryflag.png']
 
 INTERFACE_GRAPHICS = []
 for i in temp:

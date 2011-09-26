@@ -13,19 +13,25 @@ import mapitem
 from constants import *
 
 class MapChar(mapitem.MapItem):
-    def __init__(self, inImages, speedBase, speedModifiers, team, name,
-                 battleChar, portrait):
+    def __init__(self, inImages, speedBase, speedTerrainModifiers,
+                 speedTerritoryModifiers, team, name, battleChar, portrait):
         self.team = team
         self.name = name
         self.initPortrait(portrait)
         self.battleChar = battleChar
         
         self.speedBase = speedBase
-        self.speedModifiers = speedModifiers
+        self.speedTerrainModifiers = speedTerrainModifiers
+        self.speedTerritoryModifiers = speedTerritoryModifiers
+        
         self.vel = [0.0, 0.0]
         self.target = None
+        
         self.currTerrain = 0
         self.oldTerrain = 0
+        self.currTerritory = "allied"
+        self.oldTerritory = "allied"
+        
         self.addToPos = [0, 0]
         self.blinkOn = True
         self.blinkTick = 0
@@ -37,14 +43,20 @@ class MapChar(mapitem.MapItem):
         super(MapChar, self).__init__((0, 0), inImages)
 
     def update(self):
-        if self.oldTerrain != self.currTerrain:
+        if self.speedHasChanged():
             self.startMovement(self.target)
+            print self.name + ": " + self.currTerritory + " " + str(self.currTerrain)
         self.oldTerrain = self.currTerrain
+        self.oldTerritory = self.currTerritory
         
         for i in range(2):
             self.precisePos[i] += self.vel[i]
 
         self.checkForStop()
+
+    def speedHasChanged(self):
+        return ( (self.oldTerrain != self.currTerrain) or
+                 (self.oldTerritory != self.currTerritory) )
 
     def checkForStop(self):
         if not self.target is None:
@@ -73,6 +85,8 @@ class MapChar(mapitem.MapItem):
 
     def startMovement(self, target):
         self.target = target
+        if target is None:
+            return
         direction = util.get_direction(self.precisePos, self.target)
         speed = self.getCurrSpeed()
 
@@ -80,7 +94,17 @@ class MapChar(mapitem.MapItem):
             self.vel[i] = direction[i] * speed
 
     def getCurrSpeed(self):
-        return self.speedBase * self.speedModifiers[self.currTerrain]
+        print (str(self.speedBase) + " * " +
+               str(self.speedTerrainModifiers[self.currTerrain]) + " * " +
+               str(self.speedTerritoryModifiers[self.currTerritory]) )
+        val = (self.speedBase *
+                self.speedTerrainModifiers[self.currTerrain] *
+                self.speedTerritoryModifiers[self.currTerritory] )
+
+        print val
+        return val
+
+                
 
     def initPortrait(self, p):
         q = pygame.Surface(MAP_CHAR_BAR_PORTRAIT_SIZE)
@@ -104,19 +128,22 @@ class MapChar(mapitem.MapItem):
 
 def Hare(team, battleChar, name="Unnamed Hare", portrait=None):
     c = MapChar(HARE_TOKENS, HARE_MAP_SPEED_BASE,
-                HARE_MAP_SPEED_MODIFIERS, team,
-                name, battleChar, portrait)
+                HARE_MAP_SPEED_TERRAIN_MODIFIERS,
+                HARE_MAP_SPEED_TERRITORY_MODIFIERS,
+                team, name, battleChar, portrait)
     return c
 
 
 def Fox(team, battleChar, name="Unnamed Fox", portrait=None):
     c = MapChar(FOX_TOKENS, FOX_MAP_SPEED_BASE,
-                FOX_MAP_SPEED_MODIFIERS, team,
-                name, battleChar, portrait)
+                FOX_MAP_SPEED_TERRAIN_MODIFIERS,
+                FOX_MAP_SPEED_TERRITORY_MODIFIERS,
+                team, name, battleChar, portrait)
     return c
 
 def Cat(team, battleChar, name="Unnamed Cat", portrait=None):
     c = MapChar(CAT_TOKENS, CAT_MAP_SPEED_BASE,
-                CAT_MAP_SPEED_MODIFIERS, team,
-                name, battleChar, portrait)
+                CAT_MAP_SPEED_TERRAIN_MODIFIERS,
+                CAT_MAP_SPEED_TERRITORY_MODIFIERS,
+                team, name, battleChar, portrait)
     return c
