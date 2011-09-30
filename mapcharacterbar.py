@@ -139,9 +139,43 @@ class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
             self.territoryEffectIcons[o] = icon
 
 
+        self.terrainEffectIcons = []
+
+        for i in range(4):
+            terrainIcon = TERRAIN_ICONS[i]
+
+            effect = self.character.speedTerrainModifiers[i]
+
+            if effect <= 0.99:
+                bgColor = EFFECT_COLORS["bad"]
+            elif effect >= 1.01:
+                bgColor = EFFECT_COLORS["good"]
+            else:
+                bgColor = EFFECT_COLORS["neutral"]
+
+            icon = pygame.Surface(EFFECT_ICON_SIZE)
+            icon.fill(bgColor)
+
+            if not terrainIcon is None:
+                icon.blit(terrainIcon, (0,0))
+
+            self.terrainEffectIcons.append(icon)
+
+
     def drawEffectIcons(self, image):
 
+        self.drawTerrainIcon(image)
         self.drawTerritoryIcon(image)
+
+    def drawTerrainIcon(self, image):
+
+        icon = self.terrainEffectIcons[self.character.currTerrain]
+
+        x = (self.rect.width - MAP_CHAR_BAR_BORDER - MAP_CHAR_BAR_PADDING -
+             EFFECT_ICON_SIZE[0])
+        y = MAP_CHAR_BAR_BORDER + MAP_CHAR_BAR_PADDING
+
+        image.blit(icon, (x, y))
 
 
     def drawTerritoryIcon(self, image):
@@ -150,7 +184,8 @@ class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
 
         x = (self.rect.width - MAP_CHAR_BAR_BORDER - MAP_CHAR_BAR_PADDING -
              EFFECT_ICON_SIZE[0])
-        y = MAP_CHAR_BAR_BORDER + MAP_CHAR_BAR_PADDING
+        y = (self.rect.height - MAP_CHAR_BAR_BORDER - MAP_CHAR_BAR_PADDING -
+             EFFECT_ICON_SIZE[1])
 
         image.blit(icon, (x, y))
             

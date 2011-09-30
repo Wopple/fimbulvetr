@@ -691,12 +691,19 @@ temp = ['pauseicon.png',
         'target.png',
         'networking.png',
         'pagearrow.png',
-        'territoryflag.png']
+        'territoryflag.png',
+        'terrainforest.png',
+        'terrainmountain.png',
+        'terrainwater.png']
 
 INTERFACE_GRAPHICS = []
 for i in temp:
     INTERFACE_GRAPHICS.append(pygame.image.load(os.path.join(
         DIREC_INTERFACE_GRAPHICS, i)).convert_alpha())
+
+TERRAIN_ICONS = [None, INTERFACE_GRAPHICS[6],
+                 INTERFACE_GRAPHICS[7], INTERFACE_GRAPHICS[8]]
+    
 
 temp = ['hare00.png']
 
