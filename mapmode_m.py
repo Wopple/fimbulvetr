@@ -52,6 +52,8 @@ class Model(mvc.Model):
         self.encounterPause = -1
         self.encounterPauseTick = 0
 
+        self.charBarSideRight = True
+
         self.setCountdown()
 
         self.buildInterface()
@@ -433,8 +435,37 @@ class Model(mvc.Model):
 
     def updateInterface(self):
         self.updatePausePlayIcons()
+        updateSide = self.checkCharBarSide()
         for i in self.charBars:
             i.update()
+
+            if updateSide:
+                if self.charBarSideRight:
+                    i.rect.right = SCREEN_SIZE[0] - MAP_CHAR_BAR_INIT_POS[0]
+                else:
+                    i.rect.left = MAP_CHAR_BAR_INIT_POS[0]
+
+    def checkCharBarSide(self):
+
+        fraction = SCREEN_SIZE[0] / MAP_CHAR_BAR_SIDE_FRACTION
+
+        newSideRight = None
+        if self.mousePos[0] <= fraction:
+            newSideRight = True
+        elif self.mousePos[0] >= (fraction * (MAP_CHAR_BAR_SIDE_FRACTION-1)):
+            newSideRight = False
+
+        if newSideRight is None:
+            return False
+
+        if newSideRight == self.charBarSideRight:
+            return False
+
+        self.charBarSideRight = newSideRight
+
+        return True
+
+        
 
     def updatePausePlayIcons(self):
         self.bigPausePlayIcon.update(self.paused())
@@ -644,8 +675,8 @@ class Model(mvc.Model):
             newLoc[i] = -(int(c.tokenRect.center[i])) + (SCREEN_SIZE[i] / 2)
 
         self.mapRect.topleft = add_points(self.mapRect.topleft, newLoc)
-        self.adjustMap()            
-            
+        self.adjustMap()
+        
 
 
 def ConvertBattleCharsToMapChars(hostChars, clientChars):
