@@ -22,7 +22,7 @@ class Model(mvc.Model):
         self.bg = pygame.Surface(SCREEN_SIZE)
         self.bg.fill(CHARACTER_SELECT_BG_COLOR)
 
-        self.group = CharacterPanelGroup(3)
+        self.group = CharacterPanelGroup(self.theMap.numOfCharactersPerTeam())
         self.currSelected = None
 
         x = ((CHARACTER_SELECT_PANEL_SELECTION_BORDER_WIDTH * 2) +

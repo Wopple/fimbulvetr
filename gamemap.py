@@ -97,6 +97,10 @@ class GameMap(object):
         for o in orderToAdd:
             for i in range(len(o[0])):
                 self.terrainMasterList.append([o[0][i], o[1]])
+
+
+    def numOfCharactersPerTeam(self):
+        return len(self.startingPoints[0])
         
 
 def getMap(s):
@@ -106,9 +110,11 @@ def getMap(s):
         return None
 
     if i == 0:
-        startingPoints = [(334, 481),
-                          (384, 525),
-                          (411, 433)]
+        startingPoints = [(594, 439),
+                          (413, 600),
+                          (393, 486),
+                          (444, 329),
+                          (297, 333)]
         
         mapSize = (3000, 990)
         horizAxis = True

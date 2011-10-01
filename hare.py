@@ -35,9 +35,10 @@ class Hare(battlechar.BattleChar):
         self.initSpecMoves()
 
         self.speciesDesc = ("A speedy light-assault unit specializing in" +
-                            " chasing down opponents, using hit-and-run" +
-                            " tactics, and evading danger with acrobatic" +
-                            " mobility.")
+                            " close-range combat and acrobatic mobility." +
+                            "  Can quickly change distance in combat to" +
+                            " close in for an offensive rush or back off" +
+                            " defensively as needed.")
 
         if (inSpecial < 0) or (inSpecial >= len(self.superMoves)):
             inSpecial = 0
@@ -562,9 +563,22 @@ class Hare(battlechar.BattleChar):
                     (2, -61, 18, -45),
                     (1, -45, 22, -18),
                     (9, -18, 19, -1)
-                ]
+                ],
+                [
+                    (-13, -44, 1, -35),
+                    (-13, -52, -2, -44),
+                    (-12, -35, 1, -19),
+                    (0, -33, 5, -29),
+                    (-18, -32, -11, -26),
+                    (-24, -29, -17, -24),
+                    (-12, -19, -5, 0),
+                    (-8, -19, 1, -12),
+                    (0, -16, 7, -11),
+                    (3, -12, 8, 0),
+                    (5, -4, 17, 1)
+                 ]
             ]
-        dam1 = 80
+        dam1 = 90
         stun1 = 60
         force1 = 15
         angle1 = 30
@@ -579,11 +593,12 @@ class Hare(battlechar.BattleChar):
                 ]
             ]
 
-        f = [ self.frameData(46, 3, r[0]),
+        f = [ self.frameData(46, 5, r[0]),
               self.frameData(47, 1, r[1]),
               self.frameData(48, 1, r[2], h[0]),
               self.frameData(49, 5, r[3], h[1]),
-              self.frameData(50, 6, r[4]) ]
+              self.frameData(50, 6, r[4]),
+              self.frameData(0, 4, r[5])]
         self.moves['jabB'].append(f, [])
         self.moves['jabB'].canDI = False
 
@@ -675,7 +690,7 @@ class Hare(battlechar.BattleChar):
                     (20, -15, 27, -8)
                 ]
             ]
-        dam1 = 150
+        dam1 = 100
         stun1 = 120
         force1 = 24
         angle1 = 25
@@ -828,7 +843,7 @@ class Hare(battlechar.BattleChar):
                 ],
             ]
 
-        dam1 = 40
+        dam1 = 75
         stun1 = 101
         force1 = 6
         angle1 = 30
@@ -1480,7 +1495,7 @@ class Hare(battlechar.BattleChar):
                 ],
             ]
         
-        dam1 = 80
+        dam1 = 60
         stun1 = 20
         force1 = 14
         angle1 = 20
@@ -1748,7 +1763,7 @@ class Hare(battlechar.BattleChar):
                 ],
             ]
 
-        h[0] = [i + [28, 40, 20, 60, [], 3] for i in h[0]]
+        h[0] = [i + [12, 40, 20, 60, [], 3] for i in h[0]]
         f = [ self.frameData(51, 3, r[0]),
               self.frameData(52, 1, r[1], h[0]),
               self.frameData(53, 1, r[1], h[0]),
@@ -1968,7 +1983,7 @@ class Hare(battlechar.BattleChar):
                     [28, -20, 51, 2]
                 ],
             ]
-        h[0] = [i + [60, 60, 25, 315, [], 2] for i in h[0]]
+        h[0] = [i + [40, 60, 25, 315, [], 2] for i in h[0]]
         f = [ self.frameData(55, 6, r[0]),
               self.frameData(56, 1, r[1], h[0]),
               self.frameData(57, 1, r[1], h[0]),
