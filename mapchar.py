@@ -29,6 +29,7 @@ class MapChar(mapitem.MapItem):
         
         self.currTerrain = 0
         self.oldTerrain = 0
+        self.region = None
         self.currTerritory = "allied"
         self.oldTerritory = "allied"
         
@@ -124,6 +125,14 @@ class MapChar(mapitem.MapItem):
 
     def isDead(self):
         return (self.battleChar.hp.value <= 0)
+
+    def resetRegion(self):
+        if self.region is None:
+            return
+
+        if (util.distance(self.precisePos, self.region.pos) >
+            MAP_REGION_SIZE):
+            self.region = None
         
 
 def Hare(team, battleChar, name="Unnamed Hare", portrait=None):

@@ -290,6 +290,8 @@ BATTLE_COUNTDOWN_LENGTH = 3
 TECH_BUFFER_MIN = -10
 TECH_BUFFER_MAX = 8
 
+MAP_REGION_SIZE = 100
+
 
 DIREC_FONTS = "fonts"
 DIREC_GRAPHICS = "graphics"
@@ -314,8 +316,8 @@ STUN_THRESHOLD_2 = 100
 STUN_THRESHOLD_3 = 150
 
 
-#BASE_CHARACTER_SPEED = 1.2
-BASE_CHARACTER_SPEED = 3.0
+BASE_CHARACTER_SPEED = 1.2
+#BASE_CHARACTER_SPEED = 3.0
 
 HARE_MAP_SPEED_BASE = 1.45 * BASE_CHARACTER_SPEED
 FOX_MAP_SPEED_BASE = 1.2 * BASE_CHARACTER_SPEED
@@ -840,3 +842,4 @@ def colorSwap(i, color1, color2, tolerance):
                             newColor[2], newColor[3])
 
                 i.set_at((x,y), complete)
+

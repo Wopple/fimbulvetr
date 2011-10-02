@@ -36,6 +36,7 @@ class Model(mvc.Model):
         self.currSelected = None
         self.drawOrigMap()
         self.mousePos = pygame.mouse.get_pos()
+        self.createRegions()
         self.placeChars()
         self.placeStructures()
         self.checkForStructureOwnership()
@@ -258,7 +259,17 @@ class Model(mvc.Model):
         return False
 
     def checkTerrain(self, c):
-        for i in self.map.terrainMasterList:
+
+        c.resetRegion()
+        if c.region is None:
+            for r in self.regions:
+                dist = util.distance(c.precisePos, r.pos)
+                if dist <= MAP_REGION_SIZE:
+                    c.region = r
+                    print c.name, "Region Change", r.pos
+                    break
+        
+        for i in c.region.terrainMasterList:
             circle = i[0]
             terrainType = i[1]
             dist = util.distance(c.precisePos, circle[0])
@@ -676,6 +687,79 @@ class Model(mvc.Model):
 
         self.mapRect.topleft = add_points(self.mapRect.topleft, newLoc)
         self.adjustMap()
+
+    def createRegions(self):
+        self.regions = []
+        for rx in range(0, self.map.mapSize[0], MAP_REGION_SIZE):
+            for ry in range(0, self.map.mapSize[1], MAP_REGION_SIZE):
+                r = MapRegion((rx * 1.0, ry * 1.0))
+                self.regions.append(r)
+
+                for t in [(self.map.mountains, "m"), (self.map.water, "w"),
+                          (self.map.forests, "f"), (self.map.islands, "i"),
+                          (self.map.rivers, "r")]:
+                    for i in t[0]:
+                        terrPos = i[0]
+                        terrRadius = i[1]
+                        if (util.distance(terrPos, r.pos) <=
+                            MAP_REGION_SIZE + terrRadius):
+                            r.append(i, t[1])
+
+                r.createTerrainMasterList()
+                
+
+class MapRegion(object):
+    def __init__ (self, pos):
+        
+        self.pos = pos
+        
+        self.mountains = []
+        self.water = []
+        self.forests = []
+        self.islands = []
+        self.rivers = []
+
+    def append(self, i, c):
+
+        
+        if (c == "m"):
+            l = self.mountains
+        elif (c == "w"):
+            l = self.water
+        elif (c == "f"):
+            l = self.forests
+        elif (c == "i"):
+            l = self.islands
+        elif (c == "r"):
+            l = self.rivers
+
+        l.append(i)
+
+    def createTerrainMasterList(self):
+        self.terrainMasterList = []
+
+        orderToAdd = [[self.rivers, WATER], [self.forests, FOREST],
+                      [self.mountains, MOUNTAIN], [self.islands, PLAINS],
+                      [self.water, WATER]]
+
+        for o in orderToAdd:
+            for i in range(len(o[0])):
+                self.terrainMasterList.append([o[0][i], o[1]])
+
+    def printList(self):
+        print "Region at (" + str(self.pos[0]) + ", " + str(self.pos[1]) + "):"
+
+        for t in [(self.mountains, "Mountains:"),
+                  (self.water, "Water:"),
+                  (self.forests, "Forests:"),
+                  (self.islands, "Islands:"),
+                  (self.rivers, "Rivers:") ]:
+
+            print t[1]
+
+            for i in t[0]:
+                print ("(" + str(i[0][0]) + ", " + str(i[0][1]) + "), " +
+                       str(i[1]))
         
 
 
