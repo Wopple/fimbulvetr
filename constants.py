@@ -192,7 +192,25 @@ RETREAT_RECEED_FAST = 200
 RETREAT_TEAM_COLORS = [(10, 80, 200, 255),
                        (210, 20, 20, 255)]
 
-SUPER_ENERGY_MAX = 100
+SUPER_ENERGY_MAX = 100000
+SUPER_ENERGY_INITIAL_FACTOR = 0
+SUPER_ENERGY_GAIN_BASE = 100
+SUPER_ENERGY_GAIN_FACTOR = 0.7
+
+SUPER_ENERGY_GAIN_FINAL = [0]
+
+temp = 1.00
+for i in range(20):
+
+    SUPER_ENERGY_GAIN_FINAL.append(SUPER_ENERGY_GAIN_FINAL[i] +
+                                   SUPER_ENERGY_GAIN_BASE * temp)
+
+    temp *= SUPER_ENERGY_GAIN_FACTOR
+
+for i in range(len(SUPER_ENERGY_GAIN_FINAL)):
+    SUPER_ENERGY_GAIN_FINAL[i] = int(SUPER_ENERGY_GAIN_FINAL[i])    
+
+
 
 BATTLE_EDGE_COLLISION_WIDTH = 24
 
@@ -794,6 +812,13 @@ def degreesToPoint(deg, mag, pos=[0,0]):
 
 def flipRect(i):
     return ( ((i.left * -1) - i.width), i.top )
+
+
+def getSuperEnergyGain(i):
+    if i < len(SUPER_ENERGY_GAIN_FINAL):
+        return SUPER_ENERGY_GAIN_FINAL[i]
+    else:
+        return SUPER_ENERGY_GAIN_FINAL[-1]
 
 def colorSwap(i, color1, color2, tolerance):
     lowerBound = []

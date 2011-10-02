@@ -121,7 +121,10 @@ class MapChar(mapitem.MapItem):
         return self.battleChar.hp.maximum
 
     def getSuperEnergy(self):
-        return 50
+        return self.battleChar.superEnergy.value
+
+    def addSuperEnergy(self, val):
+        self.battleChar.superEnergy.add(val)
 
     def isDead(self):
         return (self.battleChar.hp.value <= 0)

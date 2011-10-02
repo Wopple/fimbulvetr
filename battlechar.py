@@ -12,6 +12,8 @@ from constants import *
 class BattleChar(object):
     def __init__(self, hp, footRectSize=30):
         self.hp = boundint.BoundInt(0, hp, hp)
+        self.superEnergy = boundint.BoundInt(0, SUPER_ENERGY_MAX,
+                    int(SUPER_ENERGY_MAX * SUPER_ENERGY_INITIAL_FACTOR))
         self.preciseLoc = [50.0, 50.0]
         self.accel = [0.0, 0.0]
         self.vel = [0.0, 0.0]

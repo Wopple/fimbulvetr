@@ -47,18 +47,15 @@ class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
             s.blit(self.character.portrait, ((b+p), (b+p)))
 
 
-        tempVal = boundint.BoundInt(0, SUPER_ENERGY_MAX,
-                                    self.character.getSuperEnergy())
+
         x = (b + (p*2) + MAP_CHAR_BAR_PORTRAIT_SIZE[0])
         y = (b + p + MAP_CHAR_BAR_PORTRAIT_SIZE[1]
              - MAP_CHAR_BAR_ENERGY_BAR_SIZE[1])
         tempRect = pygame.Rect((x, y), MAP_CHAR_BAR_ENERGY_BAR_SIZE)
-        self.superBar = energybar.EnergyBar(tempVal, tempRect,
+        self.superBar = energybar.EnergyBar(self.character.battleChar.superEnergy, tempRect,
                                              MAP_CHAR_BAR_ENERGY_BAR_BORDERS,
                                              SUPER_BAR_COLORS, 2)
 
-        tempVal = boundint.BoundInt(0, self.character.getMaxHP(),
-                                    self.character.getHP())
         y = y - ps - MAP_CHAR_BAR_ENERGY_BAR_SIZE[1]
         tempRect = pygame.Rect((x, y), MAP_CHAR_BAR_ENERGY_BAR_SIZE)
         self.healthBar = energybar.EnergyBar(self.character.battleChar.hp, tempRect,

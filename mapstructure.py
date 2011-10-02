@@ -20,7 +20,7 @@ class MapStructure(mapitem.MapItem):
 
         super(MapStructure, self).__init__(inPos, inImages)
 
-        self.changeOwnership(1)
+        self.changeOwnership(0)
 
         self.triggerColor = STRUCTURE_TRIGGER_AREA_COLOR_WITH_ALPHA
         self.triggerSize = STRUCTURE_TRIGGER_RANGE

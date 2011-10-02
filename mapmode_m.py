@@ -76,6 +76,8 @@ class Model(mvc.Model):
 
         self.checkForStructureOwnership()
 
+        self.addSuperEnergy()
+
         self.mousePos = pygame.mouse.get_pos()
         if self.encounterPause == -1:
             self.checkScrolling()
@@ -396,6 +398,23 @@ class Model(mvc.Model):
 
             if checker:
                 s.territoryPoints.append([pos, contested])
+
+    def addSuperEnergy(self):
+        for team in range(2):
+            total = 0
+            
+            for s in self.structures:
+                if (isinstance(s, mapstructure.Spire)
+                    and team+1 == s.team):
+                    total += 1
+
+            if total == 0:
+                continue
+
+            gain = getSuperEnergyGain(total)
+            
+            for c in self.charactersInTeams[team]:
+                c.addSuperEnergy(gain)
             
                 
 
@@ -449,6 +468,8 @@ class Model(mvc.Model):
         updateSide = self.checkCharBarSide()
         for i in self.charBars:
             i.update()
+            i.setActive(i.character is self.currSelected)
+            i.setAlphaFade(self.isHighlightedOrSelected(i.character))
 
             if updateSide:
                 if self.charBarSideRight:
@@ -485,11 +506,6 @@ class Model(mvc.Model):
         for i in range(2):
             self.littlePausePlayIcons[i].update(self.pause[i])
             self.littlePausePlayIcons[i].setAlphaFade(self.paused())
-
-        for i in self.charBars:
-            i.update()
-            i.setActive(i.character is self.currSelected)
-            i.setAlphaFade(self.isHighlightedOrSelected(i.character))
 
     def isHighlightedOrSelected(self, i):
         return ((i is self.currHighlighted) or (i is self.currSelected))
