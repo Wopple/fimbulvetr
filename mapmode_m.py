@@ -59,6 +59,9 @@ class Model(mvc.Model):
 
         self.buildInterface()
 
+        self.initialCount = 5
+        
+
     def update(self):
         if self.countdown.isGoing():
             if (not self.pause[0]) and (not self.pause[1]):
@@ -98,6 +101,13 @@ class Model(mvc.Model):
                 self.checkTerrain(c)
                 self.checkTerritory(c)
                 c.update()
+
+        if self.initialCount > 0:
+            self.initialCount -= 1
+            self.centerOnCharacter(self.charactersInTeams[self.team][0])
+
+        print self.mapRect.topleft
+                
 
     def runCharacters(self):
         return ( (self.pendingBattle is None) and (not self.paused()) and
