@@ -74,6 +74,10 @@ class Model(mvc.Model):
         self.selectionBorderButton.fill(
             CHARACTER_SELECT_PANEL_SELECTION_BORDER_COLOR)
 
+        self.loadingImage = INTERFACE_GRAPHICS[9]
+        self.loadingRect = pygame.Rect( (0, 0), self.loadingImage.get_size() )
+        self.loadingRect.center = ( SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] / 2)
+
 
     def update(self):
         pass

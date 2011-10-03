@@ -716,7 +716,8 @@ temp = ['pauseicon.png',
         'territoryflag.png',
         'terrainforest.png',
         'terrainmountain.png',
-        'terrainwater.png']
+        'terrainwater.png',
+        'loading.png']
 
 INTERFACE_GRAPHICS = []
 for i in temp:

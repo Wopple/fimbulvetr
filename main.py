@@ -328,6 +328,7 @@ def goCharacterSelection(conn, theMap, isHost):
             m.setCharacter(temp)
             m.sendNetMessage = True
         if m.starting:
+            v.update(screen)
             m.advanceNow = True
 
     playerChars = m.getCharacters()

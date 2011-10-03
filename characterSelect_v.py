@@ -26,6 +26,11 @@ class View(mvc.View):
         if not self.model.startButton is None:
             self.model.startButton.draw(self.screen)
 
+        if self.model.starting:
+            print "YO!"
+            self.screen.blit(self.model.loadingImage,
+                             self.model.loadingRect.topleft)
+
         if tickClock:
             pygame.display.flip()
 
