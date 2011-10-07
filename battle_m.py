@@ -450,27 +450,6 @@ class Model(mvc.Model):
     def testKey(self, k):
         p = self.players[self.cameraPlayer]
 
-        if k == 1:
-            if self.frameByFrame[self.cameraPlayer] == 0:
-                self.frameByFrame[self.cameraPlayer] = 1
-            elif self.frameByFrame[self.cameraPlayer] == 1:
-                self.frameByFrame[self.cameraPlayer] = 0
-        elif k == 2:
-            self.frameByFrame[self.cameraPlayer] = 2
-        elif k == 3:
-            self.testBool = not self.testBool
-        elif k == 4:
-            self.testBool2 = not self.testBool2
-        elif k == 5 or k == 6:
-            if self.players[0].facingRight:
-                mult = 1
-            else:
-                mult = -1
-            self.players[0].getHit(10, 155, [-10 * mult, -8])
-
-            if k == 6:
-                self.players[0].canTech = False
-
 
     def checkProjForEdge(self, p):
         if ( (p.preciseLoc[0] < (0 - PROJECTILE_SCREEN_ALLOWANCE))
