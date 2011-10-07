@@ -345,21 +345,25 @@ PLAINS = 0
 FOREST = 1
 MOUNTAIN = 2
 WATER = 3
+FORTRESS = 4
 
 HARE_MAP_SPEED_TERRAIN_MODIFIERS = [1.0,
                                     0.6,
                                     0.3,
-                                    0.3]
+                                    0.3,
+                                    1.1]
 
 FOX_MAP_SPEED_TERRAIN_MODIFIERS = [1.0,
                                    0.7,
                                    0.3,
-                                   0.34]
+                                   0.34,
+                                   1.1]
 
 CAT_MAP_SPEED_TERRAIN_MODIFIERS = [1.0,
                                    0.7,
                                    0.32,
-                                   0.18]
+                                   0.18,
+                                   1.1]
 
 
 
@@ -717,7 +721,8 @@ temp = ['pauseicon.png',
         'terrainforest.png',
         'terrainmountain.png',
         'terrainwater.png',
-        'loading.png']
+        'loading.png',
+        'terrainfortress.png']
 
 INTERFACE_GRAPHICS = []
 for i in temp:
@@ -725,7 +730,8 @@ for i in temp:
         DIREC_INTERFACE_GRAPHICS, i)).convert_alpha())
 
 TERRAIN_ICONS = [None, INTERFACE_GRAPHICS[6],
-                 INTERFACE_GRAPHICS[7], INTERFACE_GRAPHICS[8]]
+                 INTERFACE_GRAPHICS[7], INTERFACE_GRAPHICS[8],
+                 INTERFACE_GRAPHICS[10]]
     
 
 temp = ['hare00.png']

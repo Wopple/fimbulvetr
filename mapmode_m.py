@@ -60,6 +60,10 @@ class Model(mvc.Model):
         self.buildInterface()
 
         self.initialCount = 5
+
+        for c in self.characters:
+            self.checkTerrain(c)
+            self.checkTerritory(c)
         
 
     def update(self):
@@ -105,8 +109,6 @@ class Model(mvc.Model):
         if self.initialCount > 0:
             self.initialCount -= 1
             self.centerOnCharacter(self.charactersInTeams[self.team][0])
-
-        print self.mapRect.topleft
                 
 
     def runCharacters(self):
@@ -272,6 +274,7 @@ class Model(mvc.Model):
 
     def checkTerrain(self, c):
 
+        #Confirm current region
         c.resetRegion()
         if c.region is None:
             for r in self.regions:
@@ -280,7 +283,19 @@ class Model(mvc.Model):
                     c.region = r
                     print c.name, "Region Change", r.pos
                     break
-        
+
+        #Check for Fortress
+        for i in self.structures:
+            sTeam = i.team
+            cTeam = c.team + 1
+            if isinstance(i, mapstructure.Fortress) and (sTeam == cTeam):
+                dist = util.distance(c.precisePos, i.precisePos)
+                print dist, i.triggerSize
+                if (dist <= i.triggerSize):
+                    c.currTerrain = FORTRESS
+                    return
+                 
+        #Check all terrain circles in current region
         for i in c.region.terrainMasterList:
             circle = i[0]
             terrainType = i[1]
@@ -646,10 +661,8 @@ class Model(mvc.Model):
 
     def blinkEncounter(self):
         for c in self.pendingBattle:
-            print c.blinkTick
             c.blinkTick += 1
             if c.blinkTick == ENCOUNTER_START_BLINK:
-                print c.blinkOn
                 c.blinkTick = 0
                 c.blinkOn = not c.blinkOn
 

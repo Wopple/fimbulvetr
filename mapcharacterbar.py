@@ -138,7 +138,7 @@ class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
 
         self.terrainEffectIcons = []
 
-        for i in range(4):
+        for i in range(5):
             terrainIcon = TERRAIN_ICONS[i]
 
             effect = self.character.speedTerrainModifiers[i]
