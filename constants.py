@@ -382,6 +382,14 @@ CAT_MAP_SPEED_TERRITORY_MODIFIERS  = {"neutral"   : 1.00,
                                       "enemy"     : 0.90,
                                       "contested" : 0.75 }
 
+HARE_HEALTH_SPEED_MODIFIER = 0.35
+FOX_HEALTH_SPEED_MODIFIER = 0.5
+CAT_HEALTH_SPEED_MODIFIER = 0.5
+
+
+HEALTH_REGAIN_SPEED = 5
+HEALTH_REGAIN_AMOUNT = 3
+
 
 FORTRESS_TERRITORY_RADIUS = 420
 SPIRE_TERRITORY_RADIUS = 300

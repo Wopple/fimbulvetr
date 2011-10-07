@@ -14,7 +14,7 @@ from constants import *
 
 class MapChar(mapitem.MapItem):
     def __init__(self, inImages, speedBase, speedTerrainModifiers,
-                 speedTerritoryModifiers, team, name, battleChar, portrait):
+                 speedTerritoryModifiers, speedHealthMod, team, name, battleChar, portrait):
         self.team = team
         self.name = name
         self.initPortrait(portrait)
@@ -23,6 +23,7 @@ class MapChar(mapitem.MapItem):
         self.speedBase = speedBase
         self.speedTerrainModifiers = speedTerrainModifiers
         self.speedTerritoryModifiers = speedTerritoryModifiers
+        self.speedHealthModifier = speedHealthMod
         
         self.vel = [0.0, 0.0]
         self.target = None
@@ -38,6 +39,8 @@ class MapChar(mapitem.MapItem):
         self.blinkTick = 0
         self.removed = False
 
+        self.healthRegainTick = 0
+
         self.triggerColor = BATTLE_TRIGGER_AREA_COLOR_WITH_ALPHA
         self.triggerSize = BATTLE_TRIGGER_RANGE
 
@@ -52,6 +55,8 @@ class MapChar(mapitem.MapItem):
         
         for i in range(2):
             self.precisePos[i] += self.vel[i]
+
+        self.regainHealth()
 
         self.checkForStop()
 
@@ -95,15 +100,23 @@ class MapChar(mapitem.MapItem):
             self.vel[i] = direction[i] * speed
 
     def getCurrSpeed(self):
-        print (str(self.speedBase) + " * " +
-               str(self.speedTerrainModifiers[self.currTerrain]) + " * " +
-               str(self.speedTerritoryModifiers[self.currTerritory]) )
         val = (self.speedBase *
-                self.speedTerrainModifiers[self.currTerrain] *
-                self.speedTerritoryModifiers[self.currTerritory] )
+               self.speedTerrainModifiers[self.currTerrain] *
+               self.speedTerritoryModifiers[self.currTerritory] *
+               self.getSpeedHealthModifier())
 
         print val
         return val
+
+    def getSpeedHealthModifier(self):
+        hp = self.battleChar.hp
+        
+        currDamageRatio = float( (float(hp.maximum) - float(hp.value))
+                                 / float(hp.maximum))
+
+        loss = (1 - self.speedHealthModifier) * currDamageRatio
+
+        return 1.00 - loss
 
                 
 
@@ -136,12 +149,24 @@ class MapChar(mapitem.MapItem):
         if (util.distance(self.precisePos, self.region.pos) >
             MAP_REGION_SIZE):
             self.region = None
+
+    def regainHealth(self):
+        if (self.currTerrain == FORTRESS) and (not self.battleChar.hp.isMax()):
+            self.healthRegainTick += 1
+            if self.healthRegainTick == HEALTH_REGAIN_SPEED:
+                self.healthRegainTick = 0
+                self.battleChar.hp.add(HEALTH_REGAIN_AMOUNT)
+            
+        else:
+            self.healthRegainTick = 0
+            
         
 
 def Hare(team, battleChar, name="Unnamed Hare", portrait=None):
     c = MapChar(HARE_TOKENS, HARE_MAP_SPEED_BASE,
                 HARE_MAP_SPEED_TERRAIN_MODIFIERS,
                 HARE_MAP_SPEED_TERRITORY_MODIFIERS,
+                HARE_HEALTH_SPEED_MODIFIER,
                 team, name, battleChar, portrait)
     return c
 
@@ -150,6 +175,7 @@ def Fox(team, battleChar, name="Unnamed Fox", portrait=None):
     c = MapChar(FOX_TOKENS, FOX_MAP_SPEED_BASE,
                 FOX_MAP_SPEED_TERRAIN_MODIFIERS,
                 FOX_MAP_SPEED_TERRITORY_MODIFIERS,
+                FOX_HEALTH_SPEED_MODIFIER,
                 team, name, battleChar, portrait)
     return c
 
@@ -157,5 +183,6 @@ def Cat(team, battleChar, name="Unnamed Cat", portrait=None):
     c = MapChar(CAT_TOKENS, CAT_MAP_SPEED_BASE,
                 CAT_MAP_SPEED_TERRAIN_MODIFIERS,
                 CAT_MAP_SPEED_TERRITORY_MODIFIERS,
+                CAT_HEALTH_SPEED_MODIFIER,
                 team, name, battleChar, portrait)
     return c

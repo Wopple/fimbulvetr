@@ -108,8 +108,7 @@ class Model(mvc.Model):
 
         if self.initialCount > 0:
             self.initialCount -= 1
-            self.centerOnCharacter(self.charactersInTeams[self.team][0])
-                
+            self.centerOnCharacter(self.charactersInTeams[self.team][0])           
 
     def runCharacters(self):
         return ( (self.pendingBattle is None) and (not self.paused()) and
@@ -290,7 +289,6 @@ class Model(mvc.Model):
             cTeam = c.team + 1
             if isinstance(i, mapstructure.Fortress) and (sTeam == cTeam):
                 dist = util.distance(c.precisePos, i.precisePos)
-                print dist, i.triggerSize
                 if (dist <= i.triggerSize):
                     c.currTerrain = FORTRESS
                     return
