@@ -237,6 +237,7 @@ class Model(mvc.Model):
         if self.encounterPause == -1:
             if (not self.currSelected is None):
                 pos = self.absMousePos()
+                pos = [int(pos[0]), int(pos[1])]
                 self.currSelected.startMovement(pos)
                 self.currentFrameOrder = [self.currSelected, pos]
 
@@ -565,13 +566,53 @@ class Model(mvc.Model):
     def netMessageSize(self):
         return MAP_MODE_NET_MESSAGE_SIZE
 
+##    def buildNetMessage(self):
+##        if self.pause[self.team]:
+##            msg = "p#"
+##        else:
+##            msg = "n#"
+##
+##        if not self.currentFrameOrder is None:
+##            charNum = None
+##            for i, c in enumerate(self.charactersInTeams[self.team]):
+##                if c is self.currentFrameOrder[0]:
+##                    charNum = i
+##                    break
+##
+##            if charNum is None:
+##                raise Exception()
+##
+##            msg = msg + str(charNum) + "#"
+##            msg = (msg + str(self.currentFrameOrder[1][0]) + "#" +
+##                   str(self.currentFrameOrder[1][1]) + "#")
+##
+##        size = len(msg)
+##
+##        if size > MAP_MODE_NET_MESSAGE_SIZE:
+##            print msg
+##            raise Exception()
+##
+##        add = MAP_MODE_NET_MESSAGE_SIZE - size
+##
+##        for i in range(add):
+##            msg = msg + "-"
+##
+##        return msg
+
     def buildNetMessage(self):
         if self.pause[self.team]:
-            msg = "p#"
+            pauseBit = 1
         else:
-            msg = "n#"
+            pauseBit = 0
+            
+        xBytes = [chr(0), chr(0)]
+        yBytes = [chr(0), chr(0)]
+        specialByte = chr(pauseBit)
 
         if not self.currentFrameOrder is None:
+            xBytes[0], xBytes[1] = convertIntToTwoASCII(self.currentFrameOrder[1][0])
+            yBytes[0], yBytes[1] = convertIntToTwoASCII(self.currentFrameOrder[1][1])
+
             charNum = None
             for i, c in enumerate(self.charactersInTeams[self.team]):
                 if c is self.currentFrameOrder[0]:
@@ -581,38 +622,63 @@ class Model(mvc.Model):
             if charNum is None:
                 raise Exception()
 
-            msg = msg + str(charNum) + "#"
-            msg = (msg + str(self.currentFrameOrder[1][0]) + "#" +
-                   str(self.currentFrameOrder[1][1]) + "#")
+            specialByte = chr(int("00" + convertIntToBinary(charNum, 4) +
+                              "1" + str(pauseBit), 2))
 
-        size = len(msg)
 
-        if size > MAP_MODE_NET_MESSAGE_SIZE:
+
+        msg = xBytes[0] + xBytes[1] + yBytes[0] + yBytes[1] + specialByte
+
+        if not self.currentFrameOrder is None:
+            print xBytes[0], xBytes[1], yBytes[0], yBytes[1], specialByte
             print msg
-            raise Exception()
 
-        add = MAP_MODE_NET_MESSAGE_SIZE - size
+        return msg      
 
-        for i in range(add):
-            msg = msg + "-"
 
-        return msg
+##    def parseNetMessage(self, msg, p):
+##        p = p-1
+##        
+##        vals = msg.split('#')
+##
+##        pause = (vals[0] == "p")
+##        self.pause[p] = pause
+##
+##        if len(vals) > 2:
+##            charNum = int(vals[1])
+##            x = float(vals[2])
+##            y = float(vals[3])
+##
+##            self.charactersInTeams[p][charNum].startMovement((x, y))
 
 
     def parseNetMessage(self, msg, p):
         p = p-1
+
+        msgC = list(msg)
+
+        xBytes = [msgC[0], msgC[1]]
+        yBytes = [msgC[2], msgC[3]]
+        specialByte = msgC[4]
+
+        xVal = (ord(xBytes[0]) * 256) + ord(xBytes[1])
+        yVal = (ord(yBytes[0]) * 256) + ord(yBytes[1])
+
+        specialString = convertIntToBinary(ord(specialByte), 8)
+
+        charNum = int(specialString[2:6], 2)
+        moveNum = int(specialString[6:7], 2)
+        pauseNum = int(specialString[7:8], 2)
+
+
+        self.pause[p] = (pauseNum == 1)
+
+        if (moveNum == 1):
+            self.charactersInTeams[p][charNum].startMovement((xVal, yVal))
+
+            print msg
+            print xBytes[0], xBytes[1], yBytes[0], yBytes[1], specialByte
         
-        vals = msg.split('#')
-
-        pause = (vals[0] == "p")
-        self.pause[p] = pause
-
-        if len(vals) > 2:
-            charNum = int(vals[1])
-            x = float(vals[2])
-            y = float(vals[3])
-
-            self.charactersInTeams[p][charNum].startMovement((x, y))
 
     def getBattleData(self):
         data = []

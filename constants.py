@@ -273,7 +273,7 @@ MULTIPLAYER_PORT = 1338
 NET_MESSAGE_SIZE = 17
 NET_ICON_SPEED = 8
 
-MAP_MODE_NET_MESSAGE_SIZE = 30
+MAP_MODE_NET_MESSAGE_SIZE = 5
 
 CHARACTER_SELECT_BG_COLOR = (40, 40, 40)
 CHARACTER_SELECT_PANEL_COLOR_FILL = (165, 130, 50)
@@ -834,6 +834,18 @@ def getSuperEnergyGain(i):
         return SUPER_ENERGY_GAIN_FINAL[i]
     else:
         return SUPER_ENERGY_GAIN_FINAL[-1]
+
+def convertIntToBinary(n, digits=16):
+    return "".join([str((n >> y) & 1) for y in range(digits-1, -1, -1)])
+
+
+def convertIntToTwoASCII(n):
+    binary = convertIntToBinary(n)
+
+
+    return chr(int(binary[:8], 2)), chr(int(binary[8:], 2))
+
+
 
 def colorSwap(i, color1, color2, tolerance):
     lowerBound = []
