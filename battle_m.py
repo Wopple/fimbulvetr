@@ -129,6 +129,11 @@ class Model(mvc.Model):
                 else:
                     keys = self.keys[i]
                     keysNow = self.keysNow[i]
+
+                if keys[7] and (keysNow[7] == KEY_BUFFER):
+                    if p.techBuffer == TECH_BUFFER_MIN:
+                        p.techBuffer = TECH_BUFFER_MAX
+                    
                 l, r = self.exclusiveKeys(keys[2], keys[3])
                 self.resetKeysNow(keysNow)
                 self.act(p, keys, keysNow)
@@ -199,10 +204,6 @@ class Model(mvc.Model):
         self.keys[p-1][k] = t
         if t:
             self.keysNow[p-1][k] = KEY_BUFFER
-
-        if k == 7:
-            if self.players[p-1].techBuffer == TECH_BUFFER_MIN:
-                self.players[p-1].techBuffer = TECH_BUFFER_MAX
 
     def resetKeysNow(self, keysNow):
         for k in range(len(keysNow)):
@@ -469,71 +470,149 @@ class Model(mvc.Model):
     def setNetPlayer(self, p):
         self.netPlayer = p
 
+##    def buildNetMessage(self):
+##        p = self.netPlayer - 1
+##        msg = ''
+##        for i in self.keys[p]:
+##            if i:
+##                j = '1'
+##            else:
+##                j = '0'
+##            msg += j
+##        for i in self.keysNow[p]:
+##            msg += str(i)
+##
+##        msg += str(self.frameByFrame[p])
+##
+##        return msg
+
     def buildNetMessage(self):
-        p = self.netPlayer - 1
-        msg = ''
-        for i in self.keys[p]:
-            if i:
-                j = '1'
+
+        keys = self.keys[self.netPlayer-1]
+        keysNow = self.keysNow[self.netPlayer-1]
+
+        byte1S = ""
+        for k in keys:
+            if k:
+                byte1S += "1"
             else:
-                j = '0'
-            msg += j
-        for i in self.keysNow[p]:
-            msg += str(i)
+                byte1S += "0"
+        byte1 = chr(int(byte1S, 2))
 
-        msg += str(self.frameByFrame[p])
+        print "sent", byte1S
 
+        msg = byte1
+        moreBytes = ""
+        for i in range(4):
+            byteS = ""
+            for j in range(2):
+                byteS += convertIntToBinary(keysNow[i + (j*4)], 4)
+                
+            byte = chr(int(byteS, 2))
+
+            msg += byte
+
+        checksum = self.getChecksum()
+        msg += checksum
+
+        print msg
         return msg
+
 
     def parseNetMessage(self, msg, p):
         if p == 0:
             return
-        else:
-            keys = self.keys[p-1]
-            keysNow = self.keysNow[p-1]
-            
-        msg1 = msg[0:8]
-        if len(msg1) != 8:
-            print "!"
-            print msg1
-            sys.exit()
-        msg2 = msg[8:16]
-        if len(msg2) != 8:
-            print "!!"
-            print msg2
-            sys.exit()
-        msg3 = msg[16:]
-        if len(msg3) != 1:
-            print "!!!"
-            print msg3
-            sys.exit()
+
+        #print msg
+
+        msgC = list(msg)
+
+        keysByte = convertIntToBinary(ord(msgC[0]), 8)
+
+        for i in range(8):
+            self.keys[p-1][i] = (keysByte[i] == "1")
+
+        for i in range(4):
+            nowByte = convertIntToBinary(ord(msgC[i+1]), 8)
+
+            for j in range(2):
+                plus = 4 * j
+                bits = nowByte[plus:4+plus]
+                value = int(bits, 2)
+
+                self.keysNow[p-1][i + (j*4)] = value
+
+
+        recvChecksum = ord(msgC[5])
+        myChecksum = ord(self.getChecksum())
+
+        print "CheckSums", recvChecksum, myChecksum
+
+        if (recvChecksum != myChecksum):
+            print "Checksums to not match!!"
+
+
         
-        for i, c in enumerate(msg1):
-            if c == '1':
-                keys[i] = True
-            elif c == '0':
-                keys[i] = False
-            else:
-                print "Error in message parsing"
-                sys.exit()
 
-        for i, c in enumerate(msg2):
-            try:
-                keysNow[i] = int(c)
-            except:
-                print "Error in message parsing"
-                sys.exit()
+##    def parseNetMessage(self, msg, p):
+##        if p == 0:
+##            return
+##        else:
+##            keys = self.keys[p-1]
+##            keysNow = self.keysNow[p-1]
+##            
+##        msg1 = msg[0:8]
+##        if len(msg1) != 8:
+##            print "!"
+##            print msg1
+##            sys.exit()
+##        msg2 = msg[8:16]
+##        if len(msg2) != 8:
+##            print "!!"
+##            print msg2
+##            sys.exit()
+##        msg3 = msg[16:]
+##        if len(msg3) != 1:
+##            print "!!!"
+##            print msg3
+##            sys.exit()
+##        
+##        for i, c in enumerate(msg1):
+##            if c == '1':
+##                keys[i] = True
+##            elif c == '0':
+##                keys[i] = False
+##            else:
+##                print "Error in message parsing"
+##                sys.exit()
+##
+##        for i, c in enumerate(msg2):
+##            try:
+##                keysNow[i] = int(c)
+##            except:
+##                print "Error in message parsing"
+##                sys.exit()
+##
+##        if keys[7] and (keysNow[7] == KEY_BUFFER):
+##            if self.players[p-1].techBuffer == TECH_BUFFER_MIN:
+##                self.players[p-1].techBuffer = TECH_BUFFER_MAX
+##
+##        try:
+##            self.frameByFrame[p-1] = int(msg3)
+##        except:
+##            print "Error in message parsing"
+##            print "Message:", msg3
+##            sys.exit()
 
-        if keys[7] and (keysNow[7] == KEY_BUFFER):
-            if self.players[p-1].techBuffer == TECH_BUFFER_MIN:
-                self.players[p-1].techBuffer = TECH_BUFFER_MAX
+    def getChecksum(self):
+        tempsum = 0
+        for p in self.players:
+            for i in range(2):
+                tempsum += int(p.preciseLoc[i])
 
-        try:
-            self.frameByFrame[p-1] = int(msg3)
-        except:
-            print "Error in message parsing"
-            print "Message:", msg3
-            sys.exit()
+        checksum = chr(tempsum % 256)
+
+        return checksum
 
     def reverse01(self, val):
         if val == 0:
