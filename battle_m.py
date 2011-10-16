@@ -499,8 +499,6 @@ class Model(mvc.Model):
                 byte1S += "0"
         byte1 = chr(int(byte1S, 2))
 
-        print "sent", byte1S
-
         msg = byte1
         moreBytes = ""
         for i in range(4):
@@ -515,7 +513,6 @@ class Model(mvc.Model):
         checksum = self.getChecksum()
         msg += checksum
 
-        print msg
         return msg
 
 
@@ -545,8 +542,6 @@ class Model(mvc.Model):
 
         recvChecksum = ord(msgC[5])
         myChecksum = ord(self.getChecksum())
-
-        print "CheckSums", recvChecksum, myChecksum
 
         if (recvChecksum != myChecksum):
             print "Checksums to not match!!"

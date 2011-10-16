@@ -629,10 +629,6 @@ class Model(mvc.Model):
 
         msg = xBytes[0] + xBytes[1] + yBytes[0] + yBytes[1] + specialByte
 
-        if not self.currentFrameOrder is None:
-            print xBytes[0], xBytes[1], yBytes[0], yBytes[1], specialByte
-            print msg
-
         return msg      
 
 
@@ -675,9 +671,6 @@ class Model(mvc.Model):
 
         if (moveNum == 1):
             self.charactersInTeams[p][charNum].startMovement((xVal, yVal))
-
-            print msg
-            print xBytes[0], xBytes[1], yBytes[0], yBytes[1], specialByte
         
 
     def getBattleData(self):
