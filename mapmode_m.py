@@ -230,7 +230,8 @@ class Model(mvc.Model):
     def leftClick(self):
         if self.encounterPause == -1:
             if isinstance(self.currHighlighted, mapchar.MapChar):
-                if self.currHighlighted.team == self.team:
+                if (self.currHighlighted.team == self.team and
+                    not self.currHighlighted.isDead()):
                     self.currSelected = self.currHighlighted
                     return
 
@@ -556,7 +557,8 @@ class Model(mvc.Model):
 
         k -= 1
 
-        if (k >= 0) and (k < len(self.charactersInTeams[self.team])):
+        if ( (k >= 0) and (k < len(self.charactersInTeams[self.team])) and
+             (not self.charactersInTeams[self.team][k].isDead()) ):
             if self.currSelected is self.charactersInTeams[self.team][k]:
                 self.centerOnCharacter(self.currSelected)
             else:
@@ -755,6 +757,8 @@ class Model(mvc.Model):
                 c.removed = True
                 c.battleChar.superEnergy.change(0)
                 c.respawnTime.change(0)
+                if c == self.currSelected:
+                    self.currSelected = None
             for i in range(2):
                 if c.addToPos[i] != 0:
                     c.precisePos[i] += c.addToPos[i]
