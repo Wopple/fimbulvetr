@@ -69,6 +69,17 @@ class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
         self.pastSuperEnergy = -1
 
     def update(self):
+        if self.character.isDead():
+            if self.healthBar.value != self.character.respawnTime:
+                self.healthBar.value = self.character.respawnTime
+                self.healthBar.threshold = self.healthBar.value.maximum
+                self.healthBar.changeColor(RESPAWN_BAR_COLOR)
+        else:
+            if self.healthBar.value != self.character.battleChar.hp:
+                self.healthBar.value = self.character.battleChar.hp
+                self.healthBar.threshold = self.healthBar.value.maximum
+                self.healthBar.changeColor(HEALTH_BAR_COLORS[0])
+        
         self.remakeImage()
 
         super(MapCharacterBar, self).update()

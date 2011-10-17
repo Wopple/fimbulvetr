@@ -52,6 +52,7 @@ class BattleChar(object):
         self.blockstun = 0
         if self.hp.value == 0:
             self.hp.value = 1
+        self.setCurrMove('idle')
 
     def countdownComplete(self):
         pass

@@ -83,7 +83,9 @@ class Model(mvc.Model):
 
         self.checkForStructureOwnership()
 
-        self.addSuperEnergy()
+        if self.runCharacters():
+            self.addSuperEnergy()
+            self.addRespawn()
 
         self.mousePos = pygame.mouse.get_pos()
         if self.encounterPause == -1:
@@ -207,6 +209,7 @@ class Model(mvc.Model):
                     else:
                         spot = self.map.startingPoints[team][0]
                     c.setPos(spot)
+                    c.respawnPoint = spot
                     count += 1
 
     def placeStructures(self):
@@ -281,7 +284,6 @@ class Model(mvc.Model):
                 dist = util.distance(c.precisePos, r.pos)
                 if dist <= MAP_REGION_SIZE:
                     c.region = r
-                    print c.name, "Region Change", r.pos
                     break
 
         #Check for Fortress
@@ -438,7 +440,16 @@ class Model(mvc.Model):
             gain = getSuperEnergyGain(total)
             
             for c in self.charactersInTeams[team]:
-                c.addSuperEnergy(gain)
+                if not c.isDead():
+                    c.addSuperEnergy(gain)
+
+
+    def addRespawn(self):
+        for c in self.characters:
+            if c.isDead():
+                c.respawnTime.add(RESPAWN_GAIN)
+                if c.respawnTime.isMax():
+                    c.revive()
             
                 
 
@@ -737,12 +748,13 @@ class Model(mvc.Model):
                     c.blinkOn = not c.blinkOn
 
     def backOffEncounterFinal(self):
-        print "done"
         for c in self.characters:
             c.blinkOn = True
             c.blinkTick = 0
             if c.isDead():
                 c.removed = True
+                c.battleChar.superEnergy.change(0)
+                c.respawnTime.change(0)
             for i in range(2):
                 if c.addToPos[i] != 0:
                     c.precisePos[i] += c.addToPos[i]

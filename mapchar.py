@@ -7,6 +7,7 @@ from pygame.locals import *
 
 import drawable
 import util
+import boundint
 
 import mapitem
 
@@ -39,6 +40,8 @@ class MapChar(mapitem.MapItem):
         self.blinkTick = 0
         self.removed = False
 
+        self.respawnTime = boundint.BoundInt(0, RESPAWN_MAX, 0)
+
         self.healthRegainTick = 0
 
         self.triggerColor = BATTLE_TRIGGER_AREA_COLOR_WITH_ALPHA
@@ -49,7 +52,6 @@ class MapChar(mapitem.MapItem):
     def update(self):
         if self.speedHasChanged():
             self.startMovement(self.target)
-            print self.name + ": " + self.currTerritory + " " + str(self.currTerrain)
         self.oldTerrain = self.currTerrain
         self.oldTerritory = self.currTerritory
         
@@ -105,7 +107,6 @@ class MapChar(mapitem.MapItem):
                self.speedTerritoryModifiers[self.currTerritory] *
                self.getSpeedHealthModifier())
 
-        print val
         return val
 
     def getSpeedHealthModifier(self):
@@ -159,6 +160,12 @@ class MapChar(mapitem.MapItem):
             
         else:
             self.healthRegainTick = 0
+
+    def revive(self):
+        self.respawnTime.setToMin()
+        self.battleChar.hp.setToMax()
+        self.removed = False
+        self.setPos(self.respawnPoint)
             
         
 
