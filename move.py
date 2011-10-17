@@ -265,7 +265,7 @@ def baseBlocking():
           ['jump', Transition(None, None, None, None, 'jumping')],
           ['releaseBlock', Transition(None, None, None, None, 'idle')],
           ['doDuck', Transition(None, None, None, None, 'lowBlocking')],
-          ['attackB', Transition(None, None, None, None, 'grabbing')]]
+          ['attackA', Transition(None, None, None, None, 'grabbing')]]
 
     m = Move([], t)
     m.canDI = False

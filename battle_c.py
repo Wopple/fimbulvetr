@@ -26,13 +26,13 @@ class Controller(mvc.Controller):
                     self.model.key(2, True, self.player)
                 elif event.key == K_RIGHT:
                     self.model.key(3, True, self.player)
-                elif event.key == K_e:
+                elif event.key == KEY_ATTACK_A:
                     self.model.key(4, True, self.player)
-                elif event.key == K_w:
+                elif event.key == KEY_ATTACK_B:
                     self.model.key(5, True, self.player)
-                elif event.key == K_q:
+                elif event.key == KEY_JUMP:
                     self.model.key(6, True, self.player)
-                elif event.key == K_d:
+                elif event.key == KEY_BLOCK:
                     self.model.key(7, True, self.player)
                 elif event.key == K_F1:
                     self.model.testKey(1)
@@ -57,13 +57,13 @@ class Controller(mvc.Controller):
                     self.model.key(2, False, self.player)
                 elif event.key == K_RIGHT:
                     self.model.key(3, False, self.player)
-                elif event.key == K_e:
+                elif event.key == KEY_ATTACK_A:
                     self.model.key(4, False, self.player)
-                elif event.key == K_w:
+                elif event.key == KEY_ATTACK_B:
                     self.model.key(5, False, self.player)
-                elif event.key == K_q:
+                elif event.key == KEY_JUMP:
                     self.model.key(6, False, self.player)
-                elif event.key == K_d:
+                elif event.key == KEY_BLOCK:
                     self.model.key(7, False, self.player)
             elif event.type == pygame.QUIT:
                 sys.exit(0)
