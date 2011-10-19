@@ -39,7 +39,7 @@ class Model(mvc.Model):
         self.createRegions()
         self.placeChars()
         self.placeStructures()
-        self.checkForStructureOwnership()
+        self.checkForStructureOwnership(True)
         
         self.pendingBattle = None
         self.pause = [False, False]
@@ -81,9 +81,8 @@ class Model(mvc.Model):
         
         self.checkForBattle()
 
-        self.checkForStructureOwnership()
-
         if self.runCharacters():
+            self.checkForStructureOwnership()
             self.addSuperEnergy()
             self.addRespawn()
 
@@ -371,7 +370,8 @@ class Model(mvc.Model):
                     self.encounterPause = 0
                     return
 
-    def checkForStructureOwnership(self):
+    def checkForStructureOwnership(self, first=False):
+        print "BLAH!"
         for s in self.structures:
             s.emptyPlayerList()
         
@@ -388,7 +388,7 @@ class Model(mvc.Model):
 
         checker = False
         for s in self.structures:
-            if (s.checkForOwnershipChange()):
+            if (s.checkForOwnershipChange(first)):
                 checker = True
 
 
