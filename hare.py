@@ -715,7 +715,7 @@ class Hare(battlechar.BattleChar):
               self.frameData(63, 5, r[4]),
               self.frameData(64, 2, r[5]),
               self.frameData(65, 2, r[6]) ]
-        t = [ ['doDuck', move.Transition(2, HARE_ENERGY_USAGE, 2, 3, 'idleLike')] ]
+        t = [ ['doDuck', move.Transition(2, HARE_ENERGY_USAGE, 2, 4, 'idleLike')] ]
         self.moves['dashAttackA'].append(f, t)
         self.moves['dashAttackA'].canDI = False
         self.moves['dashAttackA'].frames[0].setVelX = 15

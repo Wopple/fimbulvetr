@@ -168,6 +168,8 @@ class Model(mvc.Model):
                 p.update()
                 self.checkShoot(p)
                 p.DI(l, r)
+            
+            self.checkDisplacement()
 
             temp = []
             for i in range(len(self.projectiles)):
@@ -389,6 +391,22 @@ class Model(mvc.Model):
             if p.rect.colliderect(c.footRect):
                 return p
         return None
+    
+    def checkDisplacement(self):
+        
+        for i in range(2):
+            m = self.players[i].currMove
+            if (not m.grabPos is None) or (m.grabVal != 0) or (m.isDead) or (m.isOnGround):
+                return
+        
+        if self.players[0].footRect.colliderect(self.players[1].footRect):
+            if (self.players[0].footRect.left <= self.players[1].footRect.left):
+                displace = [-1, 1]
+            else:
+                displace = [1, -1]
+                
+            for i in range(2):
+                self.players[i].preciseLoc[0] += DISPLACEMENT_AMOUNT * displace[i]
             
 
     def checkForEdge(self, l, r, p):

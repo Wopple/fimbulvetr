@@ -39,6 +39,7 @@ class Move(object):
         self.grabVal = 0
         self.grabPos = None
         self.isDead = False
+        self.isOnGround = False
 
 
     def append(self, f, t):
@@ -310,6 +311,7 @@ def baseGroundHit():
           ['tech', Transition(None, None, 0, 0, 'teching')]]
     m = Move([], t)
     m.canDI = False
+    m.isOnGround = True
     return m
 
 def baseTeching():
@@ -358,6 +360,7 @@ def baseDeadGroundHit():
     m = Move([], t)
     m.canDI = False
     m.isDead = True
+    m.isOnGround = True
     return m
 
 def baseDeadLaying():
