@@ -43,7 +43,7 @@ class Model(mvc.Model):
         
         self.pendingBattle = None
         self.pause = [False, False]
-        self.keys = [False, False, False, False]
+        self.keys = [False, False, False, False, False, False]
         self.currentFrameOrder = None
         self.countdown = countdown.Countdown(MAP_COUNTDOWN_LENGTH)
 
@@ -170,13 +170,21 @@ class Model(mvc.Model):
             axis[0] = -1
         if self.keys[3] and not self.keys[2]:
             axis[0] = 1
-        
-
+            
         self.mapRect.left -= SCROLL_SPEED * axis[0]
         self.mapRect.top -= SCROLL_SPEED * axis[1]
 
         if (axis[0] != 0) or (axis[1] != 0):
             self.adjustMap()
+            
+        print self.keys
+        if (self.keys[4] and not self.keys[5]):
+            print "ZOOMING IN!"
+            self.scrollIn()
+        elif (self.keys[5] and not self.keys[4]):
+            self.scrollOut()
+            
+        
 
     def scrollMap(self):
         

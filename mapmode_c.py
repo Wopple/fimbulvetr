@@ -54,6 +54,10 @@ class Controller(mvc.Controller):
                         self.model.key(2, True)
                     elif event.key == K_RIGHT:
                         self.model.key(3, True)
+                    elif event.key == K_PAGEUP:
+                        self.model.key(4, True)
+                    elif event.key == K_PAGEDOWN:
+                        self.model.key(5, True)
                 elif event.type == pygame.KEYUP:
                     if event.key == K_UP:
                         self.model.key(0, False)
@@ -63,6 +67,10 @@ class Controller(mvc.Controller):
                         self.model.key(2, False)
                     elif event.key == K_RIGHT:
                         self.model.key(3, False)
+                    elif event.key == K_PAGEUP:
+                        self.model.key(4, False)
+                    elif event.key == K_PAGEDOWN:
+                        self.model.key(5, False)
                 elif event.type == pygame.QUIT:
                     sys.exit(0)
 
