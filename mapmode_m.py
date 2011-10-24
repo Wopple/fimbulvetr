@@ -756,7 +756,6 @@ class Model(mvc.Model):
             if c.isDead():
                 c.removed = True
                 c.battleChar.superEnergy.change(0)
-                c.respawnTime.change(0)
                 if c == self.currSelected:
                     self.currSelected = None
             for i in range(2):

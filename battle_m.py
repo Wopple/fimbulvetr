@@ -958,9 +958,9 @@ def testData():
     platforms = []
 
     platforms.append( platform.Platform(
-        (250, size[1] - BATTLE_AREA_FLOOR_HEIGHT - 175), 300 ) )
+        (250, size[1] - BATTLE_AREA_FLOOR_HEIGHT - 200), 300 ) )
     
     platforms.append( platform.Platform(
-        (850, size[1] - BATTLE_AREA_FLOOR_HEIGHT - 175), 300 ) )
+        (850, size[1] - BATTLE_AREA_FLOOR_HEIGHT - 200), 300 ) )
     
     return [heroes, size, bg, platforms]

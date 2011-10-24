@@ -124,7 +124,7 @@ class Hare(battlechar.BattleChar):
 
     def createSuperMoves(self):
         self.createSuperMove1()
-        self.createSuperMove2()
+        #self.createSuperMove2()
 
     def createMoveIdle(self):
         r = [
@@ -464,7 +464,7 @@ class Hare(battlechar.BattleChar):
                 ]
             ]
                     
-        f = [ self.frameData(41, 4, r[0]),
+        f = [ self.frameData(41, 2, r[0]),
               self.frameData(42, 2, r[1], h[0]),
               self.frameData(43, 2, r[1]),
               self.frameData(43, 10, r[1])]
@@ -588,8 +588,8 @@ class Hare(battlechar.BattleChar):
                     (25, -51, 63, -27, dam1, stun1, force1, angle1, [], 0)                ],
                 [
                     (19, -37, 43, -21, dam1, stun1, force1, angle1, [], 0),
-                    (28, -47, 58, -32, dam1, stun1, force1, angle1, [], 0),
-                    (46, -56, 81, -35, dam1, stun1, force1, angle1, [], 0)
+                    (28, -47, 58, -24, dam1, stun1, force1, angle1, [], 0),
+                    (46, -56, 81, -28, dam1, stun1, force1, angle1, [], 0)
                 ]
             ]
 
@@ -843,7 +843,7 @@ class Hare(battlechar.BattleChar):
                 ],
             ]
 
-        dam1 = 75
+        dam1 = 60
         stun1 = 101
         force1 = 6
         angle1 = 30
@@ -963,7 +963,7 @@ class Hare(battlechar.BattleChar):
         self.moves['upA'].liftOff = True
 
         self.moves['upA'].frames[1].setVelY = -5.0
-        self.moves['upA'].frames[1].setVelX = 4.0
+        self.moves['upA'].frames[1].setVelX = 6.0
         self.moves['upA'].frames[1].ignoreFriction = True
         self.moves['upA'].frames[4].setVelY = -5.5
         self.moves['upA'].frames[4].setVelX = 4.0
@@ -1136,9 +1136,9 @@ class Hare(battlechar.BattleChar):
         self.moves['upADropSlash'] = move.Move(f, t)
         self.moves['upADropSlash'].canDI = False
 
-        self.moves['upADropSlash'].frames[0].setVelY = -8.0
+        self.moves['upADropSlash'].frames[0].setVelY = -10.0
         self.moves['upADropSlash'].frames[0].setVelX = 8.0
-        self.moves['upADropSlash'].frames[2].setVelY = 20.0
+        self.moves['upADropSlash'].frames[2].setVelY = 30.0
         self.moves['upADropSlash'].frames[0].setAccelY = self.airAccel * 0.6
         self.moves['upADropSlash'].frames[1].setAccelY = self.airAccel * 0.6
         self.moves['upADropSlash'].frames[2].setAccelY = self.airAccel * 1.5
@@ -2104,21 +2104,28 @@ class Hare(battlechar.BattleChar):
 
         h = [
                 [
-                    [0, -38, 40, -26, 0, 0, 0, 0, [('grab', 'grabHold', 'grabbed')], 0 ]
+                    [-14, -34, 8, -25, 0, 0, 0, 0, [('grab', 'grabHold', 'grabbed')], 0 ]
+                ],
+                [
+                    [-14, -40, 31, -24, 0, 0, 0, 0, [('grab', 'grabHold', 'grabbed')], 0 ]
                 ]
             ]
                     
         
-        f = [ self.frameData(110, 3, r[0]),
-              self.frameData(111, 1, r[1]),
-              self.frameData(112, 1, r[2], h[0]),
-              self.frameData(113, 1, r[3], h[0]),
-              self.frameData(114, 10, r[4]),
+        f = [ self.frameData(110, 2, r[0]),
+              self.frameData(111, 1, r[1], h[0]),
+              self.frameData(112, 1, r[2], h[1]),
+              self.frameData(113, 2, r[3], h[1]),
+              self.frameData(114, 2, r[4], h[1]),
+              self.frameData(114, 7, r[4]),
               self.frameData(111, 2, r[1]) ]
 
         self.moves['grabbing'].append(f, [])
-        self.moves['grabbing'].frames[1].setVelX = 21.0
-        self.moves['grabbing'].frames[5].setVelX = -9.0
+        self.moves['grabbing'].frames[1].setVelX = 32.0
+        self.moves['grabbing'].frames[1].ignoreFriction = True
+        self.moves['grabbing'].frames[2].ignoreFriction = True
+        self.moves['grabbing'].frames[6].setVelX = -10.0
+        self.moves['grabbing'].frames[6].ignoreFriction = True
 
     def createMoveGrabHold(self):
         r = [
@@ -2703,24 +2710,22 @@ class Hare(battlechar.BattleChar):
         for i in range(len(self.moves['techBackward'].frames)):
             self.moves['techBackward'].frames[i].setFrictionX = self.groundFriction * 0.75
             self.moves['techBackward'].frames[i].ignoreSpeedCap = True
-        
 
     def createSuperMove1(self):
-        n = "Blazing Ambush"
+        n = "Air Rush"
         
-        d = ("A powerup effect that can be used at the beginning of battle" +
-             " in order to deal additional damage for the first few moments" +
-             " of the encounter.")
+        d = ("Surrounds the user in a field of elemental air energy and" +
+             " charges forward.  A dependable move that combos from several" +
+             " normal attacks.")
         
         s = move.SuperMove(n, d, [], [])
 
         self.superMoves.append(s)
 
     def createSuperMove2(self):
-        n = "Lightning Strike"
+        n = "Blazing Ambush"
         
-        d = ("A heavily damaging assault of steel and electricity that is" +
-             " initiated with a slash at close range.")
+        d = ("")
         
         s = move.SuperMove(n, d, [], [])
 

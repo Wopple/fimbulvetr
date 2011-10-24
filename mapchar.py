@@ -152,7 +152,8 @@ class MapChar(mapitem.MapItem):
             self.region = None
 
     def regainHealth(self):
-        if (self.currTerrain == FORTRESS) and (not self.battleChar.hp.isMax()):
+        if ( (self.currTerrain == FORTRESS) and (not self.battleChar.hp.isMax()) and
+            (not self.isDead()) ):
             self.healthRegainTick += 1
             if self.healthRegainTick == HEALTH_REGAIN_SPEED:
                 self.healthRegainTick = 0
