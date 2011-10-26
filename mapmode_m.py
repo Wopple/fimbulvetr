@@ -177,9 +177,7 @@ class Model(mvc.Model):
         if (axis[0] != 0) or (axis[1] != 0):
             self.adjustMap()
             
-        print self.keys
         if (self.keys[4] and not self.keys[5]):
-            print "ZOOMING IN!"
             self.scrollIn()
         elif (self.keys[5] and not self.keys[4]):
             self.scrollOut()
@@ -379,7 +377,6 @@ class Model(mvc.Model):
                     return
 
     def checkForStructureOwnership(self, first=False):
-        print "BLAH!"
         for s in self.structures:
             s.emptyPlayerList()
         

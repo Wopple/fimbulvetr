@@ -800,7 +800,6 @@ class Model(mvc.Model):
         fxPos = average_point_list(pointList)
 
         if blocked:
-            print pointList
             self.fx.append(fx.FX(fxPos, hitter.facingRight, 'block'))
         elif hitter.currMove.isGrab():
             self.fx.append(fx.FX(fxPos, hitter.facingRight, 'grab'))

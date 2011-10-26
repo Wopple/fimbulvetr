@@ -77,7 +77,7 @@ class EnergyBar(object):
         if not self.text is None:
             x = self.rect.left
             if self.textOnBottom:
-                y = self.rect.top + self.rect.height - self.vertBorderSize
+                y = self.rect.bottom
             else:
                 y = self.rect.top - (ENERGY_BAR_FONT.get_height() + 2)
             screen.blit(self.text, (x, y))

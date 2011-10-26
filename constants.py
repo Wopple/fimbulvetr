@@ -61,7 +61,7 @@ SHOW_HITBOXES = True
 SHOW_BLOCKBOXES = False
 SHOW_TRIGGER_AREA = False
 
-MAP_INTERFACE_ALPHA_MIN = 50
+MAP_INTERFACE_ALPHA_MIN = 120
 MAP_INTERFACE_ALPHA_TICK = 10
 
 MAP_CHAR_BAR_COLOR_BG = [(10, 80, 200, 255),
@@ -70,12 +70,12 @@ MAP_CHAR_BAR_COLOR_BORDER = [(0, 0, 150, 255),
                              (150, 0, 0, 255)]
 MAP_CHAR_BAR_COLOR_SELECTED = (250, 250, 250, 255)
 MAP_CHAR_BAR_BORDER = 5
-MAP_CHAR_BAR_PADDING = 10
-MAP_CHAR_BAR_PADDING_SMALL = 4
-MAP_CHAR_BAR_SPACING = 8
+MAP_CHAR_BAR_PADDING = 6
+MAP_CHAR_BAR_PADDING_SMALL = 3
+MAP_CHAR_BAR_SPACING = 6
 MAP_CHAR_BAR_INIT_POS = (20, 20)
 MAP_CHAR_BAR_PORTRAIT_SIZE = (40, 40)
-MAP_CHAR_BAR_ENERGY_BAR_SIZE = (140, 12)
+MAP_CHAR_BAR_ENERGY_BAR_SIZE = (120, 10)
 MAP_CHAR_BAR_ENERGY_BAR_BORDERS = (2, 2)
 
 MAP_CHAR_BAR_SIDE_FRACTION = 3
@@ -782,14 +782,15 @@ temp = [ ["fontdata.ttf",10],
          ["fontheadline.ttf", 16],
          ["fontbio.ttf", 26],
          ["fontheadline.ttf", 20],
-         ["fontheadline.ttf", 50]]
+         ["fontheadline.ttf", 50],
+         ["fontapple.ttf", 14] ]
 FONTS = []
 for i in temp:
     FONTS.append(pygame.font.Font(
         os.path.join(DIREC_FONTS, i[0]), i[1]))
 
 MINIMENU_FONT = FONTS[0]
-ENERGY_BAR_FONT = FONTS[1]
+ENERGY_BAR_FONT = FONTS[8]
 MAIN_MENU_FONT = FONTS[4]
 CHAR_EDITOR_FONT = FONTS[4]
 TEXT_ENTRY_FONT = FONTS[5]
