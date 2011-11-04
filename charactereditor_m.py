@@ -203,9 +203,10 @@ class Model(mvc.Model):
         
 
     def getSpeciesList(self):
-        self.currSpeciesList = [ hare.Hare(),
-                                 fox.Fox(),
-                                 cat.Cat()]
+        #self.currSpeciesList = [ hare.Hare(),
+        #                         fox.Fox(),
+        #                         cat.Cat()]
+        self.currSpeciesList = [hare.Hare()]
         
         for s in self.currSpeciesList:
             s.preciseLoc = [self.menu.rect.center[0] + self.menu.rect.width,

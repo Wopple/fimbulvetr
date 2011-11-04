@@ -39,10 +39,10 @@ class Model(mvc.Model):
                             ((BATTLE_PLAYER_START_DISTANCE / 2), 0)))
             self.players[1].facingRight = False
             
-        self.keys = [[False, False, False, False, False, False, False, False],
-                     [False, False, False, False, False, False, False, False]]
-        self.keysNow = [[0, 0, 0, 0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0, 0, 0, 0]]
+        self.keys = [[False, False, False, False, False, False, False, False, False],
+                     [False, False, False, False, False, False, False, False, False]]
+        self.keysNow = [[0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
         self.frameByFrame = [0, 0]
         
@@ -124,8 +124,8 @@ class Model(mvc.Model):
             
             for i, p in enumerate(self.players):
                 if self.countdown.isGoing() or self.returnCode[i] == 1:
-                    keys = [False, False, False, False, False, False, False, False]
-                    keysNow = [0, 0, 0, 0, 0, 0, 0, 0]
+                    keys = [False, False, False, False, False, False, False, False, False]
+                    keysNow = [0, 0, 0, 0, 0, 0, 0, 0, 0]
                 else:
                     keys = self.keys[i]
                     keysNow = self.keysNow[i]
@@ -331,6 +331,13 @@ class Model(mvc.Model):
                 else:
                     if p.actTransition('block'):
                         keysNow[7] = 0
+            if self.wasKeyPressed(8, keysNow):
+                if p.superEnergy.isMax():
+                    if p.actTransition('super'):
+                        print "SUPER!!"
+                        keysNow[8] = 0
+                        p.superEnergy.setToMin()
+                        
             if not keys[4]:
                 p.actTransition('releaseA')
             if not keys[5]:
@@ -510,7 +517,7 @@ class Model(mvc.Model):
         keysNow = self.keysNow[self.netPlayer-1]
 
         byte1S = ""
-        for k in keys:
+        for k in keys[0:8]:
             if k:
                 byte1S += "1"
             else:
@@ -527,6 +534,16 @@ class Model(mvc.Model):
             byte = chr(int(byteS, 2))
 
             msg += byte
+            
+        if keys[8]:
+            superByte = "0001"
+        else:
+            superByte = "0000"
+        superByte += convertIntToBinary(keysNow[8], 4)
+        
+        msg += chr(int(superByte, 2))
+        
+        
 
         checksum = self.getChecksum()
         msg += checksum
@@ -556,9 +573,13 @@ class Model(mvc.Model):
                 value = int(bits, 2)
 
                 self.keysNow[p-1][i + (j*4)] = value
+                
+        superByte = convertIntToBinary(ord(msgC[5]), 8)
+        self.keys[p-1][8] = (superByte[3] == "1")
+        self.keysNow[p-1][8] = int(superByte[4:], 2)
 
 
-        recvChecksum = ord(msgC[5])
+        recvChecksum = ord(msgC[6])
         myChecksum = ord(self.getChecksum())
 
         if (recvChecksum != myChecksum):
@@ -957,6 +978,9 @@ class Model(mvc.Model):
 
 def testData():
     heroes = [hare.Hare(), hare.Hare()]
+    
+    for h in heroes:
+        h.superEnergy.setToMax()
     
     size = (1400, 800)
     bg = pygame.Surface(size)

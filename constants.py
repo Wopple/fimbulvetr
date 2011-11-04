@@ -4,6 +4,8 @@ import sys
 
 import math
 
+VERSION = "0.1.0"
+
 FULL_SCREEN = False
 FRAME_RATE = 40
 SCREEN_SIZE = (800, 600)
@@ -57,7 +59,7 @@ INTRO_SPEEDS = [4, 30, 5, 50, 5, 15]
 SHOW_RED_DOT = False
 SHOW_TEAL_DOTS = False
 SHOW_HURTBOXES = False
-SHOW_HITBOXES = True
+SHOW_HITBOXES = False
 SHOW_BLOCKBOXES = False
 SHOW_TRIGGER_AREA = False
 
@@ -277,6 +279,7 @@ KEY_ATTACK_A = pygame.K_e
 KEY_ATTACK_B = pygame.K_w
 KEY_JUMP = pygame.K_SPACE
 KEY_BLOCK = pygame.K_q
+KEY_SUPER = pygame.K_d
 
 
 PLATFORM_HEIGHT = 20
@@ -290,7 +293,7 @@ ENCOUNTER_START_BLINK = 3
 ENCOUNTER_END_BLINK = 5
 
 MULTIPLAYER_PORT = 1338
-NET_MESSAGE_SIZE = 6
+NET_MESSAGE_SIZE = 7
 NET_ICON_SPEED = 8
 
 MAP_MODE_NET_MESSAGE_SIZE = 5
@@ -594,7 +597,13 @@ temp = [ ["00.png", (24, 62)],
          ["137.png", (40, 26)],
          ["138.png", (40, 27)],
          ["139.png", (40, 27)],
-         ["140.png", (40, 67)]]
+         ["140.png", (40, 67)],
+         ["141.png", (106, 76)],
+         ["142.png", (106, 76)],
+         ["143.png", (106, 76)],
+         ["144.png", (106, 76)],
+         ["145.png", (106, 76)],
+         ["146.png", (106, 76)]]
 
 HARE_IMAGES = []
 for i in temp:

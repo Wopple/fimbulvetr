@@ -53,6 +53,8 @@ class BattleChar(object):
         if self.hp.value == 0:
             self.hp.value = 1
         self.setCurrMove('idle')
+        
+        self.setupSuper()
 
     def countdownComplete(self):
         pass
@@ -226,7 +228,21 @@ class BattleChar(object):
                 if not self.getCurrentFrame().ignoreFriction:
                     self.friction()
                 else:
-                    self.accel = [0.0, 0.0]
+                    
+                    if self.facingRight:
+                        f2 = 1
+                    else:
+                        f2 = -1
+                    
+                    if self.getCurrentFrame().setAccelX is None:
+                        self.accel[0] = 0.0
+                    else:
+                        self.accel[0] = self.getCurrentFrame().setAccelX * f2
+                        
+                    if self.getCurrentFrame().setAccelY is None:
+                        self.accel[1] = 0.0
+                    else:
+                        self.accel[1] = self.getCurrentFrame().setAccelY * f2
             else:
                 self.accel[0] = accel * f
 
@@ -329,7 +345,10 @@ class BattleChar(object):
 
         self.moves['deadFalling'] = move.baseDeadFalling()
         self.moves['deadGroundHit'] = move.baseDeadGroundHit()
-        self.moves['deadLaying'] = move.baseDeadGroundHit()
+        self.moves['deadLaying'] = move.baseDeadLaying()
+        
+        self.moves['superFlash'] = None
+        self.moves['superMove'] = None
 
     def setCurrMove(self, index, frame=0):
         self.currMove = self.moves[index]
@@ -337,7 +356,7 @@ class BattleChar(object):
         self.currSubframe = 0
         self.attackCanHit = True
 
-        if len(self.currMove.frames) == 0:
+        if (self.currMove is None) or (len(self.currMove.frames) == 0):
             self.currMove = self.moves['idle']
 
     def getCurrentFrame(self):
@@ -495,3 +514,17 @@ class BattleChar(object):
         if not self.facingRight:
             p[0] *= -1
         return add_points(self.preciseLoc, p)
+    
+    def setSuperValue(self, s):
+        if (s < 0) or (s >= len(self.superMoves)):
+            s = 0
+            
+        self.currSuperMove = s
+        
+    def setupSuper(self):
+        
+        m = self.superMoves[self.currSuperMove]
+        self.moves['superMove'] = m
+        self.moves['superFlash'] = m.flash
+        
+        

@@ -20,7 +20,7 @@ class Move(object):
                 'attackBDown', 'attackBUpCharge', 'bladelv1', 'bladelv2',
                 'bladelv3', 'onHit', 'attackAAtMax', 'attackBAtMax',
                 'block', 'releaseBlock', 'downBlock', 'forward', 'backward',
-                'up', 'tech', 'dropThrough']
+                'up', 'tech', 'dropThrough', 'super']
         self.transitions = {}
         for i in temp:
             self.transitions[i] = None
@@ -40,6 +40,8 @@ class Move(object):
         self.grabPos = None
         self.isDead = False
         self.isOnGround = False
+        self.isSuper = False
+        self.isSuperFlash = False
 
 
     def append(self, f, t):
@@ -63,6 +65,9 @@ class SuperMove(Move):
         super(SuperMove, self).__init__(f, t)
         self.name = inName
         self.desc = inDesc
+        self.isSuper = True
+        self.flash = None
+        
 
 class Frame(object):
     def __init__(self, inImage, inOffset, inLength, hurtboxData,
@@ -147,7 +152,8 @@ def baseIdle():
           ['attackA', Transition(None, None, None, None, 'jabA')],
           ['attackB', Transition(None, None, None, None, 'jabB')],
           ['block', Transition(None, None, None, None, 'blocking')],
-          ['downBlock', Transition(None, None, None, None, 'lowBlocking')]]
+          ['downBlock', Transition(None, None, None, None, 'lowBlocking')],
+          ['super', Transition(None, None, None, None, 'superFlash')]]
     m = Move([], t)
     m.canDI = False
     return m
@@ -364,7 +370,19 @@ def baseDeadGroundHit():
     return m
 
 def baseDeadLaying():
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'deadLaying')] ]
     m = Move([], t)
     m.canDI = False
     m.isDead = True
+    m.isOnGround = True
     return m
+
+def baseSuperFlash():
+    t = [['exitFrame', Transition(-1, None, None, None, 'superMove')]]
+    
+    m = Move([], t)
+    m.canDI = False
+    m.isSuper = True
+    return m
+
+

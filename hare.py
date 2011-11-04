@@ -12,7 +12,7 @@ from constants import *
 # DAMAGE STUN KNOCKBACK ANGLE
 
 class Hare(battlechar.BattleChar):
-    def __init__(self, name="Unnamed Hare", inSpecial=0):
+    def __init__(self, name="Unnamed Hare", inSuper=0):
         self.name = name
         self.speciesName = "Hare"
         self.spriteSet = HARE_IMAGES
@@ -40,9 +40,8 @@ class Hare(battlechar.BattleChar):
                             " close in for an offensive rush or back off" +
                             " defensively as needed.")
 
-        if (inSpecial < 0) or (inSpecial >= len(self.superMoves)):
-            inSpecial = 0
-        self.currSuperMove = inSpecial
+        self.setSuperValue(inSuper)
+        
 
     def beginBattle(self):
         super(Hare, self).beginBattle()
@@ -2719,8 +2718,43 @@ class Hare(battlechar.BattleChar):
              " normal attacks.")
         
         s = move.SuperMove(n, d, [], [])
+        
+        s.flash = self.createSuperFlash1()
 
         self.superMoves.append(s)
+        
+    def createSuperFlash1(self):
+        
+        s = move.baseSuperFlash()
+        
+        f = [ self.frameData(87, 2),
+             self.frameData(87, 22),
+             self.frameData(141, 2),
+             self.frameData(141, 12),
+             self.frameData(142, 12),
+             self.frameData(143, 30)]
+        
+        s.append(f, [])
+        s.liftOff = True
+        
+        s.frames[0].setVelY = -9.0
+        s.frames[0].setVelX = -4.5
+        
+        for i in range(1, 6):
+            s.frames[i].ignoreFriction = True
+            
+        s.frames[1].setAccelY = 0.55
+        s.frames[2].setAccelY = -0.05
+        s.frames[3].setAccelY = -0.05
+        s.frames[3].setAccelX = 0.3
+        s.frames[4].setAccelY = -0.2
+        s.frames[4].setAccelX = 0.3
+        s.frames[4].setAccelY = -0.2
+        s.frames[5].setAccelX = 0.3
+        
+        return s
+        
+        
 
     def createSuperMove2(self):
         n = "Blazing Ambush"
