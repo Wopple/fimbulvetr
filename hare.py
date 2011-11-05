@@ -2716,8 +2716,47 @@ class Hare(battlechar.BattleChar):
         d = ("Surrounds the user in a field of elemental air energy and" +
              " charges forward.  A dependable move that combos from several" +
              " normal attacks.")
+
+        f = [ self.frameData(143, 2),
+              self.frameData(144, 1),
+              self.frameData(145, 1),
+              self.frameData(146, 1),
+              self.frameData(144, 1),
+              self.frameData(145, 1),
+              self.frameData(146, 1),
+              self.frameData(144, 1),
+              self.frameData(145, 1),
+              self.frameData(146, 1),
+              self.frameData(144, 1),
+              self.frameData(145, 1),
+              self.frameData(146, 1),
+              self.frameData(144, 1),
+              self.frameData(145, 1),
+              self.frameData(146, 1),
+              self.frameData(144, 1),
+              self.frameData(145, 1),
+              self.frameData(146, 1),
+              self.frameData(144, 1),
+              self.frameData(145, 1),
+              self.frameData(146, 1),
+              self.frameData(144, 1),
+              self.frameData(145, 1),
+              self.frameData(146, 1),
+              self.frameData(144, 1),
+              self.frameData(145, 1),
+              self.frameData(146, 1),
+              self.frameData(144, 1),
+              self.frameData(145, 1),
+              self.frameData(146, 1) ]
+
         
-        s = move.SuperMove(n, d, [], [])
+        s = move.SuperMove(n, d, f, [])
+
+        for i in range(len(s.frames)):
+            s.frames[i].setVelX = 14
+            s.frames[i].setVelY = 0
+            s.frames[i].ignoreSpeedCap = True
+            s.frames[i].ignoreFriction = True
         
         s.flash = self.createSuperFlash1()
 
@@ -2728,22 +2767,22 @@ class Hare(battlechar.BattleChar):
         s = move.baseSuperFlash()
         
         f = [ self.frameData(87, 2),
-             self.frameData(87, 22),
+             self.frameData(87, 16),
              self.frameData(141, 2),
              self.frameData(141, 12),
              self.frameData(142, 12),
-             self.frameData(143, 30)]
+             self.frameData(143, 4)]
         
         s.append(f, [])
         s.liftOff = True
         
-        s.frames[0].setVelY = -9.0
+        s.frames[0].setVelY = -7.4
         s.frames[0].setVelX = -4.5
         
         for i in range(1, 6):
             s.frames[i].ignoreFriction = True
             
-        s.frames[1].setAccelY = 0.55
+        s.frames[1].setAccelY = 0.60
         s.frames[2].setAccelY = -0.05
         s.frames[3].setAccelY = -0.05
         s.frames[3].setAccelX = 0.3
@@ -2751,10 +2790,10 @@ class Hare(battlechar.BattleChar):
         s.frames[4].setAccelX = 0.3
         s.frames[4].setAccelY = -0.2
         s.frames[5].setAccelX = 0.3
+        s.frames[5].setAccelY = -0.2
         
         return s
-        
-        
+
 
     def createSuperMove2(self):
         n = "Blazing Ambush"

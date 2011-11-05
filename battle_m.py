@@ -379,12 +379,12 @@ class Model(mvc.Model):
                 c.inAir = False
                 c.vel[1] = 0.0
                 c.aerialCharge = True
-                if old:
+                if old and (not c.currMove.ignoreGroundAir):
                     c.transToGround()
                     self.createTransitionDust(c)
         else:
             c.inAir = True
-            if not old:
+            if not old and (not c.currMove.ignoreGroundAir):
                 c.transToAir()
 
     def dropThrough(self, p):

@@ -42,6 +42,7 @@ class Move(object):
         self.isOnGround = False
         self.isSuper = False
         self.isSuperFlash = False
+        self.ignoreGroundAir = False
 
 
     def append(self, f, t):
@@ -378,11 +379,12 @@ def baseDeadLaying():
     return m
 
 def baseSuperFlash():
-    t = [['exitFrame', Transition(-1, None, None, None, 'superMove')]]
+    t = [['exitFrame', Transition(-1, 0, None, None, 'superMove')]]
     
     m = Move([], t)
     m.canDI = False
     m.isSuper = True
+    m.ignoreGroundAir = True
     return m
 
 
