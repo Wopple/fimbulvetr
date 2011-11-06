@@ -30,6 +30,7 @@ class Move(object):
         self.append(f, t)
 
         self.canDI = True
+        self.canRetreat = True
         self.isJump = False
         self.isStun = False
         self.liftOff = False
@@ -68,6 +69,7 @@ class SuperMove(Move):
         self.desc = inDesc
         self.isSuper = True
         self.flash = None
+        self.canRetreat = False
         
 
 class Frame(object):
@@ -171,7 +173,8 @@ def baseDash():
           ['attackA', Transition(None, None, None, None, 'dashAttackA')],
           ['attackB', Transition(None, None, None, None, 'dashAttackB')],
           ['block', Transition(None, None, None, None, 'blocking')],
-          ['downBlock', Transition(None, None, None, None, 'lowBlocking')]]
+          ['downBlock', Transition(None, None, None, None, 'lowBlocking')],
+          ['super', Transition(None, None, None, None, 'superFlash')]]
     m = Move([], t)
     return m
 
@@ -208,7 +211,8 @@ def baseDucking():
           ['dropThrough', Transition(None, None, None, None, 'droppingThrough')],
           ['attackADown', Transition(None, None, None, None, 'downA')],
           ['attackBDown', Transition(None, None, None, None, 'downB')],
-          ['downBlock', Transition(None, None, None, None, 'lowBlocking')]]
+          ['downBlock', Transition(None, None, None, None, 'lowBlocking')],
+          ['super', Transition(None, None, None, None, 'superFlash')]]
     m = Move([], t)
     m.canDI = False
     return m
@@ -384,7 +388,9 @@ def baseSuperFlash():
     m = Move([], t)
     m.canDI = False
     m.isSuper = True
+    m.isSuperFlash = True
     m.ignoreGroundAir = True
+    m.canRetreat = False
     return m
 
 

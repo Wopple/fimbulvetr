@@ -31,7 +31,7 @@ class Hare(battlechar.BattleChar):
         self.prevEnergy = self.hareEnergy.value
         self.energyDelayTick = HARE_ENERGY_DELAY
         self.energy = self.hareEnergy
-        super(Hare, self).__init__(900, 13)
+        super(Hare, self).__init__(800, 13)
         self.initSpecMoves()
 
         self.speciesDesc = ("A speedy light-assault unit specializing in" +
@@ -691,8 +691,8 @@ class Hare(battlechar.BattleChar):
             ]
         dam1 = 100
         stun1 = 120
-        force1 = 24
-        angle1 = 25
+        force1 = 21
+        angle1 = 22
         freeze1 = 5
         h = [
                 [
@@ -1525,7 +1525,7 @@ class Hare(battlechar.BattleChar):
         for j in range(3):
             h[j] = [i + [dam1, stun1, force1, angle1, [], 2] for i in h[j]]
         
-        f = [ self.frameData(14, 4, r[0]),
+        f = [ self.frameData(14, 3, r[0]),
               self.frameData(15, 1, r[1], h[0]),
               self.frameData(16, 1, r[2], h[1]),
               self.frameData(17, 2, r[3], h[2]),
@@ -1982,7 +1982,7 @@ class Hare(battlechar.BattleChar):
                     [28, -20, 51, 2]
                 ],
             ]
-        h[0] = [i + [40, 60, 25, 315, [], 2] for i in h[0]]
+        h[0] = [i + [40, 60, 20, 325, [], 2] for i in h[0]]
         f = [ self.frameData(55, 6, r[0]),
               self.frameData(56, 1, r[1], h[0]),
               self.frameData(57, 1, r[1], h[0]),
@@ -2717,46 +2717,66 @@ class Hare(battlechar.BattleChar):
              " charges forward.  A dependable move that combos from several" +
              " normal attacks.")
 
+        dam1 = 35
+        stun1 = 155
+        force1 = 19.5
+        angle1 = 15
+        freeze1 = 6
+        h = [
+                [
+                    [-23, -78, 68, 18],
+                    [-37, -73, -23, 16],
+                    [-42, -45, -37, -1]
+                ]
+            ]
+
+        for j in range(len(h)):
+            h[j] = [i + [dam1, stun1, force1, angle1, [], freeze1] for i in h[j]]
+        
+
         f = [ self.frameData(143, 2),
-              self.frameData(144, 1),
-              self.frameData(145, 1),
-              self.frameData(146, 1),
-              self.frameData(144, 1),
-              self.frameData(145, 1),
-              self.frameData(146, 1),
-              self.frameData(144, 1),
-              self.frameData(145, 1),
-              self.frameData(146, 1),
-              self.frameData(144, 1),
-              self.frameData(145, 1),
-              self.frameData(146, 1),
-              self.frameData(144, 1),
-              self.frameData(145, 1),
-              self.frameData(146, 1),
-              self.frameData(144, 1),
-              self.frameData(145, 1),
-              self.frameData(146, 1),
-              self.frameData(144, 1),
-              self.frameData(145, 1),
-              self.frameData(146, 1),
-              self.frameData(144, 1),
-              self.frameData(145, 1),
-              self.frameData(146, 1),
-              self.frameData(144, 1),
-              self.frameData(145, 1),
-              self.frameData(146, 1),
-              self.frameData(144, 1),
-              self.frameData(145, 1),
-              self.frameData(146, 1) ]
+              self.frameData(144, 1, [], h[0]),
+              self.frameData(145, 1, [], h[0]),
+              self.frameData(146, 1, [], h[0]),
+              self.frameData(144, 1, [], h[0]),
+              self.frameData(145, 1, [], h[0]),
+              self.frameData(146, 1, [], h[0]),
+              self.frameData(144, 1, [], h[0]),
+              self.frameData(145, 1, [], h[0]),
+              self.frameData(146, 1, [], h[0]),
+              self.frameData(144, 1, [], h[0]),
+              self.frameData(145, 1, [], h[0]),
+              self.frameData(146, 1, [], h[0]),
+              self.frameData(144, 1, [], h[0]),
+              self.frameData(145, 1, [], h[0]),
+              self.frameData(146, 1, [], h[0]),
+              self.frameData(144, 1, [], h[0]),
+              self.frameData(145, 1, [], h[0]),
+              self.frameData(146, 1, [], h[0]),
+              self.frameData(144, 1, [], h[0]),
+              self.frameData(145, 1, [], h[0]),
+              self.frameData(146, 1, [], h[0]),
+              self.frameData(144, 1, [], h[0]),
+              self.frameData(145, 1, [], h[0]),
+              self.frameData(146, 1, [], h[0]),
+              self.frameData(144, 1, [], h[0]),
+              self.frameData(145, 1, [], h[0]),
+              self.frameData(146, 1, [], h[0]),
+              self.frameData(144, 1, [], h[0]),
+              self.frameData(145, 1, [], h[0]),
+              self.frameData(146, 1, [], h[0]) ]
 
         
         s = move.SuperMove(n, d, f, [])
 
         for i in range(len(s.frames)):
-            s.frames[i].setVelX = 14
+            s.frames[i].setVelX = 19
             s.frames[i].setVelY = 0
             s.frames[i].ignoreSpeedCap = True
             s.frames[i].ignoreFriction = True
+
+            if (i % 3) == 1:
+                s.frames[i].resetHitPotential = True
         
         s.flash = self.createSuperFlash1()
 
@@ -2771,13 +2791,13 @@ class Hare(battlechar.BattleChar):
              self.frameData(141, 2),
              self.frameData(141, 12),
              self.frameData(142, 12),
-             self.frameData(143, 4)]
+             self.frameData(143, 2)]
         
         s.append(f, [])
         s.liftOff = True
         
         s.frames[0].setVelY = -7.4
-        s.frames[0].setVelX = -4.5
+        s.frames[0].setVelX = -6
         
         for i in range(1, 6):
             s.frames[i].ignoreFriction = True

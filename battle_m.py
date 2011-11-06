@@ -121,8 +121,18 @@ class Model(mvc.Model):
                     self.retreatBar.createText("Retreat", 1)
                     self.retreatBar.value.maximum = RETREAT_HOLD_TOTAL
                     self.retreatBar.threshold = self.retreatBar.value.maximum + 1
+
+            isFlash = False
+            for p in self.players:
+                if p.currMove.isSuperFlash:
+                    isFlash = True
+
             
             for i, p in enumerate(self.players):
+
+                if (isFlash) and (not p.currMove.isSuperFlash):
+                    continue
+                
                 if self.countdown.isGoing() or self.returnCode[i] == 1:
                     keys = [False, False, False, False, False, False, False, False, False]
                     keysNow = [0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -139,48 +149,53 @@ class Model(mvc.Model):
                 self.act(p, keys, keysNow)
                 self.checkReversable(l, r, p)
                 self.checkForGround(p)
-                self.checkForEdge(l, r, p)
+                self.checkForEdge(l, r, p, isFlash)
                 if self.returnCode[i] != 0:
                     p.retreat.value = 0
                 self.checkForFX(p)
                 if not p.dropThroughPlatform is None:
                     p.dropThroughPlatform = self.checkForPlatform(p)
 
-            self.checkRetreat()
-            self.resetHitMemory()
+            if (not isFlash):
+                self.checkRetreat()
+                self.resetHitMemory()
 
-            self.checkForBlock()
-            for i, p in enumerate(self.players):
-                if self.returnCode[i] != 1:
-                    self.actOnBlock(i, p)
-            
-            self.checkForHits()
-            for i, p in enumerate(self.players):
-                if self.returnCode[i] != 1:
-                    self.actOnHit(i, p)
+                self.checkForBlock()
+                for i, p in enumerate(self.players):
+                    if self.returnCode[i] != 1:
+                        self.actOnBlock(i, p)
+                
+                self.checkForHits()
+                for i, p in enumerate(self.players):
+                    if self.returnCode[i] != 1:
+                        self.actOnHit(i, p)
 
-            self.checkGrabPair()
+                self.checkGrabPair()
 
             for i, p in enumerate(self.players):
+                if (isFlash) and (not p.currMove.isSuperFlash):
+                    continue
+                
                 keys = self.keys[i]
                 keysNow = self.keysNow[i]
                 l, r = self.exclusiveKeys(keys[2], keys[3])
                 p.update()
                 self.checkShoot(p)
                 p.DI(l, r)
-            
-            self.checkDisplacement()
 
-            temp = []
-            for i in range(len(self.projectiles)):
-                self.projectiles[i].update()
-                self.checkProjForEdge(self.projectiles[i])
-                self.checkProjForDissolve(self.projectiles[i])
-                if not self.projectiles[i].destroy:
-                    temp.append(self.projectiles[i])
-            self.projectiles = temp
+            if (not isFlash):
+                self.checkDisplacement()
 
-            self.centerCamera(self.players[self.cameraPlayer])
+                temp = []
+                for i in range(len(self.projectiles)):
+                    self.projectiles[i].update()
+                    self.checkProjForEdge(self.projectiles[i])
+                    self.checkProjForDissolve(self.projectiles[i])
+                    if not self.projectiles[i].destroy:
+                        temp.append(self.projectiles[i])
+                self.projectiles = temp
+
+                self.centerCamera(self.players[self.cameraPlayer])
 
             for f in self.fx:
                 f.update()
@@ -334,7 +349,6 @@ class Model(mvc.Model):
             if self.wasKeyPressed(8, keysNow):
                 if p.superEnergy.isMax():
                     if p.actTransition('super'):
-                        print "SUPER!!"
                         keysNow[8] = 0
                         p.superEnergy.setToMin()
                         
@@ -416,7 +430,7 @@ class Model(mvc.Model):
                 self.players[i].preciseLoc[0] += DISPLACEMENT_AMOUNT * displace[i]
             
 
-    def checkForEdge(self, l, r, p):
+    def checkForEdge(self, l, r, p, isFlash):
         check = False
         if p.preciseLoc[0] < BATTLE_EDGE_COLLISION_WIDTH:
             p.preciseLoc[0] = BATTLE_EDGE_COLLISION_WIDTH
@@ -425,9 +439,13 @@ class Model(mvc.Model):
             p.preciseLoc[0] = self.rect.width - BATTLE_EDGE_COLLISION_WIDTH
             check = True
 
+        if not p.currMove.canRetreat:
+            check = False
+            
+
         if p.currMove.isDead:
             p.retreat.value = 0
-        elif self.retreatPhase == 2:
+        elif self.retreatPhase == 2 and not isFlash:
             if self.endingVal in [-1, 0, 1]: 
                 if check:
                     if self.endingVal == -1:
@@ -475,6 +493,8 @@ class Model(mvc.Model):
 
     def testKey(self, k):
         p = self.players[self.cameraPlayer]
+
+        self.players[0].superEnergy.setToMax()
 
 
     def checkProjForEdge(self, p):
