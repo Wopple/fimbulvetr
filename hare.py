@@ -2766,8 +2766,10 @@ class Hare(battlechar.BattleChar):
               self.frameData(145, 1, [], h[0]),
               self.frameData(146, 1, [], h[0]) ]
 
+        t = [['exitFrame', move.Transition(-1, None, None, None, 'super1Ending1')]]
+
         
-        s = move.SuperMove(n, d, f, [])
+        s = move.SuperMove(n, d, f, t)
 
         for i in range(len(s.frames)):
             s.frames[i].setVelX = 19
@@ -2781,6 +2783,8 @@ class Hare(battlechar.BattleChar):
         s.flash = self.createSuperFlash1()
 
         self.superMoves.append(s)
+
+        self.createSuper1Ending1()
         
     def createSuperFlash1(self):
         
@@ -2814,6 +2818,135 @@ class Hare(battlechar.BattleChar):
         
         return s
 
+
+    def createSuper1Ending1(self):
+        r = [
+                [
+                    (-19, -20, -3, -10),
+                    (-12, -10, -5, -1),
+                    (-14, -32, 4, -19),
+                    (-7, -22, 7, -13),
+                    (-7, -15, 0, -12),
+                    (0, -40, 17, -23)
+                ],
+                [
+                    (-13, -35, 5, -22),
+                    (-21, -32, -8, -26),
+                    (-11, -24, 11, -15),
+                    (0, -29, 12, -21),
+                    (-2, -17, 18, -2)
+                ],
+                [
+                    (-21, -19, -2, -3),
+                    (-4, -27, 12, -10),
+                    (-2, -35, 18, -25),
+                    (9, -27, 16, -22),
+                    (-7, -32, 1, -22),
+                    (4, -43, 13, -35),
+                    (-9, -26, 3, -18)
+                ]
+            ]
+
+        flippingSpeed = 3
+        f = [ self.frameData(34, flippingSpeed, r[0]),
+              self.frameData(23, flippingSpeed, r[1]),
+              self.frameData(33, flippingSpeed, r[2]) ]
+
+        t = [['land', move.Transition(None, None, None, None, 'super1EndingLag1')],
+             ['exitFrame', move.Transition(-1, None, None, None, 'super1Ending2')]]
+
+        self.moves['super1Ending1'] = move.Move(f, t)
+        self.moves['super1Ending1'].canDI = False
+
+        self.moves['super1Ending1'].frames[0].ignoreFriction = True
+        self.moves['super1Ending1'].frames[1].ignoreFriction = True
+
+        self.createSuper1EndingLag1()
+        self.createSuper1Ending2()
+
+
+    def createSuper1EndingLag1(self):
+
+        f = [ self.frameData(147, 8),
+              self.frameData(148, 14) ]
+
+        self.moves['super1EndingLag1'] = move.Move(f, [])
+        self.moves['super1EndingLag1'].canDI = False
+
+        self.moves['super1EndingLag1'].frames[0].setFrictionX = 0.3
+        self.moves['super1EndingLag1'].frames[1].setFrictionX = 0.3
+
+    def createSuper1Ending2(self):
+        r = [
+                [
+                    (-19, -20, -3, -10),
+                    (-12, -10, -5, -1),
+                    (-14, -32, 4, -19),
+                    (-7, -22, 7, -13),
+                    (-7, -15, 0, -12),
+                    (0, -40, 17, -23)
+                ],
+                [
+                    (-13, -35, 5, -22),
+                    (-21, -32, -8, -26),
+                    (-11, -24, 11, -15),
+                    (0, -29, 12, -21),
+                    (-2, -17, 18, -2)
+                ],
+                [
+                    (-21, -19, -2, -3),
+                    (-4, -27, 12, -10),
+                    (-2, -35, 18, -25),
+                    (9, -27, 16, -22),
+                    (-7, -32, 1, -22),
+                    (4, -43, 13, -35),
+                    (-9, -26, 3, -18)
+                ],
+                [
+                    (-19, -40, 0, -26),
+                    (-15, -27, 5, -14),
+                    (-6, -17, 12, -6),
+                    (3, -25, 15, -12),
+                    (12, -16, 21, -10)
+                ]
+            ]
+
+        
+        flippingSpeed = 3
+        f = [ self.frameData(34, flippingSpeed, r[0]),
+              self.frameData(23, flippingSpeed, r[1]),
+              self.frameData(33, flippingSpeed, r[2]),
+              self.frameData(24, flippingSpeed, r[3]),
+              self.frameData(34, flippingSpeed, r[0]),
+              self.frameData(23, flippingSpeed, r[1]),
+              self.frameData(33, flippingSpeed, r[2]),
+              self.frameData(24, flippingSpeed, r[3]),
+              self.frameData(34, flippingSpeed, r[0]),
+              self.frameData(23, flippingSpeed, r[1]),
+              self.frameData(33, flippingSpeed, r[2]),
+              self.frameData(24, flippingSpeed, r[3]) ]
+
+        t = [['land', move.Transition(None, None, None, None, 'super1EndingLag2')]]
+
+        self.moves['super1Ending2'] = move.Move(f, t)
+        self.moves['super1Ending2'].canDI = False
+
+        self.createSuper1EndingLag2()
+
+    def createSuper1EndingLag2(self):
+        r = [
+                [
+                    (-9, -27, 6, -15),
+                    (-14, -16, 8, -10),
+                    (-7, -10, 9, 5)
+                ]
+            ]
+
+        
+        f = [ self.frameData(86, 16, r[0]) ]
+
+        self.moves['super1EndingLag2'] = move.Move(f, [])
+        self.moves['super1EndingLag2'].canDI = False
 
     def createSuperMove2(self):
         n = "Blazing Ambush"
