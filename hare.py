@@ -2857,6 +2857,7 @@ class Hare(battlechar.BattleChar):
 
         self.moves['super1Ending1'] = move.Move(f, t)
         self.moves['super1Ending1'].canDI = False
+        self.moves['super1Ending1'].canRetreat = False
 
         self.moves['super1Ending1'].frames[0].ignoreFriction = True
         self.moves['super1Ending1'].frames[1].ignoreFriction = True
@@ -2872,6 +2873,7 @@ class Hare(battlechar.BattleChar):
 
         self.moves['super1EndingLag1'] = move.Move(f, [])
         self.moves['super1EndingLag1'].canDI = False
+        self.moves['super1EndingLag1'].canRetreat = False
 
         self.moves['super1EndingLag1'].frames[0].setFrictionX = 0.3
         self.moves['super1EndingLag1'].frames[1].setFrictionX = 0.3
@@ -2930,6 +2932,7 @@ class Hare(battlechar.BattleChar):
 
         self.moves['super1Ending2'] = move.Move(f, t)
         self.moves['super1Ending2'].canDI = False
+        self.moves['super1Ending2'].canRetreat = False
 
         self.createSuper1EndingLag2()
 
@@ -2947,6 +2950,7 @@ class Hare(battlechar.BattleChar):
 
         self.moves['super1EndingLag2'] = move.Move(f, [])
         self.moves['super1EndingLag2'].canDI = False
+        self.moves['super1EndingLag2'].canRetreat = False
 
     def createSuperMove2(self):
         n = "Blazing Ambush"
