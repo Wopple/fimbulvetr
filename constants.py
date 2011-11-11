@@ -162,8 +162,11 @@ BATTLE_PLAYER_START_DISTANCE = 300
 
 PROJECTILE_SCREEN_ALLOWANCE = 100
 
-HEALTH_BAR_POSITION = (15, 15)
-HEALTH_BAR_SIZE = (300, 35)
+BATTLE_PORTRAIT_SIZE = (60, 60)
+BATTLE_SUPER_ICON_SIZE = (40, 40)
+HEALTH_BAR_OFFSET = (10, 10)
+BATTLE_PORTRAIT_OFFSET = (10, 10)
+HEALTH_BAR_SIZE = (200, 22)
 HEALTH_BAR_BORDERS = (6, 4)
 HEALTH_BAR_COLORS = ( (5, 120, 10),
                       (15, 200, 25),
@@ -187,6 +190,17 @@ SUPER_BAR_COLORS = ( (90, 30, 172),
                      (20, 20, 20),
                      (200, 200, 10),
                      (10, 10, 10) )
+
+SPECIAL_BAR_OFFSET = 16
+SPECIAL_BAR_SIZE = (150, 22)
+SPECIAL_BAR_BORDERS = (3, 2)
+SPECIAL_BAR_COLORS = ( (0, 183, 240),
+                       (0, 185, 245),
+                       (20, 210, 253),
+                       (20, 20, 20),
+                       (200, 200, 10),
+                       (10, 10, 10))
+SPECIAL_BAR_PULSE = 5
 
 RESPAWN_BAR_COLOR = (255, 215, 0)
 
@@ -248,16 +262,6 @@ CAT_ENERGY_BAR_COLORS = ( (10, 150, 10),
                           (255, 194, 15),
                           (180, 10, 10) )
 
-SPECIAL_BAR_OFFSET = 15
-SPECIAL_BAR_SIZE = (150, 16)
-SPECIAL_BAR_BORDERS = (3, 2)
-SPECIAL_BAR_COLORS = ( (0, 183, 240),
-                       (0, 185, 245),
-                       (20, 210, 253),
-                       (20, 20, 20),
-                       (200, 200, 10),
-                       (10, 10, 10))
-SPECIAL_BAR_PULSE = 5
 
 ATTACK_PROPERTIES = [ "melee",
                       "projectile"  ]

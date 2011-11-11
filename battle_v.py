@@ -29,6 +29,7 @@ class View(mvc.View):
 
         for b in self.model.bars:
             b.draw(self.screen)
+        self.drawInterfaceExtras()
 
         self.model.countdown.draw(self.screen)
         self.drawEndingText()
@@ -45,3 +46,11 @@ class View(mvc.View):
                              self.model.countdown.rect.topleft)
             self.screen.blit(self.model.endingText[1][self.model.returnCode[1]+1],
                              self.model.countdown.rect.bottomleft)
+
+
+    def drawInterfaceExtras(self):
+        for p in self.model.portraits:
+            p.draw(screen)
+            
+        self.model.superIcon.draw(screen)
+        

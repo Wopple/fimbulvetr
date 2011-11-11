@@ -13,6 +13,7 @@ import countdown
 import fx
 import platform
 import textrect
+import drawable
 
 import hare, fox, cat
 
@@ -55,6 +56,7 @@ class Model(mvc.Model):
         self.cameraPlayer = 0
         self.netPlayer = 0
         self.catBar = None
+        self.createInterfaceExtras()
         self.createBars()
         self.resetHitMemory()
 
@@ -113,8 +115,13 @@ class Model(mvc.Model):
                 for p in self.players:
                     p.countdownComplete()
                 self.retreatPhase = 1
+                
+            isFlash = False
+            for p in self.players:
+                if p.currMove.isSuperFlash:
+                    isFlash = True
 
-            if self.retreatPhase == 1 and self.endingVal == -1:
+            if self.retreatPhase == 1 and self.endingVal == -1 and not isFlash:
                 self.retreatProhibitTime.add(-1)
                 if self.retreatProhibitTime.value == 0:
                     self.retreatPhase = 2
@@ -122,10 +129,7 @@ class Model(mvc.Model):
                     self.retreatBar.value.maximum = RETREAT_HOLD_TOTAL
                     self.retreatBar.threshold = self.retreatBar.value.maximum + 1
 
-            isFlash = False
-            for p in self.players:
-                if p.currMove.isSuperFlash:
-                    isFlash = True
+            
 
             
             for i, p in enumerate(self.players):
@@ -679,9 +683,12 @@ class Model(mvc.Model):
         self.bars = []
         p = self.players[self.cameraPlayer]
         q = self.players[self.reverse01(self.cameraPlayer)]
+        
+        x = BATTLE_PORTRAIT_SIZE[0] + HEALTH_BAR_OFFSET[0] + BATTLE_PORTRAIT_OFFSET[0]
+        y = HEALTH_BAR_OFFSET[1]
 
         self.bars.append(energybar.EnergyBar(p.hp,
-                                             pygame.Rect(HEALTH_BAR_POSITION,
+                                             pygame.Rect((x, y),
                                                          HEALTH_BAR_SIZE),
                                              HEALTH_BAR_BORDERS,
                                              HEALTH_BAR_COLORS,
@@ -689,8 +696,8 @@ class Model(mvc.Model):
                                              p.name)
             )
 
-        x = SCREEN_SIZE[0] - HEALTH_BAR_POSITION[0] - HEALTH_BAR_SIZE[0]
-        y = HEALTH_BAR_POSITION[1]
+        x = SCREEN_SIZE[0] - HEALTH_BAR_OFFSET[0] - HEALTH_BAR_SIZE[0] - BATTLE_PORTRAIT_SIZE[0] - BATTLE_PORTRAIT_OFFSET[0]
+        y = HEALTH_BAR_OFFSET[1]
 
         self.bars.append(energybar.EnergyBar(q.hp,
                                              pygame.Rect((x, y),
@@ -702,7 +709,7 @@ class Model(mvc.Model):
             )
 
         x = (SCREEN_SIZE[0] / 2) - (RETREAT_BAR_SIZE[0] / 2)
-        y = HEALTH_BAR_POSITION[1]
+        y = HEALTH_BAR_OFFSET[1]
 
         self.retreatBar = energybar.EnergyBar(self.retreatProhibitTime,
                                              pygame.Rect((x, y),
@@ -713,8 +720,8 @@ class Model(mvc.Model):
         self.bars.append(self.retreatBar)
         
 
-        x = HEALTH_BAR_POSITION[0]
-        y = HEALTH_BAR_POSITION[1] + HEALTH_BAR_SIZE[1] + SPECIAL_BAR_OFFSET
+        x = BATTLE_PORTRAIT_SIZE[0] + HEALTH_BAR_OFFSET[0] + BATTLE_PORTRAIT_OFFSET[0]
+        y = HEALTH_BAR_OFFSET[1] + HEALTH_BAR_SIZE[1] + SPECIAL_BAR_OFFSET
         if isinstance(p, hare.Hare):
             self.bars.append(energybar.EnergyBar(p.hareEnergy,
                                                  pygame.Rect((x, y), SPECIAL_BAR_SIZE),
@@ -734,6 +741,7 @@ class Model(mvc.Model):
                                                  CAT_ENERGY_NAME,
                                                  CAT_ENERGY_MAX+1)
             self.bars.append(self.catBar)
+            
 
     def updateCatBarColors(self):
         x = len(CAT_ENERGY_SECTIONS)
@@ -992,7 +1000,27 @@ class Model(mvc.Model):
                                         COUNTDOWN_COLOR, ALMOST_BLACK, 1, True)
         sublist.append(image)
         self.endingText.append(sublist)
-
+        
+    def createInterfaceExtras(self):
+        self.portraits = []
+        for i in range(2):
+            s = pygame.Surface(BATTLE_PORTRAIT_SIZE)
+            s.fill(BLACK)
+            if (i == 0):
+                x = BATTLE_PORTRAIT_OFFSET[0]
+            else:
+                x = SCREEN_SIZE[0] - BATTLE_PORTRAIT_OFFSET[0] - BATTLE_PORTRAIT_SIZE[0]
+            y = BATTLE_PORTRAIT_OFFSET[1]
+            p = drawable.Drawable(pygame.Rect((x, y), BATTLE_PORTRAIT_SIZE), s)
+            self.portraits.append(p)
+            
+        s = pygame.Surface(BATTLE_SUPER_ICON_SIZE)
+        s.fill(BLACK)
+        
+        x = self.portraits[0].rect.left
+        y = self.portraits[0].rect.bottom + BATTLE_PORTRAIT_OFFSET[1]
+        
+        self.superIcon = drawable.Drawable(pygame.Rect((x, y), BATTLE_SUPER_ICON_SIZE), s)
 
                 
 

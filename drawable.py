@@ -5,6 +5,11 @@ import pygame
 from constants import *
 
 class Drawable(object):
+    
+    def __init__(self, rect, image):
+        self.rect = rect
+        self.image = image
+    
     def draw(self, screen):
         screen.blit(self.image, self.rect.topleft)
 
