@@ -527,4 +527,13 @@ class BattleChar(object):
         self.moves['superMove'] = m
         self.moves['superFlash'] = m.flash
         
+    def getSuperIcon(self):
+        
+        if (self.currSuperMove >= len(self.superIcons)):
+            s = pygame.Surface(BATTLE_SUPER_ICON_SIZE)
+            s.fill(BLACK)
+        else:
+            s = self.superIcons[self.currSuperMove]
+            
+        return s
         

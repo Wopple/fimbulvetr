@@ -498,7 +498,7 @@ class Model(mvc.Model):
     def testKey(self, k):
         p = self.players[self.cameraPlayer]
 
-        self.players[0].superEnergy.setToMax()
+        self.players[0].superEnergy.add(self.players[0].superEnergy.maximum / 5)
 
 
     def checkProjForEdge(self, p):
@@ -1014,13 +1014,57 @@ class Model(mvc.Model):
             p = drawable.Drawable(pygame.Rect((x, y), BATTLE_PORTRAIT_SIZE), s)
             self.portraits.append(p)
             
-        s = pygame.Surface(BATTLE_SUPER_ICON_SIZE)
-        s.fill(BLACK)
         
         x = self.portraits[0].rect.left
         y = self.portraits[0].rect.bottom + BATTLE_PORTRAIT_OFFSET[1]
         
-        self.superIcon = drawable.Drawable(pygame.Rect((x, y), BATTLE_SUPER_ICON_SIZE), s)
+        c = self.players[self.cameraPlayer]
+        
+        self.superIcon = SuperIcon(pygame.Rect((x, y), BATTLE_SUPER_ICON_SIZE), c.getSuperIcon(), c.superEnergy)
+        
+        
+class SuperIcon(drawable.Drawable):
+    def __init__(self, inRect, inImage, energy):
+        self.imageBase = inImage
+        self.energy = energy
+        self.oldValue = self.energy.value
+        
+        super(SuperIcon, self).__init__(inRect, None)
+        
+        self.updateImage()
+        
+    def draw(self, screen):
+        
+        if self.oldValue != self.energy.value:
+            self.oldValue = self.energy.value
+            self.updateImage()
+            
+        super(SuperIcon, self).draw(screen)
+        
+    def updateImage(self):
+        
+        temp = pygame.Surface(BATTLE_SUPER_ICON_SIZE)
+        temp.fill(BLACK)
+        
+        if self.energy.isMax():
+            temp.blit(self.imageBase, (0,0))
+        else:
+            percent = float(self.energy.value) / float(self.energy.maximum)
+            leftSideWidth = int(BATTLE_SUPER_ICON_SIZE[0] * percent)
+            rightSideWidth = int(BATTLE_SUPER_ICON_SIZE[0] * (1 - percent))
+            
+            leftSide = pygame.Surface((leftSideWidth, BATTLE_SUPER_ICON_SIZE[1]))
+            leftSide.blit(self.imageBase, (0, 0))
+            leftSide.set_alpha(BATTLE_SUPER_ICON_ALPHA_FILL)
+            temp.blit(leftSide, (0, 0))
+            
+            rightSide = pygame.Surface((rightSideWidth, BATTLE_SUPER_ICON_SIZE[1]))
+            rightSide.blit(self.imageBase, (-leftSideWidth, 0))
+            rightSide.set_alpha(BATTLE_SUPER_ICON_ALPHA_EMPTY)
+            temp.blit(rightSide, (leftSideWidth, 0))
+            
+        self.image = temp
+
 
                 
 
@@ -1028,7 +1072,7 @@ def testData():
     heroes = [hare.Hare(), hare.Hare()]
     
     for h in heroes:
-        h.superEnergy.setToMax()
+        h.superEnergy.change(h.superEnergy.maximum / 2)
     
     size = (1400, 800)
     bg = pygame.Surface(size)

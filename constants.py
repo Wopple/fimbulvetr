@@ -204,6 +204,9 @@ SPECIAL_BAR_PULSE = 5
 
 RESPAWN_BAR_COLOR = (255, 215, 0)
 
+BATTLE_SUPER_ICON_ALPHA_FILL = 200
+BATTLE_SUPER_ICON_ALPHA_EMPTY = 100
+
 RETREAT_PROHIBIT_TIME = FRAME_RATE * 8
 RETREAT_HOLD_TOTAL = 5000
 RETREAT_ADD = 72
@@ -720,6 +723,25 @@ CAT_TOKENS = []
 for i in temp:
     CAT_TOKENS.append([pygame.image.load(os.path.join(DIREC_CAT_GRAPHICS, i[0])).convert_alpha(), i[1]])
     
+
+temp = [ 'super1.png']
+
+HARE_SUPER_ICONS = []
+for i in temp:
+    HARE_SUPER_ICONS.append(pygame.image.load(os.path.join(DIREC_HARE_GRAPHICS, i)).convert_alpha())
+    
+temp = []
+
+FOX_SUPER_ICONS = []
+for i in temp:
+    FOX_SUPER_ICONS.append(pygame.image.load(os.path.join(DIREC_FOX_GRAPHICS, i)).convert_alpha())
+    
+temp = []
+
+CAT_SUPER_ICONS = []
+for i in temp:
+    CAT_SUPER_ICONS.append(pygame.image.load(os.path.join(DIREC_CAT_GRAPHICS, i)).convert_alpha())
+
 
 mapItemsList = [["fortress", "fortress.png", (33, 37)],
                 ["spire", "spire.png", (14, 54)]]

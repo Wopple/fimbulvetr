@@ -14,6 +14,7 @@ class Fox(battlechar.BattleChar):
         self.name = name
         self.speciesName = "Fox"
         self.spriteSet = FOX_IMAGES
+        self.superIcons = FOX_SUPER_ICONS
         self.groundAccel = 1.2
         self.groundVelMax = 12.5
         self.groundFriction = 2.2

@@ -16,6 +16,7 @@ class Hare(battlechar.BattleChar):
         self.name = name
         self.speciesName = "Hare"
         self.spriteSet = HARE_IMAGES
+        self.superIcons = HARE_SUPER_ICONS
         self.groundAccel = 1.5
         self.groundVelMax = 10.0
         self.groundFriction = 2.2

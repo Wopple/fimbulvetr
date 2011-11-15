@@ -15,6 +15,7 @@ class Cat(battlechar.BattleChar):
         self.name = name
         self.speciesName = "Cat"
         self.spriteSet = CAT_IMAGES
+        self.superIcons = CAT_SUPER_ICONS
         self.groundAccel = 1.3
         self.groundVelMax = 9.0
         self.groundFriction = 2.6
