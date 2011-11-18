@@ -7,8 +7,12 @@ from constants import *
 import drawable
 
 class TargetMarker(object):
-    def __init__(self):
-        self.image = INTERFACE_GRAPHICS[2]
+    def __init__(self, waypoint=False):
+        if waypoint:
+            self.image = INTERFACE_GRAPHICS[11]
+        else:
+            self.image = INTERFACE_GRAPHICS[2]
+            
         self.rect = pygame.Rect((0, 0), self.image.get_size())
 
     def draw(self, screen, charPos, inZoom, inOffset):

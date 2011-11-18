@@ -331,8 +331,8 @@ CHARACTER_TRANSFER_NET_MESSAGE_SIZE = 30
 CHARACTER_NAME_MAX_LENGTH = 10
 
 COUNTDOWN_COLOR = (244, 210, 11)
-MAP_COUNTDOWN_LENGTH = 10
-ENCOUNTER_COUNTDOWN_LENGTH = 3
+MAP_COUNTDOWN_LENGTH = 30
+ENCOUNTER_COUNTDOWN_LENGTH = 10
 BATTLE_COUNTDOWN_LENGTH = 3
 
 TECH_BUFFER_MIN = -10
@@ -366,6 +366,8 @@ STUN_THRESHOLD_3 = 150
 
 BASE_CHARACTER_SPEED = 1.2
 #BASE_CHARACTER_SPEED = 3.0
+
+MAX_WAYPOINTS = 20
 
 HARE_MAP_SPEED_BASE = 1.45 * BASE_CHARACTER_SPEED
 FOX_MAP_SPEED_BASE = 1.2 * BASE_CHARACTER_SPEED
@@ -792,7 +794,8 @@ temp = ['pauseicon.png',
         'terrainmountain.png',
         'terrainwater.png',
         'loading.png',
-        'terrainfortress.png']
+        'terrainfortress.png',
+        'waypoint.png']
 
 INTERFACE_GRAPHICS = []
 for i in temp:

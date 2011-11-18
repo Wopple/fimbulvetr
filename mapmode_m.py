@@ -109,7 +109,7 @@ class Model(mvc.Model):
 
         if self.initialCount > 0:
             self.initialCount -= 1
-            self.centerOnCharacter(self.charactersInTeams[self.team][0])           
+            self.centerOnCharacter(self.charactersInTeams[self.team][0])    
 
     def runCharacters(self):
         return ( (self.pendingBattle is None) and (not self.paused()) and
@@ -242,13 +242,13 @@ class Model(mvc.Model):
 
             self.currSelected = None
 
-    def rightClick(self):
+    def rightClick(self, waypoint):
         if self.encounterPause == -1:
             if (not self.currSelected is None):
                 pos = self.absMousePos()
                 pos = [int(pos[0]), int(pos[1])]
-                self.currSelected.startMovement(pos)
-                self.currentFrameOrder = [self.currSelected, pos]
+                self.currSelected.setTarget(pos, waypoint)
+                self.currentFrameOrder = [self.currSelected, pos, waypoint]
 
     def absMousePos(self):
         temp = []
@@ -503,6 +503,10 @@ class Model(mvc.Model):
             self.charBars.append(bar)
 
         self.targetMarker = targetmarker.TargetMarker()
+        
+        self.waypointMarkers = []
+        for i in range(MAX_WAYPOINTS):
+            self.waypointMarkers.append(targetmarker.TargetMarker(True))
 
     def updateInterface(self):
         self.updatePausePlayIcons()
@@ -639,8 +643,13 @@ class Model(mvc.Model):
 
             if charNum is None:
                 raise Exception()
+            
+            if self.currentFrameOrder[2]:
+                waypoint = "1"
+            else:
+                waypoint = "0"
 
-            specialByte = chr(int("00" + convertIntToBinary(charNum, 4) +
+            specialByte = chr(int("0" + waypoint + convertIntToBinary(charNum, 4) +
                               "1" + str(pauseBit), 2))
 
 
@@ -680,15 +689,17 @@ class Model(mvc.Model):
 
         specialString = convertIntToBinary(ord(specialByte), 8)
 
+        waypointNum = int(specialString[1:2], 2)
         charNum = int(specialString[2:6], 2)
         moveNum = int(specialString[6:7], 2)
         pauseNum = int(specialString[7:8], 2)
 
+        waypoint = (waypointNum == 1)
 
         self.pause[p] = (pauseNum == 1)
 
         if (moveNum == 1):
-            self.charactersInTeams[p][charNum].startMovement((xVal, yVal))
+            self.charactersInTeams[p][charNum].setTarget((xVal, yVal), waypoint)
         
 
     def getBattleData(self):

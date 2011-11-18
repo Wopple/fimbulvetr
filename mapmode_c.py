@@ -10,6 +10,8 @@ from constants import *
 class Controller(mvc.Controller):
     def __init__(self, model=None, screen=None):
         super(Controller, self).__init__()
+        
+        self.shift = [False, False]
 
     def update(self):
         if self.model.initialCount == 0:
@@ -18,7 +20,7 @@ class Controller(mvc.Controller):
                     if event.button == 1:
                         self.model.leftClick()
                     elif event.button == 3:
-                        self.model.rightClick()
+                        self.model.rightClick(True in self.shift)
                     elif event.button == 4:
                         self.model.scrollIn()
                     elif event.button == 5:
@@ -58,6 +60,10 @@ class Controller(mvc.Controller):
                         self.model.key(4, True)
                     elif event.key == K_PAGEDOWN:
                         self.model.key(5, True)
+                    elif event.key == K_LSHIFT:
+                        self.shift[0] = True
+                    elif event.key == K_RSHIFT:
+                        self.shift[1] = True
                 elif event.type == pygame.KEYUP:
                     if event.key == K_UP:
                         self.model.key(0, False)
@@ -71,6 +77,10 @@ class Controller(mvc.Controller):
                         self.model.key(4, False)
                     elif event.key == K_PAGEDOWN:
                         self.model.key(5, False)
+                    elif event.key == K_LSHIFT:
+                        self.shift[0] = False
+                    elif event.key == K_RSHIFT:
+                        self.shift[1] = False
                 elif event.type == pygame.QUIT:
                     sys.exit(0)
 

@@ -19,7 +19,13 @@ class View(mvc.View):
         c = self.model.currSelected
         if not c is None:
             if not c.target is None:
-                self.model.targetMarker.draw(self.screen, c.target,
+                points = [c.target]
+                points += c.targetBuffer
+                for i in range(len(points)-1):
+                    self.model.waypointMarkers[i].draw(self.screen, points[i],
+                                             self.model.zoomVal, self.model.mapRect.topleft)
+                    
+                self.model.targetMarker.draw(self.screen, points[-1],
                                              self.model.zoomVal, self.model.mapRect.topleft)
 
         for i in self.model.structures:

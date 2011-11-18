@@ -29,6 +29,8 @@ class MapChar(mapitem.MapItem):
         self.vel = [0.0, 0.0]
         self.target = None
         
+        self.targetBuffer = []
+        
         self.currTerrain = 0
         self.oldTerrain = 0
         self.region = None
@@ -51,7 +53,7 @@ class MapChar(mapitem.MapItem):
 
     def update(self):
         if self.speedHasChanged():
-            self.startMovement(self.target)
+            self.startMovement()
         self.oldTerrain = self.currTerrain
         self.oldTerritory = self.currTerritory
         
@@ -75,11 +77,17 @@ class MapChar(mapitem.MapItem):
                 nextLoc.append(self.precisePos[i] + self.vel[i]) 
             nextDist = util.distance(nextLoc, self.target)
             if nextDist > currDist:
-                self.stop()
+                if len(self.targetBuffer) > 0:
+                    self.target = self.targetBuffer[0]
+                    self.targetBuffer = self.targetBuffer[1:]
+                    self.startMovement()
+                else:
+                    self.stop()
 
     def stop(self):
         self.vel = [0.0, 0.0]
         self.target = None
+        self.targetBuffer = []
 
     def modifyImages(self):
         colorSwap(self.images[0][0], TOKEN_BORDER_NEUTRAL,
@@ -91,15 +99,36 @@ class MapChar(mapitem.MapItem):
         colorSwap(self.images[2][0], TOKEN_BORDER_NEUTRAL,
                   TOKEN_BORDER_SELECTED, 60)
 
-    def startMovement(self, target):
-        self.target = target
-        if target is None:
+    
+    def setTarget(self, target, waypoint):
+        if waypoint and (not self.target is None):
+            self.setTargetWaypoint(target)
+            return
+        else:
+            self.setTargetSingle(target)
+            
+        self.startMovement()
+            
+            
+    def startMovement(self):
+        if self.target is None:
             return
         direction = util.get_direction(self.precisePos, self.target)
         speed = self.getCurrSpeed()
 
         for i in range(2):
             self.vel[i] = direction[i] * speed
+            
+    def setTargetWaypoint(self, target):
+        if self.target is None:
+            self.target = target
+        else:
+            if (not target is None) and (len(self.targetBuffer) < MAX_WAYPOINTS):
+                self.targetBuffer.append(target)
+                
+    def setTargetSingle(self, target):
+        self.target = target
+        self.targetBuffer = []
 
     def getCurrSpeed(self):
         val = (self.speedBase *
