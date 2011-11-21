@@ -142,3 +142,8 @@ class EnergyBar(object):
     def changeColor(self, c):
         self.colorChanged = True
         self.fillColor = c
+        
+    def changeFullColors(self, c1, c2):
+        self.fullLowColor = c1
+        self.fullHighColor = c2
+        self.createPulse()

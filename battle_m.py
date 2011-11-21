@@ -218,6 +218,7 @@ class Model(mvc.Model):
         if (c >= 0) and (c <= 1):
             self.cameraPlayer = c
         self.createBars()
+        self.createInterfaceExtras()
 
     def key(self, k, t, p):
         if p == 0:

@@ -57,8 +57,9 @@ class MapChar(mapitem.MapItem):
         self.oldTerrain = self.currTerrain
         self.oldTerritory = self.currTerritory
         
-        for i in range(2):
-            self.precisePos[i] += self.vel[i]
+        if (not self.isDead()):
+            for i in range(2):
+                self.precisePos[i] += self.vel[i]
 
         self.regainHealth()
 
@@ -101,6 +102,9 @@ class MapChar(mapitem.MapItem):
 
     
     def setTarget(self, target, waypoint):
+        if self.isDead():
+            waypoint = False
+            
         if waypoint and (not self.target is None):
             self.setTargetWaypoint(target)
             return
@@ -195,7 +199,7 @@ class MapChar(mapitem.MapItem):
         self.respawnTime.setToMin()
         self.battleChar.hp.setToMax()
         self.removed = False
-        self.setPos(self.respawnPoint)
+        self.setPos(self.target)
             
         
 

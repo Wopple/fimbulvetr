@@ -451,6 +451,9 @@ EFFECT_COLORS = {"good"   : (0, 180, 0),
 
 EFFECT_ICON_SIZE = (20, 20)
 
+NEUTRAL_ICON = pygame.Surface(EFFECT_ICON_SIZE)
+NEUTRAL_ICON.fill(EFFECT_COLORS["neutral"])
+
 size = TERRITORY_DOT_OFFSET * 2
 TERRITORY_DOT_IMAGES = []
 for i in range(len(TERRITORY_DOT_COLORS)):

@@ -246,6 +246,10 @@ class Model(mvc.Model):
         if self.encounterPause == -1:
             if (not self.currSelected is None):
                 pos = self.absMousePos()
+                
+                if self.currSelected.isDead() and (not self.isInTerritory(pos, self.currSelected.team)):
+                    return
+                
                 pos = [int(pos[0]), int(pos[1])]
                 self.currSelected.setTarget(pos, waypoint)
                 self.currentFrameOrder = [self.currSelected, pos, waypoint]
@@ -333,6 +337,18 @@ class Model(mvc.Model):
                         c.currTerritory = "contested"
                     else:
                         c.currTerritory = "enemy"
+                        
+    
+    def isInTerritory(self, pos, team):
+        cTeam = team + 1
+        for s in self.structures:
+            sTeam = s.team
+            if sTeam == cTeam:
+                dist = util.distance(pos, s.precisePos)
+                if dist <= s.territorySize:
+                    return True
+                
+        return False
                 
                     
             
@@ -399,6 +415,12 @@ class Model(mvc.Model):
 
         if checker:
             self.recreateTerritory()
+            
+            for c in self.characters:
+                if c.isDead():
+                    if not c.target is None:
+                        if not self.isInTerritory(c.target, c.team):
+                            c.target = None
 
 
     def recreateTerritory(self):
@@ -454,7 +476,7 @@ class Model(mvc.Model):
         for c in self.characters:
             if c.isDead():
                 c.respawnTime.add(RESPAWN_GAIN)
-                if c.respawnTime.isMax():
+                if c.respawnTime.isMax() and (not c.target is None):
                     c.revive()
             
                 
@@ -566,9 +588,9 @@ class Model(mvc.Model):
 
         k -= 1
 
-        if ( (k >= 0) and (k < len(self.charactersInTeams[self.team])) and
-             (not self.charactersInTeams[self.team][k].isDead()) ):
-            if self.currSelected is self.charactersInTeams[self.team][k]:
+        if (k >= 0) and (k < len(self.charactersInTeams[self.team])):
+            if ( (self.currSelected is self.charactersInTeams[self.team][k]) and
+                 (not self.charactersInTeams[self.team][k].isDead()) ):
                 self.centerOnCharacter(self.currSelected)
             else:
                 self.currSelected = self.charactersInTeams[self.team][k]

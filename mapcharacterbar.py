@@ -74,11 +74,13 @@ class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
                 self.healthBar.value = self.character.respawnTime
                 self.healthBar.threshold = self.healthBar.value.maximum
                 self.healthBar.changeColor(RESPAWN_BAR_COLOR)
+                self.healthBar.changeFullColors(RESPAWN_BAR_COLOR, RESPAWN_BAR_COLOR)
         else:
             if self.healthBar.value != self.character.battleChar.hp:
                 self.healthBar.value = self.character.battleChar.hp
                 self.healthBar.threshold = self.healthBar.value.maximum
                 self.healthBar.changeColor(HEALTH_BAR_COLORS[0])
+                self.healthBar.changeFullColors(HEALTH_BAR_COLORS[1], HEALTH_BAR_COLORS[2])
         
         self.remakeImage()
 
@@ -176,8 +178,10 @@ class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
         self.drawTerritoryIcon(image)
 
     def drawTerrainIcon(self, image):
-
-        icon = self.terrainEffectIcons[self.character.currTerrain]
+        if self.character.isDead():
+            icon = NEUTRAL_ICON
+        else:
+            icon = self.terrainEffectIcons[self.character.currTerrain]
 
         x = (self.rect.width - MAP_CHAR_BAR_BORDER - MAP_CHAR_BAR_PADDING -
              EFFECT_ICON_SIZE[0])
@@ -187,8 +191,10 @@ class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
 
 
     def drawTerritoryIcon(self, image):
-
-        icon = self.territoryEffectIcons[self.character.currTerritory]
+        if self.character.isDead():
+            icon = NEUTRAL_ICON
+        else:
+            icon = self.territoryEffectIcons[self.character.currTerritory]
 
         x = (self.rect.width - MAP_CHAR_BAR_BORDER - MAP_CHAR_BAR_PADDING -
              EFFECT_ICON_SIZE[0])
