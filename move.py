@@ -14,7 +14,7 @@ class Move(object):
     def __init__(self, f, t):
         self.frames = []
         
-        temp = ['exitFrame', 'doDash', 'noXMove', 'noXVel', 'land', 'jump',
+        temp = ['exitFrame', 'doWalk', 'doDash', 'noXMove', 'noXVel', 'land', 'jump',
                 'doDuck', 'stopDuck', 'attackA', 'attackB', 'releaseA',
                 'releaseB', 'attackAUp', 'attackBUp', 'attackADown',
                 'attackBDown', 'attackBUpCharge', 'bladelv1', 'bladelv2',
@@ -147,7 +147,8 @@ class Transition(object):
 
 def baseIdle():
     t = [ ['exitFrame', Transition(-1, 0, None, None, 'idle')],
-          ['doDash', Transition(None, None, None, None, 'dash')],
+          ['doWalk', Transition(None, None, None, None, 'walking')],
+          ['doDash', Transition(None, None, None, None, 'dashing')],
           ['jump', Transition(None, None, None, None, 'jumping')],
           ['doDuck', Transition(None, None, None, None, 'ducking')],
           ['attackAUp', Transition(None, None, None, None, 'upA')],
@@ -161,15 +162,43 @@ def baseIdle():
     m.canDI = False
     return m
     
-def baseDash():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'dash')],
+def baseWalking():
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'walking')],
+          ['doDash', Transition(None, None, None, None, 'dashing')],
           ['noXMove', Transition(None, None, None, None, 'idle')],
           ['jump', Transition(None, None, None, None, 'jumping')],
           ['doDuck', Transition(None, None, None, None, 'ducking')],
           ['attackAUp', Transition(None, None, None, None, 'upA')],
           ['attackBUp', Transition(None, None, None, None, 'upB')],
-          ['attackAAtMax', Transition(None, None, None, None, 'jabA')],
-          ['attackBAtMax', Transition(None, None, None, None, 'jabB')],
+          ['attackA', Transition(None, None, None, None, 'jabA')],
+          ['attackB', Transition(None, None, None, None, 'jabB')],
+          ['block', Transition(None, None, None, None, 'blocking')],
+          ['downBlock', Transition(None, None, None, None, 'lowBlocking')],
+          ['super', Transition(None, None, None, None, 'superFlash')]]
+    m = Move([], t)
+    return m
+
+def baseDashing():
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'running')],
+          ['jump', Transition(None, None, None, None, 'jumping')],
+          ['doDuck', Transition(None, None, None, None, 'ducking')],
+          ['attackAUp', Transition(None, None, None, None, 'upA')],
+          ['attackBUp', Transition(None, None, None, None, 'upB')],
+          ['attackA', Transition(None, None, None, None, 'dashAttackA')],
+          ['attackB', Transition(None, None, None, None, 'dashAttackB')],
+          ['block', Transition(None, None, None, None, 'blocking')],
+          ['downBlock', Transition(None, None, None, None, 'lowBlocking')],
+          ['super', Transition(None, None, None, None, 'superFlash')]]
+    m = Move([], t)
+    return m
+
+def baseRunning():
+    t = [ ['exitFrame', Transition(-1, 0, None, None, 'running')],
+          ['noXMove', Transition(None, None, None, None, 'idle')],
+          ['jump', Transition(None, None, None, None, 'jumping')],
+          ['doDuck', Transition(None, None, None, None, 'ducking')],
+          ['attackAUp', Transition(None, None, None, None, 'upA')],
+          ['attackBUp', Transition(None, None, None, None, 'upB')],
           ['attackA', Transition(None, None, None, None, 'dashAttackA')],
           ['attackB', Transition(None, None, None, None, 'dashAttackB')],
           ['block', Transition(None, None, None, None, 'blocking')],

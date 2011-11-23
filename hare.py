@@ -18,7 +18,7 @@ class Hare(battlechar.BattleChar):
         self.spriteSet = HARE_IMAGES
         self.superIcons = HARE_SUPER_ICONS
         self.groundAccel = 1.5
-        self.groundVelMax = 10.0
+        self.groundVelMax = 6.5
         self.groundFriction = 2.2
         self.airAccel = 1.2
         self.airVelMax = 7.0
@@ -64,7 +64,9 @@ class Hare(battlechar.BattleChar):
     def initSpecMoves(self):
         self.createMoveIdle()
         self.createMoveIdleLike()
-        self.createMoveDash()
+        self.createMoveWalking()
+        self.createMoveDashing()
+        self.createMoveRunning()
         self.createMoveAir()
         self.createMoveFlipping()
         self.createMoveAirLike()
@@ -255,46 +257,31 @@ class Hare(battlechar.BattleChar):
         self.moves['idleLike'].frames[1].ignoreFriction = True
         self.moves['idleLike'].frames[1].ignoreSpeedCap = True
 
-    def createMoveDash(self):
-        r = [
-                [
-                    (-8, -47, 5, -37),
-                    (-8, -53, 2, -47),
-                    (-10, -37, 4, -22),
-                    (2, -35, 13, -29),
-                    (-18, -30, -10, -21),
-                    (-25, -19, -6, -10),
-                    (-11, -21, 8, -13),
-                    (8, -18, 20, -12),
-                    (19, -20, 26, -11),
-                    (1, -31, 10, -24)
-                ],
-                [
-                    (-8, -47, 5, -37),
-                    (-8, -53, 2, -47),
-                    (-10, -37, 5, -20),
-                    (-9, -21, 8, -11),
-                    (-16, -10, -4, 0),
-                    (4, -12, 11, -3),
-                    (9, -8, 22, -3),
-                    (1, -30, 10, -25)
-                ],
-                [
-                    (-8, -47, 5, -37),
-                    (-8, -53, 2, -47),
-                    (-10, -37, 5, -20),
-                    (-7, -20, 5, -1),
-                    (-3, -4, 9, 0)
-                ]
-            ]
+    def createMoveWalking(self):
                     
-        f = [ self.frameData(2, 3, r[0]),
-              self.frameData(3, 3, r[1]),
-              self.frameData(4, 3, r[2]),
-              self.frameData(5, 3, r[0]),
-              self.frameData(6, 3, r[1]),
-              self.frameData(7, 3, r[2]) ]
-        self.moves['dash'].append(f, [])
+        f = [self.frameData(149, 4),
+             self.frameData(150, 4),
+             self.frameData(151, 4),
+             self.frameData(152, 4) ]
+        
+        self.moves['walking'].append(f, [])
+        
+    def createMoveDashing(self):
+                    
+        f = [self.frameData(2, 7)]
+        
+        self.moves['dashing'].append(f, [])
+        
+    def createMoveRunning(self):
+                    
+        f = [self.frameData(3, 2),
+             self.frameData(4, 2),
+             self.frameData(5, 2),
+             self.frameData(6, 2),
+             self.frameData(7, 2),
+             self.frameData(2, 2)]
+        
+        self.moves['running'].append(f, [])
 
     def createMoveAir(self):
         r = [

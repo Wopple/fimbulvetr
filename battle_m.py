@@ -286,7 +286,28 @@ class Model(mvc.Model):
             if d:
                 p.actTransition('doDuck')
             if l or r:
-                p.actTransitionFacing('doDash', l, r)
+                if (l and self.wasKeyPressed(2, keysNow)):
+                    keysNow[2] = 0
+                    if (p.dashBuffer[0] > 0 and p.dashBuffer[0] < DASH_BUFFER_MAX):
+                        print p.dashBuffer
+                        p.dashBuffer = [0, 0]
+                        p.actTransitionFacing('doDash', l, r)
+                    else:
+                        p.dashBuffer[0] = DASH_BUFFER_MAX
+                        p.dashBuffer[1] = 0
+                        
+                if (r and self.wasKeyPressed(3, keysNow)):
+                    keysNow[3] = 0
+                    print p.dashBuffer
+                    if (p.dashBuffer[1] > 0 and p.dashBuffer[1] < DASH_BUFFER_MAX):
+                        print p.dashBuffer
+                        p.dashBuffer = [0, 0]
+                        p.actTransitionFacing('doDash', l, r)
+                    else:
+                        p.dashBuffer[1] = DASH_BUFFER_MAX
+                        p.dashBuffer[0] = 0
+                        
+                p.actTransitionFacing('doWalk', l, r)
                 if l:
                     if p.facingRight:
                         p.actTransition('backward')

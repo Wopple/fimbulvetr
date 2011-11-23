@@ -30,6 +30,7 @@ class BattleChar(object):
         self.techBuffer = TECH_BUFFER_MIN
         self.canTech = True
         self.dropThroughPlatform = None
+        self.dashBuffer = [0, 0]
 
         self.superMoves = []
         self.currSuperMove = None
@@ -64,6 +65,10 @@ class BattleChar(object):
         self.preciseLoc[1] = float(loc[1])
 
     def update(self):
+        for i in range(2):
+            if self.dashBuffer[i] > 0:
+                self.dashBuffer[i] -= 1
+            
         if self.freezeFrame == 0:
             self.onHitTrigger = False
             self.proceedFrame()
@@ -291,7 +296,9 @@ class BattleChar(object):
         self.moves = {}
         self.moves['idle'] = move.baseIdle()
         self.moves['idleLike'] = move.baseBlank()
-        self.moves['dash'] = move.baseDash()
+        self.moves['walking'] = move.baseWalking()
+        self.moves['dashing'] = move.baseDashing()
+        self.moves['running'] = move.baseRunning()
         self.moves['air'] = move.baseAir()
         self.moves['flipping'] = move.baseAir()
         self.moves['airLike'] = move.baseBlank()
@@ -427,6 +434,7 @@ class BattleChar(object):
         return True
     
     def actTransition(self, key, var1=None, var2=None):
+                        
         t = self.currMove.transitions[key]
         
         if self.actLeft and self.checkTransition(key, var1, var2):

@@ -59,9 +59,11 @@ INTRO_SPEEDS = [4, 30, 5, 50, 5, 15]
 SHOW_RED_DOT = False
 SHOW_TEAL_DOTS = False
 SHOW_HURTBOXES = False
-SHOW_HITBOXES = False
+SHOW_HITBOXES = True
 SHOW_BLOCKBOXES = False
 SHOW_TRIGGER_AREA = False
+
+DASH_BUFFER_MAX = 8
 
 MAP_INTERFACE_ALPHA_MIN = 120
 MAP_INTERFACE_ALPHA_TICK = 10
@@ -617,7 +619,11 @@ temp = [ ["00.png", (24, 62)],
          ["145.png", (106, 76)],
          ["146.png", (106, 76)],
          ["147.png", (26, 59)],
-         ["148.png", (26, 59)]  ]
+         ["148.png", (26, 59)],
+         ["149.png", (15, 64)],
+         ["150.png", (15, 64)],
+         ["151.png", (15, 64)],
+         ["152.png", (15, 64)] ]
 
 HARE_IMAGES = []
 for i in temp:
