@@ -289,7 +289,6 @@ class Model(mvc.Model):
                 if (l and self.wasKeyPressed(2, keysNow)):
                     keysNow[2] = 0
                     if (p.dashBuffer[0] > 0 and p.dashBuffer[0] < DASH_BUFFER_MAX):
-                        print p.dashBuffer
                         p.dashBuffer = [0, 0]
                         p.actTransitionFacing('doDash', l, r)
                     else:
@@ -298,9 +297,7 @@ class Model(mvc.Model):
                         
                 if (r and self.wasKeyPressed(3, keysNow)):
                     keysNow[3] = 0
-                    print p.dashBuffer
                     if (p.dashBuffer[1] > 0 and p.dashBuffer[1] < DASH_BUFFER_MAX):
-                        print p.dashBuffer
                         p.dashBuffer = [0, 0]
                         p.actTransitionFacing('doDash', l, r)
                     else:
@@ -330,14 +327,8 @@ class Model(mvc.Model):
                     if p.actTransition('attackADown'):
                         keysNow[4] = 0
                 else:
-                    check = False
-                    if abs(p.vel[0]) < p.groundVelMax:
-                        if p.actTransition('attackAAtMax'):
-                            keysNow[4] = 0
-                            check = True
-                    if not check:
-                        if p.actTransition('attackA'):
-                            keysNow[4] = 0
+                    if p.actTransition('attackA'):
+                        keysNow[4] = 0
             if self.wasKeyPressed(5, keysNow):
                 if u:
                     if p.actTransition('attackBUp'):
@@ -351,14 +342,8 @@ class Model(mvc.Model):
                     if p.actTransition('attackBDown'):
                         keysNow[5] = 0
                 else:
-                    check = False
-                    if abs(p.vel[0]) < p.groundVelMax:
-                        if p.actTransition('attackBAtMax'):
-                            keysNow[4] = 0
-                            check = True
-                    if not check:
-                        if p.actTransition('attackB'):
-                            keysNow[4] = 0
+                    if p.actTransition('attackB'):
+                        keysNow[4] = 0
             if self.wasKeyPressed(6, keysNow):
                 if not self.checkForPlatform(p) is None:
                     if p.actTransition('dropThrough'):

@@ -17,8 +17,11 @@ class Hare(battlechar.BattleChar):
         self.speciesName = "Hare"
         self.spriteSet = HARE_IMAGES
         self.superIcons = HARE_SUPER_ICONS
-        self.groundAccel = 1.5
-        self.groundVelMax = 6.5
+        self.walkVelMax = 8.0
+        self.dashVelMax = 26.0
+        self.runVelMax = 13.0
+        self.walkAccel = 2.5
+        self.dashAccel = 12.0
         self.groundFriction = 2.2
         self.airAccel = 1.2
         self.airVelMax = 7.0
@@ -2108,7 +2111,7 @@ class Hare(battlechar.BattleChar):
               self.frameData(111, 2, r[1]) ]
 
         self.moves['grabbing'].append(f, [])
-        self.moves['grabbing'].frames[1].setVelX = 32.0
+        self.moves['grabbing'].frames[1].setVelX = 10.0
         self.moves['grabbing'].frames[1].ignoreFriction = True
         self.moves['grabbing'].frames[2].ignoreFriction = True
         self.moves['grabbing'].frames[6].setVelX = -10.0

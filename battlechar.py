@@ -88,7 +88,12 @@ class BattleChar(object):
             elif self.inAir:
                 speedCap = self.airVelMax
             else:
-                speedCap = self.groundVelMax
+                if (self.currMove == self.moves['dashing']) or (self.currMove == self.moves['grabbing']):
+                    speedCap = self.dashVelMax
+                elif self.currMove == self.moves['running']:
+                    speedCap = self.runVelMax
+                else:
+                    speedCap = self.walkVelMax
 
             for i in range(2):
                 self.vel[i] += self.accel[i]
@@ -220,9 +225,12 @@ class BattleChar(object):
             if not self.canDI():
                 f = 0
             if not self.inAir:
-                if not self.keyTowardFacing(l, r):
+                if self.currMove == self.moves['dashing']:
+                    accel = self.dashAccel
+                elif not self.keyTowardFacing(l, r):
                     f = 0
-                accel = self.groundAccel
+                else:
+                    accel = self.walkAccel
             else:
                 accel = self.airAccel
 
