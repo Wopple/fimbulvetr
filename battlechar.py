@@ -33,6 +33,7 @@ class BattleChar(object):
         self.dashBuffer = [0, 0]
 
         self.superMoves = []
+        self.superMovesAir = []
         self.currSuperMove = None
         
         temp = pygame.Surface((50, 80))
@@ -364,6 +365,9 @@ class BattleChar(object):
         
         self.moves['superFlash'] = None
         self.moves['superMove'] = None
+        
+        self.moves['superFlashAir'] = None
+        self.moves['superMoveAir'] = None
 
     def setCurrMove(self, index, frame=0):
         self.currMove = self.moves[index]
@@ -444,6 +448,9 @@ class BattleChar(object):
     def actTransition(self, key, var1=None, var2=None):
                         
         t = self.currMove.transitions[key]
+        
+        if (key == 'super') and (not t is None) and (self.moves[t.destination] is None):
+            return 
         
         if self.actLeft and self.checkTransition(key, var1, var2):
             
@@ -532,16 +539,33 @@ class BattleChar(object):
         return add_points(self.preciseLoc, p)
     
     def setSuperValue(self, s):
-        if (s < 0) or (s >= len(self.superMoves)):
+        if (s < 0) or (s >= len(self.superMoves)) or (s >= len(self.superMovesAir)):
             s = 0
             
         self.currSuperMove = s
         
     def setupSuper(self):
         
+        self.moves['superMove'] = None
+        self.moves['superFlash'] = None
+        self.moves['superMoveAir'] = None
+        self.moves['superFlashAir'] = None
+        
         m = self.superMoves[self.currSuperMove]
         self.moves['superMove'] = m
-        self.moves['superFlash'] = m.flash
+        if (not m is None):
+            self.moves['superFlash'] = m.flash
+        
+        m = self.superMovesAir[self.currSuperMove]
+        self.moves['superMoveAir'] = m
+        if (not m is None):
+            self.moves['superFlashAir'] = m.flash
+        
+    def appendSuperMove(self, ground, air):
+        
+        self.superMoves.append(ground)
+        self.superMovesAir.append(air)
+        
         
     def getSuperIcon(self):
         

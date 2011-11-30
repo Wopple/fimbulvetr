@@ -217,7 +217,8 @@ def baseAir():
           ['attackADown', Transition(None, None, None, None, 'downAirA')],
           ['attackBDown', Transition(None, None, None, None, 'downAirB')],
           ['block', Transition(None, None, None, None, 'airBlocking')],
-          ['downBlock', Transition(None, None, None, None, 'airBlocking')] ]
+          ['downBlock', Transition(None, None, None, None, 'airBlocking')],
+          ['super', Transition(None, None, None, None, 'superFlashAir')] ]
     m = Move([], t)
     return m
 

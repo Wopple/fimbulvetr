@@ -2848,20 +2848,35 @@ class Hare(battlechar.BattleChar):
         t = [['exitFrame', move.Transition(-1, None, None, None, 'super1Ending1')]]
 
         
-        s = move.SuperMove(n, d, f, t)
+        sg = move.SuperMove(n, d, f, t)
 
-        for i in range(len(s.frames)):
-            s.frames[i].setVelX = 19
-            s.frames[i].setVelY = 0
-            s.frames[i].ignoreSpeedCap = True
-            s.frames[i].ignoreFriction = True
+        for i in range(len(sg.frames)):
+            sg.frames[i].setVelX = 19
+            sg.frames[i].setVelY = 0
+            sg.frames[i].ignoreSpeedCap = True
+            sg.frames[i].ignoreFriction = True
 
             if (i % 3) == 1:
-                s.frames[i].resetHitPotential = True
+                sg.frames[i].resetHitPotential = True
         
-        s.flash = self.createSuperFlash1()
+        sg.flash = self.createSuperFlash1()
+        
+        
+        sa = move.SuperMove(n, d, f, t)
 
-        self.superMoves.append(s)
+        for i in range(len(sa.frames)):
+            sa.frames[i].setVelX = 14
+            sa.frames[i].setVelY = 0
+            sa.frames[i].ignoreSpeedCap = True
+            sa.frames[i].ignoreFriction = True
+
+            if (i % 3) == 1:
+                sa.frames[i].resetHitPotential = True
+        
+        sa.flash = self.createSuperFlash1Air()
+        
+
+        self.appendSuperMove(sg, sa)
 
         self.createSuper1Ending1()
         
@@ -2894,6 +2909,25 @@ class Hare(battlechar.BattleChar):
         s.frames[4].setAccelY = -0.2
         s.frames[5].setAccelX = 0.3
         s.frames[5].setAccelY = -0.2
+        
+        return s
+    
+    def createSuperFlash1Air(self):
+        
+        s = move.baseSuperFlash()
+        
+        f = [ self.frameData(87, 22),
+             self.frameData(141, 2),
+             self.frameData(141, 1),
+             self.frameData(142, 1),
+             self.frameData(143, 1)]
+        
+        s.append(f, [])
+        s.liftOff = True
+        
+        for i in range(len(s.frames)):
+            s.frames[i].setVelX = 0
+            s.frames[i].setVelY = 0
         
         return s
 
