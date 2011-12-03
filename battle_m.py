@@ -1081,7 +1081,7 @@ def testData():
     for h in heroes:
         h.superEnergy.change(h.superEnergy.maximum / 2)
     
-    size = (1400, 800)
+    size = (1000, 900)
     bg = pygame.Surface(size)
     bg.fill((190, 190, 190))
     barSpace = 200
@@ -1098,9 +1098,12 @@ def testData():
     platforms = []
 
     platforms.append( platform.Platform(
-        (250, size[1] - BATTLE_AREA_FLOOR_HEIGHT - 200), 300 ) )
+        (100, size[1] - BATTLE_AREA_FLOOR_HEIGHT - 150), 250 ) )
     
     platforms.append( platform.Platform(
-        (850, size[1] - BATTLE_AREA_FLOOR_HEIGHT - 200), 300 ) )
+        (650, size[1] - BATTLE_AREA_FLOOR_HEIGHT - 150), 250 ) )
+    
+    platforms.append( platform.Platform(
+        (375, size[1] - BATTLE_AREA_FLOOR_HEIGHT - 260), 250 ) )
     
     return [heroes, size, bg, platforms]
