@@ -89,13 +89,13 @@ TEXT_ENTRY_BORDER_SIZE = 10
 MAP_CHAR_TOKEN_SIZE = (32, 32)
 TOKEN_BORDER_NEUTRAL = (153, 153, 153, 255)
 
-TOKEN_BORDER_HIGHLIGHTED = [(10, 80, 200, 255),
-                            (210, 20, 20, 255)]
+TOKEN_BORDER_HIGHLIGHTED = [(100, 152, 229, 255),
+                            (225, 104, 104, 255)]
 
-TOKEN_BORDER_OFF = [(0, 0, 150, 255),
-                   (150, 0, 0, 255)]
+TOKEN_BORDER_OFF = [(80, 132, 209, 255),
+                   (205, 84, 84, 255)]
 
-TOKEN_BORDER_SELECTED = (250, 250, 250, 255)
+TOKEN_BORDER_SELECTED = (220, 220, 220, 255)
 
 FORTRESS_TEAM_COLORS = [(114, 182, 230, 255),
                             (196, 146, 140, 255)]
@@ -708,9 +708,9 @@ for i in temp:
     CAT_IMAGES.append([pygame.image.load(os.path.join(DIREC_CAT_GRAPHICS, i[0])).convert_alpha(), i[1]])
 
 
-temp = [ ['face1.png', (28, 66)],
-         ['face2.png', (28, 66)],
-         ['face2.png', (28, 66)] ]
+temp = [ ['face1.png', (17, 35)],
+         ['face2.png', (17, 35)],
+         ['face2.png', (17, 35)] ]
 
 HARE_TOKENS = []
 for i in temp:
