@@ -16,18 +16,6 @@ class View(mvc.View):
         self.screen.blit(BLACK_SCREEN, (0, 0))
         self.screen.blit(self.model.mapImage, self.model.mapRect.topleft)
 
-        c = self.model.currSelected
-        if not c is None:
-            if not c.target is None:
-                points = [c.target]
-                points += c.targetBuffer
-                for i in range(len(points)-1):
-                    self.model.waypointMarkers[i].draw(self.screen, points[i],
-                                             self.model.zoomVal, self.model.mapRect.topleft)
-                    
-                self.model.targetMarker.draw(self.screen, points[-1],
-                                             self.model.zoomVal, self.model.mapRect.topleft)
-
         for i in self.model.structures:
             i.draw(self.screen, self.model.zoomVal, self.model.mapRect.topleft)
 
@@ -42,6 +30,18 @@ class View(mvc.View):
 
         if isinstance(self.model.currSelected, mapchar.MapChar):
             self.model.currSelected.draw(self.screen, self.model.zoomVal, self.model.mapRect.topleft)
+            
+        c = self.model.currSelected
+        if not c is None:
+            if not c.target is None:
+                points = [c.target]
+                points += c.targetBuffer
+                for i in range(len(points)-1):
+                    self.model.waypointMarkers[i].draw(self.screen, points[i],
+                                             self.model.zoomVal, self.model.mapRect.topleft)
+                    
+                self.model.targetMarker.draw(self.screen, points[-1],
+                                             self.model.zoomVal, self.model.mapRect.topleft)
 
         for i in self.model.structures:
             i.drawBar(self.screen)

@@ -313,6 +313,7 @@ class BattleChar(object):
         self.moves['airLike'] = move.baseBlank()
         self.moves['landing'] = move.baseLanding()
         self.moves['jumping'] = move.baseJumping()
+        self.moves['jumpingLike'] = move.baseJumping()
         self.moves['ducking'] = move.baseDucking()
         self.moves['jabA'] = move.baseBlank()
         self.moves['jabB'] = move.baseBlank()
@@ -415,7 +416,8 @@ class BattleChar(object):
 
     def unholdJump(self):
         self.holdJump = False
-        self.vel[1] /= 3
+        if self.currMove.canDI:
+            self.vel[1] /= 3
 
     def checkTransition(self, key, var1=None, var2=None):
         t = self.currMove.transitions[key]

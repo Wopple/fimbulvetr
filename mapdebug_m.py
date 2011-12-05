@@ -20,11 +20,11 @@ class Model(mvc.Model):
         super(Model, self).__init__()
 
         inChars = [mapchar.Hare(0, hare.Hare()),
-                   mapchar.Fox(0, fox.Fox()),
-                   mapchar.Cat(0, cat.Cat()),
+                   mapchar.Hare(0, hare.Hare()),
+                   mapchar.Hare(0, hare.Hare()),
                    mapchar.Hare(1, hare.Hare()),
-                   mapchar.Fox(1, fox.Fox()),
-                   mapchar.Cat(1, cat.Cat()), ]
+                   mapchar.Hare(1, hare.Hare()),
+                   mapchar.Hare(1, hare.Hare()), ]
 
         self.m = mapmode_m.Model(inMap, inChars, 0)
         self.magnitude = 5
