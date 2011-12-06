@@ -634,7 +634,9 @@ class Hare(battlechar.BattleChar):
               self.frameData(44, 3, r[1], h[0]),
               self.frameData(45, 8, r[2]),
               self.frameData(45, 3, r[2])]
-        t = [ ['doDuck', move.Transition(2, HARE_ENERGY_USAGE, 1, 2, 'idleLike')] ]
+        t = [ ['doDuck', move.Transition(2, HARE_ENERGY_USAGE, 1, 2, 'idleLike')],
+              ['attackB', move.Transition(0, 0, 1, 2, 'upB')],
+              ['attackBUp', move.Transition(0, 0, 1, 2, 'upB')] ]
         self.moves['jab2'] = move.Move(f, t)
         self.moves['jab2'].canDI = False
 
@@ -710,8 +712,130 @@ class Hare(battlechar.BattleChar):
               self.frameData(0, 4, r[5])]
         self.moves['jabB'].append(f, [])
         self.moves['jabB'].canDI = False
-
+        
     def createMoveDashAttackA(self):
+        
+        r = [
+                [
+                    (-8, -47, 5, -37),
+                    (-8, -53, 2, -47),
+                    (-10, -37, 4, -22),
+                    (2, -35, 13, -29),
+                    (-18, -30, -10, -21),
+                    (-25, -19, -6, -10),
+                    (-11, -21, 8, -13),
+                    (8, -18, 20, -12),
+                    (19, -20, 26, -11),
+                    (1, -31, 10, -24)
+                ],
+                [
+                    (-13, -45, 1, -34),
+                    (-14, -49, -1, -45),
+                    (-19, -36, -6, -29),
+                    (-9, -34, 5, -27),
+                    (3, -32, 14, -27),
+                    (-13, -29, 3, -19),
+                    (-11, -20, 13, -9),
+                    (12, -20, 27, -16)
+                ],
+                [
+                    (-10, -45, 3, -34),
+                    (-11, -49, 0, -45),
+                    (-18, -37, -8, -31),
+                    (-13, -34, 5, -28),
+                    (2, -31, 13, -26),
+                    (-11, -29, 2, -20),
+                    (-10, -20, 11, -13),
+                    (-7, -14, 4, -11),
+                    (10, -19, 28, -15)
+                ],
+                [
+                    (-9, -49, 0, -46),
+                    (-10, -46, 4, -34),
+                    (-18, -38, -7, -32),
+                    (-13, -34, 5, -27),
+                    (3, -31, 14, -26),
+                    (-10, -27, 2, -19),
+                    (-9, -19, 9, -12),
+                    (9, -18, 23, -14),
+                    (19, -16, 28, -13),
+                    (-6, -13, 10, -10)
+                ],
+                [
+                    (-7, -46, 4, -34),
+                    (-7, -50, 3, -46),
+                    (-16, -37, -8, -33),
+                    (-14, -35, 5, -30),
+                    (-10, -31, 2, -18),
+                    (0, -32, 7, -26),
+                    (6, -28, 10, -24),
+                    (7, -25, 14, -21),
+                    (-9, -19, 1, -10),
+                    (-2, -19, 10, -13),
+                    (8, -17, 19, -13),
+                    (16, -15, 26, -10),
+                    (22, -13, 23, -11),
+                    (21, -13, 35, -9),
+                    (-5, -10, 2, 1)
+                ],
+                [
+                    (-4, -44, 8, -32),
+                    (-4, -48, 7, -44),
+                    (-5, -33, 5, -23),
+                    (-8, -27, 4, -19),
+                    (-10, -21, 3, -16),
+                    (-10, -16, 6, -9),
+                    (-10, -8, -5, 0),
+                    (1, -10, 8, -7),
+                    (5, -7, 10, -4),
+                    (6, -4, 10, -1),
+                    (7, -3, 17, -1),
+                    (4, -28, 10, -24),
+                    (6, -25, 13, -21),
+                    (9, -21, 13, -19)
+                ],
+                [
+                    (3, -41, 15, -30),
+                    (4, -45, 14, -41),
+                    (1, -31, 10, -26),
+                    (-1, -27, 11, -22),
+                    (-3, -24, 7, -20),
+                    (-5, -21, 7, -17),
+                    (-6, -14, 10, -8),
+                    (7, -22, 13, -19),
+                    (-7, -8, -4, -3),
+                    (-13, -3, -5, 0),
+                    (7, -9, 11, -2),
+                    (7, -3, 18, 0)
+                ]
+             ]
+        
+        h = [
+                [(-11, -27, 40, -9, 60, 90, 15, 40, [], 2)]
+            ]
+        
+        f = [ self.frameData(2, 3, r[0]),
+              self.frameData(153, 5, r[1], h[0]),
+              self.frameData(154, 3, r[2], h[0]),
+              self.frameData(155, 2, r[3], h[0]),
+              self.frameData(156, 1, r[4]),
+              self.frameData(157, 1, r[5]),
+              self.frameData(158, 3, r[6]),
+              self.frameData(157, 2, r[5]) ]
+        
+        t = [ ['attackB', move.Transition(0, 0, 2, 5, 'upB')],
+              ['attackBUp', move.Transition(0, 0, 2, 5, 'upB')] ]
+        
+        self.moves['dashAttackA'].append(f, t)
+        self.moves['dashAttackA'].canDI = False
+        
+        self.moves['dashAttackA'].frames[0].setVelX = 16
+        for i in range(5):
+            self.moves['dashAttackA'].frames[i].setFrictionX = 0.5
+        for i in range(len(self.moves['dashAttackA'].frames)):
+            self.moves['dashAttackA'].frames[i].ignoreSpeedCap = True
+
+    def createMoveDashAttackB(self):
         r = [
                 [
                     (-3, -50, 13, -35),
@@ -817,7 +941,7 @@ class Hare(battlechar.BattleChar):
             ]
         f = [ self.frameData(59, 3, r[0]),
               self.frameData(59, 2, r[0]),
-              self.frameData(59, 4, r[0]),
+              self.frameData(59, 3, r[0]),
               self.frameData(60, 1, r[1], h[0]),
               self.frameData(61, 1, r[2], h[1]),
               self.frameData(62, 2, r[3]),
@@ -825,17 +949,17 @@ class Hare(battlechar.BattleChar):
               self.frameData(64, 2, r[5]),
               self.frameData(65, 2, r[6]) ]
         t = [ ['doDuck', move.Transition(2, HARE_ENERGY_USAGE, 2, 4, 'idleLike')] ]
-        self.moves['dashAttackA'].append(f, t)
-        self.moves['dashAttackA'].canDI = False
-        self.moves['dashAttackA'].frames[0].setVelX = 15
-        self.moves['dashAttackA'].frames[0].ignoreFriction = True
-        self.moves['dashAttackA'].frames[0].ignoreSpeedCap = True
-        self.moves['dashAttackA'].frames[1].ignoreFriction = True
-        self.moves['dashAttackA'].frames[1].ignoreSpeedCap = True
-        self.moves['dashAttackA'].frames[2].ignoreSpeedCap = True
+        self.moves['dashAttackB'].append(f, t)
+        self.moves['dashAttackB'].canDI = False
+        self.moves['dashAttackB'].frames[0].setVelX = 15
+        self.moves['dashAttackB'].frames[0].ignoreFriction = True
+        self.moves['dashAttackB'].frames[0].ignoreSpeedCap = True
+        self.moves['dashAttackB'].frames[1].ignoreFriction = True
+        self.moves['dashAttackB'].frames[1].ignoreSpeedCap = True
+        self.moves['dashAttackB'].frames[2].ignoreSpeedCap = True
 
 
-    def createMoveDashAttackB(self):
+    def createOldMoveDashAttackB(self):
         r = [
                 [
                     (-21, -27, 18, -11),
@@ -1224,6 +1348,38 @@ class Hare(battlechar.BattleChar):
         stun1 = 140
         force1 = 20
         angle1 = 270
+        
+        r = [
+                [
+                    (-3, -50, 13, -35),
+                    (-12, -47, -7, -43),
+                    (-10, -45, -4, -38),
+                    (-7, -41, 9, -32),
+                    (-9, -32, 7, -19),
+                    (4, -35, 14, -27),
+                    (-27, -21, 7, -13),
+                    (1, -16, 10, -6),
+                    (5, -10, 17, 1),
+                    (-14, -49, -9, -44)
+                ],
+                [
+                    (-1, -53, 11, -41),
+                    (-1, -57, 10, -53),
+                    (-2, -43, 6, -19),
+                    (-6, -44, 0, -38),
+                    (-9, -46, -5, -43),
+                    (-13, -48, -8, -44),
+                    (-6, -31, -1, -17),
+                    (-6, -17, -3, -11),
+                    (-8, -11, -5, -6),
+                    (-9, -6, -6, 2),
+                    (3, -19, 8, -13),
+                    (4, -13, 8, -8),
+                    (1, -8, 4, -5),
+                    (0, -6, 6, 1),
+                    (5, -42, 11, -24)
+                ],
+             ]
 
         h = [
                 [
@@ -1235,10 +1391,10 @@ class Hare(battlechar.BattleChar):
 
 
 
-        f = [ self.frameData(59, 2 ),
-              self.frameData(59, 10 ),
-              self.frameData(132, 2, [], h[0] ),
-              self.frameData(132, 20 ) ]
+        f = [ self.frameData(59, 2, r[0]),
+              self.frameData(59, 10, r[0]),
+              self.frameData(132, 2, r[1], h[0] ),
+              self.frameData(132, 20, r[1] ) ]
         t = [ ['land', move.Transition(None, None, None, None, 'dropSlashLag')] ]
 
         
@@ -1256,7 +1412,27 @@ class Hare(battlechar.BattleChar):
         self.createLagDropSlash()
 
     def createLagDropSlash(self):
-        f = [ self.frameData(133, 10 ) ]
+        r = [
+                [
+                    (-4, -44, 7, -31),
+                    (-4, -48, 6, -44),
+                    (-10, -36, -2, -31),
+                    (-8, -32, 3, -16),
+                    (1, -31, 9, -1),
+                    (3, -3, 13, 0),
+                    (-11, -25, -7, -11),
+                    (-12, -16, 6, -10),
+                    (-17, -11, -11, -7),
+                    (-19, -9, -15, -5),
+                    (-22, -5, -17, -2),
+                    (-28, -3, -20, -1),
+                    (-19, -47, -15, -44),
+                    (-17, -44, -11, -40),
+                    (-14, -40, -9, -36)
+                    ]
+            ]
+        
+        f = [ self.frameData(133, 10, r[0] ) ]
 
         self.moves['dropSlashLag'] = move.Move(f, [])
         self.moves['dropSlashLag'].canDI = False

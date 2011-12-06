@@ -59,7 +59,7 @@ INTRO_SPEEDS = [4, 30, 5, 50, 5, 15]
 SHOW_RED_DOT = False
 SHOW_TEAL_DOTS = False
 SHOW_HURTBOXES = False
-SHOW_HITBOXES = True
+SHOW_HITBOXES = False
 SHOW_BLOCKBOXES = False
 SHOW_TRIGGER_AREA = False
 
@@ -196,7 +196,7 @@ SUPER_BAR_COLORS = ( (90, 30, 172),
 SPECIAL_BAR_OFFSET = 16
 SPECIAL_BAR_SIZE = (150, 22)
 SPECIAL_BAR_BORDERS = (3, 2)
-SPECIAL_BAR_COLORS = ( (0, 183, 240),
+SPECIAL_BAR_COLORS = ( (10, 121, 140),
                        (0, 185, 245),
                        (20, 210, 253),
                        (20, 20, 20),
@@ -416,9 +416,9 @@ CAT_MAP_SPEED_TERRITORY_MODIFIERS  = {"neutral"   : 1.00,
                                       "enemy"     : 0.90,
                                       "contested" : 0.75 }
 
-HARE_HEALTH_SPEED_MODIFIER = 0.35
-FOX_HEALTH_SPEED_MODIFIER = 0.5
-CAT_HEALTH_SPEED_MODIFIER = 0.5
+HARE_HEALTH_SPEED_MODIFIER = 0.45
+FOX_HEALTH_SPEED_MODIFIER = 0.6
+CAT_HEALTH_SPEED_MODIFIER = 0.6
 
 
 HEALTH_REGAIN_SPEED = 5
@@ -624,7 +624,13 @@ temp = [ ["00.png", (24, 62)],
          ["149.png", (15, 64)],
          ["150.png", (15, 64)],
          ["151.png", (15, 64)],
-         ["152.png", (15, 64)] ]
+         ["152.png", (15, 64)],
+         ["153.png", (24, 61)],
+         ["154.png", (24, 61)],
+         ["155.png", (24, 61)],
+         ["156.png", (24, 61)],
+         ["157.png", (24, 61)],
+         ["158.png", (24, 61)] ]
 
 HARE_IMAGES = []
 for i in temp:
