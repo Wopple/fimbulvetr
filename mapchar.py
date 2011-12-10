@@ -41,6 +41,8 @@ class MapChar(mapitem.MapItem):
         self.blinkOn = True
         self.blinkTick = 0
         self.removed = False
+        self.rezzing = False
+        self.rezTime = 0
 
         self.respawnTime = boundint.BoundInt(0, RESPAWN_MAX, 0)
 
@@ -64,6 +66,14 @@ class MapChar(mapitem.MapItem):
         self.regainHealth()
 
         self.checkForStop()
+
+        if self.rezzing:
+            self.rezTime += 1
+            if self.rezTime == REZ_TIME:
+                self.rezTime = 0
+                self.rez()
+        else:
+            self.rezTime = 0
 
     def speedHasChanged(self):
         return ( (self.oldTerrain != self.currTerrain) or
@@ -102,7 +112,7 @@ class MapChar(mapitem.MapItem):
 
     
     def setTarget(self, target, waypoint):
-        if self.isDead():
+        if self.isDead() and (not self.rezzing):
             waypoint = False
             
         if waypoint and (not self.target is None):
@@ -200,10 +210,13 @@ class MapChar(mapitem.MapItem):
 
     def revive(self):
         self.respawnTime.setToMin()
+        self.setPos(self.target)
+        self.rezzing = True
+
+    def rez(self):
         self.battleChar.hp.setToMax()
         self.removed = False
-        self.setPos(self.target)
-            
+        self.rezzing = False
         
 
 def Hare(team, battleChar, name="Unnamed Hare", portrait=None):

@@ -14,6 +14,7 @@ import mapcharacterbar
 import targetmarker
 import countdown
 
+import rezspark
 import mapstructure
 
 import hare, fox, cat
@@ -29,6 +30,7 @@ class Model(mvc.Model):
         
         self.characters = inChars
         self.charactersInTeams = [[], []]
+        self.rezSparks = []
         for c in self.characters:
             self.charactersInTeams[c.team].append(c)
         self.mapRect = None
@@ -107,9 +109,17 @@ class Model(mvc.Model):
                 self.checkTerritory(c)
                 c.update()
 
+        newList = []
+        for i in range(len(self.rezSparks)):
+            s = self.rezSparks[i]
+            s.update()
+            if not(s.isRemovable()):
+                newList.append(s)
+        self.rezSparks = newList
+
         if self.initialCount > 0:
             self.initialCount -= 1
-            self.centerOnCharacter(self.charactersInTeams[self.team][0])    
+            self.centerOnCharacter(self.charactersInTeams[self.team][0])   
 
     def runCharacters(self):
         return ( (self.pendingBattle is None) and (not self.paused()) and
@@ -473,11 +483,12 @@ class Model(mvc.Model):
 
 
     def addRespawn(self):
-        for c in self.characters:
-            if c.isDead():
+        for i, c in enumerate(self.characters):
+            if c.isDead() and (not c.rezzing):
                 c.respawnTime.add(RESPAWN_GAIN)
                 if c.respawnTime.isMax() and (not c.target is None):
                     c.revive()
+                    self.rezSparks.append(rezspark.RezSpark(self.characters[i]))
             
                 
 
