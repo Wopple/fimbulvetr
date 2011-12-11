@@ -351,14 +351,17 @@ class Model(mvc.Model):
     
     def isInTerritory(self, pos, team):
         cTeam = team + 1
+        value = False
         for s in self.structures:
             sTeam = s.team
-            if sTeam == cTeam:
-                dist = util.distance(pos, s.precisePos)
-                if dist <= s.territorySize:
-                    return True
+            dist = util.distance(pos, s.precisePos)
+            if dist <= s.territorySize:
+                if sTeam == cTeam:
+                    value = True
+                elif team != 0:
+                    return False
                 
-        return False
+        return value
                 
                     
             
