@@ -2051,7 +2051,7 @@ class Hare(battlechar.BattleChar):
                 ],
             ]
 
-        h[0] = [i + [12, 40, 20, 60, [], 3] for i in h[0]]
+        h[0] = [i + [18, 40, 20, 60, [], 3] for i in h[0]]
         f = [ self.frameData(51, 3, r[0]),
               self.frameData(52, 1, r[1], h[0]),
               self.frameData(53, 1, r[1], h[0]),
