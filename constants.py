@@ -6,7 +6,7 @@ import math
 
 VERSION = "0.1.2"
 
-FULL_SCREEN = False
+FULL_SCREEN = True
 FRAME_RATE = 40
 SCREEN_SIZE = (800, 600)
 ENTIRE_SCREEN = pygame.Rect( (0,0), SCREEN_SIZE )
