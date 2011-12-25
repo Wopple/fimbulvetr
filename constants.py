@@ -357,6 +357,7 @@ DIREC_INTERFACE_GRAPHICS = os.path.join(DIREC_GRAPHICS, "interface")
 DIREC_PORTRAITS = os.path.join(DIREC_GRAPHICS, "portraits")
 DIREC_FX_GRAPHICS = os.path.join(DIREC_GRAPHICS, "fx")
 DIREC_MAP_ITEMS = os.path.join(DIREC_GRAPHICS, "mapitems")
+DIREC_TERRAIN_FILL_GRAPHICS = os.path.join(DIREC_GRAPHICS, "terrainfills")
 
 CHARACTER_FILE_NAME = "char"
 CHARACTER_FILE_EXT = "dat"
@@ -773,7 +774,7 @@ for i in temp:
 
 
 mapItemsList = [["fortress", "fortressneutral.png", "fortressblue.png", "fortressred.png", (29, 53)],
-                ["spire", "spireneutral.png", "spireblue.png", "spirered.png", (12, 38)] ]
+                ["spire", "spireneutral.png", "spireblue.png", "spirered.png", (15, 51)] ]
 MAP_ITEMS = {}
 for i in mapItemsList:
     MAP_ITEMS[i[0]] = []
@@ -832,6 +833,16 @@ for i in temp:
 TERRAIN_ICONS = [None, INTERFACE_GRAPHICS[6],
                  INTERFACE_GRAPHICS[7], INTERFACE_GRAPHICS[8],
                  INTERFACE_GRAPHICS[10]]
+
+
+temp = ['grass.png',
+        'water.png']
+
+TERRAIN_FILL_GRAPHICS = []
+for i in temp:
+    TERRAIN_FILL_GRAPHICS.append(pygame.image.load(os.path.join(
+        DIREC_TERRAIN_FILL_GRAPHICS, i)).convert_alpha())
+
     
 
 temp = ['hare00.png']

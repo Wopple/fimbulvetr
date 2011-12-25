@@ -533,7 +533,29 @@ def drawMap(inMap):
                     if i[2] == m and i[3] == n:
                         pygame.draw.circle(mapImage, TEST_CIRCLE_COLORS[m][n],
                                            i[0], i[1])
+                        
+    mapImage = fillPattern(mapImage, TERRAIN_FILL_GRAPHICS[0], TERRAIN_COLORS[0])
+    mapImage = fillPattern(mapImage, TERRAIN_FILL_GRAPHICS[1], WATER_FILL_COLOR)
     
     return mapImage
+
+
+def fillPattern(baseImage, patternImage, replaceColor):
+    baseSize = baseImage.get_size()
+    patternSize = patternImage.get_size()
+    
+    baseImage.set_colorkey(replaceColor)
+    
+    back = pygame.Surface(baseImage.get_size())
+    for x in range(0, baseSize[0], patternSize[0]):
+        for y in range(0, baseSize[1], patternSize[1]):
+            back.blit(patternImage, (x, y))
+    
+    
+    canvas = pygame.Surface(baseImage.get_size())
+    canvas.blit(back, (0, 0))
+    canvas.blit(baseImage, (0, 0))
+    
+    return canvas
     
 
