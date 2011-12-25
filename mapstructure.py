@@ -136,11 +136,7 @@ class Fortress(MapStructure):
 
 
     def modifyImages(self):
-        colorSwap(self.images[1][0], FORTRESS_NEUTRAL,
-                  FORTRESS_TEAM_COLORS[0], 135)
-
-        colorSwap(self.images[2][0], FORTRESS_NEUTRAL,
-                  FORTRESS_TEAM_COLORS[1], 135)
+        pass
 
 class Spire(MapStructure):
     def __init__(self, inPos):
@@ -152,8 +148,4 @@ class Spire(MapStructure):
 
 
     def modifyImages(self):
-        colorSwap(self.images[1][0], SPIRE_NEUTRAL,
-                  SPIRE_TEAM_COLORS[0], 75)
-
-        colorSwap(self.images[2][0], SPIRE_NEUTRAL,
-                  SPIRE_TEAM_COLORS[1], 75)
+        pass

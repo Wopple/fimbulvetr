@@ -4,9 +4,9 @@ import sys
 
 import math
 
-VERSION = "0.1.2"
+VERSION = "0.1.3"
 
-FULL_SCREEN = True
+FULL_SCREEN = False
 FRAME_RATE = 40
 SCREEN_SIZE = (800, 600)
 ENTIRE_SCREEN = pygame.Rect( (0,0), SCREEN_SIZE )
@@ -87,7 +87,7 @@ MAP_CHAR_BAR_SIDE_FRACTION = 3
 TEXT_ENTRY_BORDER_SIZE = 10
 
 MAP_CHAR_TOKEN_SIZE = (32, 32)
-TOKEN_BORDER_NEUTRAL = (153, 153, 153, 255)
+TOKEN_BORDER_NEUTRAL = (255, 255, 255, 255)
 
 TOKEN_BORDER_HIGHLIGHTED = [(100, 152, 229, 255),
                             (225, 104, 104, 255)]
@@ -101,9 +101,10 @@ FORTRESS_TEAM_COLORS = [(114, 182, 230, 255),
                             (196, 146, 140, 255)]
 FORTRESS_NEUTRAL = (191, 191, 191, 255)
 
-SPIRE_TEAM_COLORS = [(10, 90, 220, 255),
-                            (210, 20, 20, 255)]
-SPIRE_NEUTRAL = (210, 40, 192, 255)
+SPIRE_TEAM_COLORS = [(0, 162, 232, 255),
+                            (217, 0, 33, 255)]
+SPIRE_NEUTRAL_COLOR = (96, 96, 96, 255)
+SPIRE_BASE_COLOR = (41, 123, 41, 255)
 
 TERRAIN_COLORS = [ (15, 111, 22, 255),
                    (230, 230, 230, 255) ]
@@ -725,9 +726,9 @@ for i in temp:
     CAT_IMAGES.append([pygame.image.load(os.path.join(DIREC_CAT_GRAPHICS, i[0])).convert_alpha(), i[1]])
 
 
-temp = [ ['face1.png', (17, 35)],
-         ['face2.png', (17, 35)],
-         ['face2.png', (17, 35)] ]
+temp = [ ['face1.png', (24, 44)],
+         ['face2.png', (24, 44)],
+         ['face2.png', (24, 44)] ]
 
 HARE_TOKENS = []
 for i in temp:
@@ -771,13 +772,13 @@ for i in temp:
     CAT_SUPER_ICONS.append(pygame.image.load(os.path.join(DIREC_CAT_GRAPHICS, i)).convert_alpha())
 
 
-mapItemsList = [["fortress", "fortress.png", (20, 28)],
-                ["spire", "spire.png", (11, 49)]]
+mapItemsList = [["fortress", "fortressneutral.png", "fortressblue.png", "fortressred.png", (29, 53)],
+                ["spire", "spireneutral.png", "spireblue.png", "spirered.png", (12, 38)] ]
 MAP_ITEMS = {}
 for i in mapItemsList:
     MAP_ITEMS[i[0]] = []
     for c in range(3):
-        MAP_ITEMS[i[0]].append([pygame.image.load(os.path.join(DIREC_MAP_ITEMS, i[1])).convert_alpha(), i[2]])
+        MAP_ITEMS[i[0]].append([pygame.image.load(os.path.join(DIREC_MAP_ITEMS, i[c+1])).convert_alpha(), i[4]])
 
 
 

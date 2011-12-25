@@ -102,13 +102,13 @@ class MapChar(mapitem.MapItem):
 
     def modifyImages(self):
         colorSwap(self.images[0][0], TOKEN_BORDER_NEUTRAL,
-                  TOKEN_BORDER_OFF[self.team], 60)
+                  TOKEN_BORDER_OFF[self.team], 5)
 
         colorSwap(self.images[1][0], TOKEN_BORDER_NEUTRAL,
-                  TOKEN_BORDER_HIGHLIGHTED[self.team], 60)
+                  TOKEN_BORDER_HIGHLIGHTED[self.team], 5)
 
         colorSwap(self.images[2][0], TOKEN_BORDER_NEUTRAL,
-                  TOKEN_BORDER_SELECTED, 60)
+                  TOKEN_BORDER_SELECTED, 5)
 
     
     def setTarget(self, target, waypoint):
