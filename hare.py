@@ -92,6 +92,8 @@ class Hare(battlechar.BattleChar):
         self.createMoveDownAirA()
         self.createMoveDownAirB()
         self.createMoveDroppingThrough()
+        
+        self.createAirDash()
 
         self.createMoveGrabbing()
         self.createMoveGrabHold()
@@ -389,7 +391,10 @@ class Hare(battlechar.BattleChar):
             ]
 
         f = [ self.frameData(8, 2, r[0]) ]
-        self.moves['air'].append(f, [])
+        
+        t = [['doDash', move.Transition(2, HARE_ENERGY_USAGE, None, None, 'airDashing')]]
+        
+        self.moves['air'].append(f, t)
         
         self.moves['air'].transitions['attackBUpCharge'].var1 = 2
         self.moves['air'].transitions['attackBUpCharge'].var2 = HARE_ENERGY_USAGE
@@ -442,13 +447,49 @@ class Hare(battlechar.BattleChar):
               self.frameData(23, flippingSpeed, r[1]),
               self.frameData(33, flippingSpeed, r[2]),
               self.frameData(24, flippingSpeed, r[3]) ]
-        self.moves['flipping'].append(f, [])
+        
+        t = [['doDash', move.Transition(2, HARE_ENERGY_USAGE, None, None, 'airDashing')]]
+        
+        self.moves['flipping'].append(f, t)
         
         self.moves['flipping'].transitions['attackBUpCharge'].var1 = 2
         self.moves['flipping'].transitions['attackBUpCharge'].var2 = HARE_ENERGY_USAGE
         
         self.moves['flipping'].transitions['attackBDown'].var1 = 2
         self.moves['flipping'].transitions['attackBDown'].var2 = HARE_ENERGY_USAGE
+        
+    def createAirDash(self):
+        
+        f = [ self.frameData(159, 2),
+              self.frameData(160, 1),
+              self.frameData(159, 1),
+              self.frameData(160, 1),
+              self.frameData(159, 1),
+              self.frameData(159, 8) ]
+        
+        t = [ ['exitFrame', move.Transition(-1, 0, None, None, 'air')],
+             ['land', move.Transition(None, None, None, None, 'landing')],
+             ['attackA', move.Transition(None, None, 5, 5, 'neutralAirA')],
+             ['attackB', move.Transition(None, None, 5, 5, 'neutralAirB')],
+             ['attackAUp', move.Transition(None, None, 5, 5, 'upAirA')],
+             ['attackBUpCharge', move.Transition(2, HARE_ENERGY_USAGE, 5, 5, 'upAirB')],
+             ['attackADown', move.Transition(None, None, 5, 5, 'downAirA')],
+             ['attackBDown', move.Transition(2, HARE_ENERGY_USAGE, 5, 5, 'downAirB')] ]
+        
+        self.moves['airDashing'] = move.Move(f, t)
+        
+        
+        self.moves['airDashing'].frames[0].setVelX = 22
+        self.moves['airDashing'].canDI = False
+        
+        for i in range(len(self.moves['airDashing'].frames)):
+            self.moves['airDashing'].frames[i].setFrictionX = 1.0
+            self.moves['airDashing'].frames[i].setVelY = 0
+            self.moves['airDashing'].frames[i].ignoreSpeedCap = True
+            
+        self.moves['airDashing'].frames[0].fx.append(['airelementshockwave', (-20, -30), False])
+            
+            
 
     def createMoveAirLike(self):
         r = [
@@ -1479,7 +1520,12 @@ class Hare(battlechar.BattleChar):
               self.frameData(11, 2, r[0]),
               self.frameData(12, 5, r[1]),
               self.frameData(13, 20, r[2])]
-        t = [ ['land', move.Transition(None, None, None, None, 'downBLag')] ]
+        t = [ ['land', move.Transition(None, None, None, None, 'downBLag')],
+              ['attackBDown', move.Transition(2, HARE_ENERGY_USAGE, 3, 3, 'downAirB')],
+              ['attackBUpCharge', move.Transition(2, HARE_ENERGY_USAGE, 3, 3, 'upAirB')],
+              ['doDash', move.Transition(2, HARE_ENERGY_USAGE, 3, 3, 'airDashing')] ]
+        
+        
         self.moves['downB'].append(f, t)
         self.moves['downB'].canDI = False
         self.moves['downB'].liftOff = True
@@ -1554,7 +1600,7 @@ class Hare(battlechar.BattleChar):
 
         dam1 = 75
         stun1 = 110
-        force1 = 24
+        force1 = 23
         angle1 = 85
         freeze1 = 4
 
@@ -1921,7 +1967,13 @@ class Hare(battlechar.BattleChar):
               self.frameData(36, 1, r[1], h[1]),
               self.frameData(37, 4, r[2], h[1]),
               self.frameData(8, 4, r[6])]
-        self.moves['neutralAirB'].append(f, [])
+        
+        t = [ ['attackBDown', move.Transition(2, HARE_ENERGY_USAGE, 6, 9, 'downAirB')],
+              ['attackBUpCharge', move.Transition(2, HARE_ENERGY_USAGE, 6, 9, 'upAirB')],
+              ['doDash', move.Transition(2, HARE_ENERGY_USAGE, 6, 9, 'airDashing')] ]
+        
+        
+        self.moves['neutralAirB'].append(f, t)
         self.moves['neutralAirB'].canDI = False
         self.moves['neutralAirB'].reversable = True
         self.moves['neutralAirB'].frames[1].setVelYIfDrop = -3.4
@@ -2232,10 +2284,13 @@ class Hare(battlechar.BattleChar):
               self.frameData(23, flippingSpeed, r[1]),
               self.frameData(33, flippingSpeed, r[2]),
               self.frameData(24, flippingSpeed, r[3]),
-              self.frameData(87, 12, r[4]),
+              self.frameData(87, 6, r[4]),
+              self.frameData(87, 6, r[4]),
               self.frameData(87, 2, r[4])]
+        
+        t = [['doDash', move.Transition(2, HARE_ENERGY_USAGE, 6, 7, 'airDashing')]]
 
-        self.moves['headBounce'] = move.Move(f, [])
+        self.moves['headBounce'] = move.Move(f, t)
         self.moves['headBounce'].frames[0].setVelY = -22
 
         for i in range(len(f)-1):

@@ -250,9 +250,9 @@ BATTLE_EDGE_COLLISION_WIDTH = 24
 DISPLACEMENT_AMOUNT = 2.2
 
 HARE_ENERGY_MAX = 10000
-HARE_ENERGY_USAGE = 5000
+HARE_ENERGY_USAGE = 3000
 HARE_ENERGY_BATTLE_START = 10000
-HARE_ENERGY_DELAY = 35
+HARE_ENERGY_DELAY = 36
 HARE_ENERGY_RECHARGE = 25
 HARE_ENERGY_NAME = "Air Element"
 
@@ -642,7 +642,9 @@ temp = [ ["00.png", (24, 62)],
          ["155.png", (24, 61)],
          ["156.png", (24, 61)],
          ["157.png", (24, 61)],
-         ["158.png", (24, 61)] ]
+         ["158.png", (24, 61)],
+         ["159.png", (20, 60)],
+         ["160.png", (20, 60)] ]
 
 HARE_IMAGES = []
 for i in temp:
@@ -806,7 +808,12 @@ temp = [ ['00.png', (44, 35)],
          ['20.png', (60, 4)],
          ['21.png', (60, 4)],
          ['22.png', (60, 4)],
-         ['23.png', (60, 4)]]
+         ['23.png', (60, 4)],
+         ['24.png', (9, 60)],
+         ['25.png', (9, 60)],
+         ['26.png', (9, 60)],
+         ['27.png', (9, 60)],
+         ['28.png', (9, 60)]]
 FX_IMAGES = []
 for i in temp:
     FX_IMAGES.append([pygame.image.load(os.path.join(DIREC_FX_GRAPHICS, i[0])).convert_alpha(), i[1]])

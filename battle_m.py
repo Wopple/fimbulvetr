@@ -289,8 +289,8 @@ class Model(mvc.Model):
                 if (l and self.wasKeyPressed(2, keysNow)):
                     keysNow[2] = 0
                     if (p.dashBuffer[0] > 0 and p.dashBuffer[0] < DASH_BUFFER_MAX):
-                        p.dashBuffer = [0, 0]
-                        p.actTransitionFacing('doDash', l, r)
+                        if p.actTransitionFacing('doDash', l, r):
+                            p.dashBuffer = [0, 0]
                     else:
                         p.dashBuffer[0] = DASH_BUFFER_MAX
                         p.dashBuffer[1] = 0
@@ -298,8 +298,8 @@ class Model(mvc.Model):
                 if (r and self.wasKeyPressed(3, keysNow)):
                     keysNow[3] = 0
                     if (p.dashBuffer[1] > 0 and p.dashBuffer[1] < DASH_BUFFER_MAX):
-                        p.dashBuffer = [0, 0]
-                        p.actTransitionFacing('doDash', l, r)
+                        if p.actTransitionFacing('doDash', l, r):
+                            p.dashBuffer = [0, 0]
                     else:
                         p.dashBuffer[1] = DASH_BUFFER_MAX
                         p.dashBuffer[0] = 0

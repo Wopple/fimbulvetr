@@ -89,6 +89,12 @@ class FX(object):
                   [21, 1],
                   [22, 1],
                   [23, 1] ]
+        elif t == 'airelementshockwave':
+            f = [ [24, 2],
+                  [25, 1],
+                  [26, 1],
+                  [27, 1],
+                  [28, 1] ]
 
         for i in f:
             self.frames.append(Frame(FX_IMAGES[i[0]][0],
