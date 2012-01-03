@@ -358,7 +358,7 @@ class Model(mvc.Model):
             if dist <= s.territorySize:
                 if sTeam == cTeam:
                     value = True
-                elif team != 0:
+                elif cTeam != 0:
                     return False
                 
         return value
