@@ -53,8 +53,10 @@ class View(mvc.View):
         for i in self.model.littlePausePlayIcons:
             i.draw(self.screen)
 
-        for i in self.model.charBars:
-            i.draw(self.screen)
+        #for i in self.model.charBars:
+        #    i.draw(self.screen)
+        
+        self.model.unitHUD.draw(screen)
 
         self.model.countdown.draw(self.screen)
 

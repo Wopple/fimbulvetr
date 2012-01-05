@@ -14,6 +14,8 @@ import mapcharacterbar
 import targetmarker
 import countdown
 
+import unithud
+
 import rezspark
 import mapstructure
 
@@ -206,12 +208,13 @@ class Model(mvc.Model):
         if self.mapRect.width < SCREEN_SIZE[0]:
             self.mapRect.left = (SCREEN_SIZE[0] / 2) - (self.mapRect.width / 2)
 
+        bot = SCREEN_SIZE[1] - UNIT_HUD_HEIGHT
         if self.mapRect.top > 0:
             self.mapRect.top = 0
-        if self.mapRect.bottom < SCREEN_SIZE[1]:
-            self.mapRect.bottom = SCREEN_SIZE[1]
-        if self.mapRect.height < SCREEN_SIZE[1]:
-            self.mapRect.top = (SCREEN_SIZE[1] / 2) - (self.mapRect.height / 2)
+        if self.mapRect.bottom < bot:
+            self.mapRect.bottom = bot
+        if self.mapRect.height < bot:
+            self.mapRect.top = (bot / 2) - (self.mapRect.height / 2)
 
     def placeChars(self):
         for team in range(2):
@@ -527,16 +530,18 @@ class Model(mvc.Model):
         for i in range(2):
             self.littlePausePlayIcons.append(pauseplayicon.PausePlayIcon(i))
 
-        self.charBars = []
-        for i, c in enumerate(self.charactersInTeams[self.team]):
-            x = MAP_CHAR_BAR_INIT_POS[0]
-            if i == 0:
-                y = MAP_CHAR_BAR_INIT_POS[1]
-            else:
-                y = self.charBars[i-1].rect.bottom + MAP_CHAR_BAR_SPACING
+        #self.charBars = []
+        #for i, c in enumerate(self.charactersInTeams[self.team]):
+        #    x = MAP_CHAR_BAR_INIT_POS[0]
+        #    if i == 0:
+        #        y = MAP_CHAR_BAR_INIT_POS[1]
+        #    else:
+        #        y = self.charBars[i-1].rect.bottom + MAP_CHAR_BAR_SPACING
 
-            bar = mapcharacterbar.MapCharacterBar((x, y), c)
-            self.charBars.append(bar)
+        #    bar = mapcharacterbar.MapCharacterBar((x, y), c)
+        #    self.charBars.append(bar)
+        
+        self.unitHUD = unithud.UnitHUD(self.team, self.charactersInTeams)
 
         self.targetMarker = targetmarker.TargetMarker()
         
@@ -547,16 +552,16 @@ class Model(mvc.Model):
     def updateInterface(self):
         self.updatePausePlayIcons()
         updateSide = self.checkCharBarSide()
-        for i in self.charBars:
-            i.update()
-            i.setActive(i.character is self.currSelected)
-            i.setAlphaFade(self.isHighlightedOrSelected(i.character))
-
-            if updateSide:
-                if self.charBarSideRight:
-                    i.rect.right = SCREEN_SIZE[0] - MAP_CHAR_BAR_INIT_POS[0]
-                else:
-                    i.rect.left = MAP_CHAR_BAR_INIT_POS[0]
+        #for i in self.charBars:
+        #    i.update()
+        #    i.setActive(i.character is self.currSelected)
+        #    i.setAlphaFade(self.isHighlightedOrSelected(i.character))
+#
+        #    if updateSide:
+        #        if self.charBarSideRight:
+        #            i.rect.right = SCREEN_SIZE[0] - MAP_CHAR_BAR_INIT_POS[0]
+        #        else:
+        #            i.rect.left = MAP_CHAR_BAR_INIT_POS[0]
 
     def checkCharBarSide(self):
 

@@ -476,6 +476,11 @@ REZ_SPARK_BIG_ALPHA_MULT = 7
 REZ_SPARK_COLOR = [220, 220, 200]
 
 
+UNIT_HUD_COLORS = [ (172, 193, 215, 255),
+                    (220, 200, 194, 255) ]
+
+UNIT_HUD_HEIGHT = 80
+
 
 
 
