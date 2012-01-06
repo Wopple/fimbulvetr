@@ -849,9 +849,10 @@ class Model(mvc.Model):
         return newLoc
 
     def centerOnCharacter(self, c):
+        screenSize = [SCREEN_SIZE[0], SCREEN_SIZE[1] - UNIT_HUD_HEIGHT]
         newLoc = [0, 0]
         for i in range(2):
-            newLoc[i] = -(int(c.tokenRect.center[i])) + (SCREEN_SIZE[i] / 2)
+            newLoc[i] = -(int(c.tokenRect.center[i])) + (screenSize[i] / 2)
 
         self.mapRect.topleft = add_points(self.mapRect.topleft, newLoc)
         self.adjustMap()

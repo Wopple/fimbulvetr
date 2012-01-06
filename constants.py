@@ -476,12 +476,29 @@ REZ_SPARK_BIG_ALPHA_MULT = 7
 REZ_SPARK_COLOR = [220, 220, 200]
 
 
-UNIT_HUD_COLORS = [ (172, 193, 215, 255),
-                    (220, 200, 194, 255) ]
+UNIT_HUD_COLORS = [ (150, 170, 195),
+                    (200, 180, 175) ]
 
-UNIT_HUD_HEIGHT = 80
+UNIT_HUD_BORDER_WIDTH = 8
+UNIT_HUD_BUTTON_SIZE = (100, 26)
+UNIT_HUD_BUTTONS_PER_COLUMN = 4
 
+UNIT_HUD_HEIGHT = ( (UNIT_HUD_BUTTON_SIZE[1] * UNIT_HUD_BUTTONS_PER_COLUMN) +
+                    (UNIT_HUD_BORDER_WIDTH * (UNIT_HUD_BUTTONS_PER_COLUMN + 1)) )
 
+UNIT_HUD_BUTTON_COLORS_FACE_ON = [ (170, 190, 215),
+                                   (220, 200, 195) ]
+
+UNIT_HUD_BUTTON_COLORS_FACE_OFF = [ (120, 140, 165),
+                                   (170, 150, 145) ]
+
+UNIT_HUD_BUTTON_COLORS_LIGHT_BORDER = [ (200, 220, 245),
+                                             (250, 230, 225) ]
+
+UNIT_HUD_BUTTON_COLORS_DARK_BORDER = [ (80, 100, 125),
+                                        (130, 110, 105) ]
+
+UNIT_HUD_BUTTON_BORDER_SIZE = 4
 
 
 temp = []
