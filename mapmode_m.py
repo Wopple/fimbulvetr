@@ -562,6 +562,8 @@ class Model(mvc.Model):
         #            i.rect.right = SCREEN_SIZE[0] - MAP_CHAR_BAR_INIT_POS[0]
         #        else:
         #            i.rect.left = MAP_CHAR_BAR_INIT_POS[0]
+        
+        self.unitHUD.changeCharacter(self.currSelected)
 
     def checkCharBarSide(self):
 

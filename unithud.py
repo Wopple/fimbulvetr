@@ -3,6 +3,8 @@ import sys
 import pygame
 import copy
 
+import textrect
+
 from constants import *
 
 class UnitHUD(object):
@@ -27,17 +29,21 @@ class UnitHUD(object):
         self.borderHorizDark = pygame.Surface((UNIT_HUD_BUTTON_SIZE[0],
                                                 UNIT_HUD_BUTTON_BORDER_SIZE))
         self.borderHorizDark.fill(UNIT_HUD_BUTTON_COLORS_DARK_BORDER[self.team])
+        
+        self.blankPortrait = pygame.Surface(UNIT_HUD_PORTRAIT_SIZE)
+        self.blankPortrait.fill(UNIT_HUD_BLANK_PORTRAIT_COLORS[self.team])
 
         self.createCharacterButtons()
         
-        self.changeCharacter(0)
+        self.currCharacter = None
+        self.createImage()
 
 
     def changeCharacter(self, val):
-
-        self.currCharacter = val
-
-        self.createImage()
+        
+        if self.currCharacter != val:
+            self.currCharacter = val
+            self.createImage()
 
     def createCharacterButtons(self):
 
@@ -77,6 +83,18 @@ class UnitHUD(object):
                                    UNIT_HUD_BUTTON_BORDER_SIZE))
         button.blit(borderRight, (UNIT_HUD_BUTTON_SIZE[0] -
                                    UNIT_HUD_BUTTON_BORDER_SIZE, 0))
+        
+        textRect = pygame.Rect( (UNIT_HUD_BUTTON_BORDER_SIZE, 
+                                 UNIT_HUD_BUTTON_BORDER_SIZE),
+                               (UNIT_HUD_BUTTON_SIZE[0] - (UNIT_HUD_BUTTON_BORDER_SIZE * 2),
+                                UNIT_HUD_BUTTON_SIZE[1] - (UNIT_HUD_BUTTON_BORDER_SIZE * 2)) )
+        
+        textSurface = textrect.render_textrect(character.name, UNIT_HUD_NAMES_FONT, textRect,
+                                               ALMOST_BLACK, BLACK, 1, True)
+        
+        button.blit(textSurface, textRect.topleft)
+        
+        
 
         return button
 
@@ -85,12 +103,38 @@ class UnitHUD(object):
         color = UNIT_HUD_COLORS[self.team]
         
         self.image.fill(color)
+        
+        numPerColumn = int(len(self.characters) / 2) + 1
+        if numPerColumn > UNIT_HUD_BUTTONS_PER_COLUMN:
+            numPerColumn = UNIT_HUD_BUTTONS_PER_COLUMN
 
-        #for i, c in enumerate(self.characters):
-            #self.image.blit(self.buttons[i][0], (0, 0))
-
-        self.image.blit(self.buttons[0][0], (5, 5))
-        self.image.blit(self.buttons[0][1], (5, 40))
+        
+        for i, c in enumerate(self.characters):
+            
+            if self.currCharacter == c:
+                onIndex = 0
+            else:
+                onIndex = 1
+            
+            column = int (i / numPerColumn)
+            row = i % numPerColumn
+            
+            x = ((UNIT_HUD_BUTTON_SIZE[0] + UNIT_HUD_BORDER_WIDTH) * column) + UNIT_HUD_BORDER_WIDTH
+            y = ((UNIT_HUD_BUTTON_SIZE[1] + UNIT_HUD_BORDER_WIDTH) * row) + UNIT_HUD_BORDER_WIDTH
+            
+            self.image.blit(self.buttons[i][onIndex], (x, y))
+            
+        x = ((UNIT_HUD_BUTTON_SIZE[0] + UNIT_HUD_BORDER_WIDTH) * 2) + UNIT_HUD_BORDER_WIDTH
+        y = UNIT_HUD_BORDER_WIDTH
+        
+        if self.currCharacter is None:
+            portrait = self.blankPortrait
+        else:
+            portrait = self.currCharacter.portrait
+        
+        self.image.blit(portrait, (x, y))
+        
+        
         
         
     def draw(self, screen):

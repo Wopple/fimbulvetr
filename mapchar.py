@@ -165,7 +165,7 @@ class MapChar(mapitem.MapItem):
                 
 
     def initPortrait(self, p):
-        q = pygame.Surface(MAP_CHAR_BAR_PORTRAIT_SIZE)
+        q = pygame.Surface(UNIT_HUD_PORTRAIT_SIZE)
         if not p is None:
             q.blit(p, (0, 0))
         q.convert()

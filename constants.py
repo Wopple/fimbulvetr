@@ -479,8 +479,11 @@ REZ_SPARK_COLOR = [220, 220, 200]
 UNIT_HUD_COLORS = [ (150, 170, 195),
                     (200, 180, 175) ]
 
+UNIT_HUD_BLANK_PORTRAIT_COLORS = [ (120, 140, 165),
+                                   (170, 150, 145) ]
+
 UNIT_HUD_BORDER_WIDTH = 8
-UNIT_HUD_BUTTON_SIZE = (100, 26)
+UNIT_HUD_BUTTON_SIZE = (160, 28)
 UNIT_HUD_BUTTONS_PER_COLUMN = 4
 
 UNIT_HUD_HEIGHT = ( (UNIT_HUD_BUTTON_SIZE[1] * UNIT_HUD_BUTTONS_PER_COLUMN) +
@@ -499,6 +502,8 @@ UNIT_HUD_BUTTON_COLORS_DARK_BORDER = [ (80, 100, 125),
                                         (130, 110, 105) ]
 
 UNIT_HUD_BUTTON_BORDER_SIZE = 4
+
+UNIT_HUD_PORTRAIT_SIZE = (120, 120)
 
 
 temp = []
@@ -888,9 +893,10 @@ temp = [ ["fontdata.ttf",10],
          ["fontslab.ttf", 30],
          ["fontheadline.ttf", 16],
          ["fontbio.ttf", 26],
-         ["fontheadline.ttf", 20],
+         ["fontdum1.ttf", 20],
          ["fontheadline.ttf", 50],
-         ["fontapple.ttf", 14] ]
+         ["fontapple.ttf", 14],
+         ["fontdum1.ttf", 14] ]
 FONTS = []
 for i in temp:
     FONTS.append(pygame.font.Font(
@@ -903,6 +909,7 @@ CHAR_EDITOR_FONT = FONTS[4]
 TEXT_ENTRY_FONT = FONTS[5]
 CHARACTER_SELECTION_FONT = FONTS[6]
 COUNTDOWN_FONT = FONTS[7]
+UNIT_HUD_NAMES_FONT = FONTS[9]
 
 VALID_INPUT_CHARACTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                           'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
