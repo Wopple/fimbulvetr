@@ -563,7 +563,7 @@ class Model(mvc.Model):
         #        else:
         #            i.rect.left = MAP_CHAR_BAR_INIT_POS[0]
         
-        self.unitHUD.changeCharacter(self.currSelected)
+        self.unitHUD.update(self.currSelected)
 
     def checkCharBarSide(self):
 
@@ -940,8 +940,10 @@ def ConvertBattleCharsToMapChars(hostChars, clientChars):
     returnList = []
     for i, l in enumerate(masterList):
         for c in l:
+            portrait = None
             if isinstance(c, hare.Hare):
                 mod = mapchar.Hare
+                portrait = HARE_PORTRAITS[0]
             elif isinstance(c, fox.Fox):
                 mod = mapchar.Fox
             elif isinstance(c, cat.Cat):
@@ -949,6 +951,6 @@ def ConvertBattleCharsToMapChars(hostChars, clientChars):
             else:
                 raise Exception()
 
-            returnList.append(mod(i, c, c.name))
+            returnList.append(mod(i, c, c.name, portrait))
 
     return returnList
