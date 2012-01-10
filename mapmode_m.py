@@ -247,13 +247,26 @@ class Model(mvc.Model):
 
     def leftClick(self):
         if self.encounterPause == -1:
-            if isinstance(self.currHighlighted, mapchar.MapChar):
-                if (self.currHighlighted.team == self.team and
-                    not self.currHighlighted.isDead()):
-                    self.currSelected = self.currHighlighted
-                    return
+            
+            #Click on map
+            if (self.mousePos[1] < self.unitHUD.rect.top):
+                if isinstance(self.currHighlighted, mapchar.MapChar):
+                    if (self.currHighlighted.team == self.team and
+                        not self.currHighlighted.isDead()):
+                        self.currSelected = self.currHighlighted
+                        return
 
-            self.currSelected = None
+                self.currSelected = None
+                
+            #Click on HUD
+            else:
+                print "In HUD!"
+                selection = self.unitHUD.getButtonAtPos(self.mousePos)
+                if selection != None:
+                    if selection == self.currSelected:
+                        self.centerOnCharacter(self.currSelected)
+                    else:
+                        self.currSelected = selection
 
     def rightClick(self, waypoint):
         if self.encounterPause == -1:

@@ -71,7 +71,7 @@ class UnitHUD(object):
                                                      self.currCharacter.name, None, 0)
                 self.superBar = energybar.EnergyBar(self.currCharacter.battleChar.superEnergy, self.superBarRect,
                                                     (UNIT_HUD_ENERGY_BAR_BORDER_SIZE, UNIT_HUD_ENERGY_BAR_BORDER_SIZE),
-                                                    HEALTH_BAR_COLORS, 2,
+                                                    SUPER_BAR_COLORS, 2,
                                                     "Energy", None, 0)
                 self.healthBar.rect.topleft = self.healthBarRect.topleft
                 self.superBar.rect.topleft = self.superBarRect.topleft
@@ -82,11 +82,12 @@ class UnitHUD(object):
     def createCharacterButtons(self):
 
         self.buttons = []
+        self.buttonRects = []
         
         for i, c in enumerate(self.characters):
             tempList = []
-            for i in range(2):
-                isOn = (i == 0)
+            for j in range(2):
+                isOn = (j == 0)
                 tempList.append(self.createButton(i, c, isOn))
             self.buttons.append(tempList)
             
@@ -128,7 +129,18 @@ class UnitHUD(object):
         
         button.blit(textSurface, textRect.topleft)
         
+        numPerColumn = int(len(self.characters) / 2) + 1
+        if numPerColumn > UNIT_HUD_BUTTONS_PER_COLUMN:
+            numPerColumn = UNIT_HUD_BUTTONS_PER_COLUMN
         
+        if isOn:
+            column = int (val / numPerColumn)
+            row = val % numPerColumn
+            
+            x = ((UNIT_HUD_BUTTON_SIZE[0] + UNIT_HUD_BORDER_WIDTH) * column) + UNIT_HUD_BORDER_WIDTH
+            y = ((UNIT_HUD_BUTTON_SIZE[1] + UNIT_HUD_BORDER_WIDTH) * row) + UNIT_HUD_BORDER_WIDTH
+        
+            self.buttonRects.append(pygame.Rect((x, y), UNIT_HUD_BUTTON_SIZE))
 
         return button
 
@@ -138,9 +150,7 @@ class UnitHUD(object):
         
         self.baseImage.fill(color)
         
-        numPerColumn = int(len(self.characters) / 2) + 1
-        if numPerColumn > UNIT_HUD_BUTTONS_PER_COLUMN:
-            numPerColumn = UNIT_HUD_BUTTONS_PER_COLUMN
+        print self.buttonRects
 
         
         for i, c in enumerate(self.characters):
@@ -150,13 +160,8 @@ class UnitHUD(object):
             else:
                 onIndex = 1
             
-            column = int (i / numPerColumn)
-            row = i % numPerColumn
             
-            x = ((UNIT_HUD_BUTTON_SIZE[0] + UNIT_HUD_BORDER_WIDTH) * column) + UNIT_HUD_BORDER_WIDTH
-            y = ((UNIT_HUD_BUTTON_SIZE[1] + UNIT_HUD_BORDER_WIDTH) * row) + UNIT_HUD_BORDER_WIDTH
-            
-            self.baseImage.blit(self.buttons[i][onIndex], (x, y))
+            self.baseImage.blit(self.buttons[i][onIndex], self.buttonRects[i].topleft)
             
         x = ((UNIT_HUD_BUTTON_SIZE[0] + UNIT_HUD_BORDER_WIDTH) * 2) + UNIT_HUD_BORDER_WIDTH
         y = UNIT_HUD_BORDER_WIDTH
@@ -181,30 +186,39 @@ class UnitHUD(object):
         self.image.blit(self.baseImage, (0, 0))
         
         if (not self.healthBar is None):
+            self.healthBar.update()
             self.healthBar.draw(self.image)
-            if (not self.character is None):
-                if self.character.isDead():
-                    if self.healthBar.value != self.character.respawnTime:
-                        self.healthBar.value = self.character.respawnTime
+            if (not self.currCharacter is None):
+                if self.currCharacter.isDead():
+                    if self.healthBar.value != self.currCharacter.respawnTime:
+                        self.healthBar.value = self.currCharacter.respawnTime
                         self.healthBar.threshold = self.healthBar.value.maximum
                         self.healthBar.changeColor(RESPAWN_BAR_COLOR)
                         self.healthBar.changeFullColors(RESPAWN_BAR_COLOR, RESPAWN_BAR_COLOR)
                 else:
-                    if self.healthBar.value != self.character.battleChar.hp:
-                        self.healthBar.value = self.character.battleChar.hp
+                    if self.healthBar.value != self.currCharacter.battleChar.hp:
+                        self.healthBar.value = self.currCharacter.battleChar.hp
                         self.healthBar.threshold = self.healthBar.value.maximum
                         self.healthBar.changeColor(HEALTH_BAR_COLORS[0])
                         self.healthBar.changeFullColors(HEALTH_BAR_COLORS[1], HEALTH_BAR_COLORS[2])
                 
             
         if (not self.superBar is None):
+            self.superBar.update()
             self.superBar.draw(self.image)
             
+            
+    def getButtonAtPos(self, inPos):
+        pos = [inPos[0] - self.rect.left, inPos[1] - self.rect.top]
         
+        print pos
         
-        
-        
-        
+        for i, r in enumerate(self.buttonRects):
+            if r.collidepoint(pos):
+                return self.characters[i]
+            
+        return None
+            
         
         
     def draw(self, screen):
