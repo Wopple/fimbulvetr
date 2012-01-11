@@ -270,15 +270,17 @@ class Model(mvc.Model):
 
     def rightClick(self, waypoint):
         if self.encounterPause == -1:
-            if (not self.currSelected is None):
-                pos = self.absMousePos()
+            
+            if (self.mousePos[1] < self.unitHUD.rect.top):
+                if (not self.currSelected is None):
+                    pos = self.absMousePos()
                 
-                if self.currSelected.isDead() and (not self.isInTerritory(pos, self.currSelected.team)):
-                    return
+                    if self.currSelected.isDead() and (not self.isInTerritory(pos, self.currSelected.team)):
+                        return
                 
-                pos = [int(pos[0]), int(pos[1])]
-                self.currSelected.setTarget(pos, waypoint)
-                self.currentFrameOrder = [self.currSelected, pos, waypoint]
+                    pos = [int(pos[0]), int(pos[1])]
+                    self.currSelected.setTarget(pos, waypoint)
+                    self.currentFrameOrder = [self.currSelected, pos, waypoint]
 
     def absMousePos(self):
         temp = []
@@ -366,17 +368,25 @@ class Model(mvc.Model):
                         
     
     def isInTerritory(self, pos, team):
+        print "*****"
         cTeam = team + 1
+        print cTeam
         value = False
         for s in self.structures:
             sTeam = s.team
             dist = util.distance(pos, s.precisePos)
             if dist <= s.territorySize:
+                print sTeam, cTeam
                 if sTeam == cTeam:
+                    print "OK!"
                     value = True
-                elif cTeam != 0:
+                elif sTeam != 0:
+                    print "NO!"
                     return False
+                else:
+                    print "Neutral!"
                 
+        print value
         return value
                 
                     

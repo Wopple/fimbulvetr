@@ -6,6 +6,8 @@ import copy
 import textrect
 import energybar
 
+import battle_m
+
 from constants import *
 
 class UnitHUD(object):
@@ -45,13 +47,22 @@ class UnitHUD(object):
         y += UNIT_HUD_BORDER_WIDTH + self.healthBarRect.height + ENERGY_BAR_FONT.get_height() - 4
         self.superBarRect = pygame.Rect((x, y), UNIT_HUD_ENERGY_BAR_SIZE)
         
+        self.iconRect = pygame.Rect((0,0), EFFECT_ICON_SIZE)
+        self.iconRect.top = self.healthBarRect.top
+        self.iconRect.left = self.healthBarRect.right + UNIT_HUD_BORDER_WIDTH
+        
 
         self.createCharacterButtons()
+        self.createTerrainIcons()
         
         self.currCharacter = None
         self.healthBar = None
         self.superBar = None
         self.createBaseImage()
+        
+        self.createTerritoryIcons()
+        
+        self.createSuperIcons()
         
     def update(self, val):
         self.changeCharacter(val)
@@ -143,6 +154,91 @@ class UnitHUD(object):
             self.buttonRects.append(pygame.Rect((x, y), UNIT_HUD_BUTTON_SIZE))
 
         return button
+    
+    def createTerritoryIcons(self):
+        if self.team == 0:
+            alliedTeam = 1
+            enemyTeam = 2
+        else:
+            alliedTeam = 2
+            enemyTeam = 1
+        contested = 0
+
+        options = ["neutral", "allied", "enemy", "contested"]
+
+        self.territoryEffectIcons = {}
+
+        bgColor = None
+        flagColor = None
+        
+        for o in options:
+            flag = copy.copy(INTERFACE_GRAPHICS[5])
+        
+            if o == "allied":
+                flagColor = TERRITORY_FLAG_COLORS[alliedTeam]
+                bgColor = EFFECT_COLORS["good"]
+            elif o == "enemy":
+                flagColor = TERRITORY_FLAG_COLORS[enemyTeam]
+                bgColor = EFFECT_COLORS["bad"]
+            elif o == "contested":
+                flagColor = TERRITORY_FLAG_COLORS[contested]
+                bgColor = EFFECT_COLORS["bad"]
+            else:
+                flag = None
+                bgColor = EFFECT_COLORS["neutral"]
+
+            icon = pygame.Surface(EFFECT_ICON_SIZE)
+            icon.fill(bgColor)
+
+
+            if not flag is None:
+                colorSwap(flag, FLAG_NEUTRAL_COLOR, flagColor, 30)
+                icon.blit(flag, (0,0))
+
+            self.territoryEffectIcons[o] = icon
+
+    
+    def createTerrainIcons(self):
+        
+        self.terrainEffectIcons = []
+        
+        for c in self.characters:
+        
+            tempList = []
+
+            for i in range(5):
+                terrainIcon = TERRAIN_ICONS[i]
+
+                effect = c.speedTerrainModifiers[i]
+
+                if effect <= 0.99:
+                    bgColor = EFFECT_COLORS["bad"]
+                elif effect >= 1.01:
+                    bgColor = EFFECT_COLORS["good"]
+                else:
+                    bgColor = EFFECT_COLORS["neutral"]
+
+                icon = pygame.Surface(EFFECT_ICON_SIZE)
+                icon.fill(bgColor)
+                    
+                if not terrainIcon is None:
+                    icon.blit(terrainIcon, (0,0))
+
+                tempList.append(icon)
+            
+                self.terrainEffectIcons.append(tempList)
+                
+    def createSuperIcons(self):
+        self.superIcons = []
+        
+        x = self.iconRect.left
+        y = self.iconRect.top + self.iconRect.height + UNIT_HUD_BORDER_WIDTH
+        
+        for c in self.characters:
+            icon = battle_m.SuperIcon(pygame.Rect((x, y), BATTLE_SUPER_ICON_SIZE),
+                                      c.battleChar.getSuperIcon(), c.battleChar.superEnergy)
+            
+            self.superIcons.append(icon)
 
     def createBaseImage(self):
         self.baseImage = pygame.Surface(self.rect.size)
@@ -206,6 +302,34 @@ class UnitHUD(object):
         if (not self.superBar is None):
             self.superBar.update()
             self.superBar.draw(self.image)
+            
+        terrainIcon = None
+        territoryIcon = None
+        superIcon = None
+        for i, c in enumerate(self.characters):
+            if c == self.currCharacter:
+                if c.isDead():
+                    terrainIcon = NEUTRAL_ICON
+                    territoryIcon = NEUTRAL_ICON
+                else:
+                    terrainIcon = self.terrainEffectIcons[i][self.currCharacter.currTerrain]
+                    territoryIcon = self.territoryEffectIcons[self.currCharacter.currTerritory]
+                superIcon = self.superIcons[i]
+                break
+            
+        if not terrainIcon is None:
+            self.image.blit(terrainIcon, self.iconRect.topleft)
+            
+        x = self.iconRect.right
+        y = self.iconRect.top
+            
+        if not territoryIcon is None:
+            self.image.blit(territoryIcon, (x, y))
+            
+        if not superIcon is None:
+            superIcon.updateImage()
+            superIcon.draw(self.image)
+        
             
             
     def getButtonAtPos(self, inPos):
