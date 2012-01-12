@@ -140,6 +140,11 @@ class UnitHUD(object):
         
         button.blit(textSurface, textRect.topleft)
         
+        textSurface = textrect.render_textrect(str(val+1) + ".", UNIT_HUD_NAMES_FONT, textRect,
+                                               ALMOST_BLACK, BLACK, 0, True)
+        
+        button.blit(textSurface, textRect.topleft)
+        
         numPerColumn = int(len(self.characters) / 2) + 1
         if numPerColumn > UNIT_HUD_BUTTONS_PER_COLUMN:
             numPerColumn = UNIT_HUD_BUTTONS_PER_COLUMN

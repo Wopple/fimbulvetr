@@ -241,6 +241,8 @@ class Model(mvc.Model):
                 result = mapstructure.Fortress(s[0])
             elif sType == "S":
                 result = mapstructure.Spire(s[0])
+            elif sType == "O":
+                result = mapstructure.Origin(s[0])
 
             if not result is None:
                 self.structures.append(result)
@@ -260,7 +262,6 @@ class Model(mvc.Model):
                 
             #Click on HUD
             else:
-                print "In HUD!"
                 selection = self.unitHUD.getButtonAtPos(self.mousePos)
                 if selection != None:
                     if selection == self.currSelected:
@@ -368,25 +369,16 @@ class Model(mvc.Model):
                         
     
     def isInTerritory(self, pos, team):
-        print "*****"
         cTeam = team + 1
-        print cTeam
         value = False
         for s in self.structures:
             sTeam = s.team
             dist = util.distance(pos, s.precisePos)
             if dist <= s.territorySize:
-                print sTeam, cTeam
                 if sTeam == cTeam:
-                    print "OK!"
                     value = True
                 elif sTeam != 0:
-                    print "NO!"
                     return False
-                else:
-                    print "Neutral!"
-                
-        print value
         return value
                 
                     
@@ -441,9 +433,10 @@ class Model(mvc.Model):
                     continue
 
                 for s in self.structures:
-                    dist = util.distance(c.precisePos, s.precisePos)
-                    if dist <= STRUCTURE_TRIGGER_RANGE:
-                        s.playersInArea[t].append(c)
+                    if first or (not isinstance(s, mapstructure.Origin)):
+                        dist = util.distance(c.precisePos, s.precisePos)
+                        if dist <= STRUCTURE_TRIGGER_RANGE:
+                            s.playersInArea[t].append(c)
 
 
         checker = False
@@ -474,6 +467,9 @@ class Model(mvc.Model):
         for i in range(360 / TERRITORY_DEGREES_PER_DOT):
             deg = TERRITORY_DEGREES_PER_DOT * i
             pos = degreesToPoint(deg, s.territorySize, s.precisePos)
+            
+            if (pos[0] < 0) or (pos[0] > self.map.mapSize[0]) or (pos[1] < 0) or (pos[1] > self.map.mapSize[1]):
+                continue
 
             checker = True
             contested = False

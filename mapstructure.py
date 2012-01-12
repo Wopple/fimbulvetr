@@ -96,7 +96,8 @@ class MapStructure(mapitem.MapItem):
         self.setImage(self.team)
 
     def draw(self, screen, inZoom, inOffset):
-        super(MapStructure, self).draw(screen, inZoom, inOffset)
+        if not isinstance(self, Origin):
+            super(MapStructure, self).draw(screen, inZoom, inOffset)
         self.setBarPosition()
 
         for p in self.territoryPoints:
@@ -147,5 +148,15 @@ class Spire(MapStructure):
                                     SPIRE_CAPTURE_TIME)
 
 
+    def modifyImages(self):
+        pass
+    
+class Origin(MapStructure):
+    def __init__(self, inPos):
+        
+        self.territorySize = ORIGIN_TERRITORY_RADIUS
+        
+        super(Origin, self).__init__(inPos, MAP_ITEMS["fortress"], 1)
+        
     def modifyImages(self):
         pass
