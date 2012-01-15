@@ -43,6 +43,7 @@ class Model(mvc.Model):
         self.createRegions()
         self.placeChars()
         self.placeStructures()
+        self.buildInterface()
         self.checkForStructureOwnership(True)
         
         self.pendingBattle = None
@@ -60,8 +61,6 @@ class Model(mvc.Model):
         self.charBarSideRight = True
 
         self.setCountdown()
-
-        self.buildInterface()
 
         self.initialCount = 5
 
@@ -443,9 +442,20 @@ class Model(mvc.Model):
         for s in self.structures:
             if (s.checkForOwnershipChange(first)):
                 checker = True
+           
+        fortressCount = 0
+        spireCount = 0
+        for s in self.structures:
+            if (s.team-1) == self.team:
+                if isinstance(s, mapstructure.Fortress):
+                    fortressCount += 1
+                if isinstance(s, mapstructure.Spire):
+                    spireCount += 1
 
 
         if checker:
+            self.unitHUD.updateStructureCount(fortressCount, spireCount)
+            
             self.recreateTerritory()
             
             for c in self.characters:

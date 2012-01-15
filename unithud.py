@@ -15,6 +15,7 @@ class UnitHUD(object):
         self.rect = pygame.Rect((0,0), (SCREEN_SIZE[0], UNIT_HUD_HEIGHT))
         self.rect.bottom = SCREEN_SIZE[1]
         self.team = inTeam
+        
         self.characters = inPlayers[self.team]
 
         self.buttonBorderVertLight = pygame.Surface((UNIT_HUD_BUTTON_BORDER_SIZE,
@@ -47,6 +48,20 @@ class UnitHUD(object):
         y += UNIT_HUD_BORDER_WIDTH + self.healthBarRect.height + ENERGY_BAR_FONT.get_height() - 4
         self.superBarRect = pygame.Rect((x, y), UNIT_HUD_ENERGY_BAR_SIZE)
         
+        sizeX = SCREEN_SIZE[0] - self.healthBarRect.left - UNIT_HUD_BORDER_WIDTH
+        sizeY = UNIT_HUD_STRUCTURE_PANEL_HEIGHT
+        self.structureCountPanelRect = pygame.Rect( (0, 0), (sizeX, sizeY))
+        self.structureCountPanelRect.left = self.healthBarRect.left
+        self.structureCountPanelRect.bottom = UNIT_HUD_HEIGHT - UNIT_HUD_BORDER_WIDTH
+        
+        self.fortressIcon = FORTRESS_COUNT_ICONS[self.team]
+        self.fortressIconRect = pygame.Rect( (0,0), self.fortressIcon.get_size() )
+        self.fortressIconRect.centery = (self.structureCountPanelRect.height / 2)
+        self.spireIcon = SPIRE_COUNT_ICONS[self.team]
+        self.spireIconRect = pygame.Rect( (0,0), self.spireIcon.get_size() )
+        self.spireIconRect.left = UNIT_HUD_STRUCTURE_PANEL_SPACING
+        self.spireIconRect.centery = (self.structureCountPanelRect.height / 2)
+        
         self.iconRect = pygame.Rect((0,0), EFFECT_ICON_SIZE)
         self.iconRect.top = self.healthBarRect.top
         self.iconRect.left = self.healthBarRect.right + UNIT_HUD_BORDER_WIDTH
@@ -61,8 +76,8 @@ class UnitHUD(object):
         self.createBaseImage()
         
         self.createTerritoryIcons()
-        
         self.createSuperIcons()
+        self.updateStructureCount(0, 0)
         
     def update(self, val):
         self.changeCharacter(val)
@@ -250,8 +265,6 @@ class UnitHUD(object):
         color = UNIT_HUD_COLORS[self.team]
         
         self.baseImage.fill(color)
-        
-        print self.buttonRects
 
         
         for i, c in enumerate(self.characters):
@@ -334,13 +347,39 @@ class UnitHUD(object):
         if not superIcon is None:
             superIcon.updateImage()
             superIcon.draw(self.image)
+            
+            
+        self.image.blit(self.structureCountPanel, self.structureCountPanelRect.topleft)
+            
+    def updateStructureCount(self, fortressCount, spireCount):
+        self.fortressCount = fortressCount
+        self.spireCount = spireCount
+        
+        self.structureCountPanel = pygame.Surface(self.structureCountPanelRect.size)
+        self.structureCountPanel.fill(UNIT_HUD_COLORS[self.team])
+        
+        self.structureCountPanel.blit(self.fortressIcon, self.fortressIconRect.topleft)
+        self.structureCountPanel.blit(self.spireIcon, self.spireIconRect.topleft)
+        
+        textRect = pygame.Rect((0,0), (100, STRUCTURE_COUNT_FONT.get_height() + 4))
+        
+        textSurface = textrect.render_textrect(" x" + str(self.fortressCount), STRUCTURE_COUNT_FONT, textRect,
+                                               ALMOST_BLACK, BLACK, 0, True)
+        textRect.bottomleft = self.fortressIconRect.bottomright
+        self.structureCountPanel.blit(textSurface, textRect.topleft)
+        
+        textSurface = textrect.render_textrect(" x" + str(self.spireCount), STRUCTURE_COUNT_FONT, textRect,
+                                               ALMOST_BLACK, BLACK, 0, True)
+        textRect.left = self.spireIconRect.right - 3
+        self.structureCountPanel.blit(textSurface, textRect.topleft)
+        
+        
+        
         
             
             
     def getButtonAtPos(self, inPos):
         pos = [inPos[0] - self.rect.left, inPos[1] - self.rect.top]
-        
-        print pos
         
         for i, r in enumerate(self.buttonRects):
             if r.collidepoint(pos):

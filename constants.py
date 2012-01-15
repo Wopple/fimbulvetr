@@ -516,6 +516,9 @@ UNIT_HUD_ENERGY_BAR_BORDER_SIZE = 3
 
 UNIT_HUD_SUPER_ICON_SIZE = (40, 40)
 
+UNIT_HUD_STRUCTURE_PANEL_HEIGHT = 55
+UNIT_HUD_STRUCTURE_PANEL_SPACING = 120
+
 temp = []
 BACKGROUNDS = []
 for i in temp:
@@ -867,7 +870,12 @@ temp = ['pauseicon.png',
         'terrainwater.png',
         'loading.png',
         'terrainfortress.png',
-        'waypoint.png']
+        'waypoint.png',
+        'fortressblue.png',
+        'fortressred.png',
+        'spireblue.png',
+        'spirered.png' ]
+        
 
 INTERFACE_GRAPHICS = []
 for i in temp:
@@ -877,6 +885,9 @@ for i in temp:
 TERRAIN_ICONS = [None, INTERFACE_GRAPHICS[6],
                  INTERFACE_GRAPHICS[7], INTERFACE_GRAPHICS[8],
                  INTERFACE_GRAPHICS[10]]
+
+FORTRESS_COUNT_ICONS = [INTERFACE_GRAPHICS[12], INTERFACE_GRAPHICS[13]]
+SPIRE_COUNT_ICONS = [INTERFACE_GRAPHICS[14], INTERFACE_GRAPHICS[15]]
 
 
 temp = ['grass.png',
@@ -906,7 +917,8 @@ temp = [ ["fontdata.ttf",10],
          ["fontdum1.ttf", 20],
          ["fontheadline.ttf", 50],
          ["fontapple.ttf", 14],
-         ["fontdum1.ttf", 14] ]
+         ["fontdum1.ttf", 14],
+         ["fontdata.ttf",14] ]
 FONTS = []
 for i in temp:
     FONTS.append(pygame.font.Font(
@@ -920,6 +932,7 @@ TEXT_ENTRY_FONT = FONTS[5]
 CHARACTER_SELECTION_FONT = FONTS[6]
 COUNTDOWN_FONT = FONTS[7]
 UNIT_HUD_NAMES_FONT = FONTS[9]
+STRUCTURE_COUNT_FONT = FONTS[10]
 
 VALID_INPUT_CHARACTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                           'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
