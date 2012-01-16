@@ -171,9 +171,9 @@ HEALTH_BAR_OFFSET = (10, 10)
 BATTLE_PORTRAIT_OFFSET = (10, 10)
 HEALTH_BAR_SIZE = (200, 22)
 HEALTH_BAR_BORDERS = (6, 4)
-HEALTH_BAR_COLORS = ( (5, 120, 10),
-                      (15, 200, 25),
-                      (15, 200, 25),
+HEALTH_BAR_COLORS = ( (5, 100, 10),
+                      (15, 170, 25),
+                      (15, 170, 25),
                       (20, 20, 20),
                       (200, 200, 10),
                       (10, 10, 10))

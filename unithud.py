@@ -81,7 +81,7 @@ class UnitHUD(object):
         
     def update(self, val):
         self.changeCharacter(val)
-        self.characterSpecificUpdate()
+        self.everyFrameUpdate()
 
 
     def changeCharacter(self, val):
@@ -109,6 +109,7 @@ class UnitHUD(object):
 
         self.buttons = []
         self.buttonRects = []
+        self.buttonBars = []
         
         for i, c in enumerate(self.characters):
             tempList = []
@@ -165,13 +166,26 @@ class UnitHUD(object):
             numPerColumn = UNIT_HUD_BUTTONS_PER_COLUMN
         
         if isOn:
+            #Rect
             column = int (val / numPerColumn)
             row = val % numPerColumn
             
             x = ((UNIT_HUD_BUTTON_SIZE[0] + UNIT_HUD_BORDER_WIDTH) * column) + UNIT_HUD_BORDER_WIDTH
             y = ((UNIT_HUD_BUTTON_SIZE[1] + UNIT_HUD_BORDER_WIDTH) * row) + UNIT_HUD_BORDER_WIDTH
         
-            self.buttonRects.append(pygame.Rect((x, y), UNIT_HUD_BUTTON_SIZE))
+            buttonRect = pygame.Rect((x, y), UNIT_HUD_BUTTON_SIZE)
+            self.buttonRects.append(pygame.Rect(buttonRect))
+            
+            #Bar
+            sizeX = UNIT_HUD_BUTTON_SIZE[0] - (UNIT_HUD_BUTTON_BORDER_SIZE * 2)
+            sizeY = 2
+            x = buttonRect.left + UNIT_HUD_BUTTON_BORDER_SIZE
+            y = buttonRect.bottom - UNIT_HUD_BUTTON_BORDER_SIZE - 4
+            barRect = pygame.Rect((x, y), (sizeX, sizeY))
+            newBar = energybar.EnergyBar(character.battleChar.hp, barRect, (0, 0), HEALTH_BAR_COLORS, 2)
+            self.buttonBars.append(newBar)
+            
+            
 
         return button
     
@@ -293,7 +307,7 @@ class UnitHUD(object):
         
         self.baseImage.blit(finalPortrait, (x, y))
         
-    def characterSpecificUpdate(self):
+    def everyFrameUpdate(self):
         
         self.image = pygame.Surface(self.rect.size)
         
@@ -315,11 +329,28 @@ class UnitHUD(object):
                         self.healthBar.threshold = self.healthBar.value.maximum
                         self.healthBar.changeColor(HEALTH_BAR_COLORS[0])
                         self.healthBar.changeFullColors(HEALTH_BAR_COLORS[1], HEALTH_BAR_COLORS[2])
-                
+             
             
         if (not self.superBar is None):
             self.superBar.update()
             self.superBar.draw(self.image)
+            
+        for i, b in enumerate(self.buttonBars):
+            b.update()
+            b.draw(self.image)
+            c = self.characters[i]
+            if c.isDead():
+                if b.value != c.respawnTime:
+                    b.value = c.respawnTime
+                    b.threshold = b.value.maximum
+                    b.changeColor(RESPAWN_BAR_COLOR)
+                    b.changeFullColors(RESPAWN_BAR_COLOR, RESPAWN_BAR_COLOR)
+            else:
+                if b.value != c.battleChar.hp:
+                    b.value = c.battleChar.hp
+                    b.threshold = b.value.maximum
+                    b.changeColor(HEALTH_BAR_COLORS[0])
+                    b.changeFullColors(HEALTH_BAR_COLORS[1], HEALTH_BAR_COLORS[2])
             
         terrainIcon = None
         territoryIcon = None
