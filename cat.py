@@ -16,15 +16,20 @@ class Cat(battlechar.BattleChar):
         self.speciesName = "Cat"
         self.spriteSet = CAT_IMAGES
         self.superIcons = CAT_SUPER_ICONS
-        self.groundAccel = 1.3
-        self.groundVelMax = 9.0
-        self.groundFriction = 2.6
-        self.airAccel = 1.4
-        self.airVelMax = 10.5
-        self.airFriction = 0.8
+        self.walkVelMax = 7.0
+        self.dashVelMax = 16.0
+        self.runVelMax = 11.0
+        self.walkAccel = 2.5
+        self.dashAccel = 12.0
+        self.groundFriction = 2.8
+        self.airAccel = 1.5
+        self.airVelMax = 8.5
+        self.airFriction = 1.2
+        self.airFrictionStunned = self.airFriction * 0.3
         self.vertAccel = 0.6
         self.vertVelMax = 19.5
         self.jumpVel = -15.0
+        self.blockFXPoints = [ (9, -35), (33, -32), (9, -35) ]
         self.catEnergy = boundint.BoundInt(0, CAT_ENERGY_MAX, 0)
         self.prevEnergy = self.catEnergy.value
         self.energyDelayTick = CAT_ENERGY_DELAY
@@ -67,8 +72,9 @@ class Cat(battlechar.BattleChar):
 
     def initSpecMoves(self):
         self.createMoveIdle()
-        self.createMoveDash()
+        self.createMoveWalking()
         self.createMoveAir()
+        self.createMoveFlipping()
         self.createMoveJumping()
         self.createMoveDucking()
         self.createMoveJabA()
@@ -84,22 +90,26 @@ class Cat(battlechar.BattleChar):
 
     def createSuperMoves(self):
         self.createSuperMove1()
-        self.createSuperMove2()
+        #self.createSuperMove2()
 
     def createMoveIdle(self):
         f = [ self.frameData(0, 2) ]
         self.moves['idle'].append(f, [])
 
-    def createMoveDash(self):
-        f = [ self.frameData(1, 4),
-              self.frameData(2, 4),
-              self.frameData(3, 4),
-              self.frameData(4, 4) ]
-        self.moves['dash'].append(f, [])
+    def createMoveWalking(self):
+        f = [ self.frameData(1, 3),
+              self.frameData(2, 3),
+              self.frameData(3, 3),
+              self.frameData(4, 3) ]
+        self.moves['walking'].append(f, [])
 
     def createMoveAir(self):
         f = [ self.frameData(5, 2) ]
         self.moves['air'].append(f, [])
+        
+    def createMoveFlipping(self):
+        f = [ self.frameData(5, 2) ]
+        self.moves['flipping'].append(f, [])
 
     def createMoveJumping(self):
         f = [ self.frameData(5, 2) ]
@@ -125,8 +135,8 @@ class Cat(battlechar.BattleChar):
     def createMoveJabB(self):
         f = [ self.frameData(19, 2),
               self.frameData(20, 2),
-              self.frameData(21, 3),
-              self.frameData(22, 4),
+              self.frameData(21, 1),
+              self.frameData(22, 3),
               self.frameData(23, 1)]
 
         t = [ ['bladelv1', move.Transition(None, None, 4, 4, 'swordbeamGround1')],
@@ -141,7 +151,7 @@ class Cat(battlechar.BattleChar):
     def createMoveSwordBeamGroundEnd(self):
         f = [ self.frameData(24, 2),
               self.frameData(25, 1),
-              self.frameData(26, 8),
+              self.frameData(26, 10),
               self.frameData(0, 2) ]
         t = []
 
@@ -259,8 +269,11 @@ class Cat(battlechar.BattleChar):
         self.moves['chargeSword'].chargeBlade = True
 
     def createMoveDownA(self):
-        f = [ self.frameData(42, 6),
-              self.frameData(18, 5) ]
+        f = [ self.frameData(42, 2),
+              self.frameData(43, 5),
+              self.frameData(43, 2),
+              self.frameData(42, 2),
+              self.frameData(18, 2)]
 
         t = [ ['exitFrame', move.Transition(-1, None, None, None, 'ducking')] ]
 
@@ -327,23 +340,13 @@ class Cat(battlechar.BattleChar):
                 return i+1
         return x+1
 
+
     def createSuperMove1(self):
-        n = "Runic Flare"
-        
-        d = ("An instantaneous explosion of power that fully charges the" +
-             " user's Galdr Blade, as well as dealing minor damage and" +
-             " knocking away any enemy who treads too closely.")
-        
-        s = move.SuperMove(n, d, [], [])
-
-        self.superMoves.append(s)
-
-    def createSuperMove2(self):
         n = "Great Shockwave"
         
         d = ("A super-powered version of the user's normal protectile" +
              " ability, capable of dealing a great deal of damage.")
         
-        s = move.SuperMove(n, d, [], [])
+        sg = move.SuperMove(n, d, [], [])
 
-        self.superMoves.append(s)
+        self.appendSuperMove(sg, None)
