@@ -55,6 +55,8 @@ class BattleChar(object):
         if self.hp.value == 0:
             self.hp.value = 1
         self.setCurrMove('idle')
+        self.dashBuffer = [0, 0]
+        self.inAir = False
         
         self.setupSuper()
 
@@ -377,7 +379,10 @@ class BattleChar(object):
         self.attackCanHit = True
 
         if (self.currMove is None) or (len(self.currMove.frames) == 0):
-            self.currMove = self.moves['idle']
+            if (self.inAir):
+                self.currMove = self.moves['air']
+            else:
+                self.currMove = self.moves['idle']
 
     def getCurrentFrame(self):
         return self.currMove.frames[self.currFrame]

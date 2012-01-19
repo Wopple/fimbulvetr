@@ -1077,6 +1077,7 @@ class SuperIcon(drawable.Drawable):
 
 def testData():
     heroes = [cat.Cat(), hare.Hare()]
+    #heroes = [hare.Hare(), hare.Hare()]
     
     for h in heroes:
         h.superEnergy.change(h.superEnergy.maximum / 2)

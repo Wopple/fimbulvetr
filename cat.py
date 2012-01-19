@@ -17,11 +17,11 @@ class Cat(battlechar.BattleChar):
         self.spriteSet = CAT_IMAGES
         self.superIcons = CAT_SUPER_ICONS
         self.walkVelMax = 7.0
-        self.dashVelMax = 16.0
-        self.runVelMax = 11.0
+        self.dashVelMax = 13.0
+        self.runVelMax = 12
         self.walkAccel = 2.5
-        self.dashAccel = 12.0
-        self.groundFriction = 2.8
+        self.dashAccel = 13.0
+        self.groundFriction = 1.1
         self.airAccel = 1.5
         self.airVelMax = 8.5
         self.airFriction = 1.2
@@ -73,14 +73,16 @@ class Cat(battlechar.BattleChar):
     def initSpecMoves(self):
         self.createMoveIdle()
         self.createMoveWalking()
+        self.createMoveDashing()
+        self.createMoveRunning()
         self.createMoveAir()
         self.createMoveFlipping()
         self.createMoveJumping()
         self.createMoveDucking()
-        self.createMoveJabA()
+        #self.createMoveJabA()
         self.createMoveJabB()
         self.createMoveDownA()
-        self.createDashAttackA()
+        self.createMoveDashAttackA()
         self.createMoveUpB()
         self.createNeutralAirB()
 
@@ -102,6 +104,20 @@ class Cat(battlechar.BattleChar):
               self.frameData(3, 3),
               self.frameData(4, 3) ]
         self.moves['walking'].append(f, [])
+        
+    def createMoveDashing(self):
+        f = [self.frameData(47, 2),
+             self.frameData(44, 8)]
+        
+        self.moves['dashing'].append(f, [])
+        
+    def createMoveRunning(self):
+        f = [self.frameData(45, 3),
+             self.frameData(46, 3),
+             self.frameData(47, 3),
+             self.frameData(44, 3) ]
+        
+        self.moves['running'].append(f, [])
 
     def createMoveAir(self):
         f = [ self.frameData(5, 2) ]
@@ -119,18 +135,18 @@ class Cat(battlechar.BattleChar):
         f = [ self.frameData(18, 2) ]
         self.moves['ducking'].append(f, [])
 
-    def createMoveJabA(self):
-        f = [ self.frameData(14, 3),
-              self.frameData(15, 4),
-              self.frameData(15, 80) ]
-        t = [ ['releaseA', move.Transition(None, None, 2, None, 'jabThrust')],
-              ['exitFrame', move.Transition(-1, None, None, None, 'jabThrust')],
-              ['doDuck', move.Transition(None, None, 2, None, 'jabCancel')] ]
-        self.moves['jabA'].append(f, t)
-        self.moves['jabA'].canDI = False
+    #def createMoveJabA(self):
+    #    f = [ self.frameData(14, 3),
+    #          self.frameData(15, 4),
+    #          self.frameData(15, 80) ]
+    #    t = [ ['releaseA', move.Transition(None, None, 2, None, 'jabThrust')],
+    #          ['exitFrame', move.Transition(-1, None, None, None, 'jabThrust')],
+    #          ['doDuck', move.Transition(None, None, 2, None, 'jabCancel')] ]
+    #    self.moves['jabA'].append(f, t)
+    #    self.moves['jabA'].canDI = False
 
-        self.createMoveJabThrust()
-        self.createMoveJabCancel()
+    #    self.createMoveJabThrust()
+    #    self.createMoveJabCancel()
 
     def createMoveJabB(self):
         f = [ self.frameData(19, 2),
@@ -147,6 +163,22 @@ class Cat(battlechar.BattleChar):
         self.moves['jabB'].canDI = False
 
         self.createMoveSwordBeamGroundEnd()
+        
+    def createMoveDashAttackA(self):
+        f = [ self.frameData(14, 2),
+              self.frameData(15, 2),
+              self.frameData(17, 4),
+              self.frameData(43, 12)]
+        
+        self.moves['dashAttackA'].append(f, [])
+        self.moves['dashAttackA'].canDI = False
+        
+        self.moves['dashAttackA'].frames[2].setVelX = 30
+        self.moves['dashAttackA'].frames[2].ignoreSpeedCap = True
+        self.moves['dashAttackA'].frames[2].ignoreFriction = True
+        self.moves['dashAttackA'].frames[3].setVelX = 0
+        
+        
 
     def createMoveSwordBeamGroundEnd(self):
         f = [ self.frameData(24, 2),
@@ -207,16 +239,6 @@ class Cat(battlechar.BattleChar):
         f = [ self.frameData(26, 8) ]
         self.moves['neutralAirBLag'] = move.Move(f, [])
         self.moves['neutralAirBLag'].canDI = False
-
-
-    def createDashAttackA(self):
-        f = [ self.frameData(23, 2),
-              self.frameData(24, 1),
-              self.frameData(25, 1),
-              self.frameData(26, 6) ]
-
-        self.moves['dashAttackA'].append(f, [])
-        self.moves['dashAttackA'].canDI = False
 
     def createMoveJabThrust(self):
         f = [ self.frameData(17, 5),
