@@ -143,6 +143,8 @@ if imageGroup == 0:
     images = HARE_IMAGES
 elif imageGroup == 1:
     images = FOX_IMAGES
+elif imageGroup == 2:
+    images = CAT_IMAGES
 else:
     print "Invalid image group"
     exit()

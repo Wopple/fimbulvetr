@@ -56,11 +56,11 @@ MAIN_MENU_TITLE_POS = [ ((SCREEN_SIZE[0] / 6), 10),
 INTRO_MAX_FADE = 240
 INTRO_SPEEDS = [4, 30, 5, 50, 5, 15]
 
-SHOW_RED_DOT = False
+SHOW_RED_DOT = True
 SHOW_TEAL_DOTS = False
-SHOW_HURTBOXES = False
-SHOW_HITBOXES = False
-SHOW_BLOCKBOXES = False
+SHOW_HURTBOXES = True
+SHOW_HITBOXES = True
+SHOW_BLOCKBOXES = True
 SHOW_TRIGGER_AREA = False
 
 DASH_BUFFER_MAX = 8
@@ -260,7 +260,7 @@ CAT_ENERGY_MAX = 1200
 CAT_ENERGY_USAGE = 3
 CAT_ENERGY_BATTLE_START = 700
 CAT_ENERGY_DELAY = 30
-CAT_ENERGY_RECHARGE = 16
+CAT_ENERGY_RECHARGE = 22
 CAT_ENERGY_NAME = "Galdr Blade"
 
 CAT_ENERGY_SECTIONS = (350, 850)
@@ -767,7 +767,15 @@ temp = [ ["00.png", (24, 61)],
          ["44.png", (32, 65)],
          ["45.png", (32, 65)],
          ["46.png", (32, 65)],
-         ["47.png", (32, 65)]]
+         ["47.png", (32, 65)],
+         ["48.png", (32, 70)],
+         ["49.png", (32, 70)],
+         ["50.png", (32, 70)],
+         ["51.png", (32, 70)],
+         ["52.png", (32, 70)],
+         ["53.png", (32, 70)],
+         ["54.png", (32, 70)],
+         ["55.png", (32, 70)]]
 
 CAT_IMAGES = []
 for i in temp:

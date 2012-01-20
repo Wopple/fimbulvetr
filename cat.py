@@ -26,9 +26,9 @@ class Cat(battlechar.BattleChar):
         self.airVelMax = 8.5
         self.airFriction = 1.2
         self.airFrictionStunned = self.airFriction * 0.3
-        self.vertAccel = 0.6
+        self.vertAccel = 0.8
         self.vertVelMax = 19.5
-        self.jumpVel = -15.0
+        self.jumpVel = -18.0
         self.blockFXPoints = [ (9, -35), (33, -32), (9, -35) ]
         self.catEnergy = boundint.BoundInt(0, CAT_ENERGY_MAX, 0)
         self.prevEnergy = self.catEnergy.value
@@ -79,7 +79,7 @@ class Cat(battlechar.BattleChar):
         self.createMoveFlipping()
         self.createMoveJumping()
         self.createMoveDucking()
-        #self.createMoveJabA()
+        self.createMoveJabA()
         self.createMoveJabB()
         self.createMoveDownA()
         self.createMoveDashAttackA()
@@ -135,18 +135,50 @@ class Cat(battlechar.BattleChar):
         f = [ self.frameData(18, 2) ]
         self.moves['ducking'].append(f, [])
 
-    #def createMoveJabA(self):
-    #    f = [ self.frameData(14, 3),
-    #          self.frameData(15, 4),
-    #          self.frameData(15, 80) ]
-    #    t = [ ['releaseA', move.Transition(None, None, 2, None, 'jabThrust')],
-    #          ['exitFrame', move.Transition(-1, None, None, None, 'jabThrust')],
-    #          ['doDuck', move.Transition(None, None, 2, None, 'jabCancel')] ]
-    #    self.moves['jabA'].append(f, t)
-    #    self.moves['jabA'].canDI = False
-
-    #    self.createMoveJabThrust()
-    #    self.createMoveJabCancel()
+    
+    def createMoveJabA(self):
+        
+        dam1 = 100
+        stun1 = 60
+        force1 = 13
+        angle1 = 27
+        h = [
+                [
+                    (-27, -23, 12, -4, dam1, stun1, force1, angle1, [], 0),
+                    (6, -13, 43, -4, dam1, stun1, force1, angle1, [], 0)
+                ],
+                [
+                    (22, -36, 42, -5, dam1, stun1, force1, angle1, [], 0),
+                    (42, -36, 54, -8, dam1, stun1, force1, angle1, [], 0),
+                    (54, -36, 64, -12, dam1, stun1, force1, angle1, [], 0),
+                    (64, -36, 70, -19, dam1, stun1, force1, angle1, [], 0),
+                    (70, -35, 75, -28, dam1, stun1, force1, angle1, [], 0)
+                ],
+                [
+                    (22, -69, 79, -26, dam1, stun1, force1, angle1, [], 0),
+                    (8, -29, 71, -16, dam1, stun1, force1, angle1, [], 0)
+                ],
+                [
+                    (-10, -70, 56, -61, dam1, stun1, force1, angle1, [], 0),
+                    (1, -61, 58, -44, dam1, stun1, force1, angle1, [], 0),
+                    (8, -44, 27, -20, dam1, stun1, force1, angle1, [], 0)
+                ]
+            ]
+        
+        f = [ self.frameData(48, 3, []),
+              self.frameData(49, 2, [], h[0]),
+              self.frameData(50, 1, [], h[1]),
+              self.frameData(51, 1, [], h[2]),
+              self.frameData(52, 1, [], h[3]),
+              self.frameData(53, 2, []),
+              self.frameData(54, 8, []),
+              self.frameData(55, 2, []) ]
+        
+        
+        
+        self.moves['jabA'].append(f, [])
+        
+        self.moves['jabA'].canDI = False
 
     def createMoveJabB(self):
         f = [ self.frameData(19, 2),
@@ -165,10 +197,36 @@ class Cat(battlechar.BattleChar):
         self.createMoveSwordBeamGroundEnd()
         
     def createMoveDashAttackA(self):
-        f = [ self.frameData(14, 2),
-              self.frameData(15, 2),
-              self.frameData(17, 4),
-              self.frameData(43, 12)]
+        
+        dam1 = 0
+        stun1 = 50
+        force1 = 16
+        angle1 = 16
+        
+        
+        dam2 = 130
+        stun2 = 120
+        force2 = 17
+        angle2 = 18
+        freeze2 = 5
+        
+        h = [
+                [
+                    (-16, -33, 33, -28, dam1, stun1, force1, angle1, [], 0),
+                    (-1, -39, 39, -33, dam1, stun1, force1, angle1, [], 0),
+                    (23, -40, 73, -35, dam1, stun1, force1, angle1, [], 0)
+                ],
+                [
+                    (48, -44, 83, -34, dam2, stun2, force2, angle2, [], freeze2),
+                    (25, -38, 53, -30, dam2, stun2, force2, angle2, [], freeze2)
+                ]
+            ]
+        
+        f = [ self.frameData(14, 2, []),
+              self.frameData(15, 2, []),
+              self.frameData(17, 4, [], h[0]),
+              self.frameData(43, 5, [], h[1]),
+              self.frameData(43, 7, [])]
         
         self.moves['dashAttackA'].append(f, [])
         self.moves['dashAttackA'].canDI = False
@@ -177,6 +235,7 @@ class Cat(battlechar.BattleChar):
         self.moves['dashAttackA'].frames[2].ignoreSpeedCap = True
         self.moves['dashAttackA'].frames[2].ignoreFriction = True
         self.moves['dashAttackA'].frames[3].setVelX = 0
+        self.moves['dashAttackA'].frames[3].resetHitPotential = True
         
         
 
@@ -240,23 +299,6 @@ class Cat(battlechar.BattleChar):
         self.moves['neutralAirBLag'] = move.Move(f, [])
         self.moves['neutralAirBLag'].canDI = False
 
-    def createMoveJabThrust(self):
-        f = [ self.frameData(17, 5),
-              self.frameData(16, 12) ]
-        t = []
-        self.moves['jabThrust'] = move.Move(f, t)
-        self.moves['jabThrust'].canDI = False
-        self.moves['jabThrust'].frames[0].setVelX = 45
-        self.moves['jabThrust'].frames[0].ignoreFriction = True
-        self.moves['jabThrust'].frames[0].ignoreSpeedCap = True
-        self.moves['jabThrust'].frames[1].setVelX = 0
-
-    def createMoveJabCancel(self):
-        f = [ self.frameData(14, 5),
-              self.frameData(0, 3) ]
-        self.moves['jabCancel'] = move.Move(f, [])
-        self.moves['jabCancel'].canDI = False
-
     def createMoveUpB(self):
         f = [ self.frameData(6, 4),
               self.frameData(7, 4),
@@ -291,11 +333,25 @@ class Cat(battlechar.BattleChar):
         self.moves['chargeSword'].chargeBlade = True
 
     def createMoveDownA(self):
-        f = [ self.frameData(42, 2),
-              self.frameData(43, 5),
-              self.frameData(43, 2),
-              self.frameData(42, 2),
-              self.frameData(18, 2)]
+        
+        dam1 = 60
+        stun1 = 45
+        force1 = 14
+        angle1 = 32
+        freeze1 = 2
+        
+        h = [
+                [
+                    (48, -44, 83, -34, dam1, stun1, force1, angle1, [], freeze1),
+                    (25, -38, 53, -30, dam1, stun1, force1, angle1, [], freeze1)
+                ]
+             ]
+        
+        f = [ self.frameData(42, 2, []),
+              self.frameData(43, 6, [], h[0]),
+              self.frameData(43, 2, []),
+              self.frameData(42, 2, []),
+              self.frameData(18, 2, [])]
 
         t = [ ['exitFrame', move.Transition(-1, None, None, None, 'ducking')] ]
 
