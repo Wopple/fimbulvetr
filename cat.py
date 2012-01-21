@@ -82,6 +82,7 @@ class Cat(battlechar.BattleChar):
         self.createMoveJabA()
         self.createMoveJabB()
         self.createMoveDownA()
+        self.createMoveDownB()
         self.createMoveDashAttackA()
         self.createMoveUpB()
         self.createNeutralAirB()
@@ -166,12 +167,12 @@ class Cat(battlechar.BattleChar):
             ]
         
         f = [ self.frameData(48, 3, []),
-              self.frameData(49, 2, [], h[0]),
+              self.frameData(49, 1, [], h[0]),
               self.frameData(50, 1, [], h[1]),
               self.frameData(51, 1, [], h[2]),
               self.frameData(52, 1, [], h[3]),
               self.frameData(53, 2, []),
-              self.frameData(54, 8, []),
+              self.frameData(54, 9, []),
               self.frameData(55, 2, []) ]
         
         
@@ -357,6 +358,61 @@ class Cat(battlechar.BattleChar):
 
         self.moves['downA'].append(f, t)
         self.moves['downA'].canDI = False
+        
+    def createMoveDownB(self):
+        
+        dam1 = 20
+        stun1 = 101
+        force1 = 3
+        angle1 = 90
+        freeze1 = 2
+        
+        h = [
+                [
+                    (16, -12, 86, 3, dam1, stun1, force1, angle1, [('untechable')], freeze1),
+                ]
+            ]
+        
+        f = [self.frameData(22, 4, []),
+             self.frameData(56, 1, []),
+             self.frameData(57, 2, []),
+             self.frameData(58, 2, []),
+             self.frameData(59, 2, []),
+             
+             self.frameData(60, 1, [], h[0]),
+             self.frameData(61, 1, [], h[0]),
+             self.frameData(62, 1, [], h[0]),
+             self.frameData(63, 1, [], h[0]),
+             self.frameData(60, 1, [], h[0]),
+             self.frameData(61, 1, [], h[0]),
+             self.frameData(62, 1, [], h[0]),
+             self.frameData(63, 1, [], h[0]),
+             self.frameData(60, 1, [], h[0]),
+             self.frameData(61, 1, [], h[0]),
+             self.frameData(62, 1, [], h[0]),
+             self.frameData(63, 1, [], h[0]),
+             self.frameData(60, 1, [], h[0]),
+             self.frameData(61, 1, [], h[0]),
+             self.frameData(62, 1, [], h[0]),
+             self.frameData(63, 1, [], h[0]),
+             self.frameData(60, 1, [], h[0]),
+             self.frameData(61, 1, [], h[0]),
+             self.frameData(62, 1, [], h[0]),
+             self.frameData(63, 1, [], h[0]),
+             
+             self.frameData(58, 2, []),
+             self.frameData(57, 2, []),
+             self.frameData(22, 10, []) ]
+        
+        t = []
+        
+        self.moves['downB'].append(f, t)
+        self.moves['downB'].canDI = False
+        
+        self.moves['downB'].frames[10].resetHitPotential = True
+        self.moves['downB'].frames[14].resetHitPotential = True
+        self.moves['downB'].frames[18].resetHitPotential = True
+        self.moves['downB'].frames[22].resetHitPotential = True
 
     def createProjectiles(self):
         self.createProjectileSwordBeams()
