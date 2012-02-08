@@ -23,7 +23,7 @@ class Cat(battlechar.BattleChar):
         self.dashAccel = 13.0
         self.groundFriction = 1.1
         self.airAccel = 1.5
-        self.airVelMax = 8.5
+        self.airVelMax = 8.2
         self.airFriction = 1.2
         self.airFrictionStunned = self.airFriction * 0.3
         self.vertAccel = 0.8
@@ -34,7 +34,7 @@ class Cat(battlechar.BattleChar):
         self.prevEnergy = self.catEnergy.value
         self.energyDelayTick = CAT_ENERGY_DELAY
         self.energy = self.catEnergy
-        super(Cat, self).__init__(1000)
+        super(Cat, self).__init__(1000, 15)
         self.initSpecMoves()
 
         self.speciesDesc = ("An all-around warrior that wields a blade" +
