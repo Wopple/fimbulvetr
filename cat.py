@@ -93,6 +93,8 @@ class Cat(battlechar.BattleChar):
         self.createMoveStun2()
         self.createMoveStun3()
         self.createMoveStun4()
+        self.createMoveGroundHit()
+        self.createMoveStandUp()
 
         self.createSuperMoves()
 
@@ -815,6 +817,30 @@ class Cat(battlechar.BattleChar):
 
         for i in range(len(self.moves['stun4'].frames)):
             self.moves['stun4'].frames[i].ignoreSpeedCap = True
+            
+    def createMoveGroundHit(self):
+        
+        f = [ self.frameData(71, 2),
+              self.frameData(72, 4),
+              self.frameData(73, 2),
+              self.frameData(74, 1),
+              self.frameData(73, 1),
+              self.frameData(74, 10),
+              self.frameData(74, 2),
+              self.frameData(74, 80) ]
+        
+        self.moves['groundHit'].append(f, [])
+        self.moves['groundHit'].frames[0].fx.append(['dust', (28, 0), True])
+        self.moves['groundHit'].frames[0].fx.append(['dust', (-28, 0), False])
+        self.moves['groundHit'].frames[1].fx.append(['shockwave', (0, 0), True])
+        
+    def createMoveStandUp(self):
+        f = [ self.frameData(75, 4),
+              self.frameData(76, 7),
+              self.frameData(18, 4)]
+
+        self.moves['standUp'].append(f, [])
+        
 
     def getCatEnergyLevel(self):
         x = len(CAT_ENERGY_SECTIONS)

@@ -504,8 +504,13 @@ class Model(mvc.Model):
 
     def testKey(self, k):
         p = self.players[self.cameraPlayer]
+        
+        xVel = -10;
+        if (not p.facingRight):
+            xVel *= -1
+        p.getHit(5, 150, [xVel, -8])
 
-        self.players[0].superEnergy.add(self.players[0].superEnergy.maximum / 5)
+        #self.players[0].superEnergy.add(self.players[0].superEnergy.maximum / 5)
 
 
     def checkProjForEdge(self, p):
