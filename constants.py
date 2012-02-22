@@ -4,7 +4,7 @@ import sys
 
 import math
 
-VERSION = "0.1.3"
+VERSION = "0.1.4"
 
 FULL_SCREEN = False
 FRAME_RATE = 40
@@ -58,7 +58,7 @@ INTRO_SPEEDS = [4, 30, 5, 50, 5, 15]
 
 SHOW_RED_DOT = False
 SHOW_TEAL_DOTS = False
-SHOW_HURTBOXES = False
+SHOW_HURTBOXES = True
 SHOW_HITBOXES = True
 SHOW_BLOCKBOXES = False
 SHOW_TRIGGER_AREA = False
@@ -796,7 +796,16 @@ temp = [ ["00.png", (24, 61)],
          ["73.png", (34, 27)],
          ["74.png", (34, 27)],
          ["75.png", (34, 27)],
-         ["76.png", (34, 27)]]
+         ["76.png", (34, 27)],
+         ["77.png", (48, 59)],
+         ["78.png", (48, 59)],
+         ["79.png", (48, 59)],
+         ["80.png", (48, 59)],
+         ["81.png", (48, 59)],
+         ["82.png", (48, 59)],
+         ["83.png", (48, 59)],
+         ["84.png", (48, 59)],
+         ["85.png", (48, 59)]]
 
 CAT_IMAGES = []
 for i in temp:

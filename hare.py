@@ -2636,7 +2636,7 @@ class Hare(battlechar.BattleChar):
 
         damage1 = 0
         stun1 = 52
-        knockback1 = 20
+        knockback1 = 18
         angle1 = 0
 
         damage2 = 100
@@ -2650,7 +2650,7 @@ class Hare(battlechar.BattleChar):
                      [('fx', None)], 0)
                 ],
                 [
-                    (-12, -47, 59, -23, damage2, stun2, knockback2, angle2,
+                    (-12, -47, 70, -23, damage2, stun2, knockback2, angle2,
                      [], 0)
                 ]
             ]

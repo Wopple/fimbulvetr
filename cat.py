@@ -21,7 +21,7 @@ class Cat(battlechar.BattleChar):
         self.runVelMax = 9.5
         self.walkAccel = 2.5
         self.dashAccel = 13.0
-        self.groundFriction = 1.1
+        self.groundFriction = 1.4
         self.airAccel = 1.5
         self.airVelMax = 8.2
         self.airFriction = 1.2
@@ -95,6 +95,12 @@ class Cat(battlechar.BattleChar):
         self.createMoveStun4()
         self.createMoveGroundHit()
         self.createMoveStandUp()
+        self.createMoveStandForward()
+        self.createMoveStandBackward()
+        
+        self.createMoveGrabbed()
+        self.createMoveGrabbed2()
+        self.createMoveGrabbedRelease()
 
         self.createSuperMoves()
 
@@ -818,6 +824,59 @@ class Cat(battlechar.BattleChar):
         for i in range(len(self.moves['stun4'].frames)):
             self.moves['stun4'].frames[i].ignoreSpeedCap = True
             
+    def createMoveGrabbed(self):
+        r = [
+                [
+                    (-11, -61, 4, -44),
+                    (-8, -44, 5, -22),
+                    (4, -42, 9, -38),
+                    (-6, -24, 8, -18),
+                    (-3, -18, 2, 3),
+                    (1, -17, 3, -6),
+                    (5, -18, 8, 3),
+                    (7, -17, 10, 3)
+                ]
+             ]
+        
+        f = [ self.frameData(66, 2, r[0]),
+              self.frameData(66, 5, r[0]),
+              self.frameData(66, 2, r[0]) ]
+
+        self.moves['grabbed'].append(f, [])
+        self.moves['grabbed'].grabPos = (12, 0)
+        
+    def createMoveGrabbed2(self):
+        
+        r = [
+                [
+                    (-11, -61, 4, -44),
+                    (-8, -44, 5, -22),
+                    (4, -42, 9, -38),
+                    (-6, -24, 8, -18),
+                    (-3, -18, 2, 3),
+                    (1, -17, 3, -6),
+                    (5, -18, 8, 3),
+                    (7, -17, 10, 3)
+                ]
+             ]
+
+        f = [ self.frameData(66, 2, r[0]) ]
+
+        self.moves['grabbed2'].append(f, [])
+        self.moves['grabbed2'].grabPos = (12, 0)
+        
+    def createMoveGrabbedRelease(self):
+
+        f = [ self.frameData(65, 2),
+              self.frameData(65, 1),
+              self.frameData(65, 22)]
+
+        self.moves['grabbedRelease'].append(f, [])
+        self.moves['grabbedRelease'].frames[1].setVelX = -20.0
+        self.moves['grabbedRelease'].frames[1].setFrictionX = 0.5
+        self.moves['grabbedRelease'].frames[2].setFrictionX = 0.75
+        
+            
     def createMoveGroundHit(self):
         
         f = [ self.frameData(71, 2),
@@ -837,10 +896,51 @@ class Cat(battlechar.BattleChar):
     def createMoveStandUp(self):
         f = [ self.frameData(75, 4),
               self.frameData(76, 7),
-              self.frameData(18, 4)]
+              self.frameData(85, 4)]
 
         self.moves['standUp'].append(f, [])
         
+    def createMoveStandForward(self):
+        f = [ self.frameData(75, 3),
+              self.frameData(77, 3),
+              self.frameData(78, 2),
+              self.frameData(79, 2),
+              self.frameData(80, 2),
+              self.frameData(81, 2),
+              self.frameData(82, 2),
+              self.frameData(83, 1),
+              self.frameData(84, 1),
+              self.frameData(85, 4) ]
+
+        self.moves['standForward'].append(f, [])
+
+        self.moves['standForward'].frames[1].setVelX = 16.0
+        self.moves['standForward'].frames[9].setVelX = 0
+
+        for i in range(len(self.moves['standForward'].frames)):
+            self.moves['standForward'].frames[i].setFrictionX = self.groundFriction * 0.55
+            self.moves['standForward'].frames[i].ignoreSpeedCap = True
+        
+    def createMoveStandBackward(self):
+        f = [ self.frameData(75, 3),
+              self.frameData(84, 2),
+              self.frameData(83, 2),
+              self.frameData(82, 2),
+              self.frameData(81, 2),
+              self.frameData(80, 2),
+              self.frameData(79, 1),
+              self.frameData(78, 1),
+              self.frameData(77, 1),
+              self.frameData(85, 4) ]
+
+        self.moves['standBackward'].append(f, [])
+
+        self.moves['standBackward'].frames[1].setVelX = -16.0
+        self.moves['standBackward'].frames[9].setVelX = 0
+
+        for i in range(len(self.moves['standBackward'].frames)):
+            self.moves['standBackward'].frames[i].setFrictionX = self.groundFriction * 0.55
+            self.moves['standBackward'].frames[i].ignoreSpeedCap = True
 
     def getCatEnergyLevel(self):
         x = len(CAT_ENERGY_SECTIONS)
