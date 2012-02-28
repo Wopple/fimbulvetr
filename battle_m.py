@@ -947,7 +947,7 @@ class Model(mvc.Model):
         return NET_MESSAGE_SIZE
 
     def checkForFX(self, p):
-        if p.currSubframe == 0:
+        if p.currSubframe == 0 and p.canEffect:
             for i in p.getCurrentFrame().fx:
                 facing = i[2]
                 basePos = [i[1][0], i[1][1]]
@@ -956,6 +956,7 @@ class Model(mvc.Model):
                     basePos[0] *= -1
                 pos = add_points(p.preciseLoc, basePos)
                 self.fx.append(fx.FX(pos, facing, i[0]))
+                p.canEffect = False
 
     def createTransitionDust(self, p):
         if p.currMove == p.moves['groundHit'] or p.currMove.isStun:

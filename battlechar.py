@@ -31,6 +31,7 @@ class BattleChar(object):
         self.canTech = True
         self.dropThroughPlatform = None
         self.dashBuffer = [0, 0]
+        self.canEffect = True
 
         self.superMoves = []
         self.superMovesAir = []
@@ -377,6 +378,7 @@ class BattleChar(object):
         self.currFrame = frame
         self.currSubframe = 0
         self.attackCanHit = True
+        self.canEffect = True
 
         if (self.currMove is None) or (len(self.currMove.frames) == 0):
             if (self.inAir):
@@ -466,6 +468,9 @@ class BattleChar(object):
                     return False
                 else:
                     self.energy.add(-t.var2)
+            elif t.var1 == 3: #Energy minimum to perform
+                if self.energy.value < t.var2:
+                    return False
             self.setCurrMove(t.destination)
             if not key == 'exitFrame':
                 self.actLeft = False

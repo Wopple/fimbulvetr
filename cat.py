@@ -538,7 +538,7 @@ class Cat(battlechar.BattleChar):
         
     def createMoveDownB(self):
         
-        dam1 = 20
+        dam1 = 22
         stun1 = 101
         force1 = 3
         angle1 = 90
@@ -581,7 +581,8 @@ class Cat(battlechar.BattleChar):
              self.frameData(57, 2, []),
              self.frameData(22, 10, []) ]
         
-        t = []
+        t = [['attackB', move.Transition(3, CAT_ENERGY_SECTIONS[0], 6, 25, 'lowexplosion')],
+             ['attackBDown', move.Transition(3, CAT_ENERGY_SECTIONS[0], 6, 25, 'lowexplosion')]]
         
         self.moves['downB'].append(f, t)
         self.moves['downB'].canDI = False
@@ -590,6 +591,46 @@ class Cat(battlechar.BattleChar):
         self.moves['downB'].frames[14].resetHitPotential = True
         self.moves['downB'].frames[18].resetHitPotential = True
         self.moves['downB'].frames[22].resetHitPotential = True
+        
+        self.createMoveLowExplosion()
+        
+    def createMoveLowExplosion(self):
+        
+        dam1 = 90
+        stun1 = 200
+        force1 = 15
+        angle1 = 90
+        freeze1 = 5
+        
+        h = [
+                [
+                    (6, -44, 86, 4, dam1, stun1, force1, angle1, [], freeze1),
+                ]
+            ]
+        
+        f = [self.frameData(86, 2, [], h[0]),
+             self.frameData(86, 5, []),
+             self.frameData(87, 1, []),
+             self.frameData(88, 1, []),
+             self.frameData(89, 2, []),
+             self.frameData(90, 3, []),
+             self.frameData(91, 5, []),
+             self.frameData(92, 5, []),
+             self.frameData(93, 4, []),
+             self.frameData(94, 3, []),
+             self.frameData(0, 3, []),
+             ]
+        
+        t = []
+        
+        self.moves['lowexplosion'] = move.Move(f, t)
+        self.moves['lowexplosion'].canDI = False
+        
+        self.moves['lowexplosion'].frames[1].setVelX = -4
+        self.moves['lowexplosion'].frames[0].fx.append(['runicexplosion', (52, -1), True])
+        for m in self.moves['lowexplosion'].frames:
+            m.setFrictionX = 0.32
+        
 
     def createProjectiles(self):
         self.createProjectileSwordBeams()

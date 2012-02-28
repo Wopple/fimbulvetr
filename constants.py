@@ -58,8 +58,8 @@ INTRO_SPEEDS = [4, 30, 5, 50, 5, 15]
 
 SHOW_RED_DOT = False
 SHOW_TEAL_DOTS = False
-SHOW_HURTBOXES = True
-SHOW_HITBOXES = True
+SHOW_HURTBOXES = False
+SHOW_HITBOXES = False
 SHOW_BLOCKBOXES = False
 SHOW_TRIGGER_AREA = False
 
@@ -805,7 +805,16 @@ temp = [ ["00.png", (24, 61)],
          ["82.png", (48, 59)],
          ["83.png", (48, 59)],
          ["84.png", (48, 59)],
-         ["85.png", (48, 59)]]
+         ["85.png", (48, 59)],
+         ["86.png", (35, 62)],
+         ["87.png", (35, 62)],
+         ["88.png", (35, 62)],
+         ["89.png", (35, 62)],
+         ["90.png", (35, 62)],
+         ["91.png", (35, 62)],
+         ["92.png", (35, 62)],
+         ["93.png", (35, 62)],
+         ["94.png", (35, 62)],]
 
 CAT_IMAGES = []
 for i in temp:
@@ -896,7 +905,12 @@ temp = [ ['00.png', (44, 35)],
          ['25.png', (9, 60)],
          ['26.png', (9, 60)],
          ['27.png', (9, 60)],
-         ['28.png', (9, 60)]]
+         ['28.png', (9, 60)],
+         ['29.png', (86, 65)],
+         ['30.png', (86, 65)],
+         ['31.png', (86, 65)],
+         ['32.png', (86, 65)],
+         ['33.png', (86, 65)]]
 FX_IMAGES = []
 for i in temp:
     FX_IMAGES.append([pygame.image.load(os.path.join(DIREC_FX_GRAPHICS, i[0])).convert_alpha(), i[1]])

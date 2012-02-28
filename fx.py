@@ -95,6 +95,12 @@ class FX(object):
                   [26, 1],
                   [27, 1],
                   [28, 1] ]
+        elif t == 'runicexplosion':
+            f = [ [29, 2],
+                  [30, 1],
+                  [31, 2],
+                  [32, 2],
+                  [33, 2] ]
 
         for i in f:
             self.frames.append(Frame(FX_IMAGES[i[0]][0],
