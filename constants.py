@@ -60,7 +60,7 @@ SHOW_RED_DOT = False
 SHOW_TEAL_DOTS = False
 SHOW_HURTBOXES = False
 SHOW_HITBOXES = False
-SHOW_BLOCKBOXES = False
+SHOW_BLOCKBOXES = True
 SHOW_TRIGGER_AREA = False
 
 DASH_BUFFER_MAX = 8
@@ -814,7 +814,9 @@ temp = [ ["00.png", (24, 61)],
          ["91.png", (35, 62)],
          ["92.png", (35, 62)],
          ["93.png", (35, 62)],
-         ["94.png", (35, 62)],]
+         ["94.png", (35, 62)],
+         ["95.png", (24, 61)],
+         ["96.png", (28, 54)]]
 
 CAT_IMAGES = []
 for i in temp:

@@ -111,6 +111,9 @@ class Cat(battlechar.BattleChar):
         self.createMoveGrabbed()
         self.createMoveGrabbed2()
         self.createMoveGrabbedRelease()
+        
+        self.createMoveBlock()
+        self.createMoveLowBlock()
 
         self.createSuperMoves()
 
@@ -132,6 +135,36 @@ class Cat(battlechar.BattleChar):
         
         f = [ self.frameData(0, 2, r[0]) ]
         self.moves['idle'].append(f, [])
+        
+    def createMoveBlock(self):
+
+        b = [
+                [
+                    (10, -68, 12, -25),
+                    (1, -62, 11, -48)
+                ]
+            ]
+
+
+        f = [ self.frameData(95, 2, [], [], b[0]) ]
+
+        self.moves['blocking'].append(f, [])
+        
+        
+    def createMoveLowBlock(self):
+
+        b = [
+                [
+                   (12, -26, 14, 1),
+                   (4, -11, 14, 1)
+                ]
+            ]
+
+
+        f = [ self.frameData(96, 2, [], [], b[0]) ]
+
+        self.moves['lowBlocking'].append(f, [])
+        
 
     def createMoveWalking(self):
         r = [
