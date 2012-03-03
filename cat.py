@@ -84,6 +84,7 @@ class Cat(battlechar.BattleChar):
         self.createMoveDownA()
         self.createMoveDownB()
         self.createMoveDashAttackA()
+        self.createMoveUpA()
         self.createMoveUpB()
         self.createNeutralAirB()
 
@@ -510,6 +511,157 @@ class Cat(battlechar.BattleChar):
         self.moves['neutralAirBLag'] = move.Move(f, [])
         self.moves['neutralAirBLag'].canDI = False
 
+
+    def createMoveUpA(self):
+        
+        h = [
+                [
+                    [34, -84, 47, -67],
+                    [39, -71, 54, -57],
+                    [44, -59, 60, -47]
+                ],
+                [
+                    [9, -98, 24, -85],
+                    [19, -92, 35, -80],
+                    [28, -86, 48, -73]
+                ],
+                [
+                    [-20, -99, 27, -88]
+                ],
+                [
+                    [-45, -85, -27, -74],
+                    [-34, -91, -15, -81],
+                    [-25, -97, -10, -90],
+                    [-48, -76, -34, -68]
+                ],
+                [
+                    [-51, -79, -40, -60],
+                    [-53, -61, -45, -46],
+                    [-56, -48, -47, -35]
+                ],
+                [
+                    [-58, -44, -47, -33],
+                    [-55, -34, -43, -25],
+                    [-50, -26, -39, -16],
+                    [-47, -17, -36, -6]
+                ],
+                [
+                    [-33, -13, -18, -3],
+                    [-22, -10, -7, 0],
+                    [-14, -6, 1, 4],
+                    [-3, -2, 10, 6]
+                ],
+                [
+                    [-10, -3, 9, 8],
+                    [5, -4, 20, 4],
+                    [13, -6, 34, 2]
+                ],
+                [
+                    [46, -36, 57, -23],
+                    [43, -25, 51, -16],
+                    [40, -20, 45, -10],
+                    [35, -12, 44, -2],
+                    [31, -5, 39, 4]
+                ],
+                [
+                    [45, -62, 56, -17]
+                ],
+                [
+                    [28, -88, 41, -76],
+                    [35, -78, 45, -70],
+                    [40, -71, 50, -64],
+                    [44, -65, 55, -57],
+                    [48, -57, 58, -52]
+                ],
+                [
+                    [6, -97, 18, -89],
+                    [14, -92, 28, -85],
+                    [23, -87, 36, -81],
+                    [31, -84, 45, -76]
+                ],
+                [
+                    [-20, -98, 26, -88]
+                ],
+                [
+                    [-39, -88, -24, -80],
+                    [-29, -90, -17, -84],
+                    [-20, -94, -9, -88],
+                    [-15, -98, 0, -92]
+                ],
+                [
+                    [-37, -89, -31, -79],
+                    [-40, -82, -35, -71],
+                    [-44, -75, -39, -67],
+                    [-48, -68, -41, -61],
+                    [-52, -62, -45, -55],
+                    [-55, -57, -48, -51]
+                ],
+                [
+                    [-57, -46, -48, -36],
+                    [-54, -37, -44, -27],
+                    [-51, -28, -42, -19],
+                    [-48, -20, -40, -12],
+                    [-45, -13, -38, -7]
+                ],
+                [
+                    [-33, -13, -16, -3],
+                    [-22, -10, -5, 1],
+                    [-10, -5, 6, 5]
+                ],
+                [
+                    [1, -2, 18, 6],
+                    [13, -5, 29, 1],
+                    [25, -8, 39, -2],
+                    [33, -10, 42, -6]
+                ],
+                [
+                    [39, -36, 49, -27],
+                    [35, -28, 44, -18],
+                    [30, -21, 36, -12],
+                    [27, -14, 33, -7],
+                    [23, -8, 29, -2]
+                ]
+             ]
+        
+        dam1 = 65
+        stun1 = 150
+        force1 = 8
+        angle1 = 90
+        freeze1 = 3
+        
+        for j in range(len(h)):
+            h[j] = [i + [dam1, stun1, force1, angle1, [], freeze1] for i in h[j]]
+        
+        
+        f = [ self.frameData(116, 4),
+              self.frameData(97, 3, [], h[0]),
+              self.frameData(98, 3, [], h[1]),
+              self.frameData(99, 2, [], h[2]),
+              self.frameData(100, 2, [], h[3]),
+              self.frameData(101, 2, [], h[4]),
+              self.frameData(102, 2, [], h[5]),
+              self.frameData(103, 1, [], h[6]),
+              self.frameData(104, 1, [], h[7]),
+              self.frameData(105, 1, [], h[8]),
+              self.frameData(106, 2, [], h[9]),
+              self.frameData(107, 2, [], h[10]),
+              self.frameData(108, 2, [], h[11]),
+              self.frameData(109, 2, [], h[12]),
+              self.frameData(110, 2, [], h[13]),
+              self.frameData(111, 2, [], h[14]),
+              self.frameData(112, 1, [], h[15]),
+              self.frameData(113, 1, [], h[16]),
+              self.frameData(114, 2, [], h[17]),
+              self.frameData(115, 3, [], h[18]),
+              self.frameData(116, 5) ]
+        
+        t = []
+        
+        self.moves['upA'].append(f, t)
+        self.moves['upA'].canDI = False
+        self.moves['upA'].frames[7].resetHitPotential = True
+        self.moves['upA'].frames[17].resetHitPotential = True
+
     def createMoveUpB(self):
         f = [ self.frameData(6, 4),
               self.frameData(7, 4),
@@ -654,7 +806,7 @@ class Cat(battlechar.BattleChar):
              self.frameData(0, 3, []),
              ]
         
-        t = []
+        t = [['attackA', move.Transition(None, None, 2, 8, 'lowexplosiondash')]]
         
         self.moves['lowexplosion'] = move.Move(f, t)
         self.moves['lowexplosion'].canDI = False
@@ -663,7 +815,18 @@ class Cat(battlechar.BattleChar):
         self.moves['lowexplosion'].frames[0].fx.append(['runicexplosion', (52, -1), True])
         for m in self.moves['lowexplosion'].frames:
             m.setFrictionX = 0.32
+            
+        self.createMoveLowExplosionDash()
+            
+    def createMoveLowExplosionDash(self):
+        f = [self.frameData(97, 4,)]
+        t = [['exitFrame', move.Transition(-1, None, None, None, 'upA')]]
         
+        
+        self.moves['lowexplosiondash'] = move.Move(f, t)
+        self.moves['lowexplosiondash'].canDI = False
+        self.moves['lowexplosiondash'].frames[0].setVelX = 4
+        self.moves['lowexplosiondash'].frames[0].ignoreFriction = True
 
     def createProjectiles(self):
         self.createProjectileSwordBeams()
