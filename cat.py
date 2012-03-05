@@ -633,9 +633,9 @@ class Cat(battlechar.BattleChar):
                 ]
              ]
         
-        dam1 = 65
+        dam1 = 35
         stun1 = 150
-        force1 = 8
+        force1 = 7
         angle1 = 90
         freeze1 = 3
         
@@ -665,8 +665,8 @@ class Cat(battlechar.BattleChar):
               self.frameData(115, 3, [], h[18]),
               self.frameData(116, 5) ]
         
-        t = [['attackA', move.Transition(3, CAT_ENERGY_SECTIONS[1], 16, 19, 'aetherpiercer')],
-             ['attackAUp', move.Transition(3, CAT_ENERGY_SECTIONS[1], 16, 19, 'aetherpiercer')]]
+        t = [['attackA', move.Transition(3, CAT_ENERGY_SECTIONS[1], 17, 20, 'aetherpiercer')],
+             ['attackAUp', move.Transition(3, CAT_ENERGY_SECTIONS[1], 17, 20, 'aetherpiercer')]]
         
         self.moves['upA'].append(f, t)
         self.moves['upA'].canDI = False
@@ -835,9 +835,9 @@ class Cat(battlechar.BattleChar):
         
     def createMoveLowExplosion(self):
         
-        dam1 = 90
+        dam1 = 75
         stun1 = 200
-        force1 = 15
+        force1 = 12
         angle1 = 90
         freeze1 = 5
         
