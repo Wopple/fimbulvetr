@@ -36,6 +36,7 @@ class Cat(battlechar.BattleChar):
         self.energy = self.catEnergy
         super(Cat, self).__init__(1000, 15)
         self.initSpecMoves()
+        self.bladeChargeHit = True
 
         self.speciesDesc = ("An all-around warrior that wields a blade" +
                             " enchanted with Galdr runes.  Capable of both" +
@@ -59,9 +60,18 @@ class Cat(battlechar.BattleChar):
 
     def update(self):
         super(Cat, self).update()
+        
+        hitCheck = False
+        if (self.attackCanHit) and (not self.bladeChargeHit):
+            self.bladeChargeHit = True
+        elif (not self.attackCanHit) and (self.bladeChargeHit):
+            self.bladeChargeHit = False
+            hitCheck = True
+            
+            
 
         if self.energyIsChangable:
-            if self.currMove.chargeBlade:
+            if self.currMove.chargeBlade or hitCheck:
                 self.catEnergy.add(CAT_ENERGY_RECHARGE)
                 self.energyDelayTick = 0
             else:
@@ -564,7 +574,7 @@ class Cat(battlechar.BattleChar):
                     [31, -5, 39, 4]
                 ],
                 [
-                    [45, -62, 56, -17]
+                    [45, -62, 60, -17]
                 ],
                 [
                     [28, -88, 41, -76],
@@ -655,18 +665,62 @@ class Cat(battlechar.BattleChar):
               self.frameData(115, 3, [], h[18]),
               self.frameData(116, 5) ]
         
-        t = []
+        t = [['attackA', move.Transition(3, CAT_ENERGY_SECTIONS[1], 16, 19, 'aetherpiercer')],
+             ['attackAUp', move.Transition(3, CAT_ENERGY_SECTIONS[1], 16, 19, 'aetherpiercer')]]
         
         self.moves['upA'].append(f, t)
         self.moves['upA'].canDI = False
         self.moves['upA'].frames[7].resetHitPotential = True
         self.moves['upA'].frames[17].resetHitPotential = True
+        
+        self.createMoveAetherPiercer()
+        
+    def createMoveAetherPiercer(self):
+        
+        dam1 = 0
+        stun1 = 150
+        force1 = 8
+        angle1 = 75
+        freeze1 = 0
+        
+        dam2 = 120
+        stun2 = 230
+        force2 = 22
+        angle2 = 75
+        freeze2 = 8
+        
+        h = [
+                [
+                    (22, -61, 41, -28, dam1, stun1, force1, angle1, [], freeze1),
+                    (12, -36, 30, -4, dam1, stun1, force1, angle1, [], freeze1)
+
+                ],
+                [
+                    (29, -101, 48, -71, dam2, stun2, force2, angle2, [], freeze2),
+                    (40, -108, 56, -85, dam2, stun2, force2, angle2, [], freeze2),
+                    (21, -82, 41, -48, dam2, stun2, force2, angle2, [], freeze2)
+                ]
+             ]
+        
+        f = [ self.frameData(117, 5),
+              self.frameData(118, 2, [], h[0]),
+              self.frameData(119, 3, [], h[1]),
+              self.frameData(119, 20, [])]
+        
+        t = []
+        
+        self.moves['aetherpiercer'] = move.Move(f, t)
+        self.moves['aetherpiercer'].canDI = False
+        
+        self.moves['aetherpiercer'].frames[1].setVelX = 2.5
+        self.moves['aetherpiercer'].frames[2].resetHitPotential = True
+        
 
     def createMoveUpB(self):
         f = [ self.frameData(6, 4),
               self.frameData(7, 4),
-              self.frameData(8, 4),
-              self.frameData(9, 4)]
+              self.frameData(8, 3),
+              self.frameData(9, 3)]
         t = [ ['releaseB', move.Transition(None, None, 2, None, 'idle')],
               ['exitFrame', move.Transition(-1, None, None, None, 'chargeSword')] ]
         self.moves['upB'].append(f, t)
@@ -806,12 +860,13 @@ class Cat(battlechar.BattleChar):
              self.frameData(0, 3, []),
              ]
         
-        t = [['attackA', move.Transition(None, None, 2, 8, 'lowexplosiondash')]]
+        t = [['attackA', move.Transition(None, None, 2, 8, 'lowexplosiondash')],
+             ['attackAUp', move.Transition(None, None, 2, 8, 'lowexplosiondash')]]
         
         self.moves['lowexplosion'] = move.Move(f, t)
         self.moves['lowexplosion'].canDI = False
         
-        self.moves['lowexplosion'].frames[1].setVelX = -4
+        self.moves['lowexplosion'].frames[1].setVelX = -3.5
         self.moves['lowexplosion'].frames[0].fx.append(['runicexplosion', (52, -1), True])
         for m in self.moves['lowexplosion'].frames:
             m.setFrictionX = 0.32
@@ -825,7 +880,7 @@ class Cat(battlechar.BattleChar):
         
         self.moves['lowexplosiondash'] = move.Move(f, t)
         self.moves['lowexplosiondash'].canDI = False
-        self.moves['lowexplosiondash'].frames[0].setVelX = 4
+        self.moves['lowexplosiondash'].frames[0].setVelX = 5
         self.moves['lowexplosiondash'].frames[0].ignoreFriction = True
 
     def createProjectiles(self):

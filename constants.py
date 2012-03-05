@@ -259,7 +259,7 @@ HARE_ENERGY_NAME = "Air Element"
 CAT_ENERGY_MAX = 1200
 CAT_ENERGY_USAGE = 3
 CAT_ENERGY_BATTLE_START = 700
-CAT_ENERGY_DELAY = 30
+CAT_ENERGY_DELAY = 35
 CAT_ENERGY_RECHARGE = 22
 CAT_ENERGY_NAME = "Galdr Blade"
 
@@ -836,7 +836,10 @@ temp = [ ["00.png", (24, 61)],
          ["113.png", (57, 100)],
          ["114.png", (57, 100)],
          ["115.png", (57, 100)],
-         ["116.png", (57, 100)]]
+         ["116.png", (57, 100)],
+         ["117.png", (57, 100)],
+         ["118.png", (57, 100)],
+         ["119.png", (57, 100)]]
 
 CAT_IMAGES = []
 for i in temp:
