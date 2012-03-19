@@ -30,6 +30,12 @@ class View(mvc.View):
         for b in self.model.bars:
             b.draw(self.screen)
         self.drawInterfaceExtras()
+        
+        
+        for i in range(2):
+            self.screen.blit(self.model.damageTag, self.model.damageTagRects[i].topleft)
+            self.screen.blit(self.model.getDamagePercentText(i), self.model.damagePercentRects[i].topleft)
+        
 
         self.model.countdown.draw(self.screen)
         self.drawEndingText()

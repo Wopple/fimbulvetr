@@ -32,6 +32,8 @@ class BattleChar(object):
         self.dropThroughPlatform = None
         self.dashBuffer = [0, 0]
         self.canEffect = True
+        
+        self.damageMultiplier = 1.0
 
         self.superMoves = []
         self.superMovesAir = []
@@ -588,4 +590,7 @@ class BattleChar(object):
             s = self.superIcons[self.currSuperMove]
             
         return s
+    
+    def getDamagePercentText(self):
+        return str(int(self.damageMultiplier * 100)) + "%"
         

@@ -242,6 +242,8 @@ class Model(mvc.Model):
                 result = mapstructure.Spire(s[0])
             elif sType == "O":
                 result = mapstructure.Origin(s[0])
+            elif sType == "A":
+                result = mapstructure.Altar(s[0])
 
             if not result is None:
                 self.structures.append(result)
@@ -420,6 +422,8 @@ class Model(mvc.Model):
                 if dist <= BATTLE_TRIGGER_RANGE:
                     self.pendingBattle = [c, d]
                     self.encounterPause = 0
+                    c.battleChar.damageMultiplier = c.damageMultiplier()
+                    d.battleChar.damageMultiplier = d.damageMultiplier()
                     return
 
     def checkForStructureOwnership(self, first=False):
@@ -445,16 +449,22 @@ class Model(mvc.Model):
            
         fortressCount = 0
         spireCount = 0
+        altarCount = 0
         for s in self.structures:
             if (s.team-1) == self.team:
                 if isinstance(s, mapstructure.Fortress):
                     fortressCount += 1
                 if isinstance(s, mapstructure.Spire):
                     spireCount += 1
+                if isinstance(s, mapstructure.Altar):
+                    altarCount += 1
 
 
         if checker:
-            self.unitHUD.updateStructureCount(fortressCount, spireCount)
+            for c in self.charactersInTeams[self.team]:
+                c.altarCount = altarCount
+            
+            self.unitHUD.updateStructureCount(fortressCount, spireCount, altarCount)
             
             self.recreateTerritory()
             
@@ -839,6 +849,7 @@ class Model(mvc.Model):
 
     def backOffEncounterFinal(self):
         for c in self.characters:
+            self.checkTerrain(c)
             c.blinkOn = True
             c.blinkTick = 0
             if c.isDead():

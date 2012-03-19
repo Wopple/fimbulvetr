@@ -69,6 +69,30 @@ class Model(mvc.Model):
 
         self.countdown = countdown.Countdown(BATTLE_COUNTDOWN_LENGTH)
         self.createEndingText()
+        
+        self.damageTagRects = []
+        self.damagePercentRects = []
+        for i in range(2):
+            rect = pygame.Rect((0, 0), (80, 100))
+            if (i == 0):
+                rect.left = 0
+            else:
+                rect.right = SCREEN_SIZE[0]
+            rect.top = SCREEN_SIZE[1] - 55
+            self.damageTagRects.append(rect)
+            
+            rect2 = pygame.Rect((0, 0), (80, 100))
+            if (i == 0):
+                rect2.left = 0
+            else:
+                rect2.right = SCREEN_SIZE[0]
+            rect2.top = rect.top + 18
+            self.damagePercentRects.append(rect2)
+            
+        self.damageTag = textrect.render_textrect("Strength", STRUCTURE_COUNT_FONT, self.damageTagRects[0],
+                                                  ALMOST_BLACK, BLACK, 1, True)
+        
+        
 
     def checkFrameByFrame(self):
         highest = 0
@@ -891,7 +915,7 @@ class Model(mvc.Model):
                 self.actOnGrab(i, p, mem, hitter, grab)
                 return
 
-            damage = mem.damage
+            damage = int(mem.damage * hitter.damageMultiplier)
             stun = mem.stun
             prop = mem.properties
 
@@ -1035,6 +1059,11 @@ class Model(mvc.Model):
         
         self.superIcon = SuperIcon(pygame.Rect((x, y), BATTLE_SUPER_ICON_SIZE), c.getSuperIcon(), c.superEnergy)
         
+    def getDamagePercentText(self, i):
+        c = self.players[i]
+        return textrect.render_textrect(c.getDamagePercentText(), DAMAGE_PERCENT_FONT, self.damagePercentRects[i],
+                                                 ALMOST_BLACK, BLACK, 1, True)
+        
         
 class SuperIcon(drawable.Drawable):
     def __init__(self, inRect, inImage, energy):
@@ -1077,12 +1106,10 @@ class SuperIcon(drawable.Drawable):
             temp.blit(rightSide, (leftSideWidth, 0))
             
         self.image = temp
-
-
                 
 
 def testData():
-    heroes = [cat.Cat(), cat.Cat()]
+    heroes = [hare.Hare(), cat.Cat()]
     #heroes = [hare.Hare(), hare.Hare()]
     
     for h in heroes:

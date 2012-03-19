@@ -383,6 +383,14 @@ MOUNTAIN = 2
 WATER = 3
 FORTRESS = 4
 
+HOME_TERRAINS = {"hare" : PLAINS,
+                 "fox"  : FOREST,
+                 "cat"  : PLAINS}
+
+HOME_TERRAIN_DAMAGE_BONUS = 0.1
+ALTAR_DAMAGE_BONUS = 0.2
+
+
 HARE_MAP_SPEED_TERRAIN_MODIFIERS = [1.0,
                                     0.6,
                                     0.3,
@@ -430,12 +438,14 @@ PASSIVE_HEALTH_REGAIN_AMOUNT = 2
 
 FORTRESS_TERRITORY_RADIUS = 420
 SPIRE_TERRITORY_RADIUS = 300
+ALTAR_TERRITORY_RADIUS = 180
 ORIGIN_TERRITORY_RADIUS = 250
 
 BASE_CAPTURE_RATE = 100
 BASE_CAPTURE_DEGRADE = 160
-FORTRESS_CAPTURE_TIME = 70000
+FORTRESS_CAPTURE_TIME = 100000
 SPIRE_CAPTURE_TIME = 15000
+ALTAR_CAPTURE_TIME = 20000
 
 TERRITORY_DEGREES_PER_DOT = 3
 
@@ -517,7 +527,7 @@ UNIT_HUD_ENERGY_BAR_BORDER_SIZE = 3
 UNIT_HUD_SUPER_ICON_SIZE = (40, 40)
 
 UNIT_HUD_STRUCTURE_PANEL_HEIGHT = 55
-UNIT_HUD_STRUCTURE_PANEL_SPACING = 120
+UNIT_HUD_STRUCTURE_PANEL_SPACING = 70
 
 temp = []
 BACKGROUNDS = []
@@ -893,7 +903,8 @@ for i in temp:
 
 
 mapItemsList = [["fortress", "fortressneutral.png", "fortressblue.png", "fortressred.png", (29, 53)],
-                ["spire", "spireneutral.png", "spireblue.png", "spirered.png", (15, 51)] ]
+                ["spire", "spireneutral.png", "spireblue.png", "spirered.png", (15, 51)],
+                ["altar", "altarneutral.png", "altarblue.png", "altarred.png", (20, 64)] ]
 MAP_ITEMS = {}
 for i in mapItemsList:
     MAP_ITEMS[i[0]] = []
@@ -956,7 +967,9 @@ temp = ['pauseicon.png',
         'fortressblue.png',
         'fortressred.png',
         'spireblue.png',
-        'spirered.png' ]
+        'spirered.png',
+        'altarblue.png',
+        'altarred.png' ]
         
 
 INTERFACE_GRAPHICS = []
@@ -970,6 +983,7 @@ TERRAIN_ICONS = [None, INTERFACE_GRAPHICS[6],
 
 FORTRESS_COUNT_ICONS = [INTERFACE_GRAPHICS[12], INTERFACE_GRAPHICS[13]]
 SPIRE_COUNT_ICONS = [INTERFACE_GRAPHICS[14], INTERFACE_GRAPHICS[15]]
+ALTAR_COUNT_ICONS = [INTERFACE_GRAPHICS[16], INTERFACE_GRAPHICS[17]]
 
 
 temp = ['grass.png',
@@ -1000,7 +1014,8 @@ temp = [ ["fontdata.ttf",10],
          ["fontheadline.ttf", 50],
          ["fontapple.ttf", 14],
          ["fontdum1.ttf", 14],
-         ["fontdata.ttf",14] ]
+         ["fontdata.ttf",14],
+         ["fontdata.ttf",22] ]
 FONTS = []
 for i in temp:
     FONTS.append(pygame.font.Font(
@@ -1015,6 +1030,7 @@ CHARACTER_SELECTION_FONT = FONTS[6]
 COUNTDOWN_FONT = FONTS[7]
 UNIT_HUD_NAMES_FONT = FONTS[9]
 STRUCTURE_COUNT_FONT = FONTS[10]
+DAMAGE_PERCENT_FONT = FONTS[11]
 
 VALID_INPUT_CHARACTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                           'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',

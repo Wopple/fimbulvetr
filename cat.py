@@ -635,15 +635,15 @@ class Cat(battlechar.BattleChar):
         
         dam1 = 35
         stun1 = 150
-        force1 = 7
-        angle1 = 90
+        force1 = 8.5
+        angle1 = 95
         freeze1 = 3
         
         for j in range(len(h)):
             h[j] = [i + [dam1, stun1, force1, angle1, [], freeze1] for i in h[j]]
         
         
-        f = [ self.frameData(116, 4),
+        f = [ self.frameData(116, 5),
               self.frameData(97, 3, [], h[0]),
               self.frameData(98, 3, [], h[1]),
               self.frameData(99, 2, [], h[2]),
@@ -663,7 +663,7 @@ class Cat(battlechar.BattleChar):
               self.frameData(113, 1, [], h[16]),
               self.frameData(114, 2, [], h[17]),
               self.frameData(115, 3, [], h[18]),
-              self.frameData(116, 5) ]
+              self.frameData(116, 6) ]
         
         t = [['attackA', move.Transition(3, CAT_ENERGY_SECTIONS[1], 17, 20, 'aetherpiercer')],
              ['attackAUp', move.Transition(3, CAT_ENERGY_SECTIONS[1], 17, 20, 'aetherpiercer')]]

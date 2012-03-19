@@ -151,6 +151,17 @@ class Spire(MapStructure):
     def modifyImages(self):
         pass
     
+class Altar(MapStructure):
+    def __init__(self, inPos):
+        
+        self.territorySize = ALTAR_TERRITORY_RADIUS
+        
+        super(Altar, self).__init__(inPos, MAP_ITEMS["altar"],
+                                    ALTAR_CAPTURE_TIME)
+        
+    def modifyImages(self):
+        pass
+    
 class Origin(MapStructure):
     def __init__(self, inPos):
         

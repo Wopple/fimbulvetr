@@ -57,14 +57,34 @@ class UnitHUD(object):
         self.fortressIcon = FORTRESS_COUNT_ICONS[self.team]
         self.fortressIconRect = pygame.Rect( (0,0), self.fortressIcon.get_size() )
         self.fortressIconRect.centery = (self.structureCountPanelRect.height / 2)
+        
+        self.altarIcon = ALTAR_COUNT_ICONS[self.team]
+        self.altarIconRect = pygame.Rect( (0,0), self.altarIcon.get_size() )
+        self.altarIconRect.left = UNIT_HUD_STRUCTURE_PANEL_SPACING
+        self.altarIconRect.centery = (self.structureCountPanelRect.height / 2)
+        
         self.spireIcon = SPIRE_COUNT_ICONS[self.team]
         self.spireIconRect = pygame.Rect( (0,0), self.spireIcon.get_size() )
-        self.spireIconRect.left = UNIT_HUD_STRUCTURE_PANEL_SPACING
+        self.spireIconRect.left = UNIT_HUD_STRUCTURE_PANEL_SPACING * 2
         self.spireIconRect.centery = (self.structureCountPanelRect.height / 2)
+        
+        
         
         self.iconRect = pygame.Rect((0,0), EFFECT_ICON_SIZE)
         self.iconRect.top = self.healthBarRect.top
         self.iconRect.left = self.healthBarRect.right + UNIT_HUD_BORDER_WIDTH
+        
+        
+        
+        self.damageTagRect = pygame.Rect((0, 0), (80, 100))
+        self.damageTagRect.right = self.rect.width
+        self.damageTagRect.top = self.rect.height - 55
+        self.damageTag = textrect.render_textrect("Strength", STRUCTURE_COUNT_FONT, self.damageTagRect,
+                                                  ALMOST_BLACK, BLACK, 1, True)
+        
+        self.damagePercentRect = pygame.Rect((0, 0), (80, 100))
+        self.damagePercentRect.right = self.damageTagRect.right
+        self.damagePercentRect.top = self.damageTagRect.top + 18
         
 
         self.createCharacterButtons()
@@ -77,7 +97,7 @@ class UnitHUD(object):
         
         self.createTerritoryIcons()
         self.createSuperIcons()
-        self.updateStructureCount(0, 0)
+        self.updateStructureCount(0, 0, 0)
         
     def update(self, val):
         self.changeCharacter(val)
@@ -381,16 +401,29 @@ class UnitHUD(object):
             
             
         self.image.blit(self.structureCountPanel, self.structureCountPanelRect.topleft)
+        
+        self.updateDamagePercent()
+        
+    def updateDamagePercent(self):
+        if (not self.currCharacter is None):
+            if not self.currCharacter.isDead():
+                self.image.blit(self.damageTag, self.damageTagRect.topleft)
+                
+                textSurface = textrect.render_textrect(self.currCharacter.getDamagePercentText(), DAMAGE_PERCENT_FONT, self.damagePercentRect,
+                                                 ALMOST_BLACK, BLACK, 1, True)
+                self.image.blit(textSurface, self.damagePercentRect.topleft)
             
-    def updateStructureCount(self, fortressCount, spireCount):
+    def updateStructureCount(self, fortressCount, spireCount, altarCount):
         self.fortressCount = fortressCount
         self.spireCount = spireCount
+        self.altarCount = altarCount
         
         self.structureCountPanel = pygame.Surface(self.structureCountPanelRect.size)
         self.structureCountPanel.fill(UNIT_HUD_COLORS[self.team])
         
         self.structureCountPanel.blit(self.fortressIcon, self.fortressIconRect.topleft)
         self.structureCountPanel.blit(self.spireIcon, self.spireIconRect.topleft)
+        self.structureCountPanel.blit(self.altarIcon, self.altarIconRect.topleft)
         
         textRect = pygame.Rect((0,0), (100, STRUCTURE_COUNT_FONT.get_height() + 4))
         
@@ -399,9 +432,15 @@ class UnitHUD(object):
         textRect.bottomleft = self.fortressIconRect.bottomright
         self.structureCountPanel.blit(textSurface, textRect.topleft)
         
+        
         textSurface = textrect.render_textrect(" x" + str(self.spireCount), STRUCTURE_COUNT_FONT, textRect,
                                                ALMOST_BLACK, BLACK, 0, True)
         textRect.left = self.spireIconRect.right - 3
+        self.structureCountPanel.blit(textSurface, textRect.topleft)
+        
+        textSurface = textrect.render_textrect(" x" + str(self.altarCount), STRUCTURE_COUNT_FONT, textRect,
+                                               ALMOST_BLACK, BLACK, 0, True)
+        textRect.left = self.altarIconRect.right - 3
         self.structureCountPanel.blit(textSurface, textRect.topleft)
         
         

@@ -15,11 +15,14 @@ from constants import *
 
 class MapChar(mapitem.MapItem):
     def __init__(self, inImages, speedBase, speedTerrainModifiers,
-                 speedTerritoryModifiers, speedHealthMod, team, name, battleChar, portrait):
+                 speedTerritoryModifiers, speedHealthMod, team,
+                 name, battleChar, portrait, homeTerrain):
         self.team = team
         self.name = name
         self.initPortrait(portrait)
         self.battleChar = battleChar
+        self.homeTerrain = homeTerrain
+        self.altarCount = 0
         
         self.speedBase = speedBase
         self.speedTerrainModifiers = speedTerrainModifiers
@@ -218,13 +221,26 @@ class MapChar(mapitem.MapItem):
         self.removed = False
         self.rezzing = False
         
+    def getDamagePercentText(self):
+        return str(int(self.damageMultiplier() * 100)) + "%"
+        
+    def damageMultiplier(self):
+        mult = 1.0
+        
+        if (self.currTerrain == self.homeTerrain) or (self.currTerrain == FORTRESS):
+            mult += HOME_TERRAIN_DAMAGE_BONUS
+            
+        mult += (ALTAR_DAMAGE_BONUS * self.altarCount)
+            
+        return mult
+        
 
 def Hare(team, battleChar, name="Unnamed Hare", portrait=None):
     c = MapChar(HARE_TOKENS, HARE_MAP_SPEED_BASE,
                 HARE_MAP_SPEED_TERRAIN_MODIFIERS,
                 HARE_MAP_SPEED_TERRITORY_MODIFIERS,
                 HARE_HEALTH_SPEED_MODIFIER,
-                team, name, battleChar, portrait)
+                team, name, battleChar, portrait, HOME_TERRAINS["hare"])
     return c
 
 
@@ -233,7 +249,7 @@ def Fox(team, battleChar, name="Unnamed Fox", portrait=None):
                 FOX_MAP_SPEED_TERRAIN_MODIFIERS,
                 FOX_MAP_SPEED_TERRITORY_MODIFIERS,
                 FOX_HEALTH_SPEED_MODIFIER,
-                team, name, battleChar, portrait)
+                team, name, battleChar, portrait, HOME_TERRAINS["fox"])
     return c
 
 def Cat(team, battleChar, name="Unnamed Cat", portrait=None):
@@ -241,5 +257,5 @@ def Cat(team, battleChar, name="Unnamed Cat", portrait=None):
                 CAT_MAP_SPEED_TERRAIN_MODIFIERS,
                 CAT_MAP_SPEED_TERRITORY_MODIFIERS,
                 CAT_HEALTH_SPEED_MODIFIER,
-                team, name, battleChar, portrait)
+                team, name, battleChar, portrait, HOME_TERRAINS["cat"])
     return c
