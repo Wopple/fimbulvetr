@@ -44,6 +44,7 @@ class BattleChar(object):
         self.setImage(temp, (40, 25))
 
         self.initMoves()
+        self.createColors()
         self.setCurrMove('idle')
 
         self.createDust = None

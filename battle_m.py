@@ -15,6 +15,8 @@ import platform
 import textrect
 import drawable
 
+import colorswapper
+
 import hare, fox, cat
 
 from constants import *
@@ -1060,6 +1062,11 @@ class Model(mvc.Model):
         self.superIcon = SuperIcon(pygame.Rect((x, y), BATTLE_SUPER_ICON_SIZE), c.getSuperIcon(), c.superEnergy)
         
     def getDamagePercentText(self, i):
+        if self.cameraPlayer == 1:
+            if i == 0:
+                i = 1
+            else:
+                i = 0
         c = self.players[i]
         return textrect.render_textrect(c.getDamagePercentText(), DAMAGE_PERCENT_FONT, self.damagePercentRects[i],
                                                  ALMOST_BLACK, BLACK, 1, True)
@@ -1109,11 +1116,14 @@ class SuperIcon(drawable.Drawable):
                 
 
 def testData():
-    heroes = [hare.Hare(), cat.Cat()]
+    heroes = [hare.Hare(), hare.Hare()]
     #heroes = [hare.Hare(), hare.Hare()]
     
+    #for i, h in enumerate(heroes):
+        #colorswapper.swapCharacter(h, (i==0), [0], screen)
+    
     for h in heroes:
-        h.superEnergy.change(h.superEnergy.maximum / 2)
+        h.superEnergy.change(h.superEnergy.maximum)
     
     size = (1000, 900)
     bg = pygame.Surface(size)

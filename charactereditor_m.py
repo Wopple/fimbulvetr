@@ -206,7 +206,8 @@ class Model(mvc.Model):
         #self.currSpeciesList = [ hare.Hare(),
         #                         fox.Fox(),
         #                         cat.Cat()]
-        self.currSpeciesList = [hare.Hare()]
+        self.currSpeciesList = [hare.Hare(),
+                                cat.Cat()]
         
         for s in self.currSpeciesList:
             s.preciseLoc = [self.menu.rect.center[0] + self.menu.rect.width,

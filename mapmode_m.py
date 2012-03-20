@@ -447,6 +447,7 @@ class Model(mvc.Model):
             if (s.checkForOwnershipChange(first)):
                 checker = True
            
+        #FIX BUG
         fortressCount = 0
         spireCount = 0
         altarCount = 0

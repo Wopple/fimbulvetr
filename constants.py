@@ -865,18 +865,18 @@ for i in temp:
     HARE_TOKENS.append([pygame.image.load(os.path.join(DIREC_HARE_GRAPHICS, i[0])).convert_alpha(), i[1]])
 
 
-temp = [ ['face1.png', (40, 46)],
-         ['face2.png', (40, 46)],
-         ['face2.png', (40, 46)] ]
+temp = [ ['face1.png', (28, 49)],
+         ['face2.png', (28, 49)],
+         ['face2.png', (28, 49)] ]
 
 FOX_TOKENS = []
 for i in temp:
     FOX_TOKENS.append([pygame.image.load(os.path.join(DIREC_FOX_GRAPHICS, i[0])).convert_alpha(), i[1]])
 
 
-temp = [ ['face1.png', (27, 30)],
-         ['face2.png', (27, 30)],
-         ['face2.png', (27, 30)] ]
+temp = [ ['face1.png', (30, 47)],
+         ['face2.png', (30, 47)],
+         ['face2.png', (30, 47)] ]
 
 CAT_TOKENS = []
 for i in temp:

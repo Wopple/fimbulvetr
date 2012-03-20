@@ -1354,3 +1354,6 @@ class Cat(battlechar.BattleChar):
         sg = move.SuperMove(n, d, [], [])
 
         self.appendSuperMove(sg, None)
+        
+    def createColors(self):
+        pass

@@ -14,11 +14,13 @@ def setImage():
     preImage = images[imageInc.value][0]
     preSize = preImage.get_size()
     currImage = pygame.transform.scale(preImage, (preSize[0] * zoom, preSize[1] * zoom))
+
     
     swapData = [
-                #colorswapper.ColorData((0, 153, 255, 255), 145, (0, 0, 102, 255), (0, 0, 102, 255) ,"Team Colored"),
-                colorswapper.ColorData((0, 0, 102, 255), 80, None, (20, 20, 20, 255) ,"Team Colored")
-                ]
+                    colorswapper.ColorData((70, 181, 255, 255), 5, (255, 70, 70, 255), (255, 70, 70, 255)),
+                    colorswapper.ColorData((0, 134, 223, 255), 5, (221, 0, 0, 255), (221, 0, 0, 255)),
+                    colorswapper.ColorData((23, 163, 255, 255), 5, (255, 17, 17, 255), (255, 17, 17, 255))
+               ]
     
     currImage = colorswapper.ColorSwapImage(currImage, swapData, True)
     
