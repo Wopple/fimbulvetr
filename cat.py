@@ -120,8 +120,11 @@ class Cat(battlechar.BattleChar):
         self.createMoveTechForward()
         self.createMoveTechBackward()
         
+        self.createMoveGrabbing()
+        self.createMoveGrabHold()
         self.createMoveGrabbed()
         self.createMoveGrabbed2()
+        self.createMoveGrabRelease()
         self.createMoveGrabbedRelease()
         
         self.createMoveBlock()
@@ -1166,6 +1169,42 @@ class Cat(battlechar.BattleChar):
         for i in range(len(self.moves['stun4'].frames)):
             self.moves['stun4'].frames[i].ignoreSpeedCap = True
             
+    def createMoveGrabbing(self):
+        
+        h = [
+                [
+                    (-12, -44, 38, -34, 0, 0, 0, 0, [('grab', 'grabHold', 'grabbed')], 0)
+                ],
+                [
+                    (-8, -42, 28, -36, 0, 0, 0, 0, [('grab', 'grabHold', 'grabbed')], 0)
+                ]
+             ]
+        
+        
+        
+        
+        f = [ self.frameData(126, 2, []),
+              self.frameData(127, 1, [], h[0]),
+              self.frameData(128, 2, [], h[1]),
+              self.frameData(129, 3, [], h[1]),
+              self.frameData(129, 8, []),
+              self.frameData(126, 2, []) ]
+
+        self.moves['grabbing'].append(f, [])
+        self.moves['grabbing'].frames[1].setVelX = 7.5
+        self.moves['grabbing'].frames[1].ignoreFriction = True
+        self.moves['grabbing'].frames[2].ignoreFriction = True
+        self.moves['grabbing'].frames[5].setVelX = -7.5
+        self.moves['grabbing'].frames[5].ignoreFriction = True
+        
+    def createMoveGrabHold(self):
+        f = [ self.frameData(129, 10, []),
+              self.frameData(129, 42, []),
+              self.frameData(129, 2, [])]
+        
+        self.moves['grabHold'].append(f, [])
+        self.moves['grabHold'].grabPos = (13, 0)
+            
     def createMoveGrabbed(self):
         r = [
                 [
@@ -1206,6 +1245,16 @@ class Cat(battlechar.BattleChar):
 
         self.moves['grabbed2'].append(f, [])
         self.moves['grabbed2'].grabPos = (12, 0)
+        
+    def createMoveGrabRelease(self):
+        f = [ self.frameData(126, 2, []),
+              self.frameData(126, 1, []),
+              self.frameData(126, 22, [])]
+
+        self.moves['grabRelease'].append(f, [])
+        self.moves['grabRelease'].frames[1].setVelX = -20.0
+        self.moves['grabRelease'].frames[1].setFrictionX = 0.5
+        self.moves['grabRelease'].frames[2].setFrictionX = 0.75
         
     def createMoveGrabbedRelease(self):
 

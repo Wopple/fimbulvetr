@@ -58,8 +58,8 @@ INTRO_SPEEDS = [4, 30, 5, 50, 5, 15]
 
 SHOW_RED_DOT = False
 SHOW_TEAL_DOTS = False
-SHOW_HURTBOXES = False
-SHOW_HITBOXES = False
+SHOW_HURTBOXES = True
+SHOW_HITBOXES = True
 SHOW_BLOCKBOXES = True
 SHOW_TRIGGER_AREA = False
 
@@ -855,7 +855,11 @@ temp = [ ["00.png", (24, 61)],
          ["122.png", (42, 64)],
          ["123.png", (42, 64)],
          ["124.png", (42, 64)],
-         ["125.png", (42, 64)]]
+         ["125.png", (42, 64)],
+         ["126.png", (43, 61)],
+         ["127.png", (43, 61)],
+         ["128.png", (43, 61)],
+         ["129.png", (43, 61)]]
 
 CAT_IMAGES = []
 for i in temp:
