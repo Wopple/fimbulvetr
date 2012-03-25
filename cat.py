@@ -96,6 +96,7 @@ class Cat(battlechar.BattleChar):
         self.createMoveDashAttackA()
         self.createMoveUpA()
         self.createMoveUpB()
+        self.createNeutralAirA()
         self.createNeutralAirB()
 
         self.createProjectiles()
@@ -462,6 +463,7 @@ class Cat(battlechar.BattleChar):
         
 
     def createMoveSwordBeamGroundEnd(self):
+        
         f = [ self.frameData(24, 2),
               self.frameData(25, 1),
               self.frameData(26, 10),
@@ -479,6 +481,39 @@ class Cat(battlechar.BattleChar):
         self.moves['swordbeamGround3'] = move.Move(f, t)
         self.moves['swordbeamGround3'].canDI = False
         self.moves['swordbeamGround3'].shoot.append( (0, 2, (64, -30)) )
+        
+    def createNeutralAirA(self):
+        dam1 = 70
+        stun1 = 60
+        force1 = 12
+        angle1 = 20
+        freeze1 = 5
+        
+        h = [
+                [
+                    (-25, -45, -5, -31, dam1, stun1, force1, angle1, [], freeze1),
+                    (-10, -42, 16, -26, dam1, stun1, force1, angle1, [], freeze1)
+                ],
+                [
+                    (-5, -40, 58, -21, dam1, stun1, force1, angle1, [], freeze1),
+                    (8, -45, 72, -29, dam1, stun1, force1, angle1, [], freeze1)
+                ]
+             ]
+        
+        f = [ self.frameData(120, 4, []),
+              self.frameData(121, 2, [], h[0]),
+              self.frameData(122, 1, [], h[1]),
+              self.frameData(123, 1, [], h[1]),
+              self.frameData(124, 2, []),
+              self.frameData(125, 5, []),
+              self.frameData(124, 5, [])]
+        
+        t = [['land', move.Transition(None, None, None, None, 'neutralAirALag')]]
+        
+        self.moves['neutralAirA'].append(f, t)
+        self.moves['neutralAirA'].reversable = True
+        
+        self.createMoveNeutralAirALag()
 
     def createNeutralAirB(self):
         f = [ self.frameData(34, 3),
@@ -498,6 +533,11 @@ class Cat(battlechar.BattleChar):
         self.createMoveSwordBeamAirEnd()
 
         self.createMoveNeutralAirBLag()
+        
+    def createMoveNeutralAirALag(self):
+        f = [ self.frameData(26, 6) ]
+        self.moves['neutralAirALag'] = move.Move(f, [])
+        self.moves['neutralAirALag'].canDI = False
 
 
     def createMoveSwordBeamAirEnd(self):

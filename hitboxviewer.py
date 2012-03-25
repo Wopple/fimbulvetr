@@ -22,7 +22,7 @@ def setImage():
                     colorswapper.ColorData((23, 163, 255, 255), 5, (255, 17, 17, 255), (255, 17, 17, 255))
                ]
     
-    currImage = colorswapper.ColorSwapImage(currImage, swapData, True)
+    #currImage = colorswapper.ColorSwapImage(currImage, swapData, True)
     
     preOffset = images[imageInc.value][1]
     offset = (preOffset[0] * zoom, preOffset[1] * zoom)

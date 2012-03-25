@@ -1116,7 +1116,7 @@ class SuperIcon(drawable.Drawable):
                 
 
 def testData():
-    heroes = [hare.Hare(), hare.Hare()]
+    heroes = [cat.Cat(), hare.Hare()]
     #heroes = [hare.Hare(), hare.Hare()]
     
     #for i, h in enumerate(heroes):

@@ -431,7 +431,14 @@ class Model(mvc.Model):
             s.emptyPlayerList()
         
         for t, team in enumerate(self.charactersInTeams):
+            altarCount = 0
+            
+            for s in self.structures:
+                if ((s.team-1) == t) and (isinstance(s, mapstructure.Altar)):
+                    altarCount += 1
+            
             for c in team:
+                c.altarCount = altarCount
                 if c.isDead():
                     continue
 
@@ -450,20 +457,17 @@ class Model(mvc.Model):
         #FIX BUG
         fortressCount = 0
         spireCount = 0
-        altarCount = 0
         for s in self.structures:
             if (s.team-1) == self.team:
                 if isinstance(s, mapstructure.Fortress):
                     fortressCount += 1
                 if isinstance(s, mapstructure.Spire):
                     spireCount += 1
-                if isinstance(s, mapstructure.Altar):
-                    altarCount += 1
+                    
+        altarCount = self.charactersInTeams[self.team][0].altarCount
 
 
         if checker:
-            for c in self.charactersInTeams[self.team]:
-                c.altarCount = altarCount
             
             self.unitHUD.updateStructureCount(fortressCount, spireCount, altarCount)
             

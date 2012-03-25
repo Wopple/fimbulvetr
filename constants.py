@@ -388,7 +388,7 @@ HOME_TERRAINS = {"hare" : PLAINS,
                  "cat"  : PLAINS}
 
 HOME_TERRAIN_DAMAGE_BONUS = 0.1
-ALTAR_DAMAGE_BONUS = 0.2
+ALTAR_DAMAGE_BONUS = 0.15
 
 
 HARE_MAP_SPEED_TERRAIN_MODIFIERS = [1.0,
@@ -849,16 +849,22 @@ temp = [ ["00.png", (24, 61)],
          ["116.png", (57, 100)],
          ["117.png", (57, 100)],
          ["118.png", (57, 100)],
-         ["119.png", (57, 100)]]
+         ["119.png", (57, 100)],
+         ["120.png", (42, 64)],
+         ["121.png", (42, 64)],
+         ["122.png", (42, 64)],
+         ["123.png", (42, 64)],
+         ["124.png", (42, 64)],
+         ["125.png", (42, 64)]]
 
 CAT_IMAGES = []
 for i in temp:
     CAT_IMAGES.append([pygame.image.load(os.path.join(DIREC_CAT_GRAPHICS, i[0])).convert_alpha(), i[1]])
 
 
-temp = [ ['face1.png', (24, 44)],
-         ['face2.png', (24, 44)],
-         ['face2.png', (24, 44)] ]
+temp = [ ['face1.png', (29, 48)],
+         ['face2.png', (29, 48)],
+         ['face2.png', (29, 48)] ]
 
 HARE_TOKENS = []
 for i in temp:
