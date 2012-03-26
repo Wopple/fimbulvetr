@@ -101,6 +101,19 @@ class FX(object):
                   [31, 2],
                   [32, 2],
                   [33, 2] ]
+        elif t == 'runicflame1':
+            f = [ [35, 3],
+                  [36, 1],
+                  [37, 1],
+                  [38, 1] ]
+        elif t == 'runicflame2':
+            f = [ [39, 3],
+                  [40, 2],
+                  [41, 1]]
+        elif t == 'runicflame3':
+            f = [ [42, 3],
+                  [43, 2],
+                  [44, 1]]
 
         for i in f:
             self.frames.append(Frame(FX_IMAGES[i[0]][0],

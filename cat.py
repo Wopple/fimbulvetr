@@ -127,6 +127,8 @@ class Cat(battlechar.BattleChar):
         self.createMoveGrabRelease()
         self.createMoveGrabbedRelease()
         
+        self.createMoveThrowForward()
+        
         self.createMoveBlock()
         self.createMoveLowBlock()
 
@@ -791,6 +793,39 @@ class Cat(battlechar.BattleChar):
         self.moves['chargeSword'] = move.Move(f, t)
         self.moves['chargeSword'].canDI = False
         self.moves['chargeSword'].chargeBlade = True
+        
+        self.moves['chargeSword'].frames[0].fx.append(['runicflame1', (-20, -63), True])
+        self.moves['chargeSword'].frames[1].fx.append(['runicflame2', (5, -65), False])
+        self.moves['chargeSword'].frames[2].fx.append(['runicflame3', (-8, -63), True])
+        self.moves['chargeSword'].frames[3].fx.append(['runicflame1', (-13, -63), True])
+        self.moves['chargeSword'].frames[4].fx.append(['runicflame2', (2, -66), True])
+        self.moves['chargeSword'].frames[5].fx.append(['runicflame3', (-18, -63), False])
+        self.moves['chargeSword'].frames[6].fx.append(['runicflame1', (-16, -67), True])
+        self.moves['chargeSword'].frames[7].fx.append(['runicflame2', (0, -63), False])
+        self.moves['chargeSword'].frames[8].fx.append(['runicflame3', (-3, -67), True])
+        self.moves['chargeSword'].frames[9].fx.append(['runicflame1', (-18, -62), False])
+        self.moves['chargeSword'].frames[10].fx.append(['runicflame2', (-6, -63), True])
+        self.moves['chargeSword'].frames[11].fx.append(['runicflame3', (4, -63), False])
+        self.moves['chargeSword'].frames[12].fx.append(['runicflame3', (-14, -66), False])
+        self.moves['chargeSword'].frames[13].fx.append(['runicflame2', (-2, -63), True])
+        
+        self.moves['chargeSword'].frames[0].fx.append(['runicflame3', (0, -63), True])
+        self.moves['chargeSword'].frames[1].fx.append(['runicflame1', (-14, -65), False])
+        self.moves['chargeSword'].frames[2].fx.append(['runicflame2', (-18, -63), True])
+        self.moves['chargeSword'].frames[3].fx.append(['runicflame3', (-2, -63), True])
+        self.moves['chargeSword'].frames[4].fx.append(['runicflame1', (-6, -66), True])
+        self.moves['chargeSword'].frames[5].fx.append(['runicflame2', (-15, -63), False])
+        self.moves['chargeSword'].frames[6].fx.append(['runicflame3', (3, -66), True])
+        self.moves['chargeSword'].frames[7].fx.append(['runicflame1', (-2, -63), False])
+        self.moves['chargeSword'].frames[8].fx.append(['runicflame1', (-6, -67), True])
+        self.moves['chargeSword'].frames[9].fx.append(['runicflame2', (-13, -62), False])
+        self.moves['chargeSword'].frames[10].fx.append(['runicflame2', (4, -63), True])
+        self.moves['chargeSword'].frames[11].fx.append(['runicflame3', (8, -63), False])
+        self.moves['chargeSword'].frames[12].fx.append(['runicflame1', (-11, -68), False])
+        self.moves['chargeSword'].frames[13].fx.append(['runicflame2', (-1, -63), True])
+        
+        for f in self.moves['chargeSword'].frames:
+            f.resetCanEffect = True
 
     def createMoveDownA(self):
         
@@ -1173,7 +1208,7 @@ class Cat(battlechar.BattleChar):
         
         h = [
                 [
-                    (-12, -44, 38, -34, 0, 0, 0, 0, [('grab', 'grabHold', 'grabbed')], 0)
+                    (-12, -44, 40, -34, 0, 0, 0, 0, [('grab', 'grabHold', 'grabbed')], 0)
                 ],
                 [
                     (-8, -42, 28, -36, 0, 0, 0, 0, [('grab', 'grabHold', 'grabbed')], 0)
@@ -1184,17 +1219,17 @@ class Cat(battlechar.BattleChar):
         
         
         f = [ self.frameData(126, 2, []),
-              self.frameData(127, 1, [], h[0]),
+              self.frameData(127, 2, [], h[0]),
               self.frameData(128, 2, [], h[1]),
               self.frameData(129, 3, [], h[1]),
               self.frameData(129, 8, []),
               self.frameData(126, 2, []) ]
 
         self.moves['grabbing'].append(f, [])
-        self.moves['grabbing'].frames[1].setVelX = 7.5
+        self.moves['grabbing'].frames[1].setVelX = 8.0
         self.moves['grabbing'].frames[1].ignoreFriction = True
         self.moves['grabbing'].frames[2].ignoreFriction = True
-        self.moves['grabbing'].frames[5].setVelX = -7.5
+        self.moves['grabbing'].frames[5].setVelX = -8.0
         self.moves['grabbing'].frames[5].ignoreFriction = True
         
     def createMoveGrabHold(self):
@@ -1266,6 +1301,74 @@ class Cat(battlechar.BattleChar):
         self.moves['grabbedRelease'].frames[1].setVelX = -20.0
         self.moves['grabbedRelease'].frames[1].setFrictionX = 0.5
         self.moves['grabbedRelease'].frames[2].setFrictionX = 0.75
+        
+    def createMoveThrowForward(self):
+        
+        damage1 = 6
+        stun1 = 52
+        knockback1 = 1.5
+        angle1 = 90
+        freeze1 = 1
+
+        damage2 = 85
+        stun2 = 210
+        knockback2 = 18
+        angle2 = 25
+        freeze2 = 3
+        
+        h = [
+                [
+                    (8, -63, 35, -28, damage1, stun1, knockback1, angle1, [('fx', None)], freeze1)
+                ],
+                [
+                    (8, -63, 35, -28, damage2, stun2, knockback2, angle2, [], freeze2)
+                ]
+            ]
+        
+        f = [ self.frameData(130, 3, []),
+              self.frameData(132, 1, [], h[0]),
+              self.frameData(133, 1, [], h[0]),
+              self.frameData(134, 1, [], h[0]),
+              self.frameData(132, 1, [], h[0]),
+              self.frameData(134, 1, [], h[0]),
+              self.frameData(133, 1, [], h[0]),
+              self.frameData(132, 1, [], h[0]),
+              self.frameData(134, 1, [], h[0]),
+              self.frameData(133, 1, [], h[0]),
+              self.frameData(132, 1, [], h[0]),
+              self.frameData(134, 1, [], h[0]),
+              self.frameData(133, 3, [], h[1]),
+              self.frameData(130, 20, []),
+              self.frameData(131, 5, []),
+              self.frameData(126, 2, [])]
+        
+        t = []
+        
+        self.moves['throwForward'].append(f, t)
+        
+        self.moves['throwForward'].frames[12].setVelX = -16.0
+        self.moves['throwForward'].frames[12].setFrictionX = 0.5
+        self.moves['throwForward'].frames[13].setFrictionX = 0.5
+        
+        for f in self.moves['throwForward'].frames:
+            f.resetHitPotential = True
+            f.resetCanEffect = True
+        
+        self.moves['throwForward'].frames[1].fx.append(['runicflame3', (22, -43), True])
+        self.moves['throwForward'].frames[2].fx.append(['runicflame1', (20, -49), True])
+        self.moves['throwForward'].frames[3].fx.append(['runicflame3', (20, -44), True])
+        self.moves['throwForward'].frames[4].fx.append(['runicflame2', (19, -42), True])
+        self.moves['throwForward'].frames[5].fx.append(['runicflame1', (22, -47), True])
+        self.moves['throwForward'].frames[6].fx.append(['runicflame3', (20, -45), True])
+        self.moves['throwForward'].frames[7].fx.append(['runicflame2', (21, -41), True])
+        self.moves['throwForward'].frames[8].fx.append(['runicflame1', (24, -44), True])
+        self.moves['throwForward'].frames[9].fx.append(['runicflame3', (19, -43), True])
+        self.moves['throwForward'].frames[10].fx.append(['runicflame2', (23, -49), True])
+        self.moves['throwForward'].frames[11].fx.append(['runicflame1', (22, -47), True])
+        
+        self.moves['throwForward'].frames[12].fx.append(['runicexplosion', (19, -48), True])
+        
+        
         
         
     def createMoveDeadFalling(self):

@@ -390,7 +390,8 @@ class BattleChar(object):
                 self.currMove = self.moves['idle']
 
     def getCurrentFrame(self):
-        return self.currMove.frames[self.currFrame]
+        if len(self.currMove.frames) > self.currFrame:
+            return self.currMove.frames[self.currFrame]
 
     def canAct(self):
         if self.blockstun > 0:
@@ -409,6 +410,8 @@ class BattleChar(object):
             t = self.actTransition('exitFrame', self.currFrame)
             if not t:
                 self.currFrame += 1
+                if (not self.getCurrentFrame() is None) and (self.getCurrentFrame().resetCanEffect):
+                    self.canEffect = True
 
         if self.currFrame >= len(self.currMove.frames):
             if self.currMove.isJump:

@@ -7,8 +7,10 @@ import mvc
 from constants import *
 
 class View(mvc.View):
+    
     def __init__(self, model=None, screen=None):
         super(View, self).__init__()
+        self.drawChecker = [True, False]
 
     def update(self, tickClock=True):
         self.screen.blit(BLACK_SCREEN, (0, 0))
@@ -17,9 +19,10 @@ class View(mvc.View):
         for p in self.model.platforms:
             p.draw(self.screen, self.model.rect.topleft)
 
-        for i, p in enumerate(self.model.players):
-            if self.model.returnCode[i] != 1:
-                p.draw(self.screen, self.model.rect.topleft)
+        for t in range(2):
+            for i, p in enumerate(self.model.players):
+                if self.model.returnCode[i] != 1 and self.drawChecker[t] == p.currMove.drawToBack:
+                    p.draw(self.screen, self.model.rect.topleft)
 
         for p in self.model.projectiles:
             p.draw(self.screen, self.model.rect.topleft)
@@ -30,7 +33,6 @@ class View(mvc.View):
         for b in self.model.bars:
             b.draw(self.screen)
         self.drawInterfaceExtras()
-        
         
         for i in range(2):
             self.screen.blit(self.model.damageTag, self.model.damageTagRects[i].topleft)

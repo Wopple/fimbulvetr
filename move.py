@@ -44,6 +44,7 @@ class Move(object):
         self.isSuper = False
         self.isSuperFlash = False
         self.ignoreGroundAir = False
+        self.drawToBack = False
 
 
     def append(self, f, t):
@@ -95,6 +96,7 @@ class Frame(object):
         self.buildHitboxes(hitboxData)
         self.buildBlockboxes(blockboxData)
         self.fx = []
+        self.resetCanEffect = False
 
     def buildBlockboxes(self, data):
         self.blockboxes = []
@@ -272,6 +274,7 @@ def baseGrabbed():
     m.canDI = False
     m.grabVal = -1
     m.grabPos = (0, 0)
+    m.drawToBack = True
     return m
 
 def baseGrabbed2():
@@ -292,6 +295,7 @@ def baseGrabbedRelease():
     t = [ ['exitFrame', Transition(-1, 0, None, None, 'idle')] ]
     m = Move([], t)
     m.canDI = False
+    m.drawToBack = True
     return m
 
 def baseThrow():
@@ -336,6 +340,7 @@ def baseStun():
     m = Move([], [])
     m.canDI = False
     m.isStun = True
+    m.drawToBack = True
     return m
 
 def baseStunNeedTech():
