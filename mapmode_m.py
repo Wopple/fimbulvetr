@@ -422,8 +422,8 @@ class Model(mvc.Model):
                 if dist <= BATTLE_TRIGGER_RANGE:
                     self.pendingBattle = [c, d]
                     self.encounterPause = 0
-                    c.battleChar.damageMultiplier = c.damageMultiplier()
-                    d.battleChar.damageMultiplier = d.damageMultiplier()
+                    c.battleChar.damagePercent = c.damagePercent()
+                    d.battleChar.damagePercent = d.damagePercent()
                     return
 
     def checkForStructureOwnership(self, first=False):

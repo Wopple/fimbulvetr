@@ -917,7 +917,7 @@ class Model(mvc.Model):
                 self.actOnGrab(i, p, mem, hitter, grab)
                 return
 
-            damage = int(mem.damage * hitter.damageMultiplier)
+            damage = int(mem.damage * hitter.getDamageMultiplier())
             stun = mem.stun
             prop = mem.properties
 
@@ -1116,7 +1116,7 @@ class SuperIcon(drawable.Drawable):
                 
 
 def testData():
-    heroes = [cat.Cat(), hare.Hare()]
+    heroes = [hare.Hare(), hare.Hare()]
     #heroes = [hare.Hare(), hare.Hare()]
     
     #for i, h in enumerate(heroes):

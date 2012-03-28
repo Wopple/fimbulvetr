@@ -222,10 +222,10 @@ class MapChar(mapitem.MapItem):
         self.rezzing = False
         
     def getDamagePercentText(self):
-        return str(int(self.damageMultiplier() * 100)) + "%"
+        return str(self.damagePercent()) + "%"
         
-    def damageMultiplier(self):
-        mult = 1.0
+    def damagePercent(self):
+        mult = 100
         
         if (self.currTerrain == self.homeTerrain) or (self.currTerrain == FORTRESS):
             mult += HOME_TERRAIN_DAMAGE_BONUS
