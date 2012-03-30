@@ -409,11 +409,29 @@ class Cat(battlechar.BattleChar):
         self.moves['jabA'].canDI = False
 
     def createMoveJabB(self):
-        f = [ self.frameData(19, 2),
-              self.frameData(20, 2),
-              self.frameData(21, 1),
-              self.frameData(22, 3),
-              self.frameData(23, 1)]
+        r = [
+                [
+                    (-12, -61, 5, -18),
+                    (-11, -19, -5, 2),
+                    (1, -19, 6, -12),
+                    (2, -14, 9, 0)
+                ],
+                [
+                    (-4, -55, 7, -43),
+                    (-4, -42, 4, -38),
+                    (-9, -38, 5, -13),
+                    (3, -14, 8, -10),
+                    (3, -10, 10, 0),
+                    (-10, -13, -6, -7),
+                    (-11, -7, -7, 1)
+                ]
+             ]
+        
+        f = [ self.frameData(19, 2, r[0]),
+              self.frameData(20, 2, r[0]),
+              self.frameData(21, 1, r[0]),
+              self.frameData(22, 3, r[0]),
+              self.frameData(23, 1, r[1])]
 
         t = [ ['bladelv1', move.Transition(None, None, 4, 4, 'swordbeamGround1')],
               ['bladelv2', move.Transition(None, None, 4, 4, 'swordbeamGround2')],
@@ -450,11 +468,57 @@ class Cat(battlechar.BattleChar):
                 ]
             ]
         
-        f = [ self.frameData(14, 2, []),
-              self.frameData(15, 2, []),
-              self.frameData(17, 4, [], h[0]),
-              self.frameData(43, 5, [], h[1]),
-              self.frameData(43, 7, [])]
+        r = [
+                [
+                    (-8, -59, 6, -44),
+                    (-6, -43, 7, -40),
+                    (-7, -40, 7, -18),
+                    (-7, -19, -3, 3),
+                    (4, -19, 8, -14),
+                    (5, -14, 9, -11),
+                    (3, -10, 6, -3),
+                    (2, -3, 6, 2)
+                ],
+                [
+                    (-11, -58, 2, -47),
+                    (-7, -46, 2, -42),
+                    (-8, -43, 5, -19),
+                    (-8, -20, -4, 1),
+                    (2, -19, 6, -15),
+                    (4, -15, 7, -9),
+                    (2, -9, 5, -5),
+                    (0, -4, 5, 1)
+                ],
+                [
+                    (11, -47, 20, -41),
+                    (9, -36, 18, -14)
+                ],
+                [
+                    (25, -49, 35, -37),
+                    (21, -38, 30, -27),
+                    (17, -31, 26, -20),
+                    (24, -28, 29, -23),
+                    (15, -37, 23, -31),
+                    (13, -26, 19, -14),
+                    (19, -22, 25, -13),
+                    (21, -13, 29, -9),
+                    (27, -11, 33, -6),
+                    (25, -7, 29, 0),
+                    (8, -18, 13, -14),
+                    (5, -14, 10, -11),
+                    (3, -12, 7, -8),
+                    (1, -9, 4, -6),
+                    (-3, -7, 2, -3),
+                    (-4, -3, 0, -1),
+                    (-7, -2, -2, 0)
+                ]
+            ]
+        
+        f = [ self.frameData(14, 2, r[0]),
+              self.frameData(15, 2, r[1]),
+              self.frameData(17, 4, r[2], h[0]),
+              self.frameData(43, 5, r[3], h[1]),
+              self.frameData(43, 7, r[3])]
         
         self.moves['dashAttackA'].append(f, [])
         self.moves['dashAttackA'].canDI = False
@@ -469,10 +533,32 @@ class Cat(battlechar.BattleChar):
 
     def createMoveSwordBeamGroundEnd(self):
         
-        f = [ self.frameData(24, 2),
-              self.frameData(25, 1),
-              self.frameData(26, 10),
-              self.frameData(0, 2) ]
+        r = [
+                [
+                    (-1, -59, 11, -41),
+                    (-2, -40, 8, -30),
+                    (-5, -31, 6, -19),
+                    (-8, -21, 8, -15),
+                    (-10, -15, -5, -8),
+                    (-11, -8, -7, 1),
+                    (3, -16, 9, -12),
+                    (5, -12, 11, 0),
+                    (8, -38, 15, -32)
+                ],
+                [
+                    (-11, -62, 6, -18),
+                    (4, -43, 13, -37),
+                    (-10, -18, -3, 1),
+                    (2, -19, 8, -12),
+                    (3, -12, 10, 0),
+                    (5, -4, 11, 1)
+                ]
+            ]
+        
+        f = [ self.frameData(24, 2, r[0]),
+              self.frameData(25, 1, r[0]),
+              self.frameData(26, 10, r[0]),
+              self.frameData(0, 2, r[1]) ]
         t = []
 
         self.moves['swordbeamGround1'] = move.Move(f, t)
@@ -521,11 +607,26 @@ class Cat(battlechar.BattleChar):
         self.createMoveNeutralAirALag()
 
     def createNeutralAirB(self):
-        f = [ self.frameData(34, 3),
-              self.frameData(35, 3),
-              self.frameData(36, 4),
-              self.frameData(37, 4),
-              self.frameData(38, 1)]
+        r = [
+                [
+                    (-11, -58, 3, -10)
+                ],
+                [
+                    (-4, -55, 7, -42),
+                    (-4, -41, 5, -38),
+                    (-8, -38, 4, -13),
+                    (0, -15, 7, -10),
+                    (2, -10, 6, -4),
+                    (-9, -14, -5, -9),
+                    (-12, -9, -7, -3)
+                ]
+            ]
+        
+        f = [ self.frameData(34, 3, r[0]),
+              self.frameData(35, 3, r[0]),
+              self.frameData(36, 4, r[0]),
+              self.frameData(37, 4, r[0]),
+              self.frameData(38, 1, r[1])]
 
         t = [ ['bladelv1', move.Transition(None, None, 4, 4, 'swordbeamAir1')],
               ['bladelv2', move.Transition(None, None, 4, 4, 'swordbeamAir2')],
@@ -540,16 +641,53 @@ class Cat(battlechar.BattleChar):
         self.createMoveNeutralAirBLag()
         
     def createMoveNeutralAirALag(self):
-        f = [ self.frameData(26, 6) ]
+        r = [
+                [
+                    (-1, -59, 11, -41),
+                    (-2, -40, 8, -30),
+                    (-5, -31, 6, -19),
+                    (-8, -21, 8, -15),
+                    (-10, -15, -5, -8),
+                    (-11, -8, -7, 1),
+                    (3, -16, 9, -12),
+                    (5, -12, 11, 0),
+                    (8, -38, 15, -32)
+                ]
+            ]
+        
+        f = [ self.frameData(26, 6, r[0]) ]
         self.moves['neutralAirALag'] = move.Move(f, [])
         self.moves['neutralAirALag'].canDI = False
 
 
     def createMoveSwordBeamAirEnd(self):
-        f = [ self.frameData(39, 2),
-              self.frameData(40, 1),
-              self.frameData(41, 12),
-              self.frameData(5, 2) ]
+        r = [
+                [
+                    (0, -53, 12, -40),
+                    (0, -40, 7, -32),
+                    (-4, -33, 6, -22),
+                    (-6, -22, 7, -16),
+                    (-7, -16, -4, -9),
+                    (-9, -9, -5, 0),
+                    (3, -16, 9, -14),
+                    (5, -14, 8, -3)
+                ],
+                [
+                    (-10, -53, 6, -37),
+                    (-9, -37, 9, -11),
+                    (-12, -31, -7, -26),
+                    (-16, -27, -11, -16),
+                    (-7, -14, -1, 5),
+                    (-10, -2, -2, 7),
+                    (-3, -13, 8, 2),
+                    (5, -12, 11, -2)
+                ]
+            ]
+        
+        f = [ self.frameData(39, 2, r[0]),
+              self.frameData(40, 1, r[0]),
+              self.frameData(41, 12, r[0]),
+              self.frameData(5, 2, r[1]) ]
         t = [['land', move.Transition(None, None, None, None, 'neutralAirBLag')]]
 
         self.moves['swordbeamAir1'] = move.Move(f, t)
@@ -562,7 +700,21 @@ class Cat(battlechar.BattleChar):
         self.moves['swordbeamAir3'].shoot.append( (0, 2, (64, -30)) )
 
     def createMoveNeutralAirBLag(self):
-        f = [ self.frameData(26, 8) ]
+        r = [
+                [
+                    (-1, -59, 11, -41),
+                    (-2, -40, 8, -30),
+                    (-5, -31, 6, -19),
+                    (-8, -21, 8, -15),
+                    (-10, -15, -5, -8),
+                    (-11, -8, -7, 1),
+                    (3, -16, 9, -12),
+                    (5, -12, 11, 0),
+                    (8, -38, 15, -32)
+                ]
+            ]
+        
+        f = [ self.frameData(26, 8, r[0]) ]
         self.moves['neutralAirBLag'] = move.Move(f, [])
         self.moves['neutralAirBLag'].canDI = False
 
@@ -762,10 +914,22 @@ class Cat(battlechar.BattleChar):
         
 
     def createMoveUpB(self):
-        f = [ self.frameData(6, 4),
-              self.frameData(7, 4),
-              self.frameData(8, 3),
-              self.frameData(9, 3)]
+        
+        r = [
+                [
+                    (-18, -59, 9, -41),
+                    (-10, -42, 5, -18),
+                    (-10, -19, -3, 1),
+                    (-1, -19, 7, -12),
+                    (2, -14, 8, -7),
+                    (3, -9, 10, 1)
+                ]
+             ]
+        
+        f = [ self.frameData(6, 4, r[0]),
+              self.frameData(7, 4, r[0]),
+              self.frameData(8, 3, r[0]),
+              self.frameData(9, 3, r[0])]
         t = [ ['releaseB', move.Transition(None, None, 2, None, 'idle')],
               ['exitFrame', move.Transition(-1, None, None, None, 'chargeSword')] ]
         self.moves['upB'].append(f, t)
@@ -774,20 +938,32 @@ class Cat(battlechar.BattleChar):
         self.createMoveChargeSword()
 
     def createMoveChargeSword(self):
-        f = [ self.frameData(10, 2),
-              self.frameData(11, 2),
-              self.frameData(12, 2),
-              self.frameData(13, 2),
-              self.frameData(11, 2),
-              self.frameData(10, 2),
-              self.frameData(12, 2),
-              self.frameData(11, 2),
-              self.frameData(10, 2),
-              self.frameData(13, 2),
-              self.frameData(12, 2),
-              self.frameData(10, 2),
-              self.frameData(13, 2),
-              self.frameData(11, 2) ]
+        r = [
+                [
+                    (-18, -59, 9, -41),
+                    (-10, -42, 5, -18),
+                    (-10, -19, -3, 1),
+                    (-1, -19, 7, -12),
+                    (2, -14, 8, -7),
+                    (3, -9, 10, 1)
+                ]
+             ]
+        
+        f = [ self.frameData(10, 2, r[0]),
+              self.frameData(11, 2, r[0]),
+              self.frameData(12, 2, r[0]),
+              self.frameData(13, 2, r[0]),
+              self.frameData(11, 2, r[0]),
+              self.frameData(10, 2, r[0]),
+              self.frameData(12, 2, r[0]),
+              self.frameData(11, 2, r[0]),
+              self.frameData(10, 2, r[0]),
+              self.frameData(13, 2, r[0]),
+              self.frameData(12, 2, r[0]),
+              self.frameData(10, 2, r[0]),
+              self.frameData(13, 2, r[0]),
+              self.frameData(11, 2, r[0]) ]
+        
         t = [ ['releaseB', move.Transition(None, None, None, None, 'idle')],
               ['exitFrame', move.Transition(-1, None, None, None, 'chargeSword')] ]
         self.moves['chargeSword'] = move.Move(f, t)
@@ -835,6 +1011,51 @@ class Cat(battlechar.BattleChar):
         angle1 = 32
         freeze1 = 2
         
+        r = [
+                [
+                    (10, -49, 22, -38),
+                    (9, -37, 19, -27),
+                    (6, -27, 15, -17),
+                    (1, -17, 14, -12),
+                    (-1, -12, 2, -6),
+                    (-4, -9, -1, -5),
+                    (-7, -5, -3, -2),
+                    (14, -13, 21, -10),
+                    (16, -10, 21, -5),
+                    (16, -5, 20, 0),
+                    (5, -35, 10, -25),
+                    (-2, -34, 8, -31),
+                    (19, -34, 24, -29),
+                    (23, -30, 28, -25)
+                ],
+                [
+                    (25, -49, 35, -37),
+                    (21, -38, 30, -27),
+                    (17, -31, 26, -20),
+                    (24, -28, 29, -23),
+                    (15, -37, 23, -31),
+                    (13, -26, 19, -14),
+                    (19, -22, 25, -13),
+                    (21, -13, 29, -9),
+                    (27, -11, 33, -6),
+                    (25, -7, 29, 0),
+                    (8, -18, 13, -14),
+                    (5, -14, 10, -11),
+                    (3, -12, 7, -8),
+                    (1, -9, 4, -6),
+                    (-3, -7, 2, -3),
+                    (-4, -3, 0, -1),
+                    (-7, -2, -2, 0)
+                ],
+                [
+                    (-11, -52, 5, -10),
+                    (-12, -12, -7, 2),
+                    (3, -16, 9, 1),
+                    (4, -3, 10, 2),
+                    (5, -31, 10, -23)
+                ]
+            ]
+        
         h = [
                 [
                     (48, -44, 83, -34, dam1, stun1, force1, angle1, [], freeze1),
@@ -842,11 +1063,11 @@ class Cat(battlechar.BattleChar):
                 ]
              ]
         
-        f = [ self.frameData(42, 2, []),
-              self.frameData(43, 6, [], h[0]),
-              self.frameData(43, 2, []),
-              self.frameData(42, 2, []),
-              self.frameData(18, 2, [])]
+        f = [ self.frameData(42, 2, r[0]),
+              self.frameData(43, 6, r[1], h[0]),
+              self.frameData(43, 2, r[1]),
+              self.frameData(42, 2, r[0]),
+              self.frameData(18, 2, r[2])]
 
         t = [ ['exitFrame', move.Transition(-1, None, None, None, 'ducking')] ]
 

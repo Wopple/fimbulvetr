@@ -1117,7 +1117,6 @@ class SuperIcon(drawable.Drawable):
 
 def testData():
     heroes = [hare.Hare(), hare.Hare()]
-    #heroes = [hare.Hare(), hare.Hare()]
     
     #for i, h in enumerate(heroes):
         #colorswapper.swapCharacter(h, (i==0), [0], screen)
