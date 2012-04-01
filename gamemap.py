@@ -542,18 +542,26 @@ def getMap(s):
     return GameMap(startingPoints, mapSize, horizAxis, flip,
                    mountains, water, forests, islands, rivers, structures)
 
-def drawMap(inMap):
+def drawMap(inMap, isNormal):
+    
+    if isNormal:
+        colorIndex = 0
+    else:
+        colorIndex = 1
+    
     mapImage = pygame.Surface.copy(inMap.surfaceTemplate)
+    mapImage.fill(TERRAIN_COLORS[colorIndex])
+        
     for i in inMap.water:
-        pygame.draw.circle(mapImage, WATER_FILL_COLOR, i[0], i[1])
+        pygame.draw.circle(mapImage, WATER_FILL_COLORS[colorIndex], i[0], i[1])
     for i in inMap.islands:
-        pygame.draw.circle(mapImage, TERRAIN_COLORS[0], i[0], i[1])
+        pygame.draw.circle(mapImage, TERRAIN_COLORS[colorIndex], i[0], i[1])
     for i in inMap.mountains:
-        pygame.draw.circle(mapImage, MOUNTAIN_FILL_COLOR, i[0], i[1])
+        pygame.draw.circle(mapImage, MOUNTAIN_FILL_COLORS[colorIndex], i[0], i[1])
     for i in inMap.forests:
-        pygame.draw.circle(mapImage, FOREST_FILL_COLOR, i[0], i[1])
+        pygame.draw.circle(mapImage, FOREST_FILL_COLORS[colorIndex], i[0], i[1])
     for i in inMap.rivers:
-        pygame.draw.circle(mapImage, WATER_FILL_COLOR, i[0], i[1])
+        pygame.draw.circle(mapImage, WATER_FILL_COLORS[colorIndex], i[0], i[1])
 
     if DEBUG_MODE:
         for m in range(2):
@@ -562,9 +570,10 @@ def drawMap(inMap):
                     if i[2] == m and i[3] == n:
                         pygame.draw.circle(mapImage, TEST_CIRCLE_COLORS[m][n],
                                            i[0], i[1])
-                        
-    mapImage = fillPattern(mapImage, TERRAIN_FILL_GRAPHICS[0], TERRAIN_COLORS[0])
-    mapImage = fillPattern(mapImage, TERRAIN_FILL_GRAPHICS[1], WATER_FILL_COLOR)
+                
+    if isNormal:        
+        mapImage = fillPattern(mapImage, TERRAIN_FILL_GRAPHICS[0], TERRAIN_COLORS[colorIndex])
+        mapImage = fillPattern(mapImage, TERRAIN_FILL_GRAPHICS[1], WATER_FILL_COLORS[colorIndex])
     
     return mapImage
 

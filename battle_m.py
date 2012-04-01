@@ -1124,7 +1124,7 @@ def testData():
     for h in heroes:
         h.superEnergy.change(h.superEnergy.maximum)
     
-    size = (1000, 900)
+    size = BATTLE_ARENA_SIZE
     bg = pygame.Surface(size)
     bg.fill((190, 190, 190))
     barSpace = 200
@@ -1138,15 +1138,57 @@ def testData():
     bg2.fill(PLATFORM_COLOR)
     bg.blit(bg2, (0, size[1] - BATTLE_AREA_FLOOR_HEIGHT))
 
-    platforms = []
-
-    platforms.append( platform.Platform(
-        (100, size[1] - BATTLE_AREA_FLOOR_HEIGHT - 150), 250 ) )
-    
-    platforms.append( platform.Platform(
-        (650, size[1] - BATTLE_AREA_FLOOR_HEIGHT - 150), 250 ) )
-    
-    platforms.append( platform.Platform(
-        (375, size[1] - BATTLE_AREA_FLOOR_HEIGHT - 260), 250 ) )
+    platforms = getPlatforms(PLAINS, MOUNTAIN)
     
     return [heroes, size, bg, platforms]
+
+
+def getPlatforms(leftTerrain, rightTerrain):
+    
+    platformsLeft = getPlatformsForSingleTerrain(leftTerrain, False)
+    platformsRight = getPlatformsForSingleTerrain(rightTerrain, True)
+    
+    masterList = []
+    for i in range(len(platformsLeft)):
+        masterList.append(platformsLeft[i])
+    for i in range(len(platformsRight)):
+        masterList.append(platformsRight[i])
+        
+    return masterList
+    
+    
+def getPlatformsForSingleTerrain(terrain, isRight):
+    
+    platforms = []
+    
+    HALF_SCREEN = (BATTLE_ARENA_SIZE[0] / 2)
+    
+    if terrain == PLAINS:
+        platforms.append( platform.Platform(
+            (200, BATTLE_ARENA_SIZE[1] - BATTLE_AREA_FLOOR_HEIGHT - 180), HALF_SCREEN - 200, terrain ) )
+    elif terrain == FOREST:
+        platforms.append( platform.Platform(
+            (100, BATTLE_ARENA_SIZE[1] - BATTLE_AREA_FLOOR_HEIGHT - 180), 175, terrain ) )
+        platforms.append( platform.Platform(
+            (375, BATTLE_ARENA_SIZE[1] - BATTLE_AREA_FLOOR_HEIGHT - 280), HALF_SCREEN - 350, terrain ) )
+    elif terrain == MOUNTAIN:
+        platforms.append( platform.Platform(
+            (400, BATTLE_ARENA_SIZE[1] - BATTLE_AREA_FLOOR_HEIGHT - 180), HALF_SCREEN - 400, terrain ) )
+        platforms.append( platform.Platform(
+            (150, BATTLE_ARENA_SIZE[1] - BATTLE_AREA_FLOOR_HEIGHT - 280), 140, terrain ) )
+        platforms.append( platform.Platform(
+            (400, BATTLE_ARENA_SIZE[1] - BATTLE_AREA_FLOOR_HEIGHT - 380), HALF_SCREEN - 400, terrain ) )
+        platforms.append( platform.Platform(
+            (150, BATTLE_ARENA_SIZE[1] - BATTLE_AREA_FLOOR_HEIGHT - 480), 140, terrain ) )
+        
+        
+    if isRight:
+        for p in platforms:
+            p.rect.right = BATTLE_ARENA_SIZE[0] - p.rect.left
+    
+    return platforms
+    
+    
+    
+    
+    

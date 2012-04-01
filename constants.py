@@ -56,6 +56,8 @@ MAIN_MENU_TITLE_POS = [ ((SCREEN_SIZE[0] / 6), 10),
 INTRO_MAX_FADE = 240
 INTRO_SPEEDS = [4, 30, 5, 50, 5, 15]
 
+BATTLE_ARENA_SIZE = (1000, 900)
+
 SHOW_RED_DOT = False
 SHOW_TEAL_DOTS = False
 SHOW_HURTBOXES = False
@@ -106,23 +108,35 @@ SPIRE_TEAM_COLORS = [(0, 162, 232, 255),
 SPIRE_NEUTRAL_COLOR = (96, 96, 96, 255)
 SPIRE_BASE_COLOR = (41, 123, 41, 255)
 
-TERRAIN_COLORS = [ (15, 111, 22, 255),
-                   (230, 230, 230, 255) ]
-
 
 ZOOM_CLICK = 0.9
 ZOOM_MAX = 1.0
 ZOOM_MIN = 0.15
 
-MOUNTAIN_FILL_COLOR = (87, 65, 40)
-WATER_FILL_COLOR = (37, 159, 218)
-FOREST_FILL_COLOR = (12, 69, 16)
+TERRAIN_COLORS = [ (15, 111, 22),
+                   (220, 220, 230) ]
+
+MOUNTAIN_FILL_COLORS = [(87, 65, 40),
+                       (105, 93, 82)]
+
+WATER_FILL_COLORS = [(37, 159, 218),
+                    (170, 220, 220)]
+
+FOREST_FILL_COLORS = [(12, 69, 16),
+                     (100, 150, 104)]
+
 
 TEST_CIRCLE_COLORS = [ [ (67, 5, 5),
                        (228, 20, 20) ],
                        [ (226, 205, 84),
                          (241, 231, 173) ]
                      ]
+
+PLATFORM_COLORS = ( (15, 111, 22),
+                    (12, 69, 16),
+                    (87, 65, 40),
+                    (250, 250, 210),
+                    (160, 160, 160))
 
 SCROLL_AREA_WIDTH = 15
 SCROLL_SPEED = 18
@@ -382,6 +396,7 @@ FOREST = 1
 MOUNTAIN = 2
 WATER = 3
 FORTRESS = 4
+
 
 HOME_TERRAINS = {"hare" : PLAINS,
                  "fox"  : FOREST,

@@ -355,7 +355,7 @@ def goGame(theMap, hostChars, clientChars, playerNum, conn):
             oldM = m
             testData = battle_m.testData()
             realData = m.getBattleData()
-            data = [realData[0], testData[1], testData[2], testData[3]]
+            data = [realData[0], testData[1], testData[2], battle_m.getPlatforms(realData[1][0], realData[1][1])]
             goBattle(data, conn)
             resolution = m.returnCode
             changeMVC(oldM, mapmode_v.View(), mapmode_c.Controller(), screen)

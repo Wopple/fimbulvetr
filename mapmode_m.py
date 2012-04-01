@@ -29,6 +29,7 @@ class Model(mvc.Model):
         self.team = team
         self.map = inMap
         self.zoomVal = 1.0
+        self.fimbulvetrPos = 250
         
         self.characters = inChars
         self.charactersInTeams = [[], []]
@@ -135,10 +136,28 @@ class Model(mvc.Model):
 
     def drawOrigMap(self):
         
-        self.mapOrigImage = gamemap.drawMap(self.map)
+        self.mapOrigImage = gamemap.drawMap(self.map, True)
+        self.mapWinterImage = gamemap.drawMap(self.map, False)
         self.drawZoomMap()
 
     def drawZoomMap(self):
+        
+        
+        #Draw winter to Map
+        winterSize = self.mapWinterImage.get_size()
+        dualMap = pygame.Surface(winterSize)
+        dualMap.blit(self.mapWinterImage, (0, 0))
+        
+        #Create Green Overlay
+        sizeX = winterSize[0] - self.fimbulvetrPos
+        sizeY = winterSize[1]
+        greenOverlay = pygame.Surface((sizeX, sizeY))
+        greenOverlay.blit(self.mapOrigImage, (-self.fimbulvetrPos, 0))
+        
+        #Draw green to map
+        dualMap.blit(greenOverlay, (self.fimbulvetrPos, 0))
+        
+        
         newSize = (int(self.map.mapSize[0] * self.zoomVal),
                        int(self.map.mapSize[1] * self.zoomVal))
         
@@ -150,7 +169,7 @@ class Model(mvc.Model):
             self.mapRect = pygame.Rect(newPos, newSize)
         else:
             self.mapRect = pygame.Rect((0, 0), newSize)
-        self.mapImage = pygame.transform.scale(self.mapOrigImage, newSize)
+        self.mapImage = pygame.transform.scale(dualMap, newSize)
 
     def scrollIn(self):
         self.zoomVal /= ZOOM_CLICK
@@ -793,10 +812,13 @@ class Model(mvc.Model):
         data = []
 
         chars = []
+        terrain = []
         for i in self.pendingBattle:
             chars.append(i.battleChar)
+            terrain.append(i.currTerrain)
 
         data.append(chars)
+        data.append(terrain)
 
         return data
 
