@@ -29,7 +29,9 @@ class Model(mvc.Model):
         self.team = team
         self.map = inMap
         self.zoomVal = 1.0
-        self.fimbulvetrPos = 250
+        self.fimbulvetrPos = 0
+        self.fimbulvetrTick = incint.IncInt(0, 0, self.map.fimbulvetrSpeed)
+        self.fimbulvetrDelayTick = self.map.fimbulvetrDelay
         
         self.characters = inChars
         self.charactersInTeams = [[], []]
@@ -84,6 +86,9 @@ class Model(mvc.Model):
         self.updateEncounterPause()
         
         self.checkForBattle()
+        
+        if self.runCharacters():
+            self.updateFimbulvetr()
 
         if self.runCharacters():
             self.checkForStructureOwnership()
@@ -151,11 +156,12 @@ class Model(mvc.Model):
         #Create Green Overlay
         sizeX = winterSize[0] - self.fimbulvetrPos
         sizeY = winterSize[1]
-        greenOverlay = pygame.Surface((sizeX, sizeY))
-        greenOverlay.blit(self.mapOrigImage, (-self.fimbulvetrPos, 0))
-        
-        #Draw green to map
-        dualMap.blit(greenOverlay, (self.fimbulvetrPos, 0))
+        if sizeX > 0 and sizeY > 0:
+            greenOverlay = pygame.Surface((sizeX, sizeY))
+            greenOverlay.blit(self.mapOrigImage, (-self.fimbulvetrPos, 0))
+            
+            #Draw green to map
+            dualMap.blit(greenOverlay, (self.fimbulvetrPos, 0))
         
         
         newSize = (int(self.map.mapSize[0] * self.zoomVal),
@@ -944,6 +950,16 @@ class Model(mvc.Model):
                             r.append(i, t[1])
 
                 r.createTerrainMasterList()
+                
+    def updateFimbulvetr(self):
+        if self.fimbulvetrDelayTick > 0:
+            self.fimbulvetrDelayTick -= 1
+        else:
+            self.fimbulvetrTick.inc()
+            if self.fimbulvetrTick.isMin():
+                self.fimbulvetrPos += 1
+                self.drawZoomMap()
+        
                 
 
 class MapRegion(object):
