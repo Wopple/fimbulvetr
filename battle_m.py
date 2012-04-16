@@ -245,6 +245,10 @@ class Model(mvc.Model):
             self.cameraPlayer = c
         self.createBars()
         self.createInterfaceExtras()
+        
+        self.youIconImage = INTERFACE_GRAPHICS[18]
+        colorSwap(self.youIconImage, (215, 215, 215, 255), TOKEN_BORDER_HIGHLIGHTED[self.cameraPlayer], 200)
+        self.youIconRect = pygame.Rect((0, 0), self.youIconImage.get_size())
 
     def key(self, k, t, p):
         if p == 0:

@@ -24,6 +24,7 @@ class Fox(battlechar.BattleChar):
         self.vertAccel = 1.5
         self.vertVelMax = 15.0
         self.jumpVel = -24.0
+        self.youIconHeight = 80
         super(Fox, self).__init__(920)
         self.initSpecMoves()
 

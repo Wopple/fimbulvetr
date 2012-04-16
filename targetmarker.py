@@ -7,11 +7,13 @@ from constants import *
 import drawable
 
 class TargetMarker(object):
-    def __init__(self, waypoint=False):
+    def __init__(self, team, waypoint=False):
         if waypoint:
             self.image = INTERFACE_GRAPHICS[11]
         else:
             self.image = INTERFACE_GRAPHICS[2]
+            
+        colorSwap(self.image, (250, 250, 250, 255), TOKEN_BORDER_OFF[team], 200)
             
         self.rect = pygame.Rect((0, 0), self.image.get_size())
 

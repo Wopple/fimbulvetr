@@ -19,7 +19,7 @@ class Model(mvc.Model):
         
         tempRect = pygame.Rect( (50, 50), (200, 0) )
         menuOptions = ["Play Single Player", "Play via Network",
-                       "Character Setup", "Options", "Exit"]
+                       "Character Setup", "Options", "Credits", "Exit"]
         self.menu = minimenu.MiniMenu(tempRect, menuOptions,
                                            MAIN_MENU_FONT, MAIN_MENU_COLOR_ON,
                                            MAIN_MENU_COLOR_OFF,

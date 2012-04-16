@@ -29,6 +29,7 @@ class Cat(battlechar.BattleChar):
         self.vertAccel = 0.8
         self.vertVelMax = 19.5
         self.jumpVel = -18.0
+        self.youIconHeight = 80
         self.blockFXPoints = [ (9, -35), (33, -32), (9, -35) ]
         self.catEnergy = boundint.BoundInt(0, CAT_ENERGY_MAX, 0)
         self.prevEnergy = self.catEnergy.value

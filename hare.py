@@ -19,19 +19,20 @@ class Hare(battlechar.BattleChar):
         self.speciesName = "Hare"
         self.spriteSet = HARE_IMAGES
         self.superIcons = HARE_SUPER_ICONS
-        self.walkVelMax = 8.0
+        self.walkVelMax = 7.5
         self.dashVelMax = 26.0
         self.runVelMax = 13.0
         self.walkAccel = 2.5
         self.dashAccel = 12.0
         self.groundFriction = 2.2
         self.airAccel = 1.2
-        self.airVelMax = 7.0
+        self.airVelMax = 7.3
         self.airFriction = 0.9
         self.airFrictionStunned = self.airFriction * 0.3
-        self.vertAccel = 1.2
-        self.vertVelMax = 13.0
+        self.vertAccel = 1.4
+        self.vertVelMax = 14.5
         self.jumpVel = -24.0
+        self.youIconHeight = 75
         self.blockFXPoints = [ (9, -35), (33, -32), (9, -35) ]
         self.hareEnergy = boundint.BoundInt(0, HARE_ENERGY_MAX, 0)
         self.prevEnergy = self.hareEnergy.value
@@ -2702,7 +2703,7 @@ class Hare(battlechar.BattleChar):
                     (12, -8, 23, 2)
                 ]
             ]
-        f = [ self.frameData(9, 10, r[0]) ]
+        f = [ self.frameData(9, 7, r[0]) ]
         self.moves['downBAirLag'] = move.Move(f, [])
         self.moves['downBAirLag'].canDI = False
 

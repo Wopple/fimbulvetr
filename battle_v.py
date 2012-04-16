@@ -23,6 +23,7 @@ class View(mvc.View):
             for i, p in enumerate(self.model.players):
                 if self.model.returnCode[i] != 1 and self.drawChecker[t] == p.currMove.drawToBack:
                     p.draw(self.screen, self.model.rect.topleft)
+                    self.drawYouIcon(i, p, self.model.rect.topleft)
 
         for p in self.model.projectiles:
             p.draw(self.screen, self.model.rect.topleft)
@@ -61,4 +62,11 @@ class View(mvc.View):
             p.draw(screen)
             
         self.model.superIcon.draw(screen)
+        
+    def drawYouIcon(self, i, p, offset):
+        if i == self.model.cameraPlayer:
+            self.model.youIconRect.centerx = int(p.preciseLoc[0])
+            self.model.youIconRect.bottom = int(p.preciseLoc[1] - p.youIconHeight)
+            
+            self.screen.blit(self.model.youIconImage, add_points(self.model.youIconRect.topleft, offset))
         

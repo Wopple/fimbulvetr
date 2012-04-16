@@ -612,11 +612,11 @@ class Model(mvc.Model):
         
         self.unitHUD = unithud.UnitHUD(self.team, self.charactersInTeams)
 
-        self.targetMarker = targetmarker.TargetMarker()
+        self.targetMarker = targetmarker.TargetMarker(self.team)
         
         self.waypointMarkers = []
         for i in range(MAX_WAYPOINTS):
-            self.waypointMarkers.append(targetmarker.TargetMarker(True))
+            self.waypointMarkers.append(targetmarker.TargetMarker(self.team, True))
 
     def updateInterface(self):
         self.updatePausePlayIcons()

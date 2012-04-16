@@ -200,8 +200,11 @@ def goMainMenu(fade):
                 
     elif m.menu.value() == 3:
         goCharacterEditorMain()
+        
+    #elif m.menu.value() == 5:
+    #    goCredits()
                 
-    elif m.menu.value() == 5:
+    elif m.menu.value() == 6:
         sys.exit()
 
 def goCharacterEditorMain(oldM = None, conn=None, initialChar=None):
@@ -219,6 +222,11 @@ def goCharacterEditorMain(oldM = None, conn=None, initialChar=None):
                 goCreateCharacter(oldM, conn)
             else:
                 goChangeSuper(oldM, conn)
+                
+def goCredits():
+    multiMVC(credits_m.Model(), credits_v.View(), skippable_c.Controller(), screen)
+    while not m.advance():
+        proceed(clock)
 
 def goCreateCharacter(oldM = None, conn=None):
     multiMVC(textentry_m.Model("Character Name", chardata.getNameList(),

@@ -97,7 +97,8 @@ TOKEN_BORDER_HIGHLIGHTED = [(100, 152, 229, 255),
 TOKEN_BORDER_OFF = [(80, 132, 209, 255),
                    (205, 84, 84, 255)]
 
-TOKEN_BORDER_SELECTED = (220, 220, 220, 255)
+TOKEN_BORDER_SELECTED = [(120, 172, 260, 255),
+                        (255, 124, 124, 255)]
 
 FORTRESS_TEAM_COLORS = [(114, 182, 230, 255),
                             (196, 146, 140, 255)]
@@ -185,9 +186,9 @@ HEALTH_BAR_OFFSET = (10, 10)
 BATTLE_PORTRAIT_OFFSET = (10, 10)
 HEALTH_BAR_SIZE = (200, 22)
 HEALTH_BAR_BORDERS = (6, 4)
-HEALTH_BAR_COLORS = ( (5, 100, 10),
-                      (15, 170, 25),
-                      (15, 170, 25),
+HEALTH_BAR_COLORS = ( (5, 90, 10),
+                      (15, 150, 25),
+                      (15, 150, 25),
                       (20, 20, 20),
                       (200, 200, 10),
                       (10, 10, 10))
@@ -325,7 +326,7 @@ CHARACTER_SELECT_PANEL_COLOR_FILL = (165, 130, 50)
 CHARACTER_SELECT_PANEL_COLOR_BORDER = (90, 68, 35)
 CHARACTER_SELECT_PANEL_SELECTION_BORDER_COLOR = (10, 80, 200)
 CHARACTER_SELECTION_FONT_COLOR = (250, 250, 250)
-CHARACTER_SELECTION_READY_COLOR = (0, 150, 0)
+CHARACTER_SELECTION_READY_COLOR = (0, 120, 0)
 
 CHARACTER_SELECTION_BUTTON_COLOR_ON = (250, 250, 250)
 CHARACTER_SELECTION_BUTTON_COLOR_OFF = (60, 60, 60)
@@ -1008,7 +1009,8 @@ temp = ['pauseicon.png',
         'spireblue.png',
         'spirered.png',
         'altarblue.png',
-        'altarred.png' ]
+        'altarred.png',
+        "you.png" ]
         
 
 INTERFACE_GRAPHICS = []

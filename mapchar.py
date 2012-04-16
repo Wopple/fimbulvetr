@@ -111,7 +111,7 @@ class MapChar(mapitem.MapItem):
                   TOKEN_BORDER_HIGHLIGHTED[self.team], 5)
 
         colorSwap(self.images[2][0], TOKEN_BORDER_NEUTRAL,
-                  TOKEN_BORDER_SELECTED, 5)
+                  TOKEN_BORDER_SELECTED[self.team], 5)
 
     
     def setTarget(self, target, waypoint):
