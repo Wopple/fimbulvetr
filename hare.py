@@ -341,41 +341,38 @@ class Hare(battlechar.BattleChar):
         
         r = [
                 [
-                    (-8, -47, 5, -37),
-                    (-8, -53, 2, -47),
-                    (-10, -37, 4, -22),
-                    (2, -35, 13, -29),
-                    (-18, -30, -10, -21),
-                    (-25, -19, -6, -10),
-                    (-11, -21, 8, -13),
-                    (8, -18, 20, -12),
-                    (19, -20, 26, -11),
-                    (1, -31, 10, -24)
+                    (-5, -49, 11, -34),
+                    (-5, -52, 9, -49),
+                    (-5, -34, 10, -10),
+                    (-18, -17, -2, -11),
+                    (11, -16, 24, -11)
                 ],
                 [
-                    (-8, -47, 5, -37),
-                    (-8, -53, 2, -47),
-                    (-10, -37, 5, -20),
-                    (-9, -21, 8, -11),
-                    (-16, -10, -4, 0),
-                    (4, -12, 11, -3),
-                    (9, -8, 22, -3),
-                    (1, -30, 10, -25)
+                    (-5, -49, 11, -34),
+                    (-5, -52, 9, -49),
+                    (-3, -34, 5, -15),
+                    (-2, -15, 6, 1)
                 ],
                 [
-                    (-8, -47, 5, -37),
-                    (-8, -53, 2, -47),
-                    (-10, -37, 5, -20),
-                    (-7, -20, 5, -1),
-                    (-3, -4, 9, 0)
+                    (-5, -49, 11, -34),
+                    (-5, -52, 9, -49),
+                    (-3, -34, 5, -15),
+                    (6, -19, 14, -13),
+                    (7, -15, 14, -4),
+                    (-5, -15, 1, -10),
+                    (-9, -11, -2, -6),
+                    (-10, -7, -4, -2),
+                    (-11, -4, -3, 2)
                 ]
             ]
                     
         f = [self.frameData(3, 2, r[1]),
-             self.frameData(4, 2, r[2]),
-             self.frameData(5, 2, r[0]),
-             self.frameData(6, 2, r[1]),
-             self.frameData(7, 2, r[2]),
+             self.frameData(4, 2, r[1]),
+             self.frameData(5, 2, r[2]),
+             self.frameData(6, 2, r[0]),
+             self.frameData(7, 2, r[1]),
+             self.frameData(161, 2, r[1]),
+             self.frameData(162, 2, r[2]),
              self.frameData(2, 2, r[0])]
         
         self.moves['running'].append(f, [])
@@ -2186,19 +2183,21 @@ class Hare(battlechar.BattleChar):
 
         h = [
                 [
-                    (-15, -28, 14, -10, 75, 105, 25, 270, [], 3),
-                    (-8, -13, 15, 22, 75, 105, 25, 270, [], 3)
+                    (-15, -28, 14, -10, 70, 105, 22, 270, [], 3),
+                    (-8, -13, 15, 22, 70, 105, 22, 270, [], 3)
                 ]
             ]
 
-        f = [ self.frameData(85, 8, r[0]),
+        f = [ self.frameData(85, 9, r[0]),
               self.frameData(82, 1, r[1]),
               self.frameData(83, 1, r[2], h[0]),
               self.frameData(84, 7, r[2], h[0]),
               self.frameData(84, 6, r[3]) ]
 
         t = [['land', move.Transition(None, None, None, None, 'downAAirLag')],
-             ['onHit', move.Transition(None, None, None, None, 'headBounce')]]
+             ['onHit', move.Transition(None, None, None, None, 'headBounce')],
+             ['attackA', move.Transition(None, None, 0, 0, 'stomp')],
+             ['attackADown', move.Transition(None, None, 0, 0, 'stomp')]]
 
         
 
@@ -2214,6 +2213,7 @@ class Hare(battlechar.BattleChar):
 
         self.createLagDownAAir()
         self.createHeadBounce()
+        self.createStomp()
 
     def createLagDownAAir(self):
         r = [
@@ -2291,7 +2291,8 @@ class Hare(battlechar.BattleChar):
               self.frameData(87, 6, r[4]),
               self.frameData(87, 2, r[4])]
         
-        t = [['doDash', move.Transition(2, HARE_ENERGY_USAGE, 6, 7, 'airDashing')]]
+        t = [['doDash', move.Transition(2, HARE_ENERGY_USAGE, 6, 7, 'airDashing')],
+             ['attackADown', move.Transition(None, None, 2, 6, 'stomp')]]
 
         self.moves['headBounce'] = move.Move(f, t)
         self.moves['headBounce'].frames[0].setVelY = -22
@@ -2301,7 +2302,68 @@ class Hare(battlechar.BattleChar):
             self.moves['headBounce'].frames[i].setFrictionX = self.airFriction * 8.0
             self.moves['headBounce'].frames[i].setSpeedCapX = self.vertVelMax * 1.2
 
-              
+             
+    def createStomp(self):
+        
+        r = [
+                [
+                    (1, -49, 11, -38),
+                    (-3, -40, 8, -30),
+                    (-6, -35, 3, -20),
+                    (-8, -22, 3, -15),
+                    (1, -29, 7, -17),
+                    (3, -17, 6, -8)
+                ],
+                [
+                    (-4, -39, 4, -13),
+                    (-8, -50, 3, -38)
+                ],
+                [
+                    (-4, -39, 4, -13),
+                    (-8, -50, 3, -38),
+                    (-7, -2, -1, 5),
+                    (-4, -16, 2, -2)
+                ]
+            ]
+        
+        
+        dam1 = 60
+        stun1 = 250
+        force1 = 18
+        angle1 = 270
+        freeze1 = 3
+        
+        dam2 = 50
+        stun2 = 175
+        force2 = 15
+        angle2 = 270
+        freeze2 = 3
+        
+        h = [
+                [
+                    (-9, -33, 18, 9, dam1, stun1, force1, angle1, [], freeze1),
+                    (-6, -46, 5, -12, dam1, stun1, force1, angle1, [], freeze1)
+                ],
+                [
+                    (-6, -46, 5, -12, dam2, stun2, force2, angle2, [], freeze2),
+                    (-13, -12, 13, 8, dam2, stun2, force2, angle2, [], freeze2)
+                ]
+             ]
+        
+        f = [ self.frameData(163, 3, r[0]),
+              self.frameData(164, 1, r[1], h[0]),
+              self.frameData(165, 2, r[1], h[0]),
+              self.frameData(165, 12, r[1], h[1]),
+              self.frameData(165, 5, r[2]) ]
+        
+        t = []
+             
+        
+        self.moves['stomp'] = move.Move(f, t)
+        self.moves['stomp'].canDI = False
+        self.moves['stomp'].reversable = True
+        
+        self.moves['stomp'].frames[0].setVelY = 0
         
 
     def createMoveDownAirB(self):

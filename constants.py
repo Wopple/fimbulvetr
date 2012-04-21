@@ -60,8 +60,8 @@ BATTLE_ARENA_SIZE = (1000, 900)
 
 SHOW_RED_DOT = False
 SHOW_TEAL_DOTS = False
-SHOW_HURTBOXES = False
-SHOW_HITBOXES = False
+SHOW_HURTBOXES = True
+SHOW_HITBOXES = True
 SHOW_BLOCKBOXES = False
 SHOW_TRIGGER_AREA = False
 
@@ -712,7 +712,12 @@ temp = [ ["00.png", (24, 62)],
          ["157.png", (24, 61)],
          ["158.png", (24, 61)],
          ["159.png", (20, 60)],
-         ["160.png", (20, 60)] ]
+         ["160.png", (20, 60)],
+         ["161.png", (24, 63)],
+         ["162.png", (24, 63)],
+         ["163.png", (15, 66)],
+         ["164.png", (15, 66)],
+         ["165.png", (15, 66)] ]
 
 HARE_IMAGES = []
 for i in temp:
