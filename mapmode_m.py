@@ -13,6 +13,7 @@ import pauseplayicon
 import mapcharacterbar
 import targetmarker
 import countdown
+import lockcircle
 
 import unithud
 
@@ -32,10 +33,12 @@ class Model(mvc.Model):
         self.fimbulvetrPos = 0
         self.fimbulvetrTick = incint.IncInt(0, 0, self.map.fimbulvetrSpeed)
         self.fimbulvetrDelayTick = self.map.fimbulvetrDelay
+        self.fimbulvetrSpreadSpeed = self.map.fimbulvetrSpreadSpeed
         
         self.characters = inChars
         self.charactersInTeams = [[], []]
         self.rezSparks = []
+        self.lockCircles = []
         for c in self.characters:
             self.charactersInTeams[c.team].append(c)
         self.mapRect = None
@@ -123,6 +126,14 @@ class Model(mvc.Model):
             if not(s.isRemovable()):
                 newList.append(s)
         self.rezSparks = newList
+        
+        newList = []
+        for i in range(len(self.lockCircles)):
+            s = self.lockCircles[i]
+            s.update()
+            if not(s.isRemovable()):
+                newList.append(s)
+        self.lockCircles = newList
 
         if self.initialCount > 0:
             self.initialCount -= 1
@@ -957,8 +968,25 @@ class Model(mvc.Model):
         else:
             self.fimbulvetrTick.inc()
             if self.fimbulvetrTick.isMin():
-                self.fimbulvetrPos += 1
+                self.fimbulvetrPos += self.fimbulvetrSpreadSpeed
                 self.drawZoomMap()
+                self.checkForFimbulLock()
+                
+                
+    def checkForFimbulLock(self):
+        speedUp = False
+        for s in self.structures:
+            if (not s.locked) and (s.precisePos[0] < self.fimbulvetrPos):
+                s.locked = True
+                s.capture.setToMin()
+                self.lockCircles.append(lockcircle.LockCircle(s.precisePos, s.team))
+                if isinstance(s, mapstructure.Fortress):
+                    speedUp = True
+                    
+        
+        if speedUp:
+            self.fimbulvetrSpreadSpeed += self.map.fimbulvetrSpreadGrowth
+            print "SPEED UP!  " + str(self.fimbulvetrSpreadSpeed)
         
                 
 

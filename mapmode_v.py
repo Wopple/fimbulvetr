@@ -34,6 +34,9 @@ class View(mvc.View):
         for s in self.model.rezSparks:
             s.draw(self.screen, self.model.zoomVal, self.model.mapRect.topleft)
             
+        for s in self.model.lockCircles:
+            s.draw(self.screen, self.model.zoomVal, self.model.mapRect.topleft)
+            
         c = self.model.currSelected
         if not c is None:
             if not c.target is None:

@@ -19,6 +19,7 @@ class MapStructure(mapitem.MapItem):
 
         self.blinkOn = True
         self.removed = False
+        self.locked = False
 
         self.capture = boundint.BoundInt(0, captureTime, 0)
         self.captureTeam = 0
@@ -42,6 +43,11 @@ class MapStructure(mapitem.MapItem):
         self.playersInArea = [[],[]]
 
     def checkForOwnershipChange(self, autoCap=False):
+        
+        if self.locked:
+            self.capture.setToMin()
+            return False
+        
         blueCount = len(self.playersInArea[0])
         redCount = len(self.playersInArea[1])
 
@@ -166,6 +172,7 @@ class Origin(MapStructure):
     def __init__(self, inPos):
         
         self.territorySize = ORIGIN_TERRITORY_RADIUS
+        self.locked = True
         
         super(Origin, self).__init__(inPos, MAP_ITEMS["fortress"], 1)
         

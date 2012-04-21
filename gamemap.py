@@ -13,13 +13,17 @@ import mapstructure
 class GameMap(object):
     def __init__(self, startingPoints, mapSize, horizAxis, flip,
                  mountains, water, forests, islands, rivers,
-                 structures, fimbulvetrSpeed, fimbulvetrDelay):
+                 structures, fimbulvetrSpeed, fimbulvetrDelay,
+                 fimbulvetrSpreadSpeed, fimbulvetrSpreadGrowth):
 
         self.horizAxis = horizAxis
         self.flip = flip
         
         self.fimbulvetrSpeed = fimbulvetrSpeed
         self.fimbulvetrDelay = fimbulvetrDelay
+        self.fimbulvetrSpreadSpeed = fimbulvetrSpreadSpeed
+        self.fimbulvetrSpreadGrowth = fimbulvetrSpreadGrowth
+        
 
         if horizAxis:
             self.mapSize = [mapSize[0], mapSize[1] * 2]
@@ -124,8 +128,10 @@ def getMap(s):
         horizAxis = True
         flip = True
         
-        fimbulvetrDelay = 24*40
-        fimbulvetrSpeed = 5
+        fimbulvetrDelay = 35*40
+        fimbulvetrSpeed = 6
+        fimbulvetrSpreadSpeed = 2
+        fimbulvetrSpreadGrowth = 1
         
         mountains = [((-20, 420), 125),
                      ((60, 435), 80),
@@ -548,7 +554,8 @@ def getMap(s):
 
     return GameMap(startingPoints, mapSize, horizAxis, flip,
                    mountains, water, forests, islands, rivers,
-                   structures, fimbulvetrSpeed, fimbulvetrDelay)
+                   structures, fimbulvetrSpeed, fimbulvetrDelay,
+                   fimbulvetrSpreadSpeed, fimbulvetrSpreadGrowth)
 
 def drawMap(inMap, isNormal):
     
