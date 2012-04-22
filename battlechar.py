@@ -360,6 +360,7 @@ class BattleChar(object):
         self.moves['standUp'] = move.baseStand()
         self.moves['standForward'] = move.baseStand()
         self.moves['standBackward'] = move.baseStand()
+        self.moves['standAttack'] = move.baseStand()
 
         self.moves['teching'] = move.baseTeching()
         self.moves['techUp'] = move.baseTechRoll()

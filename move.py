@@ -354,6 +354,7 @@ def baseGroundHit():
           ['up', Transition(None, None, -2, -1, 'standUp')],
           ['forward', Transition(None, None, -2, -1, 'standForward')],
           ['backward', Transition(None, None, -2, -1, 'standBackward')],
+          ['attackA', Transition(None, None, -2, -1, 'standAttack')],
           ['tech', Transition(None, None, 0, 0, 'teching')]]
     m = Move([], t)
     m.canDI = False

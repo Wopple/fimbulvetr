@@ -121,6 +121,7 @@ class Hare(battlechar.BattleChar):
         self.createMoveStandUp()
         self.createMoveStandForward()
         self.createMoveStandBackward()
+        self.createMoveStandAttack()
 
         self.createMoveTeching()
         self.createMoveTechUp()
@@ -2360,7 +2361,7 @@ class Hare(battlechar.BattleChar):
              
         
         self.moves['stomp'] = move.Move(f, t)
-        self.moves['stomp'].canDI = False
+        #self.moves['stomp'].canDI = False
         self.moves['stomp'].reversable = True
         
         self.moves['stomp'].frames[0].setVelY = 0
@@ -3067,7 +3068,46 @@ class Hare(battlechar.BattleChar):
         for i in range(len(self.moves['standBackward'].frames)):
             self.moves['standBackward'].frames[i].setFrictionX = self.groundFriction * 0.42
             self.moves['standBackward'].frames[i].ignoreSpeedCap = True
-              
+            
+    def createMoveStandAttack(self):
+        
+        r = [
+                [
+                    (17, -33, 29, -23),
+                    (17, -37, 27, -32),
+                    (12, -26, 23, -14),
+                     (17, -14, 21, 1),
+                     (0, -23, 15, -15),
+                     (-4, -16, 1, -13),
+                     (-7, -13, -1, -1),
+                     (-15, -4, -3, -1),
+                     (2, -17, 11, -10),
+                     (6, -11, 16, 1)
+                ]
+            ]
+        
+        dam1 = 30
+        stun1 = 30
+        force1 = 20
+        angle1 = 30
+        freeze1 = 1
+        
+        h = [
+                [
+                    (9, -47, 63, 0, dam1, stun1, force1, angle1, [], freeze1),
+                    (-11, -25, 9, 0, dam1, stun1, force1, angle1, [], freeze1)
+                ]
+             ]
+        
+        f = [ self.frameData(138, 4),
+              self.frameData(139, 3),
+              self.frameData(25, 2, r[0]),
+              self.frameData(26, 1, r[0], h[0]),
+              self.frameData(27, 2, r[0], h[0]),
+              self.frameData(28, 11, r[0]) ]
+        
+        self.moves['standAttack'].append(f, [])
+        
 
     def createMoveTeching(self):
         f = [ self.frameData(140, 4),
