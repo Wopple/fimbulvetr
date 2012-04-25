@@ -54,16 +54,18 @@ class MapStructure(mapitem.MapItem):
         if (blueCount > 0 and redCount == 0):
             if autoCap:
                 self.changeOwnership(1)
+                return True
             else:
-                self.addCapture(1)
-            return True
+                return self.addCapture(1)
+            
 
         elif (redCount > 0 and blueCount == 0):
             if autoCap:
                 self.changeOwnership(2)
+                return True
             else:
-                self.addCapture(2)
-            return True
+                return self.addCapture(2)
+            
 
         elif (redCount == 0 and blueCount == 0):
             if not self.capture.isMin():
@@ -82,15 +84,20 @@ class MapStructure(mapitem.MapItem):
             self.captureBar.changeColor(CAPTURE_TEAM_COLORS[val-1])
             if self.capture.isMax():
                 self.changeOwnership(val)
+                return True
         else:
             self.capture.add(-BASE_CAPTURE_RATE)
             if self.capture.isMin():
                 if (val != self.team):
                     self.changeOwnership(0)
+                    return True
 
         if (self.captureTeam == val and self.team == val and
             (not self.capture.isMin())):
             self.changeOwnership(self.team)
+            return False
+        
+        return False
             
             
         
@@ -172,8 +179,6 @@ class Origin(MapStructure):
     def __init__(self, inPos):
         
         self.territorySize = ORIGIN_TERRITORY_RADIUS
-        self.locked = True
-        
         super(Origin, self).__init__(inPos, MAP_ITEMS["fortress"], 1)
         
     def modifyImages(self):

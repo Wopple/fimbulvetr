@@ -2197,8 +2197,8 @@ class Hare(battlechar.BattleChar):
 
         t = [['land', move.Transition(None, None, None, None, 'downAAirLag')],
              ['onHit', move.Transition(None, None, None, None, 'headBounce')],
-             ['attackA', move.Transition(None, None, 0, 0, 'stomp')],
-             ['attackADown', move.Transition(None, None, 0, 0, 'stomp')]]
+             ['attackA', move.Transition(2, HARE_ENERGY_USAGE, 0, 0, 'stomp')],
+             ['attackADown', move.Transition(2, HARE_ENERGY_USAGE, 0, 0, 'stomp')]]
 
         
 
@@ -2293,7 +2293,7 @@ class Hare(battlechar.BattleChar):
               self.frameData(87, 2, r[4])]
         
         t = [['doDash', move.Transition(2, HARE_ENERGY_USAGE, 6, 7, 'airDashing')],
-             ['attackADown', move.Transition(None, None, 2, 6, 'stomp')]]
+             ['attackADown', move.Transition(2, HARE_ENERGY_USAGE, 2, 6, 'stomp')]]
 
         self.moves['headBounce'] = move.Move(f, t)
         self.moves['headBounce'].frames[0].setVelY = -22
@@ -3016,8 +3016,11 @@ class Hare(battlechar.BattleChar):
               self.frameData(137, 10),
               self.frameData(137, 2),
               self.frameData(137, 80, r[0]) ]
+        
+        t = [ ['attackB', move.Transition(None, None, -2, -1, 'downB')],
+              ['attackBDown', move.Transition(None, None, -2, -1, 'downB')] ]
 
-        self.moves['groundHit'].append(f, [])
+        self.moves['groundHit'].append(f, t)
         self.moves['groundHit'].frames[0].fx.append(['dust', (28, 0), True])
         self.moves['groundHit'].frames[0].fx.append(['dust', (-28, 0), False])
         self.moves['groundHit'].frames[1].fx.append(['shockwave', (0, 0), True])

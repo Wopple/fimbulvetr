@@ -260,7 +260,7 @@ class UnitHUD(object):
         
             tempList = []
 
-            for i in range(5):
+            for i in range(7):
                 terrainIcon = TERRAIN_ICONS[i]
 
                 effect = c.speedTerrainModifiers[i]

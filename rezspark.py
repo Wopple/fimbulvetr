@@ -12,6 +12,7 @@ class RezSpark:
         self.character = inCharacter
         self.pos = [int(self.character.precisePos[0]),
                     int(self.character.precisePos[1])]
+        self.color = TERRITORY_DOT_COLORS[self.character.team+1]
         self.circles = []
         self.tick = REZ_SPARK_TICK_MAX
 
@@ -54,7 +55,7 @@ class RezSpark:
             if self.character is None:
                 size *= REZ_SPARK_BIG_MULT
 
-            pygame.draw.circle(screen, REZ_SPARK_COLOR, pos, size, 1)
+            pygame.draw.circle(screen, self.color, pos, size, 1)
 
 
     def getAlpha(self, val):

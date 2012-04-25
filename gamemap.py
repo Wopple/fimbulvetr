@@ -128,7 +128,7 @@ def getMap(s):
         horizAxis = True
         flip = True
         
-        fimbulvetrDelay = 35*40
+        fimbulvetrDelay = 45*40
         fimbulvetrSpeed = 6
         fimbulvetrSpreadSpeed = 2
         fimbulvetrSpreadGrowth = 1

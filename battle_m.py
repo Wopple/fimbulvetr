@@ -535,10 +535,10 @@ class Model(mvc.Model):
     def testKey(self, k):
         p = self.players[self.cameraPlayer]
         
-        xVel = -10;
-        if (not p.facingRight):
-            xVel *= -1
-        p.getHit(5, 150, [xVel, -8])
+        #xVel = -10;
+        #if (not p.facingRight):
+        #    xVel *= -1
+        #p.getHit(5, 150, [xVel, -8])
 
         #self.players[0].superEnergy.add(self.players[0].superEnergy.maximum / 5)
 
@@ -820,6 +820,7 @@ class Model(mvc.Model):
                 
                 self.players[a].preciseLoc = sub_points(self.players[b].preciseLoc, offset)
                 self.players[b].preciseLoc = add_points(self.players[a].preciseLoc, offset)
+                self.players[b].inAir = False
 
     def getGrabOffset(self, p1, p2):
         if p1.facingRight:

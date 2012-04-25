@@ -60,6 +60,10 @@ class Controller(mvc.Controller):
                         self.model.key(4, True)
                     elif event.key == K_PAGEDOWN:
                         self.model.key(5, True)
+                    elif event.key == K_F1:
+                        self.model.testKey(1)
+                    elif event.key == K_F2:
+                        self.model.testKey(2)
                     elif event.key == K_LSHIFT:
                         self.shift[0] = True
                     elif event.key == K_RSHIFT:

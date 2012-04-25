@@ -378,10 +378,21 @@ class Model(mvc.Model):
             terrainType = i[1]
             dist = util.distance(c.precisePos, circle[0])
             if dist <= circle[1]:
+                terrain = self.terrainBasedOnWinter(terrainType, c)
                 c.currTerrain = terrainType
                 return
 
-        c.currTerrain = PLAINS
+        c.currTerrain = self.terrainBasedOnWinter(PLAINS, c)
+        
+    def terrainBasedOnWinter(self, terrainType, c):
+        if (c.precisePos[0] < self.fimbulvetrPos):
+            if terrainType == WATER:
+                return ICE
+            elif terrainType == PLAINS:
+                return SNOW
+            
+        return terrainType
+            
 
     def checkTerritory(self, c):
         c.currTerritory = "neutral"
@@ -490,7 +501,6 @@ class Model(mvc.Model):
             if (s.checkForOwnershipChange(first)):
                 checker = True
            
-        #FIX BUG
         fortressCount = 0
         spireCount = 0
         for s in self.structures:
@@ -517,6 +527,7 @@ class Model(mvc.Model):
 
 
     def recreateTerritory(self):
+        print "Creating Territory!"
         for s in self.structures:
             if (s.team != 0):
                 self.createTerritoryForStructure(s)
@@ -976,7 +987,7 @@ class Model(mvc.Model):
     def checkForFimbulLock(self):
         speedUp = False
         for s in self.structures:
-            if (not s.locked) and (s.precisePos[0] < self.fimbulvetrPos):
+            if (not s.locked) and (not isinstance(s, mapstructure.Origin)) and (s.precisePos[0] < self.fimbulvetrPos):
                 s.locked = True
                 s.capture.setToMin()
                 self.lockCircles.append(lockcircle.LockCircle(s.precisePos, s.team))
@@ -987,6 +998,16 @@ class Model(mvc.Model):
         if speedUp:
             self.fimbulvetrSpreadSpeed += self.map.fimbulvetrSpreadGrowth
             print "SPEED UP!  " + str(self.fimbulvetrSpreadSpeed)
+            
+    def testKey(self, k):
+        if k == 1:
+            for s in self.structures:
+                if not isinstance(s, mapstructure.Origin):
+                    s.team = 1
+        elif k == 2:
+            for s in self.structures:
+                if not isinstance(s, mapstructure.Origin):
+                    s.team = 0
         
                 
 

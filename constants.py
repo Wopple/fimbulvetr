@@ -4,7 +4,7 @@ import sys
 
 import math
 
-VERSION = "0.1.4"
+VERSION = "0.1.5"
 
 FULL_SCREEN = False
 FRAME_RATE = 40
@@ -395,6 +395,8 @@ FOREST = 1
 MOUNTAIN = 2
 WATER = 3
 FORTRESS = 4
+SNOW = 5
+ICE = 6
 
 
 HOME_TERRAINS = {"hare" : PLAINS,
@@ -402,26 +404,32 @@ HOME_TERRAINS = {"hare" : PLAINS,
                  "cat"  : PLAINS}
 
 HOME_TERRAIN_DAMAGE_BONUS = 10
-ALTAR_DAMAGE_BONUS = 15
+ALTAR_DAMAGE_BONUS = 10
 
 
 HARE_MAP_SPEED_TERRAIN_MODIFIERS = [1.0,
                                     0.6,
                                     0.3,
                                     0.3,
-                                    1.1]
+                                    1.1,
+                                    0.9,
+                                    0.7]
 
 FOX_MAP_SPEED_TERRAIN_MODIFIERS = [1.0,
                                    0.7,
                                    0.3,
                                    0.34,
-                                   1.1]
+                                   1.1,
+                                   0.9,
+                                   0.7]
 
 CAT_MAP_SPEED_TERRAIN_MODIFIERS = [1.0,
                                    0.7,
                                    0.32,
                                    0.18,
-                                   1.1]
+                                   1.1,
+                                   0.9,
+                                    0.7]
 
 
 
@@ -456,8 +464,8 @@ ALTAR_TERRITORY_RADIUS = 180
 ORIGIN_TERRITORY_RADIUS = 250
 
 BASE_CAPTURE_RATE = 100
-BASE_CAPTURE_DEGRADE = 160
-FORTRESS_CAPTURE_TIME = 60000
+BASE_CAPTURE_DEGRADE = 250
+FORTRESS_CAPTURE_TIME = 55000
 SPIRE_CAPTURE_TIME = 15000
 ALTAR_CAPTURE_TIME = 20000
 
@@ -1019,7 +1027,9 @@ temp = ['pauseicon.png',
         'spirered.png',
         'altarblue.png',
         'altarred.png',
-        "you.png" ]
+        "you.png",
+        "terrainice.png",
+        "terrainsnow.png" ]
         
 
 INTERFACE_GRAPHICS = []
@@ -1029,7 +1039,8 @@ for i in temp:
 
 TERRAIN_ICONS = [None, INTERFACE_GRAPHICS[6],
                  INTERFACE_GRAPHICS[7], INTERFACE_GRAPHICS[8],
-                 INTERFACE_GRAPHICS[10]]
+                 INTERFACE_GRAPHICS[10], INTERFACE_GRAPHICS[20],
+                 INTERFACE_GRAPHICS[19]]
 
 FORTRESS_COUNT_ICONS = [INTERFACE_GRAPHICS[12], INTERFACE_GRAPHICS[13]]
 SPIRE_COUNT_ICONS = [INTERFACE_GRAPHICS[14], INTERFACE_GRAPHICS[15]]
