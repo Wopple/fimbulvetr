@@ -378,7 +378,7 @@ class Model(mvc.Model):
             terrainType = i[1]
             dist = util.distance(c.precisePos, circle[0])
             if dist <= circle[1]:
-                terrain = self.terrainBasedOnWinter(terrainType, c)
+                terrainType = self.terrainBasedOnWinter(terrainType, c)
                 c.currTerrain = terrainType
                 return
 
@@ -909,7 +909,7 @@ class Model(mvc.Model):
             c.blinkTick = 0
             if c.isDead():
                 c.removed = True
-                c.battleChar.superEnergy.change(0)
+                #c.battleChar.superEnergy.change(0)
                 if c == self.currSelected:
                     self.currSelected = None
             for i in range(2):
@@ -989,7 +989,6 @@ class Model(mvc.Model):
         for s in self.structures:
             if (not s.locked) and (not isinstance(s, mapstructure.Origin)) and (s.precisePos[0] < self.fimbulvetrPos):
                 s.locked = True
-                s.capture.setToMin()
                 self.lockCircles.append(lockcircle.LockCircle(s.precisePos, s.team))
                 if isinstance(s, mapstructure.Fortress):
                     speedUp = True

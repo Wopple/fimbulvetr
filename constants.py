@@ -114,6 +114,8 @@ ZOOM_CLICK = 0.9
 ZOOM_MAX = 1.0
 ZOOM_MIN = 0.15
 
+FIMBULVETR_MULTIPLIER = 0.5
+
 TERRAIN_COLORS = [ (15, 111, 22),
                    (220, 220, 230) ]
 
@@ -412,7 +414,7 @@ HARE_MAP_SPEED_TERRAIN_MODIFIERS = [1.0,
                                     0.3,
                                     0.3,
                                     1.1,
-                                    0.9,
+                                    0.45,
                                     0.7]
 
 FOX_MAP_SPEED_TERRAIN_MODIFIERS = [1.0,
@@ -420,7 +422,7 @@ FOX_MAP_SPEED_TERRAIN_MODIFIERS = [1.0,
                                    0.3,
                                    0.34,
                                    1.1,
-                                   0.9,
+                                   0.45,
                                    0.7]
 
 CAT_MAP_SPEED_TERRAIN_MODIFIERS = [1.0,
@@ -428,8 +430,8 @@ CAT_MAP_SPEED_TERRAIN_MODIFIERS = [1.0,
                                    0.32,
                                    0.18,
                                    1.1,
-                                   0.9,
-                                    0.7]
+                                   0.45,
+                                   0.7]
 
 
 

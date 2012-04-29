@@ -388,7 +388,7 @@ class Model(mvc.Model):
                     if p.actTransition('block'):
                         keysNow[7] = 0
             if self.wasKeyPressed(8, keysNow):
-                if p.superEnergy.isMax():
+                if p.superEnergy.isMax() and self.endingVal == -1:
                     if p.actTransition('super'):
                         keysNow[8] = 0
                         p.superEnergy.setToMin()

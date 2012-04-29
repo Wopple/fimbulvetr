@@ -44,10 +44,6 @@ class MapStructure(mapitem.MapItem):
 
     def checkForOwnershipChange(self, autoCap=False):
         
-        if self.locked:
-            self.capture.setToMin()
-            return False
-        
         blueCount = len(self.playersInArea[0])
         redCount = len(self.playersInArea[1])
 
@@ -76,17 +72,25 @@ class MapStructure(mapitem.MapItem):
         return False
 
     def addCapture(self, val):
+        
+        if self.locked:
+            multiplier = FIMBULVETR_MULTIPLIER
+        else:
+            multiplier = 1.0
+            
+        captureRate = int(BASE_CAPTURE_RATE * multiplier)
+        
         if (self.captureTeam == 0 or self.capture.value == 0):
             self.captureTeam = val
         
         if (self.captureTeam == val):
-            self.capture.add(BASE_CAPTURE_RATE)
+            self.capture.add(captureRate)
             self.captureBar.changeColor(CAPTURE_TEAM_COLORS[val-1])
             if self.capture.isMax():
                 self.changeOwnership(val)
                 return True
         else:
-            self.capture.add(-BASE_CAPTURE_RATE)
+            self.capture.add(-captureRate)
             if self.capture.isMin():
                 if (val != self.team):
                     self.changeOwnership(0)
