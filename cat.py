@@ -1187,22 +1187,38 @@ class Cat(battlechar.BattleChar):
         self.createProjectileSwordBeams()
 
     def createProjectileSwordBeams(self):
-        f = [ self.frameData(27, 2),
-              self.frameData(28, 1),
-              self.frameData(29, 2),
-              self.frameData(30, 1),
-              self.frameData(28, 2),
-              self.frameData(29, 1),
-              self.frameData(27, 1),
-              self.frameData(30, 1),
-              self.frameData(27, 1),
-              self.frameData(28, 1),
-              self.frameData(30, 1),
-              self.frameData(29, 2) ]
+        
+        dam1 = 60
+        stun1 = 80
+        force1 = 8
+        angle1 = 30
+        freeze1 = 4
+        
+        h = [
+                [
+                    (-18, -14, 0, 17, dam1, stun1, force1, angle1, [], freeze1),
+                    (-28, -21, -3, -12, dam1, stun1, force1, angle1, [], freeze1),
+                    (-22, 16, -3, 24, dam1, stun1, force1, angle1, [], freeze1),
+                ]
+             ]
+        
+        f = [ self.frameData(27, 2, [], h[0]),
+              self.frameData(28, 1, [], h[0]),
+              self.frameData(29, 2, [], h[0]),
+              self.frameData(30, 1, [], h[0]),
+              self.frameData(28, 2, [], h[0]),
+              self.frameData(29, 1, [], h[0]),
+              self.frameData(27, 1, [], h[0]),
+              self.frameData(30, 1, [], h[0]),
+              self.frameData(27, 1, [], h[0]),
+              self.frameData(28, 1, [], h[0]),
+              self.frameData(30, 1, [], h[0]),
+              self.frameData(29, 2, [], h[0]) ]
         
         t = [ ['exitFrame', move.Transition(-1, None, None, None, 'flying')] ]
 
         temp = projectile.Projectile()
+        temp.hitsRemaining = 3
         temp.moves['flying'].append(f, t)
         temp.moves['flying'].frames[0].setVelX = 5.5
         temp.moves['flying'].frames[0].setVelY = 0
@@ -1211,6 +1227,7 @@ class Cat(battlechar.BattleChar):
         self.projectiles.append(temp)
 
         temp = projectile.Projectile()
+        temp.hitsRemaining = 3
         temp.moves['flying'].append(f, t)
         temp.moves['flying'].frames[0].setVelX = 7.5
         temp.moves['flying'].frames[0].setVelY = 0
@@ -1219,6 +1236,7 @@ class Cat(battlechar.BattleChar):
         self.projectiles.append(temp)
 
         temp = projectile.Projectile()
+        temp.hitsRemaining = 3
         temp.moves['flying'].append(f, t)
         temp.moves['flying'].frames[0].setVelX = 8.8
         temp.moves['flying'].frames[0].setVelY = 0

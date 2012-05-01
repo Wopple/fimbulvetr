@@ -196,6 +196,7 @@ class Model(mvc.Model):
                         self.actOnBlock(i, p)
                 
                 self.checkForHits()
+                self.updateProjectiles()
                 for i, p in enumerate(self.players):
                     if self.returnCode[i] != 1:
                         self.actOnHit(i, p)
@@ -215,16 +216,6 @@ class Model(mvc.Model):
 
             if (not isFlash):
                 self.checkDisplacement()
-
-                temp = []
-                for i in range(len(self.projectiles)):
-                    self.projectiles[i].update()
-                    self.checkProjForEdge(self.projectiles[i])
-                    self.checkProjForDissolve(self.projectiles[i])
-                    if not self.projectiles[i].destroy:
-                        temp.append(self.projectiles[i])
-                self.projectiles = temp
-
                 self.centerCamera(self.players[self.cameraPlayer])
 
             for f in self.fx:
@@ -239,6 +230,17 @@ class Model(mvc.Model):
             if not self.catBar is None:
                 self.updateCatBarColors()
             b.update()
+            
+    def updateProjectiles(self):
+        temp = []
+        for i in range(len(self.projectiles)):
+            self.projectiles[i].update()
+            self.checkForProjectileHit(self.projectiles[i])
+            self.checkProjForEdge(self.projectiles[i])
+            self.checkProjForDissolve(self.projectiles[i])
+            if not self.projectiles[i].destroy:
+                temp.append(self.projectiles[i])
+        self.projectiles = temp
 
     def setCameraPlayer(self, c):
         if (c >= 0) and (c <= 1):
@@ -516,6 +518,7 @@ class Model(mvc.Model):
         for s in m.shoot:
             if s[0] == p.currFrame:
                 proj = copy.copy(p.projectiles[s[1]].copySelf())
+                proj.shooter = p
 
                 poffset = s[2]
                 temp = p.preciseLoc
@@ -554,6 +557,9 @@ class Model(mvc.Model):
         if (p.dissolveOnPhysical) and (p.currMove != p.moves['dissolve']):
             if p.preciseLoc[1] >= self.rect.height - BATTLE_AREA_FLOOR_HEIGHT:
                 p.setCurrMove('dissolve')
+        if (p.hitsRemaining <= 0):
+            p.setCurrMove('dissolve')
+                
         if (p.currMove == p.moves['dissolve']) and (p.currFrame == len(p.currMove.frames)-1):
             p.destroy = True
             p.currFrame = 0
@@ -885,6 +891,24 @@ class Model(mvc.Model):
 
                                 self.fxMemory[j].append(average_points(
                                     hRect.center, rRect.center))
+                                
+    
+    def checkForProjectileHit(self, proj):
+        if not proj.canHit():
+            return
+        
+        for j, q in enumerate(self.players):
+            if (not q is proj.shooter):
+                for h in proj.getHitboxes():
+                    for r in q.getHurtboxes():
+                        hRect = proj.getBoxRect(h)
+                        rRect = q.getBoxRect(r)
+                        if hRect.colliderect(rRect):
+                            if (self.hitMemory[j] is None):
+                                self.hitMemory[j] = [h, proj]
+                                
+                            self.fxMemory[j].append(average_points(
+                                    hRect.center, rRect.center))
 
                                 
 
@@ -949,6 +973,8 @@ class Model(mvc.Model):
 
             p.freezeFrame = mem.freezeFrame
             hitter.freezeFrame = mem.freezeFrame
+            
+            hitter.performHit()
 
             p.canTech = not mem.untechable()
             p.techBuffer = TECH_BUFFER_MIN
@@ -1121,7 +1147,7 @@ class SuperIcon(drawable.Drawable):
                 
 
 def testData():
-    heroes = [hare.Hare(), hare.Hare()]
+    heroes = [cat.Cat(), hare.Hare()]
     
     #for i, h in enumerate(heroes):
         #colorswapper.swapCharacter(h, (i==0), [0], screen)

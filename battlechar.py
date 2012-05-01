@@ -601,4 +601,7 @@ class BattleChar(object):
     
     def getDamageMultiplier(self):
         return self.damagePercent / 100.0
+    
+    def performHit(self):
+        pass
         

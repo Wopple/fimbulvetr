@@ -18,6 +18,9 @@ class Projectile(object):
         self.actLeft = True
         self.dissolveOnPhysical = False
         self.liveTime = None
+        self.shooter = None
+        self.hitsRemaining = 1
+        self.freezeFrame = 0
 
         temp = pygame.Surface((50, 80))
         temp.fill((2, 2, 2))
@@ -35,12 +38,16 @@ class Projectile(object):
                 (self.currMove is self.moves['dissolve'])):
                 self.setCurrMove('dissolve')
                 
-        self.proceedFrame()
-        self.frameSpecial()
-        
-        for i in range(2):
-            self.vel[i] += self.accel[i]
-            self.preciseLoc[i] += self.vel[i]
+        if self.freezeFrame == 0:
+            self.proceedFrame()
+            self.frameSpecial()
+            
+            for i in range(2):
+                self.vel[i] += self.accel[i]
+                self.preciseLoc[i] += self.vel[i]
+                
+        if self.freezeFrame > 0:
+            self.freezeFrame -= 1
 
         self.rect.topleft = self.getRectPos()
 
@@ -82,8 +89,16 @@ class Projectile(object):
 
     def draw(self, screen, inOffset):
         screen.blit(self.image, add_points(self.rect.topleft, inOffset))
+        if SHOW_HITBOXES:
+            self.drawBoxes(self.getCurrentFrame().hitboxes, screen, inOffset)
         if SHOW_RED_DOT:
             screen.blit(RED_DOT, add_points(self.preciseLoc, inOffset))
+            
+            
+    def drawBoxes(self, boxes, screen, inOffset):
+        for b in boxes:
+            boxpos = self.getBoxAbsRect(b, inOffset).topleft
+            screen.blit(b.image, boxpos)
 
 
     def facingMultiplier(self):
@@ -162,3 +177,31 @@ class Projectile(object):
         self.accel = copy.copy(self.accel)
         self.vel = copy.copy(self.vel)
         return self
+    
+    def canHit(self):
+        return (self.freezeFrame == 0 and self.hitsRemaining > 0)
+    
+    def getHitboxes(self):
+        return self.getCurrentFrame().hitboxes
+    
+    def getBoxAbsRect(self, box, inOffset):
+        if self.facingRight:
+            boxPos = box.rect.topleft
+        else:
+            boxPos = flipRect(box.rect)
+
+        topleft = add_points(add_points(self.preciseLoc, boxPos), inOffset)
+
+        return pygame.Rect(topleft, box.rect.size)
+
+    def getBoxRect(self, box):
+        return self.getBoxAbsRect(box, (0, 0))
+    
+    def getDamageMultiplier(self):
+        if not self.shooter is None:
+            return self.shooter.getDamageMultiplier()
+        else:
+            return 1.0
+        
+    def performHit(self):
+        self.hitsRemaining -= 1
