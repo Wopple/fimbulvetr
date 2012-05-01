@@ -529,13 +529,12 @@ class Model(mvc.Model):
     def recreateTerritory(self):
         print "Creating Territory!"
         for s in self.structures:
+            s.territoryPoints = []
             if (s.team != 0):
                 self.createTerritoryForStructure(s)
 
 
     def createTerritoryForStructure(self, s):
-        s.territoryPoints = []
-        
         for i in range(360 / TERRITORY_DEGREES_PER_DOT):
             deg = TERRITORY_DEGREES_PER_DOT * i
             pos = degreesToPoint(deg, s.territorySize, s.precisePos)

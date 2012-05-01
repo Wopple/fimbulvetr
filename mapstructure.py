@@ -47,6 +47,7 @@ class MapStructure(mapitem.MapItem):
         blueCount = len(self.playersInArea[0])
         redCount = len(self.playersInArea[1])
 
+        #If some blue and no red characters
         if (blueCount > 0 and redCount == 0):
             if autoCap:
                 self.changeOwnership(1)
@@ -54,7 +55,7 @@ class MapStructure(mapitem.MapItem):
             else:
                 return self.addCapture(1)
             
-
+        #If some red and no blue characters
         elif (redCount > 0 and blueCount == 0):
             if autoCap:
                 self.changeOwnership(2)
@@ -62,7 +63,7 @@ class MapStructure(mapitem.MapItem):
             else:
                 return self.addCapture(2)
             
-
+        #If no characters of either team
         elif (redCount == 0 and blueCount == 0):
             if not self.capture.isMin():
                 self.capture.add(-BASE_CAPTURE_DEGRADE)
@@ -73,21 +74,26 @@ class MapStructure(mapitem.MapItem):
 
     def addCapture(self, val):
         
+        #If in winter, capture rate is slowed
         if self.locked:
             multiplier = FIMBULVETR_MULTIPLIER
         else:
             multiplier = 1.0
-            
         captureRate = int(BASE_CAPTURE_RATE * multiplier)
         
+        #If no team was previously capturing, set current capturing team to input
         if (self.captureTeam == 0 or self.capture.value == 0):
             self.captureTeam = val
         
+        #If the input team is capturing it, add to capture bar.  If maximum is reached, change ownership
         if (self.captureTeam == val):
             self.capture.add(captureRate)
             self.captureBar.changeColor(CAPTURE_TEAM_COLORS[val-1])
             if self.capture.isMax():
-                self.changeOwnership(val)
+                if self.team == 0:
+                    self.changeOwnership(val)
+                else:
+                    self.changeOwnership(0)
                 return True
         else:
             self.capture.add(-captureRate)
