@@ -31,14 +31,16 @@ class Projectile(object):
         self.destroy = False
 
     def update(self):
-        if not self.liveTime is None:
-            if self.liveTime > 0:
-                self.liveTime -= 1
-            if (self.liveTime <= 0 and not
-                (self.currMove is self.moves['dissolve'])):
-                self.setCurrMove('dissolve')
                 
         if self.freezeFrame == 0:
+            
+            if not self.liveTime is None:
+                if self.liveTime > 0:
+                    self.liveTime -= 1
+                if (self.liveTime <= 0 and not
+                    (self.currMove is self.moves['dissolve'])):
+                    self.setCurrMove('dissolve')
+            
             self.proceedFrame()
             self.frameSpecial()
             

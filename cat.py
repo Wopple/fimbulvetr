@@ -99,6 +99,7 @@ class Cat(battlechar.BattleChar):
         self.createMoveUpB()
         self.createNeutralAirA()
         self.createNeutralAirB()
+        self.createMoveDownAirB()
 
         self.createProjectiles()
         
@@ -317,6 +318,9 @@ class Cat(battlechar.BattleChar):
         f = [ self.frameData(5, 2, r[0]) ]
         self.moves['air'].append(f, [])
         
+        self.moves['air'].transitions['attackBDown'] = None
+        self.moves['air'].transitions['attackBDownCharge'] = move.Transition(None, None, None, None, 'downAirB')
+        
     def createMoveFlipping(self):
         r = [
                 [
@@ -367,7 +371,7 @@ class Cat(battlechar.BattleChar):
     
     def createMoveJabA(self):
         
-        dam1 = 100
+        dam1 = 80
         stun1 = 60
         force1 = 13
         angle1 = 27
@@ -564,15 +568,15 @@ class Cat(battlechar.BattleChar):
 
         self.moves['swordbeamGround1'] = move.Move(f, t)
         self.moves['swordbeamGround1'].canDI = False
-        self.moves['swordbeamGround1'].shoot.append( (0, 0, (64, -30)) )
+        self.moves['swordbeamGround1'].shoot.append( (0, 0, (62, -30)) )
 
         self.moves['swordbeamGround2'] = move.Move(f, t)
         self.moves['swordbeamGround2'].canDI = False
-        self.moves['swordbeamGround2'].shoot.append( (0, 1, (64, -30)) )
+        self.moves['swordbeamGround2'].shoot.append( (0, 1, (62, -30)) )
 
         self.moves['swordbeamGround3'] = move.Move(f, t)
         self.moves['swordbeamGround3'].canDI = False
-        self.moves['swordbeamGround3'].shoot.append( (0, 2, (64, -30)) )
+        self.moves['swordbeamGround3'].shoot.append( (0, 2, (62, -30)) )
         
     def createNeutralAirA(self):
         dam1 = 70
@@ -592,12 +596,12 @@ class Cat(battlechar.BattleChar):
                 ]
              ]
         
-        f = [ self.frameData(120, 4, []),
+        f = [ self.frameData(120, 3, []),
               self.frameData(121, 2, [], h[0]),
               self.frameData(122, 1, [], h[1]),
               self.frameData(123, 1, [], h[1]),
               self.frameData(124, 2, []),
-              self.frameData(125, 5, []),
+              self.frameData(125, 4, []),
               self.frameData(124, 5, [])]
         
         t = [['land', move.Transition(None, None, None, None, 'neutralAirALag')]]
@@ -625,8 +629,8 @@ class Cat(battlechar.BattleChar):
         
         f = [ self.frameData(34, 3, r[0]),
               self.frameData(35, 3, r[0]),
-              self.frameData(36, 4, r[0]),
-              self.frameData(37, 4, r[0]),
+              self.frameData(36, 3, r[0]),
+              self.frameData(37, 3, r[0]),
               self.frameData(38, 1, r[1])]
 
         t = [ ['bladelv1', move.Transition(None, None, 4, 4, 'swordbeamAir1')],
@@ -659,7 +663,6 @@ class Cat(battlechar.BattleChar):
         f = [ self.frameData(26, 6, r[0]) ]
         self.moves['neutralAirALag'] = move.Move(f, [])
         self.moves['neutralAirALag'].canDI = False
-
 
     def createMoveSwordBeamAirEnd(self):
         r = [
@@ -718,6 +721,53 @@ class Cat(battlechar.BattleChar):
         f = [ self.frameData(26, 8, r[0]) ]
         self.moves['neutralAirBLag'] = move.Move(f, [])
         self.moves['neutralAirBLag'].canDI = False
+        
+    
+    def createMoveDownAirB(self):
+        f = [ self.frameData(135, 5 ),
+              self.frameData(136, 2 )]
+        
+        t = [ ['bladelv1', move.Transition(None, None, 1, 1, 'downAirBolt1')],
+              ['bladelv2', move.Transition(None, None, 1, 1, 'downAirBolt2')],
+              ['bladelv3', move.Transition(None, None, 1, 1, 'downAirBolt3')] ]
+        
+        
+        self.moves['downAirB'].append(f, t)
+        
+        self.createMoveDownBoltShooting()
+        
+        
+    def createMoveDownBoltShooting(self):
+        
+        f = [ self.frameData(137, 2 ),
+              self.frameData(137, 1 ) ]
+        
+        t = [ ['exitFrame', move.Transition(-1, None, None, None, 'downAirBoltEnd')] ]
+        
+        self.moves['downAirBolt1'] = move.Move(f, t)
+        self.moves['downAirBolt1'].shoot.append( (0, 3, (6, 5)) )
+        
+        self.moves['downAirBolt2'] = move.Move(f, t)
+        self.moves['downAirBolt2'].shoot.append( (0, 4, (6, 5)) )
+        
+        self.moves['downAirBolt3'] = move.Move(f, t)
+        self.moves['downAirBolt3'].shoot.append( (0, 5, (6, 5)) )
+        
+        self.createMoveDownBoltEnd()
+        
+    def createMoveDownBoltEnd(self):
+        
+        f = [ self.frameData(137, 2 ),
+              self.frameData(137, 8 ) ]
+        
+        t = []
+        
+        
+        self.moves['downAirBoltEnd'] = move.Move(f, t)
+        self.moves['downAirBoltEnd'].frames[0].setVelYIfDrop = -10
+        self.moves['downAirBoltEnd'].frames[0].setAccelY = 0
+        self.moves['downAirBoltEnd'].frames[0].setVelX = 0
+        self.moves['downAirBoltEnd'].frames[0].setAccelX = 0
 
 
     def createMoveUpA(self):
@@ -833,7 +883,7 @@ class Cat(battlechar.BattleChar):
         
         dam1 = 35
         stun1 = 150
-        force1 = 8.5
+        force1 = 14
         angle1 = 95
         freeze1 = 3
         
@@ -881,7 +931,7 @@ class Cat(battlechar.BattleChar):
         angle1 = 75
         freeze1 = 0
         
-        dam2 = 120
+        dam2 = 100
         stun2 = 230
         force2 = 22
         angle2 = 75
@@ -1006,7 +1056,7 @@ class Cat(battlechar.BattleChar):
 
     def createMoveDownA(self):
         
-        dam1 = 60
+        dam1 = 85
         stun1 = 45
         force1 = 14
         angle1 = 32
@@ -1137,7 +1187,7 @@ class Cat(battlechar.BattleChar):
         
         dam1 = 75
         stun1 = 200
-        force1 = 12
+        force1 = 15
         angle1 = 90
         freeze1 = 5
         
@@ -1180,19 +1230,20 @@ class Cat(battlechar.BattleChar):
         
         self.moves['lowexplosiondash'] = move.Move(f, t)
         self.moves['lowexplosiondash'].canDI = False
-        self.moves['lowexplosiondash'].frames[0].setVelX = 5
+        self.moves['lowexplosiondash'].frames[0].setVelX = 5.5
         self.moves['lowexplosiondash'].frames[0].ignoreFriction = True
 
     def createProjectiles(self):
         self.createProjectileSwordBeams()
+        self.createProjectileDownBolt()
 
     def createProjectileSwordBeams(self):
         
-        dam1 = 60
+        dam1 = 30
         stun1 = 80
         force1 = 8
         angle1 = 30
-        freeze1 = 4
+        freeze1 = 3
         
         h = [
                 [
@@ -1218,7 +1269,7 @@ class Cat(battlechar.BattleChar):
         t = [ ['exitFrame', move.Transition(-1, None, None, None, 'flying')] ]
 
         temp = projectile.Projectile()
-        temp.hitsRemaining = 3
+        temp.hitsRemaining = 1
         temp.moves['flying'].append(f, t)
         temp.moves['flying'].frames[0].setVelX = 5.5
         temp.moves['flying'].frames[0].setVelY = 0
@@ -1227,7 +1278,7 @@ class Cat(battlechar.BattleChar):
         self.projectiles.append(temp)
 
         temp = projectile.Projectile()
-        temp.hitsRemaining = 3
+        temp.hitsRemaining = 2
         temp.moves['flying'].append(f, t)
         temp.moves['flying'].frames[0].setVelX = 7.5
         temp.moves['flying'].frames[0].setVelY = 0
@@ -1236,14 +1287,14 @@ class Cat(battlechar.BattleChar):
         self.projectiles.append(temp)
 
         temp = projectile.Projectile()
-        temp.hitsRemaining = 3
+        temp.hitsRemaining = 2
         temp.moves['flying'].append(f, t)
         temp.moves['flying'].frames[0].setVelX = 8.8
         temp.moves['flying'].frames[0].setVelY = 0
         temp.liveTime = 40
         self.createProjectileEnding1(temp)
         self.projectiles.append(temp)
-
+        
     def createProjectileEnding1(self, m):
         f = [ self.frameData(31, 3),
               self.frameData(32, 3),
@@ -1253,6 +1304,76 @@ class Cat(battlechar.BattleChar):
         m.moves['dissolve'].append(f, t)
 
         m.dissolveOnPhysical = True
+        
+    def createProjectileDownBolt(self):
+        
+        dam1 = 45
+        stun1 = 110
+        force1 = 18
+        angle1 = 270
+        freeze1 = 3
+        
+        h = [
+                [
+                    (-6, -27, 7, 4, dam1, stun1, force1, angle1, [], freeze1)
+                ]
+            ]
+        
+        f = [ self.frameData(138, 2, [], h[0]),
+              self.frameData(139, 1, [], h[0]),
+              self.frameData(140, 2, [], h[0]),
+              self.frameData(141, 1, [], h[0]),
+              self.frameData(139, 1, [], h[0]),
+              self.frameData(141, 2, [], h[0]),
+              self.frameData(138, 1, [], h[0]),
+              self.frameData(139, 1, [], h[0]),
+              self.frameData(141, 2, [], h[0]),
+              self.frameData(140, 1, [], h[0]),
+              self.frameData(138, 1, [], h[0]),
+              self.frameData(140, 2, [], h[0]),
+              self.frameData(139, 1, [], h[0]) ]
+        
+        t = [ ['exitFrame', move.Transition(-1, None, None, None, 'flying')] ]
+        
+        
+        temp = projectile.Projectile()
+        temp.hitsRemaining = 1
+        temp.moves['flying'].append(f, t)
+        temp.moves['flying'].frames[0].setVelX = 0
+        temp.moves['flying'].frames[0].setVelY = 8.0
+        temp.liveTime = 15
+        self.createProjectileEnding2(temp)
+        self.projectiles.append(temp)
+        
+        temp = projectile.Projectile()
+        temp.hitsRemaining = 1
+        temp.moves['flying'].append(f, t)
+        temp.moves['flying'].frames[0].setVelX = 0
+        temp.moves['flying'].frames[0].setVelY = 11.0
+        temp.liveTime = 15
+        self.createProjectileEnding2(temp)
+        self.projectiles.append(temp)
+        
+        temp = projectile.Projectile()
+        temp.hitsRemaining = 1
+        temp.moves['flying'].append(f, t)
+        temp.moves['flying'].frames[0].setVelX = 0
+        temp.moves['flying'].frames[0].setVelY = 14.0
+        temp.liveTime = 15
+        self.createProjectileEnding2(temp)
+        self.projectiles.append(temp)
+        
+    
+    def createProjectileEnding2(self, m):
+        f = [ self.frameData(142, 3),
+              self.frameData(143, 2),
+              self.frameData(144, 2) ]
+        t = []
+
+        m.moves['dissolve'].append(f, t)
+
+        m.dissolveOnPhysical = True
+             
         
     def createMoveStun1(self):
         r = [

@@ -373,6 +373,11 @@ class Model(mvc.Model):
                 elif d:
                     if p.actTransition('attackBDown'):
                         keysNow[5] = 0
+                    elif p.aerialCharge:
+                        if p.actTransition('attackBDownCharge'):
+                            keysNow[5] = 0
+                            p.aerialCharge = False
+                            
                 else:
                     if p.actTransition('attackB'):
                         keysNow[4] = 0
@@ -556,9 +561,9 @@ class Model(mvc.Model):
     def checkProjForDissolve(self, p):
         if (p.dissolveOnPhysical) and (p.currMove != p.moves['dissolve']):
             if p.preciseLoc[1] >= self.rect.height - BATTLE_AREA_FLOOR_HEIGHT:
-                p.setCurrMove('dissolve')
+                p.liveTime = 0
         if (p.hitsRemaining <= 0):
-            p.setCurrMove('dissolve')
+            p.liveTime = 0
                 
         if (p.currMove == p.moves['dissolve']) and (p.currFrame == len(p.currMove.frames)-1):
             p.destroy = True

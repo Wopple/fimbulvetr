@@ -17,7 +17,7 @@ class Move(object):
         temp = ['exitFrame', 'doWalk', 'doDash', 'noXMove', 'noXVel', 'land', 'jump',
                 'doDuck', 'stopDuck', 'attackA', 'attackB', 'releaseA',
                 'releaseB', 'attackAUp', 'attackBUp', 'attackADown',
-                'attackBDown', 'attackBUpCharge', 'bladelv1', 'bladelv2',
+                'attackBDown', 'attackBUpCharge', 'attackBDownCharge', 'bladelv1', 'bladelv2',
                 'bladelv3', 'onHit', 'attackAAtMax', 'attackBAtMax',
                 'block', 'releaseBlock', 'downBlock', 'forward', 'backward',
                 'up', 'tech', 'dropThrough', 'super']
