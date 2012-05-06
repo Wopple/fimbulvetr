@@ -227,8 +227,10 @@ class MapChar(mapitem.MapItem):
     def damagePercent(self):
         mult = 100
         
-        if (self.currTerrain == self.homeTerrain) or (self.currTerrain == FORTRESS):
+        if self.currTerrain == self.homeTerrain:
             mult += HOME_TERRAIN_DAMAGE_BONUS
+        elif self.currTerrain == FORTRESS:
+            mult += FORTRESS_DAMAGE_BONUS
             
         mult += (ALTAR_DAMAGE_BONUS * self.altarCount)
             
