@@ -450,7 +450,7 @@ class Cat(battlechar.BattleChar):
     def createMoveDashAttackA(self):
         
         dam1 = 0
-        stun1 = 50
+        stun1 = 105
         force1 = 16
         angle1 = 16
         

@@ -120,6 +120,9 @@ class Model(mvc.Model):
         #else:
         #    self.keys[1][7] = False
         #    self.keysNow[1][7] = 0
+        
+        #self.keys[1][7] = True
+        #self.keysNow[1][7] = 0
 
         fbf = self.checkFrameByFrame()
 
@@ -189,14 +192,17 @@ class Model(mvc.Model):
             if (not isFlash):
                 self.checkRetreat()
                 self.resetHitMemory()
+                
+                self.updateProjectiles()
 
                 self.checkForBlock()
+                self.checkForProjectileBlock()
                 for i, p in enumerate(self.players):
                     if self.returnCode[i] != 1:
                         self.actOnBlock(i, p)
                 
                 self.checkForHits()
-                self.updateProjectiles()
+                self.checkForProjectileHit()
                 for i, p in enumerate(self.players):
                     if self.returnCode[i] != 1:
                         self.actOnHit(i, p)
@@ -235,7 +241,6 @@ class Model(mvc.Model):
         temp = []
         for i in range(len(self.projectiles)):
             self.projectiles[i].update()
-            self.checkForProjectileHit(self.projectiles[i])
             self.checkProjForEdge(self.projectiles[i])
             self.checkProjForDissolve(self.projectiles[i])
             if not self.projectiles[i].destroy:
@@ -889,30 +894,64 @@ class Model(mvc.Model):
                             hRect = p.getBoxRect(h)
                             rRect = q.getBoxRect(r)
                             if hRect.colliderect(rRect):
-                                if (self.hitMemory[j] is None):
-                                    self.hitMemory[j] = [h, p]
-                                    p.attackCanHit = False
-                                    p.onHitTrigger = True
+                                if q.blockstun > 0:
+                                    if (self.blockMemory[j] is None):
+                                        self.blockMemory[j] = [h, p]
+                                        p.attackCanHit = False
+                                        p.onHitTrigger = True
+                                else:
+                                    if (self.hitMemory[j] is None):
+                                        self.hitMemory[j] = [h, p]
+                                        p.attackCanHit = False
+                                        p.onHitTrigger = True
 
                                 self.fxMemory[j].append(average_points(
                                     hRect.center, rRect.center))
-                                
-    
-    def checkForProjectileHit(self, proj):
-        if not proj.canHit():
-            return
+                 
+                 
+    def checkForProjectileBlock(self):
+        for proj in self.projectiles:
+            if not proj.canHit():
+                return
         
-        for j, q in enumerate(self.players):
-            if (not q is proj.shooter):
-                for h in proj.getHitboxes():
-                    for r in q.getHurtboxes():
-                        hRect = proj.getBoxRect(h)
-                        rRect = q.getBoxRect(r)
-                        if hRect.colliderect(rRect):
-                            if (self.hitMemory[j] is None):
-                                self.hitMemory[j] = [h, proj]
+            for j, q in enumerate(self.players):
+                if (not q is proj.shooter):
+                    for h in proj.getHitboxes():
+                        if h.ignoreBlock():
+                            continue
+                        for r in q.getBlockboxes():
+                            hRect = proj.getBoxRect(h)
+                            rRect = q.getBoxRect(r)
+                            if hRect.colliderect(rRect):
+                                if (self.blockMemory[j] is None):
+                                    self.blockMemory[j] = [h, proj]
+
+                                if q.currMove == q.moves['blocking']:
+                                    ind = 0
+                                elif q.currMove == q.moves['lowBlocking']:
+                                    ind = 1
+                                else:
+                                    ind = 2
+
+                                self.fxMemory[j].append(q.getBlockFXPoint(ind))
+    
+    
+    def checkForProjectileHit(self):
+        for proj in self.projectiles:
+            if not proj.canHit():
+                return
+        
+            for j, q in enumerate(self.players):
+                if (not q is proj.shooter):
+                    for h in proj.getHitboxes():
+                        for r in q.getHurtboxes():
+                            hRect = proj.getBoxRect(h)
+                            rRect = q.getBoxRect(r)
+                            if hRect.colliderect(rRect):
+                                if (self.hitMemory[j] is None):
+                                    self.hitMemory[j] = [h, proj]
                                 
-                            self.fxMemory[j].append(average_points(
+                                self.fxMemory[j].append(average_points(
                                     hRect.center, rRect.center))
 
                                 
@@ -1045,8 +1084,10 @@ class Model(mvc.Model):
                     temp = True
             if temp:
                 self.endingVal = 0
+                for proj in self.projectiles:
+                    proj.freezeFrame += DEATH_FREEZE_FRAME
                 for i, p in enumerate(self.players):
-                    p.freezeFrame += 20
+                    p.freezeFrame += DEATH_FREEZE_FRAME
                     if p.currMove.isDead:
                         if p.vel[1] > DEATH_FLY_VERT_VEL_MIN:
                             p.vel[1] = DEATH_FLY_VERT_VEL_MIN
