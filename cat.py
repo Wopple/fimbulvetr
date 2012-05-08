@@ -568,15 +568,15 @@ class Cat(battlechar.BattleChar):
 
         self.moves['swordbeamGround1'] = move.Move(f, t)
         self.moves['swordbeamGround1'].canDI = False
-        self.moves['swordbeamGround1'].shoot.append( (0, 0, (62, -30)) )
+        self.moves['swordbeamGround1'].shoot.append( (0, 0, (45, -30)) )
 
         self.moves['swordbeamGround2'] = move.Move(f, t)
         self.moves['swordbeamGround2'].canDI = False
-        self.moves['swordbeamGround2'].shoot.append( (0, 1, (62, -30)) )
+        self.moves['swordbeamGround2'].shoot.append( (0, 1, (45, -30)) )
 
         self.moves['swordbeamGround3'] = move.Move(f, t)
         self.moves['swordbeamGround3'].canDI = False
-        self.moves['swordbeamGround3'].shoot.append( (0, 2, (62, -30)) )
+        self.moves['swordbeamGround3'].shoot.append( (0, 2, (45, -30)) )
         
     def createNeutralAirA(self):
         dam1 = 70
@@ -933,8 +933,8 @@ class Cat(battlechar.BattleChar):
         
         dam2 = 100
         stun2 = 230
-        force2 = 22
-        angle2 = 75
+        force2 = 25
+        angle2 = 70
         freeze2 = 8
         
         h = [
