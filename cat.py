@@ -1244,12 +1244,13 @@ class Cat(battlechar.BattleChar):
         force1 = 8
         angle1 = 30
         freeze1 = 3
+        chip = 0.35
         
         h = [
                 [
-                    (-18, -14, 0, 17, dam1, stun1, force1, angle1, [], freeze1),
-                    (-28, -21, -3, -12, dam1, stun1, force1, angle1, [], freeze1),
-                    (-22, 16, -3, 24, dam1, stun1, force1, angle1, [], freeze1),
+                    (-18, -14, 0, 17, dam1, stun1, force1, angle1, [], freeze1, chip),
+                    (-28, -21, -3, -12, dam1, stun1, force1, angle1, [], freeze1, chip),
+                    (-22, 16, -3, 24, dam1, stun1, force1, angle1, [], freeze1, chip),
                 ]
              ]
         

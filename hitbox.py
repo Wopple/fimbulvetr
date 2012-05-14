@@ -7,7 +7,7 @@ from constants import *
 
 class Hitbox(object):
     def __init__(self, inRect, damage, stun, knockback, angle, properties,
-                 freezeFrame):
+                 freezeFrame, chipDamagePercentage):
 
         self.rect = inRect
         self.damage = damage
@@ -16,6 +16,7 @@ class Hitbox(object):
         self.angle = angle
         self.properties = properties
         self.freezeFrame = freezeFrame
+        self.chipDamagePercentage = chipDamagePercentage
 
         self.image = pygame.Surface(self.rect.size)
         self.image.fill(HITBOX_COLOR)

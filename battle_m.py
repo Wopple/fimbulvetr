@@ -94,6 +94,10 @@ class Model(mvc.Model):
         self.damageTag = textrect.render_textrect("Strength", STRUCTURE_COUNT_FONT, self.damageTagRects[0],
                                                   ALMOST_BLACK, BLACK, 1, True)
         
+        self.superVeil = pygame.Surface(SCREEN_SIZE)
+        self.superVeil.fill(BLACK)
+        self.superVeil.set_alpha(100)
+        
         
 
     def checkFrameByFrame(self):
@@ -121,8 +125,8 @@ class Model(mvc.Model):
         #    self.keys[1][7] = False
         #    self.keysNow[1][7] = 0
         
-        #self.keys[1][7] = True
-        #self.keysNow[1][7] = 0
+        self.keys[1][7] = True
+        self.keysNow[1][7] = 0
 
         fbf = self.checkFrameByFrame()
 
@@ -181,11 +185,11 @@ class Model(mvc.Model):
                 self.resetKeysNow(keysNow)
                 self.act(p, keys, keysNow)
                 self.checkReversable(l, r, p)
-                self.checkForGround(p)
+                self.checkForGround(i, p)
                 self.checkForEdge(l, r, p, isFlash)
                 if self.returnCode[i] != 0:
                     p.retreat.value = 0
-                self.checkForFX(p)
+                self.checkForFX(i, p)
                 if not p.dropThroughPlatform is None:
                     p.dropThroughPlatform = self.checkForPlatform(p)
 
@@ -428,7 +432,7 @@ class Model(mvc.Model):
                 if r:
                     p.facingRight = True
 
-    def checkForGround(self, c):
+    def checkForGround(self, i, c):
         old = c.inAir
         landed = False
         p = self.checkForPlatform(c)
@@ -448,7 +452,7 @@ class Model(mvc.Model):
                 c.aerialCharge = True
                 if old and (not c.currMove.ignoreGroundAir):
                     c.transToGround()
-                    self.createTransitionDust(c)
+                    self.createTransitionDust(i, c)
         else:
             c.inAir = True
             if not old and (not c.currMove.ignoreGroundAir):
@@ -470,7 +474,7 @@ class Model(mvc.Model):
         
         for i in range(2):
             m = self.players[i].currMove
-            if (not m.grabPos is None) or (m.grabVal != 0) or (m.isDead) or (m.isOnGround):
+            if (not m.grabPos is None) or (m.grabVal != 0) or (m.isDead) or (m.isOnGround) or (self.returnCode[i] == 1):
                 return
         
         if self.players[0].footRect.colliderect(self.players[1].footRect):
@@ -991,6 +995,7 @@ class Model(mvc.Model):
                 return
 
             damage = int(mem.damage * hitter.getDamageMultiplier())
+            chip = mem.chipDamagePercentage
             stun = mem.stun
             prop = mem.properties
 
@@ -1024,6 +1029,7 @@ class Model(mvc.Model):
             p.techBuffer = TECH_BUFFER_MIN
 
             if blocked:
+                damage = int(damage * chip)
                 p.getBlockstun(damage, stun, (xVel, yVel), prop)
 
             if mem.reverseUserFacing():
@@ -1047,8 +1053,8 @@ class Model(mvc.Model):
     def netMessageSize(self):
         return NET_MESSAGE_SIZE
 
-    def checkForFX(self, p):
-        if p.currSubframe == 0 and p.canEffect:
+    def checkForFX(self, i, p):
+        if self.returnCode[i] != 1 and p.currSubframe == 0 and p.canEffect:
             for i in p.getCurrentFrame().fx:
                 facing = i[2]
                 basePos = [i[1][0], i[1][1]]
@@ -1059,9 +1065,10 @@ class Model(mvc.Model):
                 self.fx.append(fx.FX(pos, facing, i[0]))
                 p.canEffect = False
 
-    def createTransitionDust(self, p):
-        if p.currMove == p.moves['groundHit'] or p.currMove.isStun:
+    def createTransitionDust(self, i, p):
+        if p.currMove == p.moves['groundHit'] or p.currMove.isStun or self.returnCode[i] == 1:
             return
+        
         pos = add_points(p.preciseLoc, (0,0))
         self.fx.append(fx.FX(pos, True, 'dust'))
         self.fx.append(fx.FX(pos, False, 'dust'))
@@ -1073,6 +1080,7 @@ class Model(mvc.Model):
                 if self.players[i].retreat.isMax():
                     self.returnCode[i] = 1
                     self.players[i].retreat.setToMin()
+                    self.players[i].preciseLoc[1] = self.rect.height - BATTLE_AREA_FLOOR_HEIGHT
                     if self.endingVal == -1:
                         self.endingVal = 0
 
@@ -1147,6 +1155,13 @@ class Model(mvc.Model):
         c = self.players[i]
         return textrect.render_textrect(c.getDamagePercentText(), DAMAGE_PERCENT_FONT, self.damagePercentRects[i],
                                                  ALMOST_BLACK, BLACK, 1, True)
+        
+    def superDarken(self):
+        for p in self.players:
+            if p.currMove.isSuperFlash:
+                return True
+            
+        return False
         
         
 class SuperIcon(drawable.Drawable):

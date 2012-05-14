@@ -135,8 +135,12 @@ class Frame(object):
             angle = d[7]
             properties = d[8]
             freezeFrame = d[9]
+            if len(d) >= 11:
+                chip = d[10]
+            else:
+                chip = CHIP_DAMAGE_PERCENTAGE_DEFAULT
             self.hitboxes.append(hitbox.Hitbox(rect, damage, stun, knockback,
-                                               angle, properties, freezeFrame))
+                                               angle, properties, freezeFrame, chip))
 
 class Transition(object):
     def __init__(self, var1, var2, rangeMin, rangeMax, dest):
@@ -346,6 +350,7 @@ def baseStun():
 def baseStunNeedTech():
     m = baseStun()
     m.needTech = True
+    m.drawToBack = True
     return m
     
 
@@ -359,6 +364,7 @@ def baseGroundHit():
     m = Move([], t)
     m.canDI = False
     m.isOnGround = True
+    m.drawToBack = True
     return m
 
 def baseTeching():
@@ -368,6 +374,7 @@ def baseTeching():
 
     m = Move([], t)
     m.canDI = False
+    m.drawToBack = True
     return m
 
 def baseStand():
@@ -378,6 +385,7 @@ def baseStand():
 def baseTechRoll():
     m = Move([], [])
     m.canDI = False
+    m.drawToBack = True
     return m
 
 def baseBlank():
@@ -400,6 +408,7 @@ def baseDeadFalling():
     m = Move([], t)
     m.canDI = False
     m.isDead = True
+    m.drawToBack = True
     return m
 
 def baseDeadGroundHit():
@@ -408,6 +417,7 @@ def baseDeadGroundHit():
     m.canDI = False
     m.isDead = True
     m.isOnGround = True
+    m.drawToBack = True
     return m
 
 def baseDeadLaying():
@@ -416,6 +426,7 @@ def baseDeadLaying():
     m.canDI = False
     m.isDead = True
     m.isOnGround = True
+    m.drawToBack = True
     return m
 
 def baseSuperFlash():

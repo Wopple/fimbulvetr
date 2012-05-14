@@ -539,10 +539,14 @@ class BattleChar(object):
             self.setCurrMove('stun4')
 
     def getBlockstun(self, damage, stun, vel, properties):
+        self.hp.add(-damage)
+        
         self.blockstun = int(stun * BLOCKSTUN_FACTOR)
 
         self.vel[0] = vel[0]
         self.vel[1] = vel[1]
+        
+        
         
 
     def getSuper(self):
