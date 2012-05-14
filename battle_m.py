@@ -125,8 +125,8 @@ class Model(mvc.Model):
         #    self.keys[1][7] = False
         #    self.keysNow[1][7] = 0
         
-        self.keys[1][7] = True
-        self.keysNow[1][7] = 0
+        #self.keys[1][7] = True
+        #self.keysNow[1][7] = 0
 
         fbf = self.checkFrameByFrame()
 
