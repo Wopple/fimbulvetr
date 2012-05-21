@@ -95,6 +95,7 @@ class Cat(battlechar.BattleChar):
         self.createMoveDownA()
         self.createMoveDownB()
         self.createMoveDashAttackA()
+        self.createMoveDashAttackB()
         self.createMoveUpA()
         self.createMoveUpB()
         self.createNeutralAirA()
@@ -534,6 +535,36 @@ class Cat(battlechar.BattleChar):
         self.moves['dashAttackA'].frames[3].setVelX = 0
         self.moves['dashAttackA'].frames[3].resetHitPotential = True
         
+        
+    def createMoveDashAttackB(self):
+        
+        f = [ self.frameData(145, 4),
+              self.frameData(146, 1),
+              self.frameData(147, 1),
+              self.frameData(148, 2),
+              self.frameData(149, 2),
+              self.frameData(150, 2),
+              self.frameData(151, 2),
+              self.frameData(152, 2),
+              self.frameData(153, 1),
+              self.frameData(154, 1),
+              self.frameData(155, 1),
+              self.frameData(156, 8)]
+        
+        self.moves['dashAttackB'].append(f, [])
+        
+        frames = self.moves['dashAttackB'].frames
+        
+        frames[0].setVelX = 10
+        
+        
+        for i in range(0, 10):
+            frames[i].setSpeedCapX = 10.5
+            frames[i].setFrictionX = 0.65
+            
+        for i in range(10, len(frames)):
+            frames[i].setVelX = 0
+            
         
 
     def createMoveSwordBeamGroundEnd(self):
