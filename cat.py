@@ -839,11 +839,34 @@ class Cat(battlechar.BattleChar):
               self.frameData(158, 4, r[0] ),
               self.frameData(159, 4, r[0] ) ]
         
-        t = [ ['attackADown', move.Transition(None, None, 9, 10, 'downAirA')] ]
+        t = [ ['land', move.Transition(None, None, None, None, 'downAirALag')],
+              ['attackADown', move.Transition(None, None, 9, 10, 'downAirA')] ]
         
         self.moves['downAirA'] = move.Move(f, t)
         
         self.moves['downAirA'].reversable = True
+        
+        self.createMoveDownAirALag()
+        
+        
+    def createMoveDownAirALag(self):
+        r = [
+                [
+                    (-1, -59, 11, -41),
+                    (-2, -40, 8, -30),
+                    (-5, -31, 6, -19),
+                    (-8, -21, 8, -15),
+                    (-10, -15, -5, -8),
+                    (-11, -8, -7, 1),
+                    (3, -16, 9, -12),
+                    (5, -12, 11, 0),
+                    (8, -38, 15, -32)
+                ]
+            ]
+        
+        f = [ self.frameData(26, 7, r[0]) ]
+        self.moves['downAirALag'] = move.Move(f, [])
+        self.moves['downAirALag'].canDI = False
         
     
     def createMoveDownAirB(self):
