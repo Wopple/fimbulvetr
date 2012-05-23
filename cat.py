@@ -11,7 +11,7 @@ import projectile
 from constants import *
 
 class Cat(battlechar.BattleChar):
-    def __init__(self, name="Unnamed Cat", inSpecial=0):
+    def __init__(self, name="Unnamed Cat", inSuper=0):
         self.name = name
         self.speciesName = "Cat"
         self.spriteSet = CAT_IMAGES
@@ -46,9 +46,7 @@ class Cat(battlechar.BattleChar):
                             " to charge their slowly-depleting energy" +
                             " in order to maintain strength.")
 
-        if (inSpecial < 0) or (inSpecial >= len(self.superMoves)):
-            inSpecial = 0
-        self.currSuperMove = inSpecial
+        self.setSuperValue(inSuper)
 
     def beginBattle(self):
         super(Cat, self).beginBattle()
@@ -100,6 +98,7 @@ class Cat(battlechar.BattleChar):
         self.createMoveUpB()
         self.createNeutralAirA()
         self.createNeutralAirB()
+        self.createMoveDownAirA()
         self.createMoveDownAirB()
 
         self.createProjectiles()
@@ -399,7 +398,7 @@ class Cat(battlechar.BattleChar):
                 ]
             ]
         
-        f = [ self.frameData(48, 3, []),
+        f = [ self.frameData(48, 5, []),
               self.frameData(49, 1, [], h[0]),
               self.frameData(50, 1, [], h[1]),
               self.frameData(51, 1, [], h[2]),
@@ -456,7 +455,7 @@ class Cat(battlechar.BattleChar):
         angle1 = 16
         
         
-        dam2 = 130
+        dam2 = 120
         stun2 = 120
         force2 = 17
         angle2 = 18
@@ -538,18 +537,54 @@ class Cat(battlechar.BattleChar):
         
     def createMoveDashAttackB(self):
         
-        f = [ self.frameData(145, 4),
-              self.frameData(146, 1),
-              self.frameData(147, 1),
-              self.frameData(148, 2),
-              self.frameData(149, 2),
-              self.frameData(150, 2),
-              self.frameData(151, 2),
-              self.frameData(152, 2),
-              self.frameData(153, 1),
-              self.frameData(154, 1),
-              self.frameData(155, 1),
-              self.frameData(156, 8)]
+        r = [
+                [
+                    (-6, -56, 6, -17),
+                    (-3, -17, 2, 1)
+                ],
+                [
+                    (1, -55, 13, -42),
+                    (0, -42, 9, -30),
+                    (-4, -30, 7, -17),
+                    (-6, -19, -3, -10),
+                    (-8, -11, -5, 0),
+                    (5, -18, 10, -15),
+                    (6, -16, 12, -11),
+                    (7, -12, 13, 0)
+                ]
+            ]
+        
+        
+        dam1 = 145
+        stun1 = 120
+        force1 = 15
+        angle1 = 13
+        freeze1 = 4
+        h = [
+                [
+                    (-11, -37, 43, -30, dam1, stun1, force1, angle1, [], freeze1)
+                ],
+                [
+                    (4, -43, 71, -29, dam1, stun1, force1, angle1, [], freeze1),
+                    (-5, -40, 15, -31, dam1, stun1, force1, angle1, [], freeze1),
+                    (14, -52, 61, -40, dam1, stun1, force1, angle1, [], freeze1),
+                    (56, -48, 67, -40, dam1, stun1, force1, angle1, [], freeze1),
+                    (-5, -31, 8, -23, dam1, stun1, force1, angle1, [], freeze1)
+                ]
+            ]
+        
+        f = [ self.frameData(145, 4, r[0]),
+              self.frameData(146, 1, r[0]),
+              self.frameData(147, 1, r[0]),
+              self.frameData(148, 2, r[0]),
+              self.frameData(149, 2, r[0]),
+              self.frameData(150, 2, r[0]),
+              self.frameData(151, 2, r[0]),
+              self.frameData(152, 2, r[0]),
+              self.frameData(153, 1, r[1], h[0]),
+              self.frameData(154, 1, r[1], h[1]),
+              self.frameData(155, 1, r[1], h[1]),
+              self.frameData(156, 8, r[1]) ]
         
         self.moves['dashAttackB'].append(f, [])
         
@@ -752,6 +787,63 @@ class Cat(battlechar.BattleChar):
         f = [ self.frameData(26, 8, r[0]) ]
         self.moves['neutralAirBLag'] = move.Move(f, [])
         self.moves['neutralAirBLag'].canDI = False
+        
+    
+    def createMoveDownAirA(self):
+        
+        r = [
+                [
+                    (11, -47, 20, -38),
+                    (7, -42, 15, -34),
+                    (2, -37, 12, -27),
+                    (-1, -28, 8, -20),
+                    (-5, -21, 5, -12),
+                    (-8, -13, 0, -4),
+                    (-12, -5, -4, 5)
+                ]
+            ]
+        
+        dam1 = 85
+        stun1 = 70
+        force1 = 12
+        angle1 = 79
+        freeze1 = 3
+        
+        h = [
+                [
+                    (-3, -33, 13, -19, dam1, stun1, force1, angle1, [], freeze1),
+                    (7, -28, 25, -13, dam1, stun1, force1, angle1, [], freeze1),
+                    (18, -24, 35, -8, dam1, stun1, force1, angle1, [], freeze1),
+                    (26, -16, 45, -3, dam1, stun1, force1, angle1, [], freeze1)
+                ],
+                [
+                    (-5, -33, 46, -13, dam1, stun1, force1, angle1, [], freeze1),
+                    (20, -38, 41, -31, dam1, stun1, force1, angle1, [], freeze1),
+                    (24, -13, 71, 0, dam1, stun1, force1, angle1, [], freeze1),
+                    (45, -29, 69, -10, dam1, stun1, force1, angle1, [], freeze1),
+                    (14, -13, 28, -7, dam1, stun1, force1, angle1, [], freeze1)
+                ]
+            ]
+        
+    
+        f = [ self.frameData(157, 5, r[0] ),
+              self.frameData(158, 2, r[0] ),
+              self.frameData(159, 2, r[0] ),
+              self.frameData(160, 1, r[0], h[0] ),
+              self.frameData(161, 1, r[0], h[1] ),
+              self.frameData(162, 1, r[0], h[1] ),
+              self.frameData(163, 2, r[0] ),
+              self.frameData(164, 3, r[0] ),
+              self.frameData(165, 3, r[0] ),
+              self.frameData(157, 3, r[0] ),
+              self.frameData(158, 4, r[0] ),
+              self.frameData(159, 4, r[0] ) ]
+        
+        t = [ ['attackADown', move.Transition(None, None, 9, 10, 'downAirA')] ]
+        
+        self.moves['downAirA'] = move.Move(f, t)
+        
+        self.moves['downAirA'].reversable = True
         
     
     def createMoveDownAirB(self):
@@ -1936,9 +2028,66 @@ class Cat(battlechar.BattleChar):
         d = ("A super-powered version of the user's normal protectile" +
              " ability, capable of dealing a great deal of damage.")
         
-        sg = move.SuperMove(n, d, [], [])
+        r = [
+                [
+                    (-6, -56, 6, -17),
+                    (-3, -17, 2, 1)
+                ],
+                [
+                    (1, -55, 13, -42),
+                    (0, -42, 9, -30),
+                    (-4, -30, 7, -17),
+                    (-6, -19, -3, -10),
+                    (-8, -11, -5, 0),
+                    (5, -18, 10, -15),
+                    (6, -16, 12, -11),
+                    (7, -12, 13, 0)
+                ]
+            ]
+        
+        f = [ self.frameData(152, 3),
+              self.frameData(153, 1),
+              self.frameData(154, 1),
+              self.frameData(155, 1),
+              self.frameData(156, 30, r[0]) ]
+        
+        
+        sg = move.SuperMove(n, d, f, [])
+        sg.flash = self.createSuperFlash1()
+        
+        sg.canDI = False
+        sg.frames[0].setVelX = 0
 
         self.appendSuperMove(sg, None)
+        
+    def createSuperFlash1(self):
+        
+        f = [ self.frameData(10, 2),
+              self.frameData(11, 2),
+              self.frameData(12, 2),
+              self.frameData(13, 2),
+              self.frameData(11, 2),
+              self.frameData(10, 2),
+              self.frameData(12, 2),
+              self.frameData(11, 2),
+              self.frameData(10, 2),
+              self.frameData(13, 2),
+              self.frameData(12, 2),
+              self.frameData(10, 2),
+              
+              self.frameData(145, 4),
+              self.frameData(146, 10),
+              self.frameData(147, 4),
+              self.frameData(148, 4),
+              self.frameData(149, 1),
+              self.frameData(150, 1),
+              self.frameData(151, 2)]
+        
+        s = move.baseSuperFlash()
+        s.append(f, [])
+        
+        return s
+        
         
     def createColors(self):
         pass
