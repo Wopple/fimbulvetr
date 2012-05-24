@@ -371,6 +371,31 @@ class Cat(battlechar.BattleChar):
     
     def createMoveJabA(self):
         
+        r = [
+                [
+                    (-4, -54, 11, -12),
+                    (-7, -12, 0, -7),
+                    (-10, -7, -3, -3),
+                    (-13, -3, -4, 1),
+                    (8, -14, 15, -11),
+                    (12, -11, 17, -8),
+                    (12, -7, 16, -3),
+                    (11, -2, 17, 1)
+                ],
+                [
+                    (12, -50, 22, -38),
+                    (12, -38, 19, -30),
+                    (9, -30, 19, -20),
+                    (5, -19, 20, -13),
+                    (17, -13, 25, -9),
+                    (20, -9, 27, 0),
+                    (1, -14, 7, -10),
+                    (-4, -11, 2, -7),
+                    (-7, -7, 0, -4),
+                    (-11, -4, -3, 0)
+                ]
+            ]
+        
         dam1 = 80
         stun1 = 60
         force1 = 13
@@ -398,14 +423,14 @@ class Cat(battlechar.BattleChar):
                 ]
             ]
         
-        f = [ self.frameData(48, 5, []),
-              self.frameData(49, 1, [], h[0]),
-              self.frameData(50, 1, [], h[1]),
-              self.frameData(51, 1, [], h[2]),
-              self.frameData(52, 1, [], h[3]),
-              self.frameData(53, 2, []),
-              self.frameData(54, 9, []),
-              self.frameData(55, 2, []) ]
+        f = [ self.frameData(48, 5, r[0]),
+              self.frameData(49, 1, r[0], h[0]),
+              self.frameData(50, 1, r[1], h[1]),
+              self.frameData(51, 1, r[1], h[2]),
+              self.frameData(52, 1, r[1], h[3]),
+              self.frameData(53, 2, r[1]),
+              self.frameData(54, 9, r[1]),
+              self.frameData(55, 2, r[1]) ]
         
         
         
@@ -806,7 +831,7 @@ class Cat(battlechar.BattleChar):
         dam1 = 85
         stun1 = 70
         force1 = 12
-        angle1 = 79
+        angle1 = 290
         freeze1 = 3
         
         h = [
@@ -870,8 +895,18 @@ class Cat(battlechar.BattleChar):
         
     
     def createMoveDownAirB(self):
-        f = [ self.frameData(135, 5 ),
-              self.frameData(136, 2 )]
+        
+        r = [
+                [
+                    (-7, -46, 5, -36),
+                    (-6, -32, 4, -11),
+                    (-6, -11, -2, 0),
+                    (1, -11, 5, 2)
+                ]
+            ]
+        
+        f = [ self.frameData(135, 5, r[0] ),
+              self.frameData(136, 2, r[0] )]
         
         t = [ ['bladelv1', move.Transition(None, None, 1, 1, 'downAirBolt1')],
               ['bladelv2', move.Transition(None, None, 1, 1, 'downAirBolt2')],
@@ -885,8 +920,17 @@ class Cat(battlechar.BattleChar):
         
     def createMoveDownBoltShooting(self):
         
-        f = [ self.frameData(137, 2 ),
-              self.frameData(137, 1 ) ]
+        r = [
+                [
+                    (-7, -46, 5, -36),
+                    (-6, -32, 4, -11),
+                    (-6, -11, -2, 0),
+                    (1, -11, 5, 2)
+                ]
+            ]
+        
+        f = [ self.frameData(137, 2, r[0] ),
+              self.frameData(137, 1, r[0] ) ]
         
         t = [ ['exitFrame', move.Transition(-1, None, None, None, 'downAirBoltEnd')] ]
         
@@ -903,8 +947,17 @@ class Cat(battlechar.BattleChar):
         
     def createMoveDownBoltEnd(self):
         
-        f = [ self.frameData(137, 2 ),
-              self.frameData(137, 8 ) ]
+        r = [
+                [
+                    (-7, -46, 5, -36),
+                    (-6, -32, 4, -11),
+                    (-6, -11, -2, 0),
+                    (1, -11, 5, 2)
+                ]
+            ]
+        
+        f = [ self.frameData(137, 2, r[0] ),
+              self.frameData(137, 8, r[0] ) ]
         
         t = []
         
@@ -917,6 +970,17 @@ class Cat(battlechar.BattleChar):
 
 
     def createMoveUpA(self):
+        
+        r = [
+                [
+                    (-6, -56, 6, -17),
+                    (-7, -17, -4, -4),
+                    (-9, -6, -5, 1),
+                    (4, -18, 7, -13),
+                    (5, -13, 10, -8),
+                    (6, -9, 12, 0)
+                ]
+            ]
         
         h = [
                 [
@@ -1037,27 +1101,27 @@ class Cat(battlechar.BattleChar):
             h[j] = [i + [dam1, stun1, force1, angle1, [], freeze1] for i in h[j]]
         
         
-        f = [ self.frameData(116, 5),
-              self.frameData(97, 3, [], h[0]),
-              self.frameData(98, 3, [], h[1]),
-              self.frameData(99, 2, [], h[2]),
-              self.frameData(100, 2, [], h[3]),
-              self.frameData(101, 2, [], h[4]),
-              self.frameData(102, 2, [], h[5]),
-              self.frameData(103, 1, [], h[6]),
-              self.frameData(104, 1, [], h[7]),
-              self.frameData(105, 1, [], h[8]),
-              self.frameData(106, 2, [], h[9]),
-              self.frameData(107, 2, [], h[10]),
-              self.frameData(108, 2, [], h[11]),
-              self.frameData(109, 2, [], h[12]),
-              self.frameData(110, 2, [], h[13]),
-              self.frameData(111, 2, [], h[14]),
-              self.frameData(112, 1, [], h[15]),
-              self.frameData(113, 1, [], h[16]),
-              self.frameData(114, 2, [], h[17]),
-              self.frameData(115, 3, [], h[18]),
-              self.frameData(116, 6) ]
+        f = [ self.frameData(116, 5, r[0]),
+              self.frameData(97, 3, r[0], h[0]),
+              self.frameData(98, 3, r[0], h[1]),
+              self.frameData(99, 2, r[0], h[2]),
+              self.frameData(100, 2, r[0], h[3]),
+              self.frameData(101, 2, r[0], h[4]),
+              self.frameData(102, 2, r[0], h[5]),
+              self.frameData(103, 1, r[0], h[6]),
+              self.frameData(104, 1, r[0], h[7]),
+              self.frameData(105, 1, r[0], h[8]),
+              self.frameData(106, 2, r[0], h[9]),
+              self.frameData(107, 2, r[0], h[10]),
+              self.frameData(108, 2, r[0], h[11]),
+              self.frameData(109, 2, r[0], h[12]),
+              self.frameData(110, 2, r[0], h[13]),
+              self.frameData(111, 2, r[0], h[14]),
+              self.frameData(112, 1, r[0], h[15]),
+              self.frameData(113, 1, r[0], h[16]),
+              self.frameData(114, 2, r[0], h[17]),
+              self.frameData(115, 3, r[0], h[18]),
+              self.frameData(116, 6, r[0]) ]
         
         t = [['attackA', move.Transition(3, CAT_ENERGY_SECTIONS[1], 17, 20, 'aetherpiercer')],
              ['attackAUp', move.Transition(3, CAT_ENERGY_SECTIONS[1], 17, 20, 'aetherpiercer')]]
@@ -1070,6 +1134,21 @@ class Cat(battlechar.BattleChar):
         self.createMoveAetherPiercer()
         
     def createMoveAetherPiercer(self):
+        
+        
+        r = [
+                [
+                    (4, -51, 17, -39),
+                    (4, -38, 14, -26),
+                    (1, -27, 11, -14),
+                    (-4, -15, 0, -10),
+                    (-6, -9, -2, -3),
+                    (-10, -3, -5, 2),
+                    (-1, -17, 13, -12),
+                    (11, -13, 17, 1)
+                ]
+            ]
+
         
         dam1 = 0
         stun1 = 150
@@ -1096,10 +1175,10 @@ class Cat(battlechar.BattleChar):
                 ]
              ]
         
-        f = [ self.frameData(117, 5),
-              self.frameData(118, 2, [], h[0]),
-              self.frameData(119, 3, [], h[1]),
-              self.frameData(119, 20, [])]
+        f = [ self.frameData(117, 5, r[0]),
+              self.frameData(118, 2, r[0], h[0]),
+              self.frameData(119, 3, r[0], h[1]),
+              self.frameData(119, 20, r[0])]
         
         t = []
         
@@ -1279,42 +1358,55 @@ class Cat(battlechar.BattleChar):
         angle1 = 90
         freeze1 = 2
         
+        r = [
+                [
+                    (-7, -55, 4, -44),
+                    (-7, -43, 3, -18),
+                    (-10, -18, -6, -10),
+                    (-12, -10, -8, 0),
+                    (1, -19, 5, -14),
+                    (3, -14, 7, -10),
+                    (4, -10, 9, 0),
+                    (8, -3, 13, 1)
+                ]
+            ]
+        
         h = [
                 [
                     (16, -12, 86, 3, dam1, stun1, force1, angle1, [('untechable')], freeze1),
                 ]
             ]
         
-        f = [self.frameData(22, 4, []),
-             self.frameData(56, 1, []),
-             self.frameData(57, 2, []),
-             self.frameData(58, 2, []),
-             self.frameData(59, 2, []),
+        f = [self.frameData(22, 4, r[0]),
+             self.frameData(56, 1, r[0]),
+             self.frameData(57, 2, r[0]),
+             self.frameData(58, 2, r[0]),
+             self.frameData(59, 2, r[0]),
              
-             self.frameData(60, 1, [], h[0]),
-             self.frameData(61, 1, [], h[0]),
-             self.frameData(62, 1, [], h[0]),
-             self.frameData(63, 1, [], h[0]),
-             self.frameData(60, 1, [], h[0]),
-             self.frameData(61, 1, [], h[0]),
-             self.frameData(62, 1, [], h[0]),
-             self.frameData(63, 1, [], h[0]),
-             self.frameData(60, 1, [], h[0]),
-             self.frameData(61, 1, [], h[0]),
-             self.frameData(62, 1, [], h[0]),
-             self.frameData(63, 1, [], h[0]),
-             self.frameData(60, 1, [], h[0]),
-             self.frameData(61, 1, [], h[0]),
-             self.frameData(62, 1, [], h[0]),
-             self.frameData(63, 1, [], h[0]),
-             self.frameData(60, 1, [], h[0]),
-             self.frameData(61, 1, [], h[0]),
-             self.frameData(62, 1, [], h[0]),
-             self.frameData(63, 1, [], h[0]),
+             self.frameData(60, 1, r[0], h[0]),
+             self.frameData(61, 1, r[0], h[0]),
+             self.frameData(62, 1, r[0], h[0]),
+             self.frameData(63, 1, r[0], h[0]),
+             self.frameData(60, 1, r[0], h[0]),
+             self.frameData(61, 1, r[0], h[0]),
+             self.frameData(62, 1, r[0], h[0]),
+             self.frameData(63, 1, r[0], h[0]),
+             self.frameData(60, 1, r[0], h[0]),
+             self.frameData(61, 1, r[0], h[0]),
+             self.frameData(62, 1, r[0], h[0]),
+             self.frameData(63, 1, r[0], h[0]),
+             self.frameData(60, 1, r[0], h[0]),
+             self.frameData(61, 1, r[0], h[0]),
+             self.frameData(62, 1, r[0], h[0]),
+             self.frameData(63, 1, r[0], h[0]),
+             self.frameData(60, 1, r[0], h[0]),
+             self.frameData(61, 1, r[0], h[0]),
+             self.frameData(62, 1, r[0], h[0]),
+             self.frameData(63, 1, r[0], h[0]),
              
-             self.frameData(58, 2, []),
-             self.frameData(57, 2, []),
-             self.frameData(22, 10, []) ]
+             self.frameData(58, 2, r[0]),
+             self.frameData(57, 2, r[0]),
+             self.frameData(22, 10, r[0]) ]
         
         t = [['attackB', move.Transition(3, CAT_ENERGY_SECTIONS[0], 6, 25, 'lowexplosion')],
              ['attackBDown', move.Transition(3, CAT_ENERGY_SECTIONS[0], 6, 25, 'lowexplosion')]]
@@ -1331,6 +1423,20 @@ class Cat(battlechar.BattleChar):
         
     def createMoveLowExplosion(self):
         
+        
+        r = [
+                [
+                    (-7, -55, 4, -44),
+                    (-7, -43, 3, -18),
+                    (-10, -18, -6, -10),
+                    (-12, -10, -8, 0),
+                    (1, -19, 5, -14),
+                    (3, -14, 7, -10),
+                    (4, -10, 9, 0),
+                    (8, -3, 13, 1)
+                ]
+            ]
+        
         dam1 = 75
         stun1 = 200
         force1 = 15
@@ -1343,17 +1449,17 @@ class Cat(battlechar.BattleChar):
                 ]
             ]
         
-        f = [self.frameData(86, 2, [], h[0]),
-             self.frameData(86, 5, []),
-             self.frameData(87, 1, []),
-             self.frameData(88, 1, []),
-             self.frameData(89, 2, []),
-             self.frameData(90, 3, []),
-             self.frameData(91, 5, []),
-             self.frameData(92, 5, []),
-             self.frameData(93, 4, []),
-             self.frameData(94, 3, []),
-             self.frameData(0, 3, []),
+        f = [self.frameData(86, 2, r[0], h[0]),
+             self.frameData(86, 5, r[0]),
+             self.frameData(87, 1, r[0]),
+             self.frameData(88, 1, r[0]),
+             self.frameData(89, 2, r[0]),
+             self.frameData(90, 3, r[0]),
+             self.frameData(91, 5, r[0]),
+             self.frameData(92, 5, r[0]),
+             self.frameData(93, 4, r[0]),
+             self.frameData(94, 3, r[0]),
+             self.frameData(0, 3, r[0]),
              ]
         
         t = [['attackA', move.Transition(None, None, 2, 8, 'lowexplosiondash')],
@@ -2068,11 +2174,11 @@ class Cat(battlechar.BattleChar):
                 ]
             ]
         
-        f = [ self.frameData(152, 3),
-              self.frameData(153, 1),
-              self.frameData(154, 1),
-              self.frameData(155, 1),
-              self.frameData(156, 30, r[0]) ]
+        f = [ self.frameData(152, 3, r[0]),
+              self.frameData(153, 1, r[0]),
+              self.frameData(154, 1, r[0]),
+              self.frameData(155, 1, r[0]),
+              self.frameData(156, 30, r[1]) ]
         
         
         sg = move.SuperMove(n, d, f, [])
