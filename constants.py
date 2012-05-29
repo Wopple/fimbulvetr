@@ -933,7 +933,13 @@ temp = [ ["00.png", (24, 61)],
          ["162.png", (21, 54)],
          ["163.png", (21, 54)],
          ["164.png", (21, 54)],
-         ["165.png", (21, 54)]]
+         ["165.png", (21, 54)],
+         ["166.png", (37, 43)],
+         ["167.png", (37, 43)],
+         ["168.png", (37, 43)],
+         ["169.png", (34, 90)],
+         ["170.png", (34, 90)],
+         ["171.png", (34, 90)]]
 
 CAT_IMAGES = []
 for i in temp:
@@ -979,7 +985,7 @@ FOX_SUPER_ICONS = []
 for i in temp:
     FOX_SUPER_ICONS.append(pygame.image.load(os.path.join(DIREC_FOX_GRAPHICS, i)).convert_alpha())
     
-temp = []
+temp = ['super1.png']
 
 CAT_SUPER_ICONS = []
 for i in temp:

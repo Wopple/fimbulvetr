@@ -37,9 +37,13 @@ class Projectile(object):
             if not self.liveTime is None:
                 if self.liveTime > 0:
                     self.liveTime -= 1
-                if (self.liveTime <= 0 and not
-                    (self.currMove is self.moves['dissolve'])):
-                    self.setCurrMove('dissolve')
+                if (self.liveTime <= 0 and not self.isEndingAnimation()):
+                    if self.hitsRemaining == 0:
+                        self.setCurrMove('explode')
+                        self.accel = [0.0, 0.0]
+                        self.vel = [0.0, 0.0]
+                    else:
+                        self.setCurrMove('dissolve')
             
             self.proceedFrame()
             self.frameSpecial()
@@ -117,6 +121,7 @@ class Projectile(object):
         self.moves = {}
         self.moves['flying'] = move.baseProjFlying()
         self.moves['dissolve'] = move.baseBlank()
+        self.moves['explode'] = move.baseBlank() 
 
     def setCurrMove(self, index, frame=0):
         self.currMove = self.moves[index]
@@ -207,3 +212,6 @@ class Projectile(object):
         
     def performHit(self):
         self.hitsRemaining -= 1
+        
+    def isEndingAnimation(self):
+        return self.currMove == self.moves['dissolve'] or self.currMove == self.moves['explode']

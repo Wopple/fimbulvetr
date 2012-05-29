@@ -129,6 +129,7 @@ class Cat(battlechar.BattleChar):
         self.createMoveGrabRelease()
         self.createMoveGrabbedRelease()
         
+        self.createMoveThrowBackward()
         self.createMoveThrowForward()
         
         self.createMoveBlock()
@@ -1488,6 +1489,7 @@ class Cat(battlechar.BattleChar):
     def createProjectiles(self):
         self.createProjectileSwordBeams()
         self.createProjectileDownBolt()
+        self.addSuperProjectile()
 
     def createProjectileSwordBeams(self):
         
@@ -1528,6 +1530,7 @@ class Cat(battlechar.BattleChar):
         temp.moves['flying'].frames[0].setVelY = 0
         temp.liveTime = 20
         self.createProjectileEnding1(temp)
+        self.createProjectileExplosion1(temp)
         self.projectiles.append(temp)
 
         temp = projectile.Projectile()
@@ -1537,6 +1540,7 @@ class Cat(battlechar.BattleChar):
         temp.moves['flying'].frames[0].setVelY = 0
         temp.liveTime = 35
         self.createProjectileEnding1(temp)
+        self.createProjectileExplosion1(temp)
         self.projectiles.append(temp)
 
         temp = projectile.Projectile()
@@ -1546,6 +1550,7 @@ class Cat(battlechar.BattleChar):
         temp.moves['flying'].frames[0].setVelY = 0
         temp.liveTime = 40
         self.createProjectileEnding1(temp)
+        self.createProjectileExplosion1(temp)
         self.projectiles.append(temp)
         
     def createProjectileEnding1(self, m):
@@ -1557,6 +1562,15 @@ class Cat(battlechar.BattleChar):
         m.moves['dissolve'].append(f, t)
 
         m.dissolveOnPhysical = True
+        
+    def createProjectileExplosion1(self, m):
+        f = [ self.frameData(166, 3),
+              self.frameData(167, 2),
+              self.frameData(168, 3) ]
+        t = []
+
+        m.moves['explode'].append(f, t)
+
         
     def createProjectileDownBolt(self):
         
@@ -1626,6 +1640,49 @@ class Cat(battlechar.BattleChar):
         m.moves['dissolve'].append(f, t)
 
         m.dissolveOnPhysical = True
+        
+        
+    def addSuperProjectile(self):
+        
+        dam1 = 30
+        stun1 = 250
+        force1 = 22
+        angle1 = 25
+        freeze1 = 2
+        chip = 0.40
+        
+        h = [
+                [
+                    (-18, -14, 0, 17, dam1, stun1, force1, angle1, [], freeze1, chip),
+                    (-28, -21, -3, -12, dam1, stun1, force1, angle1, [], freeze1, chip),
+                    (-22, 16, -3, 24, dam1, stun1, force1, angle1, [], freeze1, chip),
+                ]
+             ]
+        
+        f = [ self.frameData(27, 2, [], h[0]),
+              self.frameData(28, 1, [], h[0]),
+              self.frameData(29, 2, [], h[0]),
+              self.frameData(30, 1, [], h[0]),
+              self.frameData(28, 2, [], h[0]),
+              self.frameData(29, 1, [], h[0]),
+              self.frameData(27, 1, [], h[0]),
+              self.frameData(30, 1, [], h[0]),
+              self.frameData(27, 1, [], h[0]),
+              self.frameData(28, 1, [], h[0]),
+              self.frameData(30, 1, [], h[0]),
+              self.frameData(29, 2, [], h[0]) ]
+        
+        t = [ ['exitFrame', move.Transition(-1, None, None, None, 'flying')] ]
+
+        temp = projectile.Projectile()
+        temp.hitsRemaining = 10
+        temp.moves['flying'].append(f, t)
+        temp.moves['flying'].frames[0].setVelX = 16
+        temp.moves['flying'].frames[0].setVelY = 0
+        temp.liveTime = 300
+        self.createProjectileEnding1(temp)
+        self.createProjectileExplosion1(temp)
+        self.projectiles.append(temp)
              
         
     def createMoveStun1(self):
@@ -1916,6 +1973,38 @@ class Cat(battlechar.BattleChar):
         self.moves['grabbedRelease'].frames[1].setFrictionX = 0.5
         self.moves['grabbedRelease'].frames[2].setFrictionX = 0.75
         
+    
+    
+    def createMoveThrowBackward(self):
+        
+        damage1 = 120
+        stun1 = 200
+        knockback1 = 17
+        angle1 = 155
+        freeze1 = 1
+        
+        h = [
+                [
+                    (-37, -32, 6, -25, damage1, stun1, knockback1, angle1, [], freeze1),
+                    (-11, -38, 7, -20, damage1, stun1, knockback1, angle1, [], freeze1)
+                ]
+            ]
+        
+        f = [ self.frameData(17, 6, []),
+               self.frameData(169, 1, []),
+               self.frameData(170, 1, []),
+               self.frameData(171, 2, [], h[0]),
+               self.frameData(171, 12, []) ]
+        
+        self.moves['throwBackward'].append(f, [])
+         
+        self.moves['throwBackward'].frames[0].setVelX = 10
+        self.moves['throwBackward'].frames[0].ignoreFriction = True
+        self.moves['throwBackward'].frames[0].ignoreSpeedCap = True
+        self.moves['throwBackward'].frames[1].setVelX = 0
+         
+         
+        
     def createMoveThrowForward(self):
         
         damage1 = 6
@@ -2181,8 +2270,11 @@ class Cat(battlechar.BattleChar):
               self.frameData(156, 30, r[1]) ]
         
         
+        
         sg = move.SuperMove(n, d, f, [])
         sg.flash = self.createSuperFlash1()
+        
+        sg.shoot.append( (0, 6, (45, -30)) )
         
         sg.canDI = False
         sg.frames[0].setVelX = 0

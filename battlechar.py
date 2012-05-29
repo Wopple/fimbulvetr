@@ -23,6 +23,7 @@ class BattleChar(object):
         self.aerialCharge = True
         self.projectiles = []
         self.attackCanHit = True
+        self.canShoot = True
         self.retreat = boundint.BoundInt(0, RETREAT_HOLD_TOTAL, 0)
         self.freezeFrame = 0
         self.blockstun = 0
@@ -382,6 +383,7 @@ class BattleChar(object):
         self.currFrame = frame
         self.currSubframe = 0
         self.attackCanHit = True
+        self.canShoot = True
         self.canEffect = True
 
         if (self.currMove is None) or (len(self.currMove.frames) == 0):

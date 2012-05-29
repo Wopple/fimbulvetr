@@ -241,6 +241,7 @@ class Model(mvc.Model):
                 self.updateCatBarColors()
             b.update()
             
+            
     def updateProjectiles(self):
         temp = []
         for i in range(len(self.projectiles)):
@@ -530,9 +531,11 @@ class Model(mvc.Model):
     def checkShoot(self, p):
         m = p.currMove
         for s in m.shoot:
-            if s[0] == p.currFrame:
+            if s[0] == p.currFrame and p.canShoot:
                 proj = copy.copy(p.projectiles[s[1]].copySelf())
                 proj.shooter = p
+                p.canShoot = False
+                
 
                 poffset = s[2]
                 temp = p.preciseLoc
@@ -568,13 +571,13 @@ class Model(mvc.Model):
             p.destroy = True
 
     def checkProjForDissolve(self, p):
-        if (p.dissolveOnPhysical) and (p.currMove != p.moves['dissolve']):
+        if (p.dissolveOnPhysical) and (not p.isEndingAnimation()):
             if p.preciseLoc[1] >= self.rect.height - BATTLE_AREA_FLOOR_HEIGHT:
                 p.liveTime = 0
         if (p.hitsRemaining <= 0):
             p.liveTime = 0
                 
-        if (p.currMove == p.moves['dissolve']) and (p.currFrame == len(p.currMove.frames)-1):
+        if (p.isEndingAnimation()) and (p.currFrame == len(p.currMove.frames)-1):
             p.destroy = True
             p.currFrame = 0
 
@@ -942,8 +945,9 @@ class Model(mvc.Model):
     
     def checkForProjectileHit(self):
         for proj in self.projectiles:
+            print proj.freezeFrame
             if not proj.canHit():
-                return
+                continue
         
             for j, q in enumerate(self.players):
                 if (not q is proj.shooter):
