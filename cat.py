@@ -1124,8 +1124,10 @@ class Cat(battlechar.BattleChar):
               self.frameData(115, 3, r[0], h[18]),
               self.frameData(116, 6, r[0]) ]
         
-        t = [['attackA', move.Transition(3, CAT_ENERGY_SECTIONS[1], 17, 20, 'aetherpiercer')],
-             ['attackAUp', move.Transition(3, CAT_ENERGY_SECTIONS[1], 17, 20, 'aetherpiercer')]]
+        t = [['attackA', move.Transition(None, None, 17, 20, 'jabA')],
+             ['attackAUp', move.Transition(None, None, 17, 20, 'jabA')],
+             ['attackB', move.Transition(3, CAT_ENERGY_SECTIONS[1], 17, 20, 'aetherpiercer')],
+             ['attackBUp', move.Transition(3, CAT_ENERGY_SECTIONS[1], 17, 20, 'aetherpiercer')]]
         
         self.moves['upA'].append(f, t)
         self.moves['upA'].canDI = False
@@ -1159,9 +1161,9 @@ class Cat(battlechar.BattleChar):
         
         dam2 = 100
         stun2 = 230
-        force2 = 25
+        force2 = 34
         angle2 = 70
-        freeze2 = 8
+        freeze2 = 15
         
         h = [
                 [
@@ -1170,16 +1172,18 @@ class Cat(battlechar.BattleChar):
 
                 ],
                 [
+                    (22, -61, 41, -28, dam2, stun2, force2, angle2, [], freeze2),
+                    (12, -36, 30, -4, dam2, stun2, force2, angle2, [], freeze2),
                     (29, -101, 48, -71, dam2, stun2, force2, angle2, [], freeze2),
                     (40, -108, 56, -85, dam2, stun2, force2, angle2, [], freeze2),
                     (21, -82, 41, -48, dam2, stun2, force2, angle2, [], freeze2)
                 ]
              ]
         
-        f = [ self.frameData(117, 5, r[0]),
-              self.frameData(118, 2, r[0], h[0]),
-              self.frameData(119, 3, r[0], h[1]),
-              self.frameData(119, 20, r[0])]
+        f = [ self.frameData(117, 4, r[0]),
+              self.frameData(118, 1, r[0], h[0]),
+              self.frameData(119, 5, r[0], h[1]),
+              self.frameData(119, 18, r[0])]
         
         t = []
         
@@ -1188,6 +1192,8 @@ class Cat(battlechar.BattleChar):
         
         self.moves['aetherpiercer'].frames[1].setVelX = 2.5
         self.moves['aetherpiercer'].frames[2].resetHitPotential = True
+        
+        self.moves['aetherpiercer'].frames[2].fx.append(['fullshockwave', (42, -97), True])
         
 
     def createMoveUpB(self):
@@ -1279,8 +1285,113 @@ class Cat(battlechar.BattleChar):
         
         for f in self.moves['chargeSword'].frames:
             f.resetCanEffect = True
-
+            
     def createMoveDownA(self):
+        
+        r = [
+                [
+                    (2, -50, 12, -36),
+                    (1, -36, 11, -27),
+                    (-6, -34, 4, -25),
+                    (-4, -26, 8, -14),
+                    (-9, -16, 9, -11),
+                    (-10, -11, -5, 1),
+                    (5, -12, 14, -7),
+                    (-2, -8, 7, -3),
+                    (-7, -4, 0, 0)
+                ],
+                [
+                    (10, -46, 23, -33),
+                    (8, -35, 17, -24),
+                    (3, -32, 14, -19),
+                    (-1, -24, 9, -10),
+                    (6, -23, 16, -3),
+                    (-3, -5, 9, -1),
+                    (-6, -16, 0, -10),
+                    (-9, -11, -4, -3)
+                ],
+                [
+                    (25, -39, 36, -27),
+                    (19, -30, 30, -21),
+                    (25, -22, 32, -14),
+                    (27, -15, 33, -9),
+                    (29, -10, 35, -1),
+                    (13, -28, 21, -21),
+                    (13, -22, 22, -17),
+                    (6, -23, 15, -18),
+                    (6, -19, 17, -12),
+                    (0, -19, 11, -13),
+                    (6, -13, 14, -8),
+                    (9, -9, 17, -2),
+                    (-2, -5, 15, -1),
+                    (-7, -2, 1, 1),
+                    (-3, -15, 2, -10),
+                    (-7, -11, -1, -6),
+                    (-10, -8, -3, -3),
+                    (-10, -4, -5, 0)
+                ]
+            ]
+        
+        
+        dam1 = 60
+        stun1 = 90
+        force1 = 22
+        angle1 = 72
+        freeze1 = 2
+        
+        
+        h= [
+                [
+                    (6, -28, 39, -11, dam1, stun1, force1, angle1, [], freeze1),
+                    (20, -18, 59, -5, dam1, stun1, force1, angle1, [], freeze1),
+                    (49, -23, 69, -9, dam1, stun1, force1, angle1, [], freeze1)
+                ],
+                [
+                    (32, -51, 58, -9, dam1, stun1, force1, angle1, [], freeze1),
+                    (48, -55, 80, -33, dam1, stun1, force1, angle1, [], freeze1),
+                    (56, -34, 78, -23, dam1, stun1, force1, angle1, [], freeze1),
+                    (54, -24, 72, -15, dam1, stun1, force1, angle1, [], freeze1),
+                    (54, -16, 67, -11, dam1, stun1, force1, angle1, [], freeze1)
+                ],
+                [
+                    (4, -80, 28, -40, dam1, stun1, force1, angle1, [], freeze1),
+                    (25, -76, 41, -42, dam1, stun1, force1, angle1, [], freeze1),
+                    (39, -73, 50, -35, dam1, stun1, force1, angle1, [], freeze1),
+                    (49, -69, 59, -55, dam1, stun1, force1, angle1, [], freeze1),
+                    (54, -62, 64, -50, dam1, stun1, force1, angle1, [], freeze1),
+                    (59, -54, 68, -43, dam1, stun1, force1, angle1, [], freeze1),
+                    (46, -55, 59, -20, dam1, stun1, force1, angle1, [], freeze1),
+                    (12, -42, 48, -17, dam1, stun1, force1, angle1, [], freeze1)
+                ],
+                [
+                    (-33, -59, 16, -39, dam1, stun1, force1, angle1, [], freeze1),
+                    (-32, -68, 21, -49, dam1, stun1, force1, angle1, [], freeze1),
+                    (-27, -75, 27, -56, dam1, stun1, force1, angle1, [], freeze1),
+                    (-19, -80, 37, -71, dam1, stun1, force1, angle1, [], freeze1),
+                    (8, -70, 34, -33, dam1, stun1, force1, angle1, [], freeze1),
+                    (-17, -42, 22, -24, dam1, stun1, force1, angle1, [], freeze1)
+                ]
+            ]
+        
+        f = [ self.frameData(172, 3, r[0]),
+              self.frameData(173, 2, r[1], h[0]),
+              self.frameData(174, 1, r[2], h[1]),
+              self.frameData(175, 1, r[2], h[2]),
+              self.frameData(176, 2, r[2], h[3]),
+              self.frameData(177, 2, r[2]),
+              self.frameData(178, 2, r[2]),
+              self.frameData(179, 4, r[2]),
+              self.frameData(177, 2, r[2]),
+              self.frameData(172, 2, r[0]) ]
+        
+        t = [ ['exitFrame', move.Transition(-1, None, None, None, 'ducking')],
+              ['jump', move.Transition(None, None, 6, 8, 'jumping')] ]
+
+        self.moves['downA'].append(f, t)
+        self.moves['downA'].canDI = False
+        
+
+    def createOldMoveDownA(self):
         
         dam1 = 85
         stun1 = 45
@@ -1355,7 +1466,7 @@ class Cat(battlechar.BattleChar):
         
         dam1 = 22
         stun1 = 101
-        force1 = 3
+        force1 = 5
         angle1 = 90
         freeze1 = 2
         
