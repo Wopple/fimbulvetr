@@ -397,7 +397,7 @@ class Cat(battlechar.BattleChar):
                 ]
             ]
         
-        dam1 = 80
+        dam1 = 70
         stun1 = 60
         force1 = 13
         angle1 = 27
@@ -585,7 +585,7 @@ class Cat(battlechar.BattleChar):
         stun1 = 120
         force1 = 15
         angle1 = 13
-        freeze1 = 4
+        freeze1 = 6
         h = [
                 [
                     (-11, -37, 43, -30, dam1, stun1, force1, angle1, [], freeze1)
@@ -612,7 +612,9 @@ class Cat(battlechar.BattleChar):
               self.frameData(155, 1, r[1], h[1]),
               self.frameData(156, 8, r[1]) ]
         
-        self.moves['dashAttackB'].append(f, [])
+        t = [ ['super', move.Transition(None, None, 9, 11, 'superFlash')] ]
+        
+        self.moves['dashAttackB'].append(f, t)
         
         frames = self.moves['dashAttackB'].frames
         
@@ -656,7 +658,8 @@ class Cat(battlechar.BattleChar):
               self.frameData(25, 1, r[0]),
               self.frameData(26, 10, r[0]),
               self.frameData(0, 2, r[1]) ]
-        t = []
+        
+        t = [ ['super', move.Transition(None, None, 1, 3, 'superFlash')] ]
 
         self.moves['swordbeamGround1'] = move.Move(f, t)
         self.moves['swordbeamGround1'].canDI = False
@@ -669,6 +672,9 @@ class Cat(battlechar.BattleChar):
         self.moves['swordbeamGround3'] = move.Move(f, t)
         self.moves['swordbeamGround3'].canDI = False
         self.moves['swordbeamGround3'].shoot.append( (0, 2, (45, -30)) )
+        
+        
+        
         
     def createNeutralAirA(self):
         dam1 = 70
@@ -1159,7 +1165,7 @@ class Cat(battlechar.BattleChar):
         angle1 = 75
         freeze1 = 0
         
-        dam2 = 100
+        dam2 = 110
         stun2 = 230
         force2 = 34
         angle2 = 70
@@ -2417,6 +2423,8 @@ class Cat(battlechar.BattleChar):
         
         s = move.baseSuperFlash()
         s.append(f, [])
+        
+        s.frames[0].setVelX = 0
         
         return s
         

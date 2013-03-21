@@ -44,8 +44,8 @@ class RezSpark:
 
     def draw(self, screen, inZoom, inOffset):
 
-        pos = ((self.pos[0] * inZoom) + inOffset[0],
-               (self.pos[1] * inZoom) + inOffset[1])
+        pos = ( int((self.pos[0] * inZoom) + inOffset[0]),
+                int((self.pos[1] * inZoom) + inOffset[1]) )
 
         for c in self.circles:
             alpha = self.getAlpha(c)
