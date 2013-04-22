@@ -331,7 +331,7 @@ class Model(mvc.Model):
     def numEnemiesExpected(self):
         return len(self.getMap().startingPoints[0])
     
-    def revealAllCharacters(self):
+    def revealAllCharacters(self, allCharacters):
         pass
                 
                 

@@ -16,12 +16,13 @@ import hare, cat, fox
 from constants import *
 
 class MapChar(mapitem.MapItem):
-    def __init__(self, mapCloneMethod, battleCloneMethod, inImages,
+    def __init__(self, mapCloneMethod, battleCloneMethod, speciesAbbrev, inImages,
                  speedBase, speedTerrainModifiers, speedTerritoryModifiers,
                  speedHealthMod, team, name, battleChar, portrait, homeTerrain):
         
         self.mapCloneMethod = mapCloneMethod
         self.battleCloneMethod = battleCloneMethod
+        self.speciesAbbrev = speciesAbbrev
         
         self.team = team
         self.name = name
@@ -244,10 +245,60 @@ class MapChar(mapitem.MapItem):
     
     def getSmallImage(self):
         return self.images[3][0]
+    
+    
+    def getTextString(self, expand=False):
+        text = self.name + "#" + self.speciesAbbrev + "#" + str(self.battleChar.currSuperMove) + "#"
+        
+        if expand:
+            size = len(text)
+            if size > CHARACTER_TRANSFER_NET_MESSAGE_SIZE:
+                raise
+            add = CHARACTER_TRANSFER_NET_MESSAGE_SIZE - size
+            
+            for i in range(add):
+                text = text + "-"
+                
+        return text
+    
+
+def makeCharacterFromInfo(info, team):
+    if info.speciesName == "hr":
+        data = [Hare, hare.Hare]
+    elif info.speciesName == "fx":
+        data = [Fox, fox.Fox]
+    elif info.speciesName == "ct":
+        data = [Cat, cat.Cat]
+    
+    return data[0](team, data[1](info.name, info.currSuperMove), info.name)
+    
+def turnStringIntoInfo(text):
+    vals = text.split('#')
+    name = vals[0]
+    speciesName = vals[1]
+    currSuperMove = int(vals[2])
+    return CharInfo(name, speciesName, currSuperMove)
+    
+def convertNetData(dataList, team):
+    charList = []
+    for d in dataList:
+        info = turnStringIntoInfo(d)
+
+        charList.append(makeCharacterFromInfo(info, team))
+
+    return charList
+
+class CharInfo(object):
+    def __init__(self, name, speciesName, currSuperMove, valid=True):
+        self.name = name
+        self.speciesName = speciesName
+        self.currSuperMove = currSuperMove
+        self.valid = valid
+
         
 
 def Hare(team, battleChar, name="Hare", portrait=None):
-    c = MapChar(Hare, hare.Hare, HARE_TOKENS, HARE_MAP_SPEED_BASE,
+    c = MapChar(Hare, hare.Hare, "hr", HARE_TOKENS, HARE_MAP_SPEED_BASE,
                 HARE_MAP_SPEED_TERRAIN_MODIFIERS,
                 HARE_MAP_SPEED_TERRITORY_MODIFIERS,
                 HARE_HEALTH_SPEED_MODIFIER,
@@ -256,7 +307,7 @@ def Hare(team, battleChar, name="Hare", portrait=None):
 
 
 def Fox(team, battleChar, name="Fox", portrait=None):
-    c = MapChar(Fox, fox.Fox, FOX_TOKENS, FOX_MAP_SPEED_BASE,
+    c = MapChar(Fox, fox.Fox, "fx", FOX_TOKENS, FOX_MAP_SPEED_BASE,
                 FOX_MAP_SPEED_TERRAIN_MODIFIERS,
                 FOX_MAP_SPEED_TERRITORY_MODIFIERS,
                 FOX_HEALTH_SPEED_MODIFIER,
@@ -264,7 +315,7 @@ def Fox(team, battleChar, name="Fox", portrait=None):
     return c
 
 def Cat(team, battleChar, name="Cat", portrait=None):
-    c = MapChar(Cat, cat.Cat, CAT_TOKENS, CAT_MAP_SPEED_BASE,
+    c = MapChar(Cat, cat.Cat, "ct", CAT_TOKENS, CAT_MAP_SPEED_BASE,
                 CAT_MAP_SPEED_TERRAIN_MODIFIERS,
                 CAT_MAP_SPEED_TERRITORY_MODIFIERS,
                 CAT_HEALTH_SPEED_MODIFIER,

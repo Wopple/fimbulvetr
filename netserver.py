@@ -9,7 +9,7 @@ import threading
 
 import netcode
 
-import chardata
+import mapchar
 
 class NetServer(object):
     def __init__(self):
@@ -33,7 +33,7 @@ class NetServer(object):
     
     def transferPregameData(self, playerChars, expected):
         for i in playerChars:
-            outMsg = chardata.getTextString(i, True)
+            outMsg = i.getTextString(True)
             netcode.updateSend(self.conn, outMsg)
 
         enemyData = []
@@ -42,7 +42,7 @@ class NetServer(object):
                                        CHARACTER_TRANSFER_NET_MESSAGE_SIZE)
             enemyData.append(inMsg)
 
-        return chardata.convertNetData(enemyData)
+        return mapchar.convertNetData(enemyData, 1)
 
 
 class NetThread(threading.Thread):

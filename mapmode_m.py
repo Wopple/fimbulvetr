@@ -1061,26 +1061,3 @@ class MapRegion(object):
             for i in t[0]:
                 print ("(" + str(i[0][0]) + ", " + str(i[0][1]) + "), " +
                        str(i[1]))
-        
-
-
-def ConvertBattleCharsToMapChars(hostChars, clientChars):
-    masterList = [hostChars, clientChars]
-
-    returnList = []
-    for i, l in enumerate(masterList):
-        for c in l:
-            portrait = None
-            if isinstance(c, hare.Hare):
-                mod = mapchar.Hare
-                portrait = HARE_PORTRAITS[0]
-            elif isinstance(c, fox.Fox):
-                mod = mapchar.Fox
-            elif isinstance(c, cat.Cat):
-                mod = mapchar.Cat
-            else:
-                raise Exception()
-
-            returnList.append(mod(i, c, c.name, portrait))
-
-    return returnList

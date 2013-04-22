@@ -9,7 +9,7 @@ import threading
 
 import netcode
 
-import chardata
+import mapchar
 
 class NetClient(object):
     def __init__(self, host):
@@ -36,9 +36,9 @@ class NetClient(object):
             enemyData.append(inMsg)
 
         for i in playerChars:
-           netcode.updateSend(self.s, chardata.getTextString(i, True))
+           netcode.updateSend(self.s, i.getTextString(True))
 
-        return chardata.convertNetData(enemyData)
+        return mapchar.convertNetData(enemyData, 0)
 
 
 class NetThread(threading.Thread):

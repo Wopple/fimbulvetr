@@ -329,6 +329,8 @@ def goCharacterSelection(conn, isHost):
         proceed(clock, conn)
         if m.starting:
             
+            theMap = m.getMap()
+            
             playerChars = m.getCharacters()
             enemyChars = conn.transferPregameData(playerChars, m.numEnemiesExpected())
             
@@ -353,7 +355,7 @@ def goCharacterSelection(conn, isHost):
     goGame(theMap, hostChars, clientChars, playerNum, conn)
 
 def goGame(theMap, hostChars, clientChars, playerNum, conn):
-    chars = mapmode_m.ConvertBattleCharsToMapChars(hostChars, clientChars)
+    chars = [] + hostChars + clientChars
     changeMVC(mapmode_m.Model(theMap, chars, playerNum), mapmode_v.View(),
               mapmode_c.Controller(), screen)
     while not m.advance():
