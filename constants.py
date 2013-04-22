@@ -323,30 +323,72 @@ NET_ICON_SPEED = 8
 
 MAP_MODE_NET_MESSAGE_SIZE = 5
 
-CHARACTER_SELECT_BG_COLOR = (40, 40, 40)
-CHARACTER_SELECT_PANEL_COLOR_FILL = (165, 130, 50)
-CHARACTER_SELECT_PANEL_COLOR_BORDER = (90, 68, 35)
-CHARACTER_SELECT_PANEL_SELECTION_BORDER_COLOR = (10, 80, 200)
-CHARACTER_SELECTION_FONT_COLOR = (250, 250, 250)
-CHARACTER_SELECTION_READY_COLOR = (0, 120, 0)
+#===============================================================================
+# CHARACTER_SELECT_BG_COLOR = (40, 40, 40)
+# CHARACTER_SELECT_PANEL_COLOR_FILL = (165, 130, 50)
+# CHARACTER_SELECT_PANEL_COLOR_BORDER = (90, 68, 35)
+# CHARACTER_SELECT_PANEL_SELECTION_BORDER_COLOR = (10, 80, 200)
+# CHARACTER_SELECTION_FONT_COLOR = (250, 250, 250)
+# CHARACTER_SELECTION_READY_COLOR = (0, 120, 0)
+# 
+# CHARACTER_SELECTION_BUTTON_COLOR_ON = (250, 250, 250)
+# CHARACTER_SELECTION_BUTTON_COLOR_OFF = (60, 60, 60)
+# 
+# CHARACTER_SELECT_PANEL_BORDER_SIZE = 4
+# CHARACTER_SELECT_PANEL_BORDER_WIDTH = 3
+# CHARACTER_SELECT_PANEL_SELECTION_BORDER_WIDTH = 6
+# CHARACTER_SELECT_PANEL_SIZE = (250, 35)
+# CHARACTER_SELECT_PLAYER_SIZE = (300, 35)
+# CHARACTER_SELECT_BUTTON_SIZE = (150, 35)
+# CHARACTER_SELECT_PANELS_PER_COL = 5
+# CHARACTER_SELECT_GROUP_FROM_TOP = 20
+# CHARACTER_SELECT_GROUP_SPACING = 25
+#===============================================================================
 
-CHARACTER_SELECTION_BUTTON_COLOR_ON = (250, 250, 250)
-CHARACTER_SELECTION_BUTTON_COLOR_OFF = (60, 60, 60)
+READY_PANEL_FONT_COLOR_TRUE = (0, 120, 0)
+READY_PANEL_FONT_COLOR_FALSE = (80, 10, 10)
 
-CHARACTER_SELECT_PANEL_BORDER_SIZE = 4
-CHARACTER_SELECT_PANEL_BORDER_WIDTH = 3
-CHARACTER_SELECT_PANEL_SELECTION_BORDER_WIDTH = 6
-CHARACTER_SELECT_PANEL_SIZE = (250, 35)
-CHARACTER_SELECT_PLAYER_SIZE = (300, 35)
-CHARACTER_SELECT_BUTTON_SIZE = (150, 35)
-CHARACTER_SELECT_PANELS_PER_COL = 5
-CHARACTER_SELECT_GROUP_FROM_TOP = 20
-CHARACTER_SELECT_GROUP_SPACING = 25
+CHARACTER_SELECT_BG_COLOR = (80, 80, 80)
+
+CHARACTER_SELECT_PANEL_BASE_COLORS_ON = [(170, 170, 206),
+                                         (197, 170, 170)]
+
+CHARACTER_SELECT_PANEL_BASE_COLORS_OFF = ([125, 125, 152],
+                                          [143, 123, 123])
+
+CHARACTER_SELECT_PANEL_DECOR_COLORS_ON = ([136, 136, 152],
+                                          [143, 128, 128])
+
+CHARACTER_SELECT_PANEL_DECOR_COLORS_OFF = ([104, 104, 116],
+                                           [107, 96, 96])
 
 CHARACTER_SELECT_NET_MESSAGE_SIZE = 3
 CHARACTER_TRANSFER_NET_MESSAGE_SIZE = 30
 
+CHARACTER_SELECTION_PANEL_SPACING = 8
+CHARACTER_SELECTION_PANEL_SIZE = ((SCREEN_SIZE[0] * 2) / 5, 50)
+READY_PANEL_SIZE = ((SCREEN_SIZE[0] * 2) / 6, 50)
+GO_PANEL_SIZE = ((SCREEN_SIZE[0]) / 8, 50)
+
+CHARACTER_SELECT_PANEL_FACE_DECOR_MARGIN = 4
+CHARACTER_SELECT_PANEL_FACE_DECOR_WIDTH = 4
+
+CHARACTER_SELECT_PANEL_BACK_DECOR_MARGIN = 0
+CHARACTER_SELECT_PANEL_BACK_DECOR_WIDTH = 6
+CHARACTER_SELECT_PANEL_BACK_CIRCLE_MARGINS = [20, 10]
+
+CHARACTER_SELECT_PANEL_SELECTION_AURA_WIDTH = 4
+
+CHARACTER_SELECTION_FONT_COLOR = (250, 250, 250)
+
+CHARACTER_SELECTION_DIALOG_BG_COLOR = (140, 140, 140)
+CHARACTER_SELECTION_DIALOG_BUTTON_COLOR = (100, 100, 100)
+
 CHARACTER_NAME_MAX_LENGTH = 10
+
+SPECIES_SELECTION_DIALOG_MARGIN = 8
+SPECIES_SELECTION_DIALOG_SPACING = 30
+SPECIES_SELECTION_DIALOG_SLOT_SIZE = 70
 
 COUNTDOWN_COLOR = (244, 210, 11)
 MAP_COUNTDOWN_LENGTH = 60
@@ -955,8 +997,9 @@ for i in temp:
 
 
 temp = [ ['face1.png', (29, 48)],
-         ['face2.png', (29, 48)],
-         ['face2.png', (29, 48)] ]
+         ['face1.png', (29, 48)],
+         ['face1.png', (29, 48)],
+         ['face2.png', (16, 31)] ]
 
 HARE_TOKENS = []
 for i in temp:
@@ -964,17 +1007,18 @@ for i in temp:
 
 
 temp = [ ['face1.png', (28, 49)],
-         ['face2.png', (28, 49)],
-         ['face2.png', (28, 49)] ]
+         ['face1.png', (28, 49)],
+         ['face1.png', (28, 49)] ]
 
 FOX_TOKENS = []
 for i in temp:
     FOX_TOKENS.append([pygame.image.load(os.path.join(DIREC_FOX_GRAPHICS, i[0])).convert_alpha(), i[1]])
 
 
-temp = [ ['face1.png', (30, 47)],
-         ['face2.png', (30, 47)],
-         ['face2.png', (30, 47)] ]
+temp = [ ['face1.png', (34, 34)],
+         ['face1.png', (34, 34)],
+         ['face1.png', (34, 34)],
+         ['face2.png', (21, 23)] ]
 
 CAT_TOKENS = []
 for i in temp:
@@ -1089,7 +1133,8 @@ temp = ['pauseicon.png',
         'altarred.png',
         "you.png",
         "terrainice.png",
-        "terrainsnow.png" ]
+        "terrainsnow.png",
+        "random.png" ]
         
 
 INTERFACE_GRAPHICS = []
@@ -1105,6 +1150,8 @@ TERRAIN_ICONS = [None, INTERFACE_GRAPHICS[6],
 FORTRESS_COUNT_ICONS = [INTERFACE_GRAPHICS[12], INTERFACE_GRAPHICS[13]]
 SPIRE_COUNT_ICONS = [INTERFACE_GRAPHICS[14], INTERFACE_GRAPHICS[15]]
 ALTAR_COUNT_ICONS = [INTERFACE_GRAPHICS[16], INTERFACE_GRAPHICS[17]]
+
+RANDOM_ICON = INTERFACE_GRAPHICS[21]
 
 
 temp = ['grass.png',
@@ -1123,7 +1170,13 @@ HARE_PORTRAITS = []
 for i in temp:
     HARE_PORTRAITS.append(pygame.image.load(os.path.join(
         DIREC_PORTRAITS, i)).convert_alpha())
+    
+    
+MAIN_MENU_BACKGROUND_IMAGE = pygame.image.load(os.path.join(DIREC_BACKGROUNDS, "snow.png")).convert_alpha()
 
+CHARACTER_SELECT_BG_SKY = pygame.image.load(os.path.join(DIREC_BACKGROUNDS, "darksky.png")).convert_alpha()
+CHARACTER_SELECT_BG_MOUNTAINS_FAR = pygame.image.load(os.path.join(DIREC_BACKGROUNDS, "mountainscape2.png")).convert_alpha()
+CHARACTER_SELECT_BG_MOUNTAINS_NEAR = pygame.image.load(os.path.join(DIREC_BACKGROUNDS, "mountainscape1.png")).convert_alpha()
 
 temp = [ ["fontdata.ttf",10],
          ["fontbars.ttf", 14],
@@ -1136,7 +1189,8 @@ temp = [ ["fontdata.ttf",10],
          ["fontapple.ttf", 14],
          ["fontdum1.ttf", 14],
          ["fontdata.ttf",14],
-         ["fontdata.ttf",22] ]
+         ["fontdata.ttf",22],
+         ["fontdum1.ttf", 30] ]
 FONTS = []
 for i in temp:
     FONTS.append(pygame.font.Font(
@@ -1152,6 +1206,7 @@ COUNTDOWN_FONT = FONTS[7]
 UNIT_HUD_NAMES_FONT = FONTS[9]
 STRUCTURE_COUNT_FONT = FONTS[10]
 DAMAGE_PERCENT_FONT = FONTS[11]
+CHARACTER_SELECTION_CAPTION_FONT = FONTS[12]
 
 VALID_INPUT_CHARACTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                           'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',

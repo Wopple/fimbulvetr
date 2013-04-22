@@ -16,7 +16,7 @@ import cutscene_c
 import netclient, netserver, netcode
 import chardata
 import multiplayerSetup_m, multiplayerSetup_v, multiplayerSetup_c
-import characterSelect_m, characterSelect_v, characterSelect_c
+import characterSelect2_m, characterSelect2_v, characterSelect2_c
 import mapdebug_m, mapdebug_v, mapdebug_c
 import gamemap
 
@@ -320,36 +320,35 @@ def goWaitForConnection(isHost, ipAddress, mapS=None):
             else:
                 mapS = netcode.updateRecv(p.net.s, 2)
             theMap = gamemap.getMap(mapS)
-            goCharacterSelection(p.net, theMap, isHost)
+            goCharacterSelection(p.net, isHost)
 
-def goCharacterSelection(conn, theMap, isHost):
-    changeMVC(characterSelect_m.Model(theMap, isHost), characterSelect_v.View(),
-              characterSelect_c.Controller(), screen)
+def goCharacterSelection(conn, isHost):
+    changeMVC(characterSelect2_m.Model(isHost), characterSelect2_v.View(),
+              characterSelect2_c.Controller(), screen)
     while not m.either():
         proceed(clock, conn)
-        if m.openEditor:
-            m.openEditor = False
-            oldM = m
-            goCharacterEditorMain(oldM, conn, oldM.getCurrSelectedName())
-            temp = m.returnCharacter()
-            multiMVCBack()
-            m.setCharacter(temp)
-            m.sendNetMessage = True
         if m.starting:
+            
+            playerChars = m.getCharacters()
+            enemyChars = conn.transferPregameData(playerChars, m.numEnemiesExpected())
+            
+            if isHost:
+                hostChars = playerChars
+                clientChars = enemyChars
+                playerNum = 0
+            else:
+                hostChars = enemyChars
+                clientChars = playerChars
+                playerNum = 1
+                
+            finalChars = [] + hostChars + clientChars
+            m.revealAllCharacters(finalChars)
             v.update(screen)
+            
+            map = m.getMap()
+            
             m.advanceNow = True
 
-    playerChars = m.getCharacters()
-    enemyChars = conn.transferPregameData(playerChars, m.numEnemiesExpected())
-
-    if isHost:
-        hostChars = playerChars
-        clientChars = enemyChars
-        playerNum = 0
-    else:
-        hostChars = enemyChars
-        clientChars = playerChars
-        playerNum = 1
 
     goGame(theMap, hostChars, clientChars, playerNum, conn)
 
@@ -401,7 +400,7 @@ if __name__ == '__main__':
                 while not m.advance():
                     proceed(clock)
             elif m.debugMenu.value() == 3:
-                goCharacterSelection(None, gamemap.getMap("00"), True)
+                goCharacterSelection(None, True)
             elif m.debugMenu.value() == 4:
                 debugLoop = False
             elif m.debugMenu.value() == 5:

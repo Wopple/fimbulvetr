@@ -11,11 +11,13 @@ import time
 import mapstructure
 
 class GameMap(object):
-    def __init__(self, startingPoints, mapSize, horizAxis, flip,
+    def __init__(self, num, name, startingPoints, mapSize, horizAxis, flip,
                  mountains, water, forests, islands, rivers,
                  structures, fimbulvetrSpeed, fimbulvetrDelay,
                  fimbulvetrSpreadSpeed, fimbulvetrSpreadGrowth):
 
+        self.num = num
+        self.name = name
         self.horizAxis = horizAxis
         self.flip = flip
         
@@ -118,6 +120,7 @@ def getMap(s):
         return None
 
     if i == 0:
+        name = "Lake of Origins"
         startingPoints = [(62, 102),
                           (99, 65),
                           (20, 68),
@@ -552,10 +555,13 @@ def getMap(s):
     else:
         return None
 
-    return GameMap(startingPoints, mapSize, horizAxis, flip,
+    return GameMap(i, name, startingPoints, mapSize, horizAxis, flip,
                    mountains, water, forests, islands, rivers,
                    structures, fimbulvetrSpeed, fimbulvetrDelay,
                    fimbulvetrSpreadSpeed, fimbulvetrSpreadGrowth)
+    
+def getMapList():
+    return [getMap("00")]
 
 def drawMap(inMap, isNormal):
     

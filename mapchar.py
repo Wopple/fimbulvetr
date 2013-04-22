@@ -11,12 +11,18 @@ import boundint
 
 import mapitem
 
+import hare, cat, fox
+
 from constants import *
 
 class MapChar(mapitem.MapItem):
-    def __init__(self, inImages, speedBase, speedTerrainModifiers,
-                 speedTerritoryModifiers, speedHealthMod, team,
-                 name, battleChar, portrait, homeTerrain):
+    def __init__(self, mapCloneMethod, battleCloneMethod, inImages,
+                 speedBase, speedTerrainModifiers, speedTerritoryModifiers,
+                 speedHealthMod, team, name, battleChar, portrait, homeTerrain):
+        
+        self.mapCloneMethod = mapCloneMethod
+        self.battleCloneMethod = battleCloneMethod
+        
         self.team = team
         self.name = name
         self.initPortrait(portrait)
@@ -235,10 +241,13 @@ class MapChar(mapitem.MapItem):
         mult += (ALTAR_DAMAGE_BONUS * self.altarCount)
             
         return mult
+    
+    def getSmallImage(self):
+        return self.images[3][0]
         
 
-def Hare(team, battleChar, name="Unnamed Hare", portrait=None):
-    c = MapChar(HARE_TOKENS, HARE_MAP_SPEED_BASE,
+def Hare(team, battleChar, name="Hare", portrait=None):
+    c = MapChar(Hare, hare.Hare, HARE_TOKENS, HARE_MAP_SPEED_BASE,
                 HARE_MAP_SPEED_TERRAIN_MODIFIERS,
                 HARE_MAP_SPEED_TERRITORY_MODIFIERS,
                 HARE_HEALTH_SPEED_MODIFIER,
@@ -246,16 +255,16 @@ def Hare(team, battleChar, name="Unnamed Hare", portrait=None):
     return c
 
 
-def Fox(team, battleChar, name="Unnamed Fox", portrait=None):
-    c = MapChar(FOX_TOKENS, FOX_MAP_SPEED_BASE,
+def Fox(team, battleChar, name="Fox", portrait=None):
+    c = MapChar(Fox, fox.Fox, FOX_TOKENS, FOX_MAP_SPEED_BASE,
                 FOX_MAP_SPEED_TERRAIN_MODIFIERS,
                 FOX_MAP_SPEED_TERRITORY_MODIFIERS,
                 FOX_HEALTH_SPEED_MODIFIER,
                 team, name, battleChar, portrait, HOME_TERRAINS["fox"])
     return c
 
-def Cat(team, battleChar, name="Unnamed Cat", portrait=None):
-    c = MapChar(CAT_TOKENS, CAT_MAP_SPEED_BASE,
+def Cat(team, battleChar, name="Cat", portrait=None):
+    c = MapChar(Cat, cat.Cat, CAT_TOKENS, CAT_MAP_SPEED_BASE,
                 CAT_MAP_SPEED_TERRAIN_MODIFIERS,
                 CAT_MAP_SPEED_TERRITORY_MODIFIERS,
                 CAT_HEALTH_SPEED_MODIFIER,

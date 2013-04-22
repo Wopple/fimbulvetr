@@ -8,6 +8,8 @@ import minimenu
 import textrect
 import boundint
 
+import scrollingbackground
+
 from constants import *
 
 class Model(mvc.Model):
@@ -15,7 +17,7 @@ class Model(mvc.Model):
         super(Model, self).__init__()
 
         self.bg = pygame.Surface(SCREEN_SIZE)
-        self.bg.fill((150, 150, 150))
+        self.bg = scrollingbackground.ScrollingBackground(pygame.Rect((0, 0), SCREEN_SIZE), MAIN_MENU_BACKGROUND_IMAGE, [0.2, 0.5])
         
         tempRect = pygame.Rect( (50, 50), (200, 0) )
         menuOptions = ["Play Single Player", "Play via Network",
@@ -52,6 +54,9 @@ class Model(mvc.Model):
             self.advanceNow = True
 
     def update(self):
+        
+        self.bg.update()
+        
         if self.transChecker:
             if self.transDirection:
                 mult = 1

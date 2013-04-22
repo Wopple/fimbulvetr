@@ -23,7 +23,7 @@ class Model(mvc.Model):
         self.stage = 0
         self.ticker = 0
 
-        self.textMessages = [ ("Symno Studios Presents", 2, ALMOST_BLACK, WHITE, 1, True) ]
+        self.textMessages = [ ("Games from Beyond the Farth", 2, ALMOST_BLACK, WHITE, 1, True) ]
         self.textRects = []
         for i in self.textMessages:
             f = FONTS[i[1]]

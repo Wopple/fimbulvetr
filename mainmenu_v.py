@@ -12,7 +12,7 @@ class View(mvc.View):
 
     def update(self, tickClock=True):
         self.screen.blit(BLACK_SCREEN, (0, 0))
-        self.screen.blit(self.model.bg, (0, 0))
+        self.model.bg.draw(self.screen)
         self.model.menu.draw(self.screen)
 
         for i in range(2):
