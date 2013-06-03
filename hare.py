@@ -155,7 +155,10 @@ class Hare(battlechar.BattleChar):
                  ]
             ]
         f = [ self.frameData(0, 10, r[0]),
-              self.frameData(1, 9, r[0])]
+              self.frameData(1, 5, r[0]),
+              self.frameData(166, 5, r[0]),
+              self.frameData(167, 12, r[0]),
+              self.frameData(1, 6, r[0])]
         self.moves['idle'].append(f, [])
 
     def createMoveBlock(self):
@@ -310,10 +313,11 @@ class Hare(battlechar.BattleChar):
 
              ]
                     
-        f = [self.frameData(149, 4, r[0]),
-             self.frameData(150, 4, r[0]),
-             self.frameData(151, 4, r[1]),
-             self.frameData(152, 4, r[2]) ]
+        f = [self.frameData(149, 3, r[0]),
+             self.frameData(150, 3, r[0]),
+             self.frameData(151, 3, r[1]),
+             self.frameData(152, 3, r[2]),
+             self.frameData(168, 3, r[0]) ]
         
         self.moves['walking'].append(f, [])
         
@@ -334,7 +338,7 @@ class Hare(battlechar.BattleChar):
                 ]
             ]
                     
-        f = [self.frameData(2, 7, r[0])]
+        f = [self.frameData(5, 7, r[0])]
         
         self.moves['dashing'].append(f, [])
         
@@ -367,14 +371,13 @@ class Hare(battlechar.BattleChar):
                 ]
             ]
                     
-        f = [self.frameData(3, 2, r[1]),
-             self.frameData(4, 2, r[1]),
-             self.frameData(5, 2, r[2]),
-             self.frameData(6, 2, r[0]),
+        f = [self.frameData(6, 2, r[1]),
              self.frameData(7, 2, r[1]),
-             self.frameData(161, 2, r[1]),
-             self.frameData(162, 2, r[2]),
-             self.frameData(2, 2, r[0])]
+             self.frameData(161, 2, r[2]),
+             self.frameData(2, 2, r[0]),
+             self.frameData(3, 2, r[1]),
+             self.frameData(4, 2, r[1]),
+             self.frameData(5, 2, r[2])]
         
         self.moves['running'].append(f, [])
 
@@ -746,11 +749,11 @@ class Hare(battlechar.BattleChar):
                 ]
             ]
 
-        f = [ self.frameData(46, 5, r[0]),
-              self.frameData(47, 1, r[1]),
-              self.frameData(48, 1, r[2], h[0]),
-              self.frameData(49, 5, r[3], h[1]),
-              self.frameData(50, 6, r[4]),
+        f = [ self.frameData(46, 3, r[0]),
+              self.frameData(47, 5, r[1]),
+              self.frameData(48, 2, r[2], h[0]),
+              self.frameData(49, 4, r[3], h[1]),
+              self.frameData(50, 5, r[4]),
               self.frameData(0, 4, r[5])]
         self.moves['jabB'].append(f, [])
         self.moves['jabB'].canDI = False
