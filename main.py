@@ -153,7 +153,7 @@ def goBattle(data, net):
         cp = 2
         cam = 1
         
-    changeMVC(battle_m.Model(data[0], data[1], data[2], data[3]), battle_v.View(), battle_c.Controller(), screen)
+    changeMVC(battle_m.Model(data[0], data[1], data[2]), battle_v.View(), battle_c.Controller(), screen)
     c.setPlayer(cp)
     m.setNetPlayer(cp)
     m.setCameraPlayer(cam)
@@ -362,9 +362,8 @@ def goGame(theMap, hostChars, clientChars, playerNum, conn):
         proceed(clock, conn)
         if m.startBattle():
             oldM = m
-            testData = battle_m.testData()
             realData = m.getBattleData()
-            data = [realData[0], testData[1], testData[2], battle_m.getPlatforms(realData[1][0], realData[1][1])]
+            data = [realData[0], realData[1][0], realData[1][1]]
             goBattle(data, conn)
             resolution = m.returnCode
             changeMVC(oldM, mapmode_v.View(), mapmode_c.Controller(), screen)

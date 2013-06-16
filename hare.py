@@ -749,10 +749,10 @@ class Hare(battlechar.BattleChar):
                 ]
             ]
 
-        f = [ self.frameData(46, 4, r[0]),
+        f = [ self.frameData(46, 3, r[0]),
               self.frameData(47, 1, r[1]),
-              self.frameData(48, 2, r[2], h[0]),
-              self.frameData(49, 3, r[3], h[1]),
+              self.frameData(48, 1, r[2], h[0]),
+              self.frameData(49, 4, r[3], h[1]),
               self.frameData(49, 2, r[3]),
               self.frameData(50, 4, r[4]),
               self.frameData(169, 3, r[5]),

@@ -406,6 +406,7 @@ DIREC_GRAPHICS = "graphics"
 DIREC_DATA = "data"
 DIREC_CHARACTER_SAVES = os.path.join(DIREC_DATA, "characters")
 DIREC_BACKGROUNDS = os.path.join(DIREC_GRAPHICS, "backgrounds")
+DIREC_SCENERY = os.path.join(DIREC_GRAPHICS, "scenery")
 DIREC_CHARACTER_GRAPHICS = os.path.join(DIREC_GRAPHICS, "characters")
 DIREC_HARE_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "hare")
 DIREC_FOX_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "fox")
@@ -603,11 +604,6 @@ UNIT_HUD_SUPER_ICON_SIZE = (40, 40)
 
 UNIT_HUD_STRUCTURE_PANEL_HEIGHT = 55
 UNIT_HUD_STRUCTURE_PANEL_SPACING = 70
-
-temp = []
-BACKGROUNDS = []
-for i in temp:
-    BACKGROUNDS.append(pygame.image.load(os.path.join(DIREC_BACKGROUNDS, i)).convert_alpha())
 
 temp = [ ["00.png", (54, 75)],
          ["01.png", (54, 75)],
@@ -1115,6 +1111,13 @@ temp = [ ['00.png', (44, 35)],
 FX_IMAGES = []
 for i in temp:
     FX_IMAGES.append([pygame.image.load(os.path.join(DIREC_FX_GRAPHICS, i[0])).convert_alpha(), i[1]])
+    
+    
+temp = [
+        ("cloud_large", ())
+        ]
+
+
 
 
 temp = ['pauseicon.png',
@@ -1181,6 +1184,16 @@ MAIN_MENU_BACKGROUND_IMAGE = pygame.image.load(os.path.join(DIREC_BACKGROUNDS, "
 CHARACTER_SELECT_BG_SKY = pygame.image.load(os.path.join(DIREC_BACKGROUNDS, "darksky.png")).convert_alpha()
 CHARACTER_SELECT_BG_MOUNTAINS_FAR = pygame.image.load(os.path.join(DIREC_BACKGROUNDS, "mountainscape2.png")).convert_alpha()
 CHARACTER_SELECT_BG_MOUNTAINS_NEAR = pygame.image.load(os.path.join(DIREC_BACKGROUNDS, "mountainscape1.png")).convert_alpha()
+
+
+temp = [['ground01', (600, 37)],
+        ['sky01', (500, 450)],
+        ['treeline', (600, 225)]]
+SCENERY_IMAGES = {}
+for i in temp:
+    SCENERY_IMAGES[i[0]] = (pygame.image.load(os.path.join(DIREC_SCENERY, i[0] + ".png")).convert_alpha(), i[1])
+
+
 
 temp = [ ["fontdata.ttf",10],
          ["fontbars.ttf", 14],

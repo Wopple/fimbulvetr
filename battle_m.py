@@ -15,6 +15,8 @@ import platform
 import textrect
 import drawable
 
+import scenery
+
 import colorswapper
 
 import hare, fox, cat
@@ -22,10 +24,9 @@ import hare, fox, cat
 from constants import *
 
 class Model(mvc.Model):
-    def __init__(self, inChars, areaSize, bg, platforms):
+    def __init__(self, inChars, terrainLeft, terrainRight):
         super(Model, self).__init__()
-        self.background = bg
-        self.rect = pygame.Rect((0, 0), areaSize)
+        self.rect = pygame.Rect((0, 0), BATTLE_ARENA_SIZE)
 
         self.testBool = False
         self.testBool2 = False
@@ -67,7 +68,8 @@ class Model(mvc.Model):
 
         self.fx = []
 
-        self.platforms = platforms
+        self.scene = scenery.Scenery(terrainLeft, terrainRight)
+        self.platforms = getPlatforms(terrainLeft, terrainRight)
 
         self.countdown = countdown.Countdown(BATTLE_COUNTDOWN_LENGTH)
         self.createEndingText()
@@ -1214,29 +1216,10 @@ class SuperIcon(drawable.Drawable):
 def testData():
     heroes = [hare.Hare(), hare.Hare()]
     
-    #for i, h in enumerate(heroes):
-        #colorswapper.swapCharacter(h, (i==0), [0], screen)
-    
     for h in heroes:
         h.superEnergy.change(h.superEnergy.maximum)
     
-    size = BATTLE_ARENA_SIZE
-    bg = pygame.Surface(size)
-    bg.fill((190, 190, 190))
-    barSpace = 200
-    x = barSpace
-    while x < size[0]:
-        bg3 = pygame.Surface((2, size[1]))
-        bg3.fill((160, 160, 160))
-        bg.blit(bg3, (x, 0))
-        x += barSpace
-    bg2 = pygame.Surface((size[0], BATTLE_AREA_FLOOR_HEIGHT))
-    bg2.fill(PLATFORM_COLOR)
-    bg.blit(bg2, (0, size[1] - BATTLE_AREA_FLOOR_HEIGHT))
-
-    platforms = getPlatforms(PLAINS, MOUNTAIN)
-    
-    return [heroes, size, bg, platforms]
+    return [heroes, FOREST, FOREST]
 
 
 def getPlatforms(leftTerrain, rightTerrain):

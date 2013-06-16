@@ -13,7 +13,8 @@ class View(mvc.View):
 
     def update(self, tickClock=True):
         self.screen.blit(BLACK_SCREEN, (0, 0))
-        self.screen.blit(self.model.background, self.model.rect)
+        
+        self.model.scene.drawBackground(self.screen, self.model.rect.topleft)
 
         for p in self.model.platforms:
             p.draw(self.screen, self.model.rect.topleft)
@@ -45,6 +46,7 @@ class View(mvc.View):
             self.screen.blit(self.model.damageTag, self.model.damageTagRects[i].topleft)
             self.screen.blit(self.model.getDamagePercentText(i), self.model.damagePercentRects[i].topleft)
         
+        self.model.scene.drawForeground(self.screen, self.model.rect.topleft)
 
         self.model.countdown.draw(self.screen)
         self.drawEndingText()
