@@ -1188,7 +1188,16 @@ CHARACTER_SELECT_BG_MOUNTAINS_NEAR = pygame.image.load(os.path.join(DIREC_BACKGR
 
 temp = [['ground01', (600, 37)],
         ['sky01', (500, 450)],
-        ['treeline', (600, 225)]]
+        ['treeline', (600, 225)],
+        ['tree01', (366, 469)],
+        ['tree02', (298, 570)],
+        ['tree03', (120, 263)],
+        ['tree04', (106, 210)],
+        ['tree05', (170, 402)],
+        ['cloudlarge', (332, 133)],
+        ['cloud01', (112, 86)],
+        ['cloud02', (170, 144)],
+        ['cloud03', (154, 76)]]
 SCENERY_IMAGES = {}
 for i in temp:
     SCENERY_IMAGES[i[0]] = (pygame.image.load(os.path.join(DIREC_SCENERY, i[0] + ".png")).convert_alpha(), i[1])
