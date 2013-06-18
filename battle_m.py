@@ -1219,7 +1219,7 @@ def testData():
     for h in heroes:
         h.superEnergy.change(h.superEnergy.maximum)
     
-    return [heroes, FOREST, FOREST]
+    return [heroes, SNOW, SNOW]
 
 
 def getPlatforms(leftTerrain, rightTerrain):
@@ -1259,6 +1259,9 @@ def getPlatformsForSingleTerrain(terrain, isRight):
             (400, BATTLE_ARENA_SIZE[1] - BATTLE_AREA_FLOOR_HEIGHT - 380), HALF_SCREEN - 400, terrain ) )
         platforms.append( platform.Platform(
             (150, BATTLE_ARENA_SIZE[1] - BATTLE_AREA_FLOOR_HEIGHT - 480), 140, terrain ) )
+    elif terrain == SNOW:
+        platforms.append( platform.Platform(
+            (200, BATTLE_ARENA_SIZE[1] - BATTLE_AREA_FLOOR_HEIGHT - 180), HALF_SCREEN - 200, terrain ) )
         
         
     if isRight:

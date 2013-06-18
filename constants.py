@@ -141,7 +141,8 @@ PLATFORM_COLORS = ( (15, 111, 22),
                     (12, 69, 16),
                     (87, 65, 40),
                     (250, 250, 210),
-                    (160, 160, 160))
+                    (160, 160, 160),
+                    (240, 240, 240))
 
 SCROLL_AREA_WIDTH = 15
 SCROLL_SPEED = 18
@@ -1113,13 +1114,6 @@ temp = [ ['00.png', (44, 35)],
 FX_IMAGES = []
 for i in temp:
     FX_IMAGES.append([pygame.image.load(os.path.join(DIREC_FX_GRAPHICS, i[0])).convert_alpha(), i[1]])
-    
-    
-temp = [
-        ("cloud_large", ())
-        ]
-
-
 
 
 temp = ['pauseicon.png',
@@ -1189,7 +1183,9 @@ CHARACTER_SELECT_BG_MOUNTAINS_NEAR = pygame.image.load(os.path.join(DIREC_BACKGR
 
 
 temp = [['ground01', (600, 37)],
+        ['ground02', (600, 10)],
         ['sky01', (500, 450)],
+        ['sky02', (500, 450)],
         ['treeline', (600, 225)],
         ['tree01', (366, 469)],
         ['tree02', (298, 570)],
@@ -1199,7 +1195,12 @@ temp = [['ground01', (600, 37)],
         ['cloudlarge', (332, 133)],
         ['cloud01', (112, 86)],
         ['cloud02', (170, 144)],
-        ['cloud03', (154, 76)]]
+        ['cloud03', (154, 76)],
+        ['cloud07', (150, 75)],
+        ['cloud08', (134, 81)],
+        ['snowyhill01', (600, 156)],
+        ['snowyhill02', (600, 278)],
+        ['snowyhill03', (600, 470)]]
 SCENERY_IMAGES = {}
 for i in temp:
     SCENERY_IMAGES[i[0]] = (pygame.image.load(os.path.join(DIREC_SCENERY, i[0] + ".png")).convert_alpha(), i[1])
