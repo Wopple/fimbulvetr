@@ -1219,7 +1219,7 @@ def testData():
     for h in heroes:
         h.superEnergy.change(h.superEnergy.maximum)
     
-    return [heroes, SNOW, SNOW]
+    return [heroes, MOUNTAIN, MOUNTAIN]
 
 
 def getPlatforms(leftTerrain, rightTerrain):

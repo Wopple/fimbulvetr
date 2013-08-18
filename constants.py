@@ -6,7 +6,7 @@ import math
 
 VERSION = "0.1.5"
 
-FULL_SCREEN = False
+FULL_SCREEN = True
 FRAME_RATE = 40
 SCREEN_SIZE = (800, 600)
 ENTIRE_SCREEN = pygame.Rect( (0,0), SCREEN_SIZE )
@@ -1184,6 +1184,7 @@ CHARACTER_SELECT_BG_MOUNTAINS_NEAR = pygame.image.load(os.path.join(DIREC_BACKGR
 
 temp = [['ground01', (600, 37)],
         ['ground02', (600, 10)],
+        ['ground03', (600, 12)],
         ['sky01', (500, 450)],
         ['sky02', (500, 450)],
         ['treeline', (600, 225)],
@@ -1196,11 +1197,23 @@ temp = [['ground01', (600, 37)],
         ['cloud01', (112, 86)],
         ['cloud02', (170, 144)],
         ['cloud03', (154, 76)],
+        ['cloud04', (150, 98)],
+        ['cloud05', (113, 72)],
+        ['cloud06', (104, 86)],
         ['cloud07', (150, 75)],
         ['cloud08', (134, 81)],
         ['snowyhill01', (600, 156)],
         ['snowyhill02', (600, 278)],
-        ['snowyhill03', (600, 470)]]
+        ['snowyhill03', (600, 470)],
+        ['plains1', (600, 210)],
+        ['plains2', (600, 246)],
+        ['plains3', (600, 240)],
+        ['lakeshore', (600, 132)],
+        ['raft', (600, 8)],
+        ['waterfront', (600, 280)],
+        ['mountain1', (800, 420)],
+        ['mountain2', (600, 470)],
+        ['rocks', (600, 456)]]
 SCENERY_IMAGES = {}
 for i in temp:
     SCENERY_IMAGES[i[0]] = (pygame.image.load(os.path.join(DIREC_SCENERY, i[0] + ".png")).convert_alpha(), i[1])

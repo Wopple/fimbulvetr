@@ -23,6 +23,24 @@ class Scenery(object):
     def generate(self):
         
         itemDict = {
+                    (PLAINS, PLAINS) : (
+                                    ("sky01", (BATTLE_ARENA_SIZE[0] / 2, BATTLE_ARENA_SIZE[1] / 2), (1.0, 0.0), False),
+                                    ("cloudlarge", (-2000, 50), (0.95, 0.0), False),
+                                    ("cloud01", (2000, 200), (0.95, 0.0), False),
+                                    ("cloud02", (6000, 400), (0.95, 0.0), False),
+                                    ("cloud03", (-4300, 300), (0.95, 0.0), False),
+                                    ("plains2", NEUTRAL_POS, (0.8, -0.01), False),
+                                    ("ground01", NEUTRAL_POS, (0.0, 0.0), False)
+                                ),
+                    (SNOW, SNOW) : (
+                                    ("sky02", (BATTLE_ARENA_SIZE[0] / 2, BATTLE_ARENA_SIZE[1] / 2), (1.0, 1.0), False),
+                                    ("cloud07", (-4300, -3000), (0.95, 0.90), False),
+                                    ("cloud08", (6000, -3000), (0.95, 0.90), False),
+                                    ("snowyhill03", (BATTLE_ARENA_SIZE[0] / 2, FLOOR_POS + 1200), (0.9, 0.9), False),
+                                    ("snowyhill02", (BATTLE_ARENA_SIZE[0] / 2, FLOOR_POS + 550), (0.5, 0.8), False),
+                                    ("snowyhill01", (BATTLE_ARENA_SIZE[0] / 2, FLOOR_POS + 300), (0.15, 0.6), False),
+                                    ("ground02", NEUTRAL_POS, (0.0, 0.0), False)
+                                ),
                     (FOREST, FOREST) : (
                                     ("sky01", (BATTLE_ARENA_SIZE[0] / 2, BATTLE_ARENA_SIZE[1] / 2), (1.0, 0.0), False),
                                     ("cloudlarge", (-2000, 50), (0.95, 0.0), False),
@@ -37,14 +55,20 @@ class Scenery(object):
                                     ("tree02", (220, FLOOR_POS), (0.1, -0.18), False),
                                     ("ground01", NEUTRAL_POS, (0.0, 0.0), False)
                                 ),
-                    (SNOW, SNOW) : (
-                                    ("sky02", (BATTLE_ARENA_SIZE[0] / 2, BATTLE_ARENA_SIZE[1] / 2), (1.0, 1.0), False),
-                                    ("cloud07", (-4300, -3000), (0.95, 0.90), False),
-                                    ("cloud08", (6000, -3000), (0.95, 0.90), False),
-                                    ("snowyhill03", (BATTLE_ARENA_SIZE[0] / 2, FLOOR_POS + 1200), (0.9, 0.9), False),
-                                    ("snowyhill02", (BATTLE_ARENA_SIZE[0] / 2, FLOOR_POS + 550), (0.5, 0.8), False),
-                                    ("snowyhill01", (BATTLE_ARENA_SIZE[0] / 2, FLOOR_POS + 300), (0.15, 0.6), False),
-                                    ("ground02", NEUTRAL_POS, (0.0, 0.0), False)
+                    (WATER, WATER) : (
+                                    ("sky01", (BATTLE_ARENA_SIZE[0] / 2, BATTLE_ARENA_SIZE[1] / 2), (1.0, 0.0), False),
+                                    ("cloud04", (26000, -28000), (0.99, 0.99), False),
+                                    ("cloud05", (-20000, -20000), (0.99, 0.99), False),
+                                    ("lakeshore", ((BATTLE_ARENA_SIZE[0] / 2), FLOOR_POS), (0.99, 0.98), False),
+                                    ("waterfront", ((BATTLE_ARENA_SIZE[0] / 2), FLOOR_POS + 18000), (0.99, 0.99), False),
+                                    ("raft", NEUTRAL_POS, (0.0, 0.0), False)
+                                ),
+                    (MOUNTAIN, MOUNTAIN) : (
+                                    ("sky01", (BATTLE_ARENA_SIZE[0] / 2, BATTLE_ARENA_SIZE[1] / 2), (1.0, 0.0), False),
+                                    ("mountain2", (BATTLE_ARENA_SIZE[0] / 2, FLOOR_POS + 1200), (0.95, 0.9), False),
+                                    ("mountain1", (BATTLE_ARENA_SIZE[0] / 2, FLOOR_POS + 800), (0.75, 0.8), False),
+                                    ("rocks", (BATTLE_ARENA_SIZE[0] / 2, FLOOR_POS + 200), (0.4, 0.5), False),
+                                    ("ground03", NEUTRAL_POS, (0.0, 0.0), False)
                                 )
                     }
         
@@ -57,25 +81,29 @@ class Scenery(object):
             dataList = normal
             flipper = 1
         elif (not flipped is None):
-            dataList = normal
+            dataList = flipped
             flipper = -1
             
-        if (not dataList is None):
-            for data in dataList:
-                print "Item!"
-                imageData = SCENERY_IMAGES[data[0]]
-                image = imageData[0]
-                anchor = imageData[1]
-                pos = data[1]
-                scale = data[2]
-                isFore = data[3]
+        if dataList is None:
+            if self.terrainLeft == SNOW or self.terrainRight == SNOW:
+                dataList = itemDict.get((SNOW, SNOW))
+            else:
+                dataList = itemDict.get((PLAINS, PLAINS))
+            
+        for data in dataList:
+            imageData = SCENERY_IMAGES[data[0]]
+            image = imageData[0]
+            anchor = imageData[1]
+            pos = data[1]
+            scale = data[2]
+            isFore = data[3]
                 
-                if isFore:
-                    itemList = self.foregroundItems
-                else:
-                    itemList = self.backgroundItems
-                item = SceneryItem(image, pos, anchor, scale)
-                itemList.append(item)
+            if isFore:
+                itemList = self.foregroundItems
+            else:
+                itemList = self.backgroundItems
+            item = SceneryItem(image, pos, anchor, scale)
+            itemList.append(item)
             
         
         
