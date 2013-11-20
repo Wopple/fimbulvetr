@@ -405,12 +405,14 @@ MAP_REGION_SIZE = 100
 
 DIREC_PARENT = ".."
 
-DIREC_FONTS = os.path.join(DIREC_PARENT, "fonts")
+DIREC_RESOURCES = os.path.join(DIREC_PARENT, "resources")
 
-DIREC_DATA = os.path.join(DIREC_PARENT, "data")
+DIREC_FONTS = os.path.join(DIREC_RESOURCES, "fonts")
+
+DIREC_DATA = os.path.join(DIREC_RESOURCES, "data")
 DIREC_CHARACTER_SAVES = os.path.join(DIREC_DATA, "characters")
 
-DIREC_GRAPHICS = os.path.join(DIREC_PARENT, "graphics")
+DIREC_GRAPHICS = os.path.join(DIREC_RESOURCES, "graphics")
 DIREC_BACKGROUNDS = os.path.join(DIREC_GRAPHICS, "backgrounds")
 DIREC_SCENERY = os.path.join(DIREC_GRAPHICS, "scenery")
 DIREC_INTERFACE_GRAPHICS = os.path.join(DIREC_GRAPHICS, "interface")
