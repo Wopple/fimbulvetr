@@ -403,22 +403,26 @@ TECH_BUFFER_MAX = 8
 
 MAP_REGION_SIZE = 100
 
+DIREC_PARENT = ".."
 
-DIREC_FONTS = "fonts"
-DIREC_GRAPHICS = "graphics"
-DIREC_DATA = "data"
+DIREC_FONTS = os.path.join(DIREC_PARENT, "fonts")
+
+DIREC_DATA = os.path.join(DIREC_PARENT, "data")
 DIREC_CHARACTER_SAVES = os.path.join(DIREC_DATA, "characters")
+
+DIREC_GRAPHICS = os.path.join(DIREC_PARENT, "graphics")
 DIREC_BACKGROUNDS = os.path.join(DIREC_GRAPHICS, "backgrounds")
 DIREC_SCENERY = os.path.join(DIREC_GRAPHICS, "scenery")
-DIREC_CHARACTER_GRAPHICS = os.path.join(DIREC_GRAPHICS, "characters")
-DIREC_HARE_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "hare")
-DIREC_FOX_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "fox")
-DIREC_CAT_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "cat")
 DIREC_INTERFACE_GRAPHICS = os.path.join(DIREC_GRAPHICS, "interface")
 DIREC_PORTRAITS = os.path.join(DIREC_GRAPHICS, "portraits")
 DIREC_FX_GRAPHICS = os.path.join(DIREC_GRAPHICS, "fx")
 DIREC_MAP_ITEMS = os.path.join(DIREC_GRAPHICS, "mapitems")
 DIREC_TERRAIN_FILL_GRAPHICS = os.path.join(DIREC_GRAPHICS, "terrainfills")
+
+DIREC_CHARACTER_GRAPHICS = os.path.join(DIREC_GRAPHICS, "characters")
+DIREC_HARE_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "hare")
+DIREC_FOX_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "fox")
+DIREC_CAT_GRAPHICS = os.path.join(DIREC_CHARACTER_GRAPHICS, "cat")
 
 CHARACTER_FILE_NAME = "char"
 CHARACTER_FILE_EXT = "dat"

@@ -372,11 +372,10 @@ def goGame(theMap, hostChars, clientChars, playerNum, conn):
             
     sys.exit()
 
-
-
-
-
-if __name__ == '__main__':
+def run():
+    global m
+    global v
+    global c
 
     m = mvc.Model()
     v = mvc.View()
@@ -388,6 +387,7 @@ if __name__ == '__main__':
 
     if DEBUG_MODE:
         debugLoop = True
+
         while debugLoop:
             changeMVC(debug_m.Model(), debug_v.View(), menu_c.Controller(), screen)
             while not m.advance():
@@ -407,10 +407,9 @@ if __name__ == '__main__':
             elif m.debugMenu.value() == 5:
                 sys.exit()
 
-
     goTitle()
     fade = True
+
     while 1:
         goMainMenu(fade)
         fade = False
-
