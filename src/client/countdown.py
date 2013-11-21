@@ -1,16 +1,14 @@
-import os
-import sys
 import pygame
 
-import incint
+import boundint
 import textrect
 
-from constants import *
+from common.constants import *
 
 class Countdown(object):
     def __init__(self, time):
         self.time = time
-        self.tick = incint.IncInt(0, 0, FRAME_RATE)
+        self.tick = boundint.BoundInt(0, FRAME_RATE, 0, True)
 
         size = (SCREEN_SIZE[0], COUNTDOWN_FONT.get_linesize() + 4)
         pos = (0, (SCREEN_SIZE[1] / 2) - (size[1] / 2) - 15)

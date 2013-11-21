@@ -3,7 +3,7 @@ import sys
 import pygame
 import copy
 
-from constants import *
+from common.constants import *
 
 class Hitbox(object):
     def __init__(self, inRect, damage, stun, knockback, angle, properties,

@@ -10,7 +10,7 @@ import boundint
 
 import scrollingbackground
 
-from constants import *
+from common.constants import *
 
 class Model(mvc.Model):
     def __init__(self, fade):

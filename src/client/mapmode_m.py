@@ -1,14 +1,10 @@
-import os
-import sys
 import pygame
-import math
-import copy
 
 import mvc
 import gamemap
 import mapchar
 import util
-import incint
+import boundint
 import pauseplayicon
 import mapcharacterbar
 import targetmarker
@@ -22,7 +18,7 @@ import mapstructure
 
 import hare, fox, cat
 
-from constants import *
+from common.constants import *
 
 class Model(mvc.Model):
     def __init__(self, inMap, inChars, team):
@@ -31,7 +27,7 @@ class Model(mvc.Model):
         self.map = inMap
         self.zoomVal = 1.0
         self.fimbulvetrPos = 0
-        self.fimbulvetrTick = incint.IncInt(0, 0, self.map.fimbulvetrSpeed)
+        self.fimbulvetrTick = boundint.BoundInt(0, self.map.fimbulvetrSpeed, 0, True)
         self.fimbulvetrDelayTick = self.map.fimbulvetrDelay
         self.fimbulvetrSpreadSpeed = self.map.fimbulvetrSpreadSpeed
         

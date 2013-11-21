@@ -3,7 +3,7 @@ import sys
 import pygame
 import boundint
 
-from constants import *
+from common.constants import *
 
 import drawable
 

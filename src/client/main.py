@@ -20,7 +20,7 @@ import characterSelect2_m, characterSelect2_v, characterSelect2_c
 import mapdebug_m, mapdebug_v, mapdebug_c
 import gamemap
 
-from constants import *
+from common.constants import *
 
 
 def changeMVC(newM, newV, newC, screen, emptyLists=True):

@@ -4,7 +4,7 @@ import pygame
 import copy
 import math
 
-from constants import *
+from common.constants import *
 
 class LockCircle:
 

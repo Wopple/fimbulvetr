@@ -13,7 +13,7 @@ import mapitem
 
 import hare, cat, fox
 
-from constants import *
+from common.constants import *
 
 class MapChar(mapitem.MapItem):
     def __init__(self, mapCloneMethod, battleCloneMethod, speciesAbbrev, inImages,

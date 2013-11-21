@@ -2,10 +2,9 @@ import os
 import sys
 import pygame
 
-import incint
 import boundint
 
-from constants import *
+from common.constants import *
 
 class FX(object):
     def __init__(self, inPos, inFacing, inType):

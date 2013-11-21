@@ -2,7 +2,7 @@ import os
 
 import pygame
 
-from constants import *
+from common.constants import *
 
 class Drawable(object):
     

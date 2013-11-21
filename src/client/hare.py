@@ -2,14 +2,13 @@ import os
 import sys
 import pygame
 
-import incint
 import boundint
 import battlechar
 import move
 
 import colorswapper
 
-from constants import *
+from common.constants import *
 
 # DAMAGE STUN KNOCKBACK ANGLE
 

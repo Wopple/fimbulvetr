@@ -4,7 +4,7 @@ import pygame
 
 import mvc
 
-from constants import *
+from common.constants import *
 
 class View(mvc.View):
     

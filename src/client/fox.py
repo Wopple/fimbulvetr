@@ -2,12 +2,11 @@ import os
 import sys
 import pygame
 
-import incint
 import battlechar
 import move
 import projectile
 
-from constants import *
+from common.constants import *
 
 class Fox(battlechar.BattleChar):
     def __init__(self, name="Unnamed Fox", inSpecial=0):

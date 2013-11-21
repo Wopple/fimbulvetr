@@ -7,7 +7,7 @@ import mapinterfaceitem
 import energybar
 import boundint
 
-from constants import *
+from common.constants import *
 
 class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
     

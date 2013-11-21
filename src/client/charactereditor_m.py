@@ -9,11 +9,10 @@ import chardata
 import minimenu
 import textrect
 import boundint
-import incint
 
 import hare, fox, cat
 
-from constants import *
+from common.constants import *
 
 class Model(mvc.Model):
     def __init__(self, isSelection=False):
@@ -71,7 +70,7 @@ class Model(mvc.Model):
         if numOfPages < 0:
             self.page = None
         else:
-            self.page = incint.IncInt(currPage, 0, numOfPages)
+            self.page = boundint.BoundInt(0, numOfPages, currPage, True)
         
         if not self.page is None:
             low = CHAR_EDITOR_NUM_PER_PAGE * self.page.value

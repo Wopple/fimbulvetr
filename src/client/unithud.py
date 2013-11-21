@@ -8,7 +8,7 @@ import energybar
 
 import battle_m
 
-from constants import *
+from common.constants import *
 
 class UnitHUD(object):
     def __init__(self, inTeam, inPlayers):

@@ -2,13 +2,11 @@ import os
 import sys
 import pygame
 
-import incint
-
 import hitbox
 import hurtbox
 import blockbox
 
-from constants import *
+from common.constants import *
 
 class Move(object):
     def __init__(self, f, t):

@@ -2,7 +2,7 @@
 #import sys
 #import pygame
 #
-#from constants import *
+#from common.constants import *
 #
 #import hare, fox, cat
 #

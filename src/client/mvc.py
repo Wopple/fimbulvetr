@@ -2,7 +2,7 @@ import sys
 import os
 import pygame
 
-from constants import *
+from common.constants import *
 
 class MVCObject(object):
     def __init__(self):

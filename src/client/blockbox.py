@@ -3,7 +3,7 @@ import sys
 import pygame
 import copy
 
-from constants import *
+from common.constants import *
 
 class Blockbox(object):
     def __init__(self, inRect):

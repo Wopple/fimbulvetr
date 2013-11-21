@@ -2,12 +2,10 @@ import os
 import sys
 import pygame
 
-import incint
-
 import move
 import copy
 
-from constants import *
+from common.constants import *
 
 class Projectile(object):
     def __init__(self):

@@ -1,9 +1,7 @@
-import sys
-
 class BoundInt(object):
-    def __init__(self, inMin, inMax, inVal):
+    def __init__(self, inMin, inMax, inVal, loop=False):
 
-        if inMin >= inMax:
+        if inMin > inMax:
             raise RuntimeError, "Minimum must be smaller than Maximum"
         if (inVal < inMin) or (inVal > inMax):
             raise RuntimeError, "Initial value must be within bounds"
@@ -11,20 +9,37 @@ class BoundInt(object):
         self.minimum = inMin
         self.maximum = inMax
         self.value = inVal
+        self.loop = loop
 
     def add(self, v):
         self.value += v
         self.checkBounds()
+
+    def sub(self, v):
+        self.value -= v
+        self.checkBounds()
+
+    def inc(self):
+        self.add(1)
+
+    def dec(self):
+        self.sub(1)
 
     def change(self, v):
         self.value = v
         self.checkBounds()
 
     def checkBounds(self):
-        if self.value < self.minimum:
-            self.value = self.minimum
-        if self.value > self.maximum:
-            self.value = self.maximum
+        if self.loop:
+            if self.value < self.minimum:
+                self.value = self.maximum
+            if self.value > self.maximum:
+                self.value = self.minimum
+        else:
+            if self.value < self.minimum:
+                self.value = self.minimum
+            if self.value > self.maximum:
+                self.value = self.maximum
 
     def atBound(self):
         return ((self.value == self.minimum) or (self.value == self.maximum))

@@ -3,7 +3,7 @@ import sys
 import pygame
 import copy
 
-from constants import *
+from common.constants import *
 
 import mapinterfaceitem
 

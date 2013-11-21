@@ -2,12 +2,11 @@ import os
 import sys
 import pygame
 
-import incint
 import boundint
 
 import move
 
-from constants import *
+from common.constants import *
 
 class BattleChar(object):
     def __init__(self, hp, footRectSize=30):

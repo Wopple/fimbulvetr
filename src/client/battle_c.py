@@ -5,7 +5,7 @@ from pygame.locals import *
 
 import mvc
 
-from constants import *
+from common.constants import *
 
 class Controller(mvc.Controller):
     def __init__(self, model=None, screen=None):

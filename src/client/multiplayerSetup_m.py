@@ -7,9 +7,8 @@ import mvc
 import minimenu
 import textrect
 import boundint
-import incint
 
-from constants import *
+from common.constants import *
 
 class Model(mvc.Model):
     def __init__(self):
@@ -55,8 +54,8 @@ class Model(mvc.Model):
         for i in temp:
             theCopy = INTERFACE_GRAPHICS[3].copy()
             self.workingIconList.append(pygame.transform.rotate(theCopy, i))
-        self.workingIconTick = incint.IncInt(0, 0, NET_ICON_SPEED)
-        self.workingIconCurr = incint.IncInt(0, 0, 3)
+        self.workingIconTick = boundint.BoundInt(0, NET_ICON_SPEED, 0, True)
+        self.workingIconCurr = boundint.BoundInt(0, 3, 0, True)
         
         self.changePhase(1)
 

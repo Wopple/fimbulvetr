@@ -14,12 +14,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Project Mage.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 import pygame
 from pygame.locals import *
-from math import sqrt
 import textrect
-import incint
+import boundint
 
 class MiniMenu(object):
     def __init__(self, inRect, options, inFont, colorOn, colorOff, colorBG):
@@ -27,7 +25,7 @@ class MiniMenu(object):
         self.rectSingle = inRect
         self.options = options
         if len(options) > 0:
-            self.selection = incint.IncInt(1, 1, len(options))
+            self.selection = boundint.BoundInt(1, len(options), 1, True)
         else:
             self.selection = None
         self.font = inFont
@@ -56,7 +54,7 @@ class MiniMenu(object):
     def inc(self):
         if not self.selection is None:
             if not self.noSelection:
-                self.selection.increment()
+                self.selection.inc()
             else:
                 self.selection.value = self.selection.minimum
                 self.noSelection = False
@@ -65,7 +63,7 @@ class MiniMenu(object):
     def dec(self):
         if not self.selection is None:
             if not self.noSelection:
-                self.selection.decrement()
+                self.selection.dec()
             else:
                 self.selection.value = self.selection.maximum
                 self.noSelection = False

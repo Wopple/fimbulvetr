@@ -18,7 +18,7 @@ import copy
 
 import hare, cat, fox
 
-from constants import *
+from common.constants import *
 
 class Model(mvc.Model):
     def __init__(self, isHost):

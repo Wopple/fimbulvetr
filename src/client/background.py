@@ -4,7 +4,7 @@ import sys
 import pygame
 import math
 
-from constants import *
+from common.constants import *
 
 class Background(object):
     def __init__(self, inRect, inImage):

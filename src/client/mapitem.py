@@ -8,7 +8,7 @@ from pygame.locals import *
 import drawable
 import util
 
-from constants import *
+from common.constants import *
 
 class MapItem(object):
 

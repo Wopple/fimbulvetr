@@ -6,7 +6,7 @@ import mvc
 
 import minimenu
 
-from constants import *
+from common.constants import *
 
 class Model(mvc.Model):
     def __init__(self):

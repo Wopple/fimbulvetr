@@ -5,7 +5,6 @@ import pygame
 import mvc
 import gamemap
 import util
-import incint
 
 import mapchar
 
@@ -13,7 +12,7 @@ import mapmode_m
 import hare, fox, cat
 
 
-from constants import *
+from common.constants import *
 
 class Model(mvc.Model):
     def __init__(self, inMap):

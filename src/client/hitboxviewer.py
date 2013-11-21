@@ -1,11 +1,10 @@
-import os
 import sys
 import pygame
-import incint
+import boundint
 import textrect
 import colorswapper
 from pygame.locals import *
-from constants import *
+from common.constants import *
 
 def setImage():
     global currImage
@@ -164,7 +163,7 @@ else:
     exit()
 
 zoom = 4
-imageInc = incint.IncInt(imageNum, 0, len(images) - 1)
+imageInc = boundint.BoundInt(0, len(images) - 1, imageNum)
 screen = pygame.display.set_mode(SCREEN_SIZE)
 pygame.init()
 pygame.display.set_caption("Hitbox Viewer")

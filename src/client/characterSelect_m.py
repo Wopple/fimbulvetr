@@ -7,7 +7,7 @@ import textrect
 
 import math
 
-from constants import *
+from common.constants import *
 
 class Model(mvc.Model):
     def __init__(self, theMap, isHost):

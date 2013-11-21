@@ -3,7 +3,7 @@ import os
 import sys
 import pygame
 
-from constants import *
+from common.constants import *
 
 class ScrollingBackground():
     def __init__ (self, inRect, inImage, inSpeed):

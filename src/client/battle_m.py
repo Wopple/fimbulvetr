@@ -6,7 +6,6 @@ import math
 
 import mvc
 
-import incint
 import boundint
 import energybar
 import countdown
@@ -21,7 +20,7 @@ import colorswapper
 
 import hare, fox, cat
 
-from constants import *
+from common.constants import *
 
 class Model(mvc.Model):
     def __init__(self, inChars, terrainLeft, terrainRight):

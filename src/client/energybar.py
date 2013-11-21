@@ -5,7 +5,7 @@ from math import sqrt
 import boundint
 import textrect
 
-from constants import *
+from common.constants import *
 
 class EnergyBar(object):
     def __init__(self, inVal, inRect, inBorders, inColors, pulse,

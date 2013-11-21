@@ -7,7 +7,7 @@ import mvc
 import textrect
 import boundint
 
-from constants import *
+from common.constants import *
 
 
 class Model(mvc.Model):
