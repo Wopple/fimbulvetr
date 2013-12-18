@@ -4,6 +4,7 @@ import pygame
 import copy
 
 from common.constants import *
+from client.constants import *
 
 class Blockbox(object):
     def __init__(self, inRect):

@@ -9,6 +9,7 @@ import drawable
 import util
 
 from common.constants import *
+from client.constants import *
 
 class MapItem(object):
 

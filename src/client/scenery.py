@@ -3,6 +3,7 @@ import sys
 import pygame
 
 from common.constants import *
+from client.constants import *
 
 FLOOR_POS = BATTLE_ARENA_SIZE[1] - BATTLE_AREA_FLOOR_HEIGHT
 NEUTRAL_POS = (BATTLE_ARENA_SIZE[0] / 2, FLOOR_POS)

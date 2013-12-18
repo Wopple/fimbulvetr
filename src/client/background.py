@@ -5,6 +5,7 @@ import pygame
 import math
 
 from common.constants import *
+from client.constants import *
 
 class Background(object):
     def __init__(self, inRect, inImage):

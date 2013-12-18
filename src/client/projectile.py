@@ -6,6 +6,7 @@ import move
 import copy
 
 from common.constants import *
+from client.constants import *
 
 class Projectile(object):
     def __init__(self):

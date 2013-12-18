@@ -8,6 +8,7 @@ import textrect
 import boundint
 
 from common.constants import *
+from client.constants import *
 
 
 class Model(mvc.Model):

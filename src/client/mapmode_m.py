@@ -19,6 +19,7 @@ import mapstructure
 import hare, fox, cat
 
 from common.constants import *
+from client.constants import *
 
 class Model(mvc.Model):
     def __init__(self, inMap, inChars, team):

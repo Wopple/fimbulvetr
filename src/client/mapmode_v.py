@@ -7,6 +7,7 @@ import mvc
 import mapchar
 
 from common.constants import *
+from client.constants import *
 
 class View(mvc.View):
     def __init__(self, model=None, screen=None):

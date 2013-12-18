@@ -9,6 +9,7 @@ import move
 import colorswapper
 
 from common.constants import *
+from client.constants import *
 
 # DAMAGE STUN KNOCKBACK ANGLE
 

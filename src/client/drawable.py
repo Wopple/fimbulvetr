@@ -3,6 +3,7 @@ import os
 import pygame
 
 from common.constants import *
+from client.constants import *
 
 class Drawable(object):
     

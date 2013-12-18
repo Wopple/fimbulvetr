@@ -13,6 +13,7 @@ import energybar
 import mapitem
 
 from common.constants import *
+from client.constants import *
 
 class MapStructure(mapitem.MapItem):
     def __init__(self, inPos, inImages, captureTime):

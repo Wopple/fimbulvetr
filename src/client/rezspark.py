@@ -5,6 +5,7 @@ import copy
 import math
 
 from common.constants import *
+from client.constants import *
 
 class RezSpark:
 

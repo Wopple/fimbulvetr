@@ -4,7 +4,11 @@ import boundint
 import textrect
 import colorswapper
 from pygame.locals import *
+
 from common.constants import *
+from client.constants import *
+
+from common.util import framerate
 
 def setImage():
     global currImage
@@ -167,7 +171,7 @@ imageInc = boundint.BoundInt(0, len(images) - 1, imageNum)
 screen = pygame.display.set_mode(SCREEN_SIZE)
 pygame.init()
 pygame.display.set_caption("Hitbox Viewer")
-clock = pygame.time.Clock()
+clock = framerate.FrameRate(FRAME_RATE)
 bg = pygame.Surface(SCREEN_SIZE)
 bg.fill(BLACK)
 cursor = pygame.Surface((zoom, zoom))
@@ -208,5 +212,5 @@ while (True):
     screen.blit(cursor, getZoomPos(mousePos))
     printText(screen, mousePos)
     printList(screen)
-    clock.tick(40)
+    clock.next()
     pygame.display.flip()

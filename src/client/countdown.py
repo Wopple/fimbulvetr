@@ -4,6 +4,7 @@ import boundint
 import textrect
 
 from common.constants import *
+from client.constants import *
 
 class Countdown(object):
     def __init__(self, time):

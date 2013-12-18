@@ -4,6 +4,7 @@ import pygame
 import boundint
 
 from common.constants import *
+from client.constants import *
 
 import drawable
 

@@ -21,6 +21,9 @@ import mapdebug_m, mapdebug_v, mapdebug_c
 import gamemap
 
 from common.constants import *
+from client.constants import *
+
+from common.util import framerate
 
 
 def changeMVC(newM, newV, newC, screen, emptyLists=True):
@@ -106,7 +109,7 @@ def proceed(clock, net=None):
     checkError()
     if not net is None:
         proceedOnNet(m, net)
-    clock.tick(FRAME_RATE)
+    clock.next()
 
 def proceedMulti(clock, net=None):
     global m
@@ -130,7 +133,7 @@ def proceedMulti(clock, net=None):
         
     proceedOnNet(m, net)
     
-    clock.tick(FRAME_RATE)
+    clock.next()
 
 def proceedOnNet(m, net):
     if not net is None:
@@ -376,10 +379,12 @@ def run():
     global m
     global v
     global c
+    global clock
 
     m = mvc.Model()
     v = mvc.View()
     c = mvc.Controller()
+    clock = framerate.FrameRate(FRAME_RATE)
 
     mList = []
     vList = []

@@ -6,6 +6,7 @@ import boundint
 import textrect
 
 from common.constants import *
+from client.constants import *
 
 class EnergyBar(object):
     def __init__(self, inVal, inRect, inBorders, inColors, pulse,

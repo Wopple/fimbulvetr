@@ -7,6 +7,7 @@ import boundint
 import move
 
 from common.constants import *
+from client.constants import *
 
 class BattleChar(object):
     def __init__(self, hp, footRectSize=30):

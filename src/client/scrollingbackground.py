@@ -4,6 +4,7 @@ import sys
 import pygame
 
 from common.constants import *
+from client.constants import *
 
 class ScrollingBackground():
     def __init__ (self, inRect, inImage, inSpeed):

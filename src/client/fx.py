@@ -5,6 +5,7 @@ import pygame
 import boundint
 
 from common.constants import *
+from client.constants import *
 
 class FX(object):
     def __init__(self, inPos, inFacing, inType):

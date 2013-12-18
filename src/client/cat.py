@@ -8,6 +8,7 @@ import move
 import projectile
 
 from common.constants import *
+from client.constants import *
 
 class Cat(battlechar.BattleChar):
     def __init__(self, name="Unnamed Cat", inSuper=0):

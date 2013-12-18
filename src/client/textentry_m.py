@@ -3,6 +3,7 @@ import sys
 import pygame
 
 from common.constants import *
+from client.constants import *
 
 import mvc
 import string
