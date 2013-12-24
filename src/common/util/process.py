@@ -17,7 +17,7 @@ def process(fn, state=None):
     Process(target=process_fn, args=(fn, queue, state)).start()
     return queue
 
-def get_last(queue):
+def getLast(queue):
     """
     queue: queue to empty
     return: the last item in the queue
