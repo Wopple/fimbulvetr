@@ -7,6 +7,8 @@ import boundint
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class FX(object):
     def __init__(self, inPos, inFacing, inType):
         self.preciseLoc = inPos
@@ -52,7 +54,7 @@ class FX(object):
             self.image = pygame.transform.flip(inImage, True, False)
         
         self.offset = offset
-        self.rect = pygame.Rect(self.getRectPos(), size)
+        self.rect = Rect(self.getRectPos(), size)
 
     def getRectPos(self):
         return ( int(self.preciseLoc[0]) - self.offset[0],

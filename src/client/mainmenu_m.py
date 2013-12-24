@@ -13,14 +13,16 @@ import scrollingbackground
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class Model(mvc.Model):
     def __init__(self, fade):
         super(Model, self).__init__()
 
         self.bg = pygame.Surface(SCREEN_SIZE)
-        self.bg = scrollingbackground.ScrollingBackground(pygame.Rect((0, 0), SCREEN_SIZE), MAIN_MENU_BACKGROUND_IMAGE, [0.2, 0.5])
+        self.bg = scrollingbackground.ScrollingBackground(Rect((0, 0), SCREEN_SIZE), MAIN_MENU_BACKGROUND_IMAGE, [0.2, 0.5])
         
-        tempRect = pygame.Rect( (50, 50), (200, 0) )
+        tempRect = Rect( (50, 50), (200, 0) )
         menuOptions = ["Play Single Player", "Play via Network",
                        "Character Setup", "Options", "Credits", "Exit"]
         self.menu = minimenu.MiniMenu(tempRect, menuOptions,
@@ -36,7 +38,7 @@ class Model(mvc.Model):
         for i in self.textMessages:
             f = FONTS[i[1]]
             size = (SCREEN_SIZE[0], f.get_linesize() + f.get_height())
-            tempRect = pygame.Rect( (0, 0), size )
+            tempRect = Rect( (0, 0), size )
             self.textRects.append(textrect.render_textrect(
                 i[0], f, tempRect, i[2], i[3], i[4], i[5]))
 

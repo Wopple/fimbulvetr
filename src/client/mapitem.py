@@ -11,6 +11,8 @@ import util
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class MapItem(object):
 
     def __init__(self, inPos, inImages):
@@ -37,7 +39,7 @@ class MapItem(object):
         if i != self.imageNum:
             self.imageNum = i
             self.image = self.images[i][0]
-            self.tokenRect = pygame.Rect((0, 0), self.image.get_size())
+            self.tokenRect = Rect((0, 0), self.image.get_size())
 
     def draw(self, screen, inZoom, inOffset):
         if (not self.blinkOn) or self.removed:
@@ -69,4 +71,4 @@ class MapItem(object):
         self.triggerArea.fill ((0, 0, 0, 0))
         pygame.draw.circle(self.triggerArea, self.triggerColor,
                            (r, r), r)
-        self.triggerRect = pygame.Rect((0, 0), (d, d))
+        self.triggerRect = Rect((0, 0), (d, d))

@@ -9,10 +9,12 @@ import minimenu
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class Model(mvc.Model):
     def __init__(self):
         super(Model, self).__init__()
-        tempRect = pygame.Rect( (50, 50), (200, 0) )
+        tempRect = Rect( (50, 50), (200, 0) )
         menuOptions = ["Combat Debug", "Map Debug", "Character Select Debug",
                        "Play Game Normally", "Exit"]
         self.debugMenu = minimenu.MiniMenu(tempRect, menuOptions,

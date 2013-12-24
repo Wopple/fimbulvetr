@@ -6,6 +6,8 @@ import textrect
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class Countdown(object):
     def __init__(self, time):
         self.time = time
@@ -13,7 +15,7 @@ class Countdown(object):
 
         size = (SCREEN_SIZE[0], COUNTDOWN_FONT.get_linesize() + 4)
         pos = (0, (SCREEN_SIZE[1] / 2) - (size[1] / 2) - 15)
-        self.rect = pygame.Rect(pos, size)
+        self.rect = Rect(pos, size)
         self.startFlag = False
 
         self.updateImage()

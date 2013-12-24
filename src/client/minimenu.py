@@ -3,6 +3,8 @@ from pygame.locals import *
 import textrect
 import boundint
 
+from common.util.rect import Rect
+
 class MiniMenu(object):
     def __init__(self, inRect, options, inFont, colorOn, colorOff, colorBG):
 
@@ -21,7 +23,7 @@ class MiniMenu(object):
         h = self.rectSingle.height * len(self.options)
         if h <= 0:
             h = 1
-        self.rect = pygame.Rect( self.rectSingle.topleft, (self.rectSingle.width, h) )
+        self.rect = Rect( self.rectSingle.topleft, (self.rectSingle.width, h) )
 
         self.colorOn = colorOn
         self.colorOff = colorOff
@@ -79,7 +81,7 @@ class MiniMenu(object):
         if not self.selection is None:
             offset = 0
             for x in range(len(self.options)):
-                textRect = pygame.Rect( (0, offset), (self.rectSingle.width, self.rectSingle.height) )
+                textRect = Rect( (0, offset), (self.rectSingle.width, self.rectSingle.height) )
                 self.areaRects.append(textRect)
                 if (self.selection.value == (x + 1)) and (not self.noSelection):
                     currColor = self.colorOn

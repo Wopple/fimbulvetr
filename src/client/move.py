@@ -9,6 +9,8 @@ import blockbox
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class Move(object):
     def __init__(self, f, t):
         self.frames = []
@@ -105,7 +107,7 @@ class Frame(object):
             width = d[2] - d[0]
             height = d[3] - d[1]
             size = (width, height)
-            rect = pygame.Rect(topleft, size)
+            rect = Rect(topleft, size)
             self.blockboxes.append(blockbox.Blockbox(rect))
 
     def buildHurtboxes(self, data):
@@ -116,7 +118,7 @@ class Frame(object):
             width = d[2] - d[0]
             height = d[3] - d[1]
             size = (width, height)
-            rect = pygame.Rect(topleft, size)
+            rect = Rect(topleft, size)
             self.hurtboxes.append(hurtbox.Hurtbox(rect))
 
     def buildHitboxes(self, data):
@@ -127,7 +129,7 @@ class Frame(object):
             width = d[2] - d[0]
             height = d[3] - d[1]
             size = (width, height)
-            rect = pygame.Rect(topleft, size)
+            rect = Rect(topleft, size)
             damage = d[4]
             stun = d[5]
             knockback = d[6]

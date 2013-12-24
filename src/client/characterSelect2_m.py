@@ -21,18 +21,20 @@ import hare, cat, fox
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class Model(mvc.Model):
     def __init__(self, isHost):
         super(Model, self).__init__()
         
-        self.bgs = [scrollingbackground.ScrollingBackground(pygame.Rect((0, 0),
-                                                                        SCREEN_SIZE), CHARACTER_SELECT_BG_SKY, [0, 0]),
+        self.bgs = [scrollingbackground.ScrollingBackground(Rect((0, 0),
+                                                                 SCREEN_SIZE), CHARACTER_SELECT_BG_SKY, [0, 0]),
                     
-                    scrollingbackground.ScrollingBackground(pygame.Rect((0, SCREEN_SIZE[1] - CHARACTER_SELECT_BG_MOUNTAINS_FAR.get_size()[1] - 70),
-                                                                        SCREEN_SIZE), CHARACTER_SELECT_BG_MOUNTAINS_FAR, [-0.3, 0]),
+                    scrollingbackground.ScrollingBackground(Rect((0, SCREEN_SIZE[1] - CHARACTER_SELECT_BG_MOUNTAINS_FAR.get_size()[1] - 70),
+                                                                 SCREEN_SIZE), CHARACTER_SELECT_BG_MOUNTAINS_FAR, [-0.3, 0]),
                     
-                    scrollingbackground.ScrollingBackground(pygame.Rect((0, SCREEN_SIZE[1] - CHARACTER_SELECT_BG_MOUNTAINS_NEAR.get_size()[1]),
-                                                                        SCREEN_SIZE), CHARACTER_SELECT_BG_MOUNTAINS_NEAR, [-0.8, 0])
+                    scrollingbackground.ScrollingBackground(Rect((0, SCREEN_SIZE[1] - CHARACTER_SELECT_BG_MOUNTAINS_NEAR.get_size()[1]),
+                                                                 SCREEN_SIZE), CHARACTER_SELECT_BG_MOUNTAINS_NEAR, [-0.8, 0])
                     ]
         
         self.starting = False
@@ -48,14 +50,14 @@ class Model(mvc.Model):
             self.playerNum = 1
             
         #Create Map-selection Panel
-        rect = pygame.Rect((0,0), CHARACTER_SELECTION_PANEL_SIZE)
+        rect = Rect((0,0), CHARACTER_SELECTION_PANEL_SIZE)
         rect.centerx = SCREEN_SIZE[0] / 2
         rect.top = CHARACTER_SELECTION_PANEL_SPACING
         self.mapPanel = Panel(0, isHost, rect)
         
         self.characterPanels = []
         
-        tempRect = pygame.Rect( (50, 50), (200, 0) )
+        tempRect = Rect( (50, 50), (200, 0) )
         menuOptions = []
         for map in gamemap.getMapList():
             menuOptions.append(map.name + " (" + str(len(map.startingPoints[0])) + ")")
@@ -250,12 +252,12 @@ class Model(mvc.Model):
                 
             
             for j in range(numOfCharacterSlots):
-                rect = pygame.Rect((0,0), CHARACTER_SELECTION_PANEL_SIZE)
+                rect = Rect((0,0), CHARACTER_SELECTION_PANEL_SIZE)
                 rect.centerx = xMid
                 rect.centery = yMid + ((CHARACTER_SELECTION_PANEL_SPACING + CHARACTER_SELECTION_PANEL_SIZE[1]) * j)
                 self.characterPanels.append(Panel(i, (self.playerNum == i), rect))
                 
-            rect = rect = pygame.Rect((0,0), READY_PANEL_SIZE)
+            rect = rect = Rect((0,0), READY_PANEL_SIZE)
             rect.centerx = xMid
             rect.bottom = SCREEN_SIZE[1] - CHARACTER_SELECTION_PANEL_SPACING
             readyPanel = Panel(i, (self.playerNum == i), rect)
@@ -309,7 +311,7 @@ class Model(mvc.Model):
             (not self.readyPanels[0] is None and self.readyPanels[0].data.value == True) and
             (not self.readyPanels[1] is None and self.readyPanels[1].data.value == True)):
             
-            rect = pygame.Rect((0,0), GO_PANEL_SIZE)
+            rect = Rect((0,0), GO_PANEL_SIZE)
             rect.centerx = SCREEN_SIZE[0] / 2
             rect.bottom = SCREEN_SIZE[1] - CHARACTER_SELECTION_PANEL_SPACING
             goPanel = Panel(0, True, rect)
@@ -353,7 +355,7 @@ class Panel(object):
         sizeY = self.rect.height + (CHARACTER_SELECT_PANEL_SELECTION_AURA_WIDTH * 2)
         posX = self.rect.left - CHARACTER_SELECT_PANEL_SELECTION_AURA_WIDTH
         posY = self.rect.top - CHARACTER_SELECT_PANEL_SELECTION_AURA_WIDTH
-        self.selectionRect = pygame.Rect((posX, posY), (sizeX, sizeY))
+        self.selectionRect = Rect((posX, posY), (sizeX, sizeY))
         self.selectionPanel = pygame.Surface(self.selectionRect.size)
         self.selectionPanel.fill(WHITE)
         
@@ -393,9 +395,9 @@ class Panel(object):
             
             if (not showFront):
                 margins = CHARACTER_SELECT_PANEL_BACK_CIRCLE_MARGINS
-                ovalRect = pygame.Rect((margins[0], margins[1]),
-                                       (decorInner.get_size()[0] - (margins[0] * 2),
-                                        decorInner.get_size()[1] - (margins[1] * 2)))
+                ovalRect = Rect((margins[0], margins[1]),
+                                (decorInner.get_size()[0] - (margins[0] * 2),
+                                 decorInner.get_size()[1] - (margins[1] * 2)))
                 pygame.draw.ellipse(decorInner, colorDecor, ovalRect)
             
             decorOuter.blit(decorInner, (decorWidth, decorWidth))
@@ -403,12 +405,12 @@ class Panel(object):
             
             
             #Fill Data
-            fillRect = pygame.Rect(((decorWidth + decorMargin), (decorWidth + decorMargin)), decorInner.get_size())
+            fillRect = Rect(((decorWidth + decorMargin), (decorWidth + decorMargin)), decorInner.get_size())
             if isinstance(self.data, mapchar.MapChar):
                 
                 font = CHARACTER_SELECTION_CAPTION_FONT
                 textHeight = font.get_linesize() + 2
-                tRect = pygame.Rect((0,0), (fillRect.width - 10, textHeight))
+                tRect = Rect((0,0), (fillRect.width - 10, textHeight))
                 tRect.centerx = fillRect.centerx
                 tRect.centery = fillRect.centery
                 text = textrect.render_textrect(self.data.name, font, tRect,
@@ -417,7 +419,7 @@ class Panel(object):
                 self.image.blit(text, tRect.topleft)
                 
                 speciesImage = self.data.getSmallImage()
-                speciesRect = pygame.Rect((0, 0), speciesImage.get_size())
+                speciesRect = Rect((0, 0), speciesImage.get_size())
                 speciesRect.right = tRect.right
                 speciesRect.centery = self.rect.height / 2
                 
@@ -428,7 +430,7 @@ class Panel(object):
                 
                 font = CHARACTER_SELECTION_CAPTION_FONT
                 textHeight = font.get_linesize() + 2
-                tRect = pygame.Rect((0,0), (fillRect.width - 10, textHeight))
+                tRect = Rect((0,0), (fillRect.width - 10, textHeight))
                 tRect.centerx = fillRect.centerx
                 tRect.centery = fillRect.centery
                 text = textrect.render_textrect(self.data.map.name, font, tRect,
@@ -438,7 +440,7 @@ class Panel(object):
                 
                 if self.data.wasRandom:
                     image = RANDOM_ICON
-                    rect = pygame.Rect((0,0), image.get_size())
+                    rect = Rect((0,0), image.get_size())
                     rect.right = fillRect.right
                     rect.centery = fillRect.centery
                     self.image.blit(image, rect.topleft)
@@ -448,7 +450,7 @@ class Panel(object):
                 font = CHARACTER_SELECTION_CAPTION_FONT
                 font = CHARACTER_SELECTION_CAPTION_FONT
                 textHeight = font.get_linesize() + 2
-                tRect = pygame.Rect((0,0), (fillRect.width - 10, textHeight))
+                tRect = Rect((0,0), (fillRect.width - 10, textHeight))
                 tRect.centerx = fillRect.centerx
                 tRect.centery = fillRect.centery
                 if self.data.value:
@@ -466,7 +468,7 @@ class Panel(object):
                 font = CHARACTER_SELECTION_CAPTION_FONT
                 font = CHARACTER_SELECTION_CAPTION_FONT
                 textHeight = font.get_linesize() + 2
-                tRect = pygame.Rect((0,0), (fillRect.width - 10, textHeight))
+                tRect = Rect((0,0), (fillRect.width - 10, textHeight))
                 tRect.centerx = fillRect.centerx
                 tRect.centery = fillRect.centery
                 color = READY_PANEL_FONT_COLOR_TRUE
@@ -503,7 +505,7 @@ class DetailDialog(object):
         size = []
         for i in range(2):
             size.append( (itemWidth * itemMatrix[i]) + (spacingWidth * (itemMatrix[i] - 1)) + (marginWidth * 2) )
-        self.rect = pygame.Rect((0, 0), size)
+        self.rect = Rect((0, 0), size)
         self.rect.centerx = SCREEN_SIZE[0] / 2
         self.rect.centery = SCREEN_SIZE[1] / 2
         
@@ -558,14 +560,14 @@ class DetailDialog(object):
                 xPos = (itemWidth * col) + (spacingWidth * (col)) + marginWidth
                 yPos = (itemWidth * row) + (spacingWidth * (row)) + marginWidth
                 
-                rect = pygame.Rect((xPos, yPos), (itemWidth, itemWidth))
+                rect = Rect((xPos, yPos), (itemWidth, itemWidth))
                 
                 if (isinstance(item, mapchar.MapChar)):
                     images = []
                     icons = [item.images[0][0], item.images[1][0]]
                     for i in range(len(icons)):
                         icon = icons[i]
-                        iconRect = pygame.Rect((0, 0), icon.get_size())
+                        iconRect = Rect((0, 0), icon.get_size())
                         iconRect.centerx = (rect.width / 2)
                         iconRect.centery = (rect.height / 2)
                         surface = pygame.Surface(rect.size)
@@ -594,7 +596,7 @@ class DetailDialog(object):
         if not curr is None:
             font = CHARACTER_SELECTION_CAPTION_FONT
             height = font.get_linesize() + 2
-            self.captionRect = pygame.Rect((0, 0), (self.rect.width, height))
+            self.captionRect = Rect((0, 0), (self.rect.width, height))
             self.caption = textrect.render_textrect(curr.data.name, font, self.captionRect,
                                                     CHARACTER_SELECTION_FONT_COLOR,
                                                     ALMOST_BLACK, 1, True)

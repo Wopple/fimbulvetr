@@ -10,6 +10,8 @@ import boundint
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 
 class Model(mvc.Model):
     def __init__(self, fade):
@@ -33,7 +35,7 @@ class Model(mvc.Model):
             header = data[0]
             subItems = data[1]
             
-            headerRect = pygame.Rect((0, 0), (40, SCREEN_SIZE[1]))
+            headerRect = Rect((0, 0), (40, SCREEN_SIZE[1]))
             headerImage = textrect.render_textrect(header, CREDITS_HEADER_FONT, headerRect, ALMOST_BLACK, WHITE, 0, True)
             self.credits.append(CreditText(headerRect, headerImage))
         

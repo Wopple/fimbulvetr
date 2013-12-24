@@ -5,6 +5,8 @@ import pygame
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 import drawable
 
 class TargetMarker(object):
@@ -16,7 +18,7 @@ class TargetMarker(object):
             
         colorSwap(self.image, (250, 250, 250, 255), TOKEN_BORDER_OFF[team], 200)
             
-        self.rect = pygame.Rect((0, 0), self.image.get_size())
+        self.rect = Rect((0, 0), self.image.get_size())
 
     def draw(self, screen, charPos, inZoom, inOffset):
         pos = [0, 0]

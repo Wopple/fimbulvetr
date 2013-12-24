@@ -8,6 +8,8 @@ import textrect
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class EnergyBar(object):
     def __init__(self, inVal, inRect, inBorders, inColors, pulse,
                  text=None, threshold=None, textJust=0, barJust=True):
@@ -136,7 +138,7 @@ class EnergyBar(object):
             w = self.rect.width
             h = ENERGY_BAR_FONT.get_height() + 2
             self.text = textrect.render_textrect(t, ENERGY_BAR_FONT,
-                                                 pygame.Rect((0, 0), (w, h)),
+                                                 Rect((0, 0), (w, h)),
                                                  self.fontColor,
                                                  (0, 0, 0), just, True)
 

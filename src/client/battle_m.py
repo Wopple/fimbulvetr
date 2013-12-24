@@ -23,10 +23,12 @@ import hare, fox, cat
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class Model(mvc.Model):
     def __init__(self, inChars, terrainLeft, terrainRight):
         super(Model, self).__init__()
-        self.rect = pygame.Rect((0, 0), BATTLE_ARENA_SIZE)
+        self.rect = Rect((0, 0), BATTLE_ARENA_SIZE)
 
         self.testBool = False
         self.testBool2 = False
@@ -77,7 +79,7 @@ class Model(mvc.Model):
         self.damageTagRects = []
         self.damagePercentRects = []
         for i in range(2):
-            rect = pygame.Rect((0, 0), (80, 100))
+            rect = Rect((0, 0), (80, 100))
             if (i == 0):
                 rect.left = 0
             else:
@@ -85,7 +87,7 @@ class Model(mvc.Model):
             rect.top = SCREEN_SIZE[1] - 55
             self.damageTagRects.append(rect)
             
-            rect2 = pygame.Rect((0, 0), (80, 100))
+            rect2 = Rect((0, 0), (80, 100))
             if (i == 0):
                 rect2.left = 0
             else:
@@ -262,7 +264,7 @@ class Model(mvc.Model):
         
         self.youIconImage = INTERFACE_GRAPHICS[18]
         colorSwap(self.youIconImage, (215, 215, 215, 255), TOKEN_BORDER_HIGHLIGHTED[self.cameraPlayer], 200)
-        self.youIconRect = pygame.Rect((0, 0), self.youIconImage.get_size())
+        self.youIconRect = Rect((0, 0), self.youIconImage.get_size())
 
     def key(self, k, t, p):
         if p == 0:
@@ -755,8 +757,7 @@ class Model(mvc.Model):
         y = HEALTH_BAR_OFFSET[1]
 
         self.bars.append(energybar.EnergyBar(p.hp,
-                                             pygame.Rect((x, y),
-                                                         HEALTH_BAR_SIZE),
+                                             Rect((x, y), HEALTH_BAR_SIZE),
                                              HEALTH_BAR_BORDERS,
                                              HEALTH_BAR_COLORS,
                                              HEALTH_BAR_PULSE,
@@ -767,8 +768,7 @@ class Model(mvc.Model):
         y = HEALTH_BAR_OFFSET[1]
 
         self.bars.append(energybar.EnergyBar(q.hp,
-                                             pygame.Rect((x, y),
-                                                         HEALTH_BAR_SIZE),
+                                             Rect((x, y), HEALTH_BAR_SIZE),
                                              HEALTH_BAR_BORDERS,
                                              HEALTH_BAR_COLORS,
                                              HEALTH_BAR_PULSE,
@@ -779,8 +779,7 @@ class Model(mvc.Model):
         y = HEALTH_BAR_OFFSET[1]
 
         self.retreatBar = energybar.EnergyBar(self.retreatProhibitTime,
-                                             pygame.Rect((x, y),
-                                                         RETREAT_BAR_SIZE),
+                                             Rect((x, y), RETREAT_BAR_SIZE),
                                              RETREAT_BAR_BORDERS,
                                              RETREAT_BAR_COLORS,
                                              5, "Battle", None, 1)
@@ -791,7 +790,7 @@ class Model(mvc.Model):
         y = HEALTH_BAR_OFFSET[1] + HEALTH_BAR_SIZE[1] + SPECIAL_BAR_OFFSET
         if isinstance(p, hare.Hare):
             self.bars.append(energybar.EnergyBar(p.hareEnergy,
-                                                 pygame.Rect((x, y), SPECIAL_BAR_SIZE),
+                                                 Rect((x, y), SPECIAL_BAR_SIZE),
                                                  SPECIAL_BAR_BORDERS,
                                                  SPECIAL_BAR_COLORS,
                                                  SPECIAL_BAR_PULSE,
@@ -801,7 +800,7 @@ class Model(mvc.Model):
 
         if isinstance(p, cat.Cat):
             self.catBar = energybar.EnergyBar(p.catEnergy,
-                                                 pygame.Rect((x, y), SPECIAL_BAR_SIZE),
+                                                 Rect((x, y), SPECIAL_BAR_SIZE),
                                                  SPECIAL_BAR_BORDERS,
                                                  SPECIAL_BAR_COLORS,
                                                  SPECIAL_BAR_PULSE,
@@ -1141,7 +1140,7 @@ class Model(mvc.Model):
             else:
                 x = SCREEN_SIZE[0] - BATTLE_PORTRAIT_OFFSET[0] - BATTLE_PORTRAIT_SIZE[0]
             y = BATTLE_PORTRAIT_OFFSET[1]
-            p = drawable.Drawable(pygame.Rect((x, y), BATTLE_PORTRAIT_SIZE), s)
+            p = drawable.Drawable(Rect((x, y), BATTLE_PORTRAIT_SIZE), s)
             self.portraits.append(p)
             
         
@@ -1150,7 +1149,7 @@ class Model(mvc.Model):
         
         c = self.players[self.cameraPlayer]
         
-        self.superIcon = SuperIcon(pygame.Rect((x, y), BATTLE_SUPER_ICON_SIZE), c.getSuperIcon(), c.superEnergy)
+        self.superIcon = SuperIcon(Rect((x, y), BATTLE_SUPER_ICON_SIZE), c.getSuperIcon(), c.superEnergy)
         
     def getDamagePercentText(self, i):
         if self.cameraPlayer == 1:

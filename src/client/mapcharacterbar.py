@@ -10,6 +10,8 @@ import boundint
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
     
     def __init__(self, inPos, inChar):
@@ -27,13 +29,13 @@ class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
         width = (MAP_CHAR_BAR_PORTRAIT_SIZE[0] + (b * 2) + (p * 4)
                  + MAP_CHAR_BAR_ENERGY_BAR_SIZE[0] + EFFECT_ICON_SIZE[0])
 
-        self.rect = pygame.Rect(inPos, (width, height))
+        self.rect = Rect(inPos, (width, height))
 
         staticSurface = pygame.Surface((width, height))
         staticSurface.fill(MAP_CHAR_BAR_COLOR_BORDER[team])
         staticSurface.fill(MAP_CHAR_BAR_COLOR_BG[team],
-                                pygame.Rect((b, b),
-                                            (width - (b*2), height - (b*2))))
+                                Rect((b, b),
+                                     (width - (b*2), height - (b*2))))
 
         staticSurface = staticSurface.convert()
 
@@ -52,13 +54,13 @@ class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
         x = (b + (p*2) + MAP_CHAR_BAR_PORTRAIT_SIZE[0])
         y = (b + p + MAP_CHAR_BAR_PORTRAIT_SIZE[1]
              - MAP_CHAR_BAR_ENERGY_BAR_SIZE[1])
-        tempRect = pygame.Rect((x, y), MAP_CHAR_BAR_ENERGY_BAR_SIZE)
+        tempRect = Rect((x, y), MAP_CHAR_BAR_ENERGY_BAR_SIZE)
         self.superBar = energybar.EnergyBar(self.character.battleChar.superEnergy, tempRect,
                                              MAP_CHAR_BAR_ENERGY_BAR_BORDERS,
                                              SUPER_BAR_COLORS, 2)
 
         y = y - ps - MAP_CHAR_BAR_ENERGY_BAR_SIZE[1]
-        tempRect = pygame.Rect((x, y), MAP_CHAR_BAR_ENERGY_BAR_SIZE)
+        tempRect = Rect((x, y), MAP_CHAR_BAR_ENERGY_BAR_SIZE)
         self.healthBar = energybar.EnergyBar(self.character.battleChar.hp, tempRect,
                                              MAP_CHAR_BAR_ENERGY_BAR_BORDERS,
                                              HEALTH_BAR_COLORS, 2,

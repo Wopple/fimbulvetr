@@ -7,6 +7,8 @@ import math
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class Background(object):
     def __init__(self, inRect, inImage):
 
@@ -23,7 +25,7 @@ class Background(object):
 
         sizeX = repeatX * imageSize[0]
         sizeY = repeatY * imageSize[0]
-        self.subRect = pygame.Rect( (0, 0), (sizeX, sizeY) )
+        self.subRect = Rect( (0, 0), (sizeX, sizeY) )
         self.subPane = pygame.Surface((self.subRect.width, self.subRect.height))
 
         for x in range (repeatX):

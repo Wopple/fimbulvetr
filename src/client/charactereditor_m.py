@@ -15,6 +15,8 @@ import hare, fox, cat
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class Model(mvc.Model):
     def __init__(self, isSelection=False):
         super(Model, self).__init__()
@@ -35,7 +37,7 @@ class Model(mvc.Model):
         size = (self.menu.rect.width *  3, self.idealSize[1])
         self.baseSurface = pygame.Surface(size)
         self.baseSurface.fill(CHAR_EDITOR_COLOR_BG)
-        self.baseSurfaceRect = pygame.Rect((0,0), size)
+        self.baseSurfaceRect = Rect((0,0), size)
         self.baseSurfaceRect.center = (SCREEN_SIZE[0]/2, SCREEN_SIZE[1]/2)
         self.charMenu.rect.topleft = self.baseSurfaceRect.topleft
 
@@ -86,7 +88,7 @@ class Model(mvc.Model):
 
         
         
-        tempRect = pygame.Rect( (50, 50), (200, 0) )
+        tempRect = Rect( (50, 50), (200, 0) )
 
         
                                             
@@ -120,7 +122,7 @@ class Model(mvc.Model):
         for i in range(CHAR_EDITOR_NUM_PER_PAGE):
             tempList.append("!")
 
-        tempRect = pygame.Rect( (50, 50), (200, 0) )
+        tempRect = Rect( (50, 50), (200, 0) )
         temp = minimenu.MiniMenu(tempRect, tempList,
                                  CHAR_EDITOR_FONT, CHAR_EDITOR_COLOR_ON,
                                  CHAR_EDITOR_COLOR_OFF,
@@ -150,7 +152,7 @@ class Model(mvc.Model):
         elif self.stage == 101:
             menuOptions = ["Nevermind...", "Delete"]
 
-        tempRect = pygame.Rect( (50, 50), (200, 0) )
+        tempRect = Rect( (50, 50), (200, 0) )
         self.menu = minimenu.MiniMenu(tempRect, menuOptions,
                                           CHAR_EDITOR_FONT, CHAR_EDITOR_COLOR_ON,
                                           CHAR_EDITOR_COLOR_OFF,
@@ -196,7 +198,7 @@ class Model(mvc.Model):
 
     def makeSuperNameText(self, s):
         self.superMoveNameText = textrect.render_textrect(s.name, CHAR_EDITOR_FONT,
-                                                          pygame.Rect((0, 0), (self.idealSize[0], 20)),
+                                                          Rect((0, 0), (self.idealSize[0], 20)),
                                                           CHAR_EDITOR_COLOR_OFF,
                                                           CHAR_EDITOR_BLACK_PANEL_COLOR, 1)
         
@@ -248,7 +250,7 @@ class Model(mvc.Model):
             text = str(name + "\n\n" + desc)
 
             self.descSurface = textrect.render_textrect(text, CHAR_EDITOR_FONT,
-                                                        pygame.Rect(self.charMenu.rect.topleft, self.idealSize),
+                                                        Rect(self.charMenu.rect.topleft, self.idealSize),
                                                         CHAR_EDITOR_COLOR_OFF,
                                                         CHAR_EDITOR_BLACK_PANEL_COLOR)
                                                         
@@ -358,14 +360,14 @@ class PageArrow(object):
         self.visible = (page.maximum > 0)
 
     def setRect(self, pos, size):
-        oldRect = pygame.Rect(pos, size)
+        oldRect = Rect(pos, size)
         
         if self.isRight:
             xRef = oldRect.right
         else:
             xRef = oldRect.left
 
-        self.rect = pygame.Rect((0, 0), self.image.get_size())
+        self.rect = Rect((0, 0), self.image.get_size())
         self.rect.center = (xRef, oldRect.centery)
 
     def draw(self, screen):

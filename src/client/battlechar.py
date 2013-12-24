@@ -9,6 +9,8 @@ import move
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class BattleChar(object):
     def __init__(self, hp, footRectSize=30):
         self.hp = boundint.BoundInt(0, hp, hp)
@@ -50,7 +52,7 @@ class BattleChar(object):
 
         self.createDust = None
 
-        self.footRect = pygame.Rect((0, 0), ((footRectSize * 2)+1, 5))
+        self.footRect = Rect((0, 0), ((footRectSize * 2)+1, 5))
         self.positionFootRect()
 
     def beginBattle(self):
@@ -177,7 +179,7 @@ class BattleChar(object):
             self.image = pygame.transform.flip(inImage, True, False)
         
         self.offset = offset
-        self.rect = pygame.Rect(self.getRectPos(), size)
+        self.rect = Rect(self.getRectPos(), size)
 
     def draw(self, screen, inOffset):
         screen.blit(self.image, add_points(self.rect.topleft, inOffset))
@@ -205,7 +207,7 @@ class BattleChar(object):
 
         topleft = add_points(add_points(self.preciseLoc, boxPos), inOffset)
 
-        return pygame.Rect(topleft, box.rect.size)
+        return Rect(topleft, box.rect.size)
 
     def getBoxRect(self, box):
         return self.getBoxAbsRect(box, (0, 0))

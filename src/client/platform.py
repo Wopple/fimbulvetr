@@ -6,9 +6,11 @@ import copy
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class Platform(object):
     def __init__(self, inPos, inLength, inTerrain):
-        self.rect = pygame.Rect( inPos, (inLength, PLATFORM_HEIGHT) )
+        self.rect = Rect( inPos, (inLength, PLATFORM_HEIGHT) )
 
         self.image = pygame.Surface( (self.rect.width, self.rect.height) )
         

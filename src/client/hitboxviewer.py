@@ -10,6 +10,8 @@ from client.constants import *
 
 from common.util import framerate
 
+from common.util.rect import Rect
+
 def setImage():
     global currImage
     global imageLoc
@@ -68,7 +70,7 @@ def leftClick(newLoc):
         newSurface.fill((255, 242, 5))
         newSurface.set_alpha(50)
         
-        boxList.append( [newSurface, pygame.Rect((left, top), (width, height))] )
+        boxList.append( [newSurface, Rect((left, top), (width, height))] )
         
         clickLoc = [-1, -1]
 
@@ -100,7 +102,7 @@ def printText(screen, mousePos):
     pos = getZoomPos(mousePos)
     pixelPos = posRelatedToAnchor(pos)
     text = textrect.render_textrect(str(pixelPos), FONTS[0],
-                                    pygame.Rect((0, 0), (SCREEN_SIZE[0], SCREEN_SIZE[1])),
+                                    Rect((0, 0), (SCREEN_SIZE[0], SCREEN_SIZE[1])),
                                     (250, 250, 250), (5, 5, 5), 0, True)
     screen.blit(text, (mousePos[0] + 15, mousePos[1] - 10))
 
@@ -112,7 +114,7 @@ def printList(screen):
         line = (str(posRelatedToAnchor(b[1].topleft)) +
                 " - " + str(posRelatedToAnchor(b[1].bottomright)) )
         text = textrect.render_textrect(line, FONTS[0],
-                                    pygame.Rect((0, 0), (SCREEN_SIZE[0], SCREEN_SIZE[1])),
+                                    Rect((0, 0), (SCREEN_SIZE[0], SCREEN_SIZE[1])),
                                     (250, 250, 250), (5, 5, 5), 0, True)
         screen.blit(text, pos)
 

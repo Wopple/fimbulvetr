@@ -21,6 +21,8 @@ import hare, fox, cat
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class Model(mvc.Model):
     def __init__(self, inMap, inChars, team):
         super(Model, self).__init__()
@@ -180,9 +182,9 @@ class Model(mvc.Model):
                     (self.mapRect.height - newSize[1]))
             newPos = ((self.mapRect.left + (diff[0] / 2)),
                       (self.mapRect.top + (diff[1] / 2)))
-            self.mapRect = pygame.Rect(newPos, newSize)
+            self.mapRect = Rect(newPos, newSize)
         else:
-            self.mapRect = pygame.Rect((0, 0), newSize)
+            self.mapRect = Rect((0, 0), newSize)
         self.mapImage = pygame.transform.scale(dualMap, newSize)
 
     def scrollIn(self):

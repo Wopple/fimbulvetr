@@ -6,8 +6,10 @@ import math
 
 from common.constants import *
 
+from common.util.rect import Rect
+
 FULL_SCREEN = False
-ENTIRE_SCREEN = pygame.Rect( (0,0), SCREEN_SIZE )
+ENTIRE_SCREEN = Rect( (0,0), SCREEN_SIZE )
 
 pygame.init()
 pygame.mixer.init()

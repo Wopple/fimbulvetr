@@ -11,9 +11,11 @@ import battle_m
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class UnitHUD(object):
     def __init__(self, inTeam, inPlayers):
-        self.rect = pygame.Rect((0,0), (SCREEN_SIZE[0], UNIT_HUD_HEIGHT))
+        self.rect = Rect((0,0), (SCREEN_SIZE[0], UNIT_HUD_HEIGHT))
         self.rect.bottom = SCREEN_SIZE[1]
         self.team = inTeam
         
@@ -45,45 +47,45 @@ class UnitHUD(object):
         x = ( (UNIT_HUD_BORDER_WIDTH * 4) + (UNIT_HUD_BUTTON_SIZE[0] * 2) + 
         (UNIT_HUD_PORTRAIT_BORDER_SIZE * 2) + UNIT_HUD_PORTRAIT_SIZE[0] )
         y = UNIT_HUD_BORDER_WIDTH
-        self.healthBarRect = pygame.Rect((x, y), UNIT_HUD_ENERGY_BAR_SIZE)
+        self.healthBarRect = Rect((x, y), UNIT_HUD_ENERGY_BAR_SIZE)
         y += UNIT_HUD_BORDER_WIDTH + self.healthBarRect.height + ENERGY_BAR_FONT.get_height() - 4
-        self.superBarRect = pygame.Rect((x, y), UNIT_HUD_ENERGY_BAR_SIZE)
+        self.superBarRect = Rect((x, y), UNIT_HUD_ENERGY_BAR_SIZE)
         
         sizeX = SCREEN_SIZE[0] - self.healthBarRect.left - UNIT_HUD_BORDER_WIDTH
         sizeY = UNIT_HUD_STRUCTURE_PANEL_HEIGHT
-        self.structureCountPanelRect = pygame.Rect( (0, 0), (sizeX, sizeY))
+        self.structureCountPanelRect = Rect( (0, 0), (sizeX, sizeY))
         self.structureCountPanelRect.left = self.healthBarRect.left
         self.structureCountPanelRect.bottom = UNIT_HUD_HEIGHT - UNIT_HUD_BORDER_WIDTH
         
         self.fortressIcon = FORTRESS_COUNT_ICONS[self.team]
-        self.fortressIconRect = pygame.Rect( (0,0), self.fortressIcon.get_size() )
+        self.fortressIconRect = Rect( (0,0), self.fortressIcon.get_size() )
         self.fortressIconRect.centery = (self.structureCountPanelRect.height / 2)
         
         self.altarIcon = ALTAR_COUNT_ICONS[self.team]
-        self.altarIconRect = pygame.Rect( (0,0), self.altarIcon.get_size() )
+        self.altarIconRect = Rect( (0,0), self.altarIcon.get_size() )
         self.altarIconRect.left = UNIT_HUD_STRUCTURE_PANEL_SPACING
         self.altarIconRect.centery = (self.structureCountPanelRect.height / 2)
         
         self.spireIcon = SPIRE_COUNT_ICONS[self.team]
-        self.spireIconRect = pygame.Rect( (0,0), self.spireIcon.get_size() )
+        self.spireIconRect = Rect( (0,0), self.spireIcon.get_size() )
         self.spireIconRect.left = UNIT_HUD_STRUCTURE_PANEL_SPACING * 2
         self.spireIconRect.centery = (self.structureCountPanelRect.height / 2)
         
         
         
-        self.iconRect = pygame.Rect((0,0), EFFECT_ICON_SIZE)
+        self.iconRect = Rect((0,0), EFFECT_ICON_SIZE)
         self.iconRect.top = self.healthBarRect.top
         self.iconRect.left = self.healthBarRect.right + UNIT_HUD_BORDER_WIDTH
         
         
         
-        self.damageTagRect = pygame.Rect((0, 0), (80, 100))
+        self.damageTagRect = Rect((0, 0), (80, 100))
         self.damageTagRect.right = self.rect.width
         self.damageTagRect.top = self.rect.height - 55
         self.damageTag = textrect.render_textrect("Strength", STRUCTURE_COUNT_FONT, self.damageTagRect,
                                                   ALMOST_BLACK, BLACK, 1, True)
         
-        self.damagePercentRect = pygame.Rect((0, 0), (80, 100))
+        self.damagePercentRect = Rect((0, 0), (80, 100))
         self.damagePercentRect.right = self.damageTagRect.right
         self.damagePercentRect.top = self.damageTagRect.top + 18
         
@@ -167,10 +169,10 @@ class UnitHUD(object):
         button.blit(borderRight, (UNIT_HUD_BUTTON_SIZE[0] -
                                    UNIT_HUD_BUTTON_BORDER_SIZE, 0))
         
-        textRect = pygame.Rect( (UNIT_HUD_BUTTON_BORDER_SIZE, 
-                                 UNIT_HUD_BUTTON_BORDER_SIZE),
-                               (UNIT_HUD_BUTTON_SIZE[0] - (UNIT_HUD_BUTTON_BORDER_SIZE * 2),
-                                UNIT_HUD_BUTTON_SIZE[1] - (UNIT_HUD_BUTTON_BORDER_SIZE * 2)) )
+        textRect = Rect( (UNIT_HUD_BUTTON_BORDER_SIZE, 
+                          UNIT_HUD_BUTTON_BORDER_SIZE),
+                         (UNIT_HUD_BUTTON_SIZE[0] - (UNIT_HUD_BUTTON_BORDER_SIZE * 2),
+                          UNIT_HUD_BUTTON_SIZE[1] - (UNIT_HUD_BUTTON_BORDER_SIZE * 2)) )
         
         textSurface = textrect.render_textrect(character.name, UNIT_HUD_NAMES_FONT, textRect,
                                                ALMOST_BLACK, BLACK, 1, True)
@@ -194,15 +196,15 @@ class UnitHUD(object):
             x = ((UNIT_HUD_BUTTON_SIZE[0] + UNIT_HUD_BORDER_WIDTH) * column) + UNIT_HUD_BORDER_WIDTH
             y = ((UNIT_HUD_BUTTON_SIZE[1] + UNIT_HUD_BORDER_WIDTH) * row) + UNIT_HUD_BORDER_WIDTH
         
-            buttonRect = pygame.Rect((x, y), UNIT_HUD_BUTTON_SIZE)
-            self.buttonRects.append(pygame.Rect(buttonRect))
+            buttonRect = Rect((x, y), UNIT_HUD_BUTTON_SIZE)
+            self.buttonRects.append(Rect(buttonRect))
             
             #Bar
             sizeX = UNIT_HUD_BUTTON_SIZE[0] - (UNIT_HUD_BUTTON_BORDER_SIZE * 2)
             sizeY = 2
             x = buttonRect.left + UNIT_HUD_BUTTON_BORDER_SIZE
             y = buttonRect.bottom - UNIT_HUD_BUTTON_BORDER_SIZE - 4
-            barRect = pygame.Rect((x, y), (sizeX, sizeY))
+            barRect = Rect((x, y), (sizeX, sizeY))
             newBar = energybar.EnergyBar(character.battleChar.hp, barRect, (0, 0), HEALTH_BAR_COLORS, 2)
             self.buttonBars.append(newBar)
             
@@ -290,7 +292,7 @@ class UnitHUD(object):
         y = self.iconRect.top + self.iconRect.height + UNIT_HUD_BORDER_WIDTH
         
         for c in self.characters:
-            icon = battle_m.SuperIcon(pygame.Rect((x, y), BATTLE_SUPER_ICON_SIZE),
+            icon = battle_m.SuperIcon(Rect((x, y), BATTLE_SUPER_ICON_SIZE),
                                       c.battleChar.getSuperIcon(), c.battleChar.superEnergy)
             
             self.superIcons.append(icon)
@@ -426,7 +428,7 @@ class UnitHUD(object):
         self.structureCountPanel.blit(self.spireIcon, self.spireIconRect.topleft)
         self.structureCountPanel.blit(self.altarIcon, self.altarIconRect.topleft)
         
-        textRect = pygame.Rect((0,0), (100, STRUCTURE_COUNT_FONT.get_height() + 4))
+        textRect = Rect((0,0), (100, STRUCTURE_COUNT_FONT.get_height() + 4))
         
         textSurface = textrect.render_textrect(" x" + str(self.fortressCount), STRUCTURE_COUNT_FONT, textRect,
                                                ALMOST_BLACK, BLACK, 0, True)

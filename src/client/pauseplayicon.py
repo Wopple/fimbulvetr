@@ -6,6 +6,8 @@ import copy
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 import mapinterfaceitem
 
 class PausePlayIcon(mapinterfaceitem.MapInterfaceItem):
@@ -56,7 +58,7 @@ class PausePlayIcon(mapinterfaceitem.MapInterfaceItem):
         x = (SCREEN_SIZE[0] / 2) - (size[0] / 2) + xMod
         y = PAUSE_PLAY_BIG_FROM_TOP + yMod
 
-        self.rect = pygame.Rect((x, y), size)
+        self.rect = Rect((x, y), size)
 
         self.pauseX = self.rect.left
         self.xMovement = 0

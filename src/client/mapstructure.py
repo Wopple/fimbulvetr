@@ -15,6 +15,8 @@ import mapitem
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class MapStructure(mapitem.MapItem):
     def __init__(self, inPos, inImages, captureTime):
 
@@ -25,7 +27,7 @@ class MapStructure(mapitem.MapItem):
         self.capture = boundint.BoundInt(0, captureTime, 0)
         self.captureTeam = 0
 
-        tempRect = pygame.Rect( (0, 0), CAPTURE_BAR_SIZE)
+        tempRect = Rect( (0, 0), CAPTURE_BAR_SIZE)
         self.captureBar = energybar.EnergyBar(self.capture, tempRect,
                         CAPTURE_BAR_BORDERS, CAPTURE_BAR_COLORS, 2)
 

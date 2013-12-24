@@ -5,6 +5,8 @@ import pygame
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 FLOOR_POS = BATTLE_ARENA_SIZE[1] - BATTLE_AREA_FLOOR_HEIGHT
 NEUTRAL_POS = (BATTLE_ARENA_SIZE[0] / 2, FLOOR_POS)
 
@@ -145,7 +147,7 @@ class SceneryItem(object):
         self.image = image
         self.scale = scale
         
-        self.rect = pygame.Rect(pos, image.get_size())
+        self.rect = Rect(pos, image.get_size())
         self.rect.left -= anchor[0]
         self.rect.top -= anchor[1]
         self.anchor = anchor
@@ -153,7 +155,7 @@ class SceneryItem(object):
         print self.rect.topleft
         
     def draw(self, screen, inOffset):
-        rect = pygame.Rect(self.rect.topleft, self.rect.size)
+        rect = Rect(self.rect.topleft, self.rect.size)
         rect.left += inOffset[0]
         rect.top += inOffset[1]
         

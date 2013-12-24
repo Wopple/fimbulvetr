@@ -10,6 +10,8 @@ import math
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class Model(mvc.Model):
     def __init__(self, theMap, isHost):
         super(Model, self).__init__()
@@ -34,12 +36,12 @@ class Model(mvc.Model):
         self.selectionBorder = pygame.Surface((x, y))
         self.selectionBorder.fill(CHARACTER_SELECT_PANEL_SELECTION_BORDER_COLOR)
 
-        tempRect = pygame.Rect((0, 0), CHARACTER_SELECT_PLAYER_SIZE)
+        tempRect = Rect((0, 0), CHARACTER_SELECT_PLAYER_SIZE)
         tempRect.bottom = SCREEN_SIZE[1] - CHARACTER_SELECT_GROUP_FROM_TOP
         tempRect.centerx = SCREEN_SIZE[0] / 2
         self.clientPanel = PlayerPanel(tempRect, "Client", self.group.num)
 
-        tempRect = pygame.Rect((0, 0), CHARACTER_SELECT_PLAYER_SIZE)
+        tempRect = Rect((0, 0), CHARACTER_SELECT_PLAYER_SIZE)
         tempRect.bottom = (self.clientPanel.rect.top -
                            CHARACTER_SELECT_GROUP_SPACING)
         tempRect.centerx = SCREEN_SIZE[0] / 2
@@ -53,13 +55,13 @@ class Model(mvc.Model):
             self.theirPanel = self.hostPanel
 
 
-        tempRect = pygame.Rect((0, 0), CHARACTER_SELECT_BUTTON_SIZE)
+        tempRect = Rect((0, 0), CHARACTER_SELECT_BUTTON_SIZE)
         tempRect.left = self.myPanel.rect.right + CHARACTER_SELECT_GROUP_SPACING
         tempRect.top = self.myPanel.rect.top
         self.readyButton = Button(tempRect, "Ready")
 
         if isHost:
-            tempRect = pygame.Rect((0, 0), CHARACTER_SELECT_BUTTON_SIZE)
+            tempRect = Rect((0, 0), CHARACTER_SELECT_BUTTON_SIZE)
             tempRect.left = (self.theirPanel.rect.right +
                              CHARACTER_SELECT_GROUP_SPACING)
             tempRect.top = self.theirPanel.rect.top
@@ -76,7 +78,7 @@ class Model(mvc.Model):
             CHARACTER_SELECT_PANEL_SELECTION_BORDER_COLOR)
 
         self.loadingImage = INTERFACE_GRAPHICS[9]
-        self.loadingRect = pygame.Rect( (0, 0), self.loadingImage.get_size() )
+        self.loadingRect = Rect( (0, 0), self.loadingImage.get_size() )
         self.loadingRect.center = ( SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] / 2)
 
 
@@ -259,12 +261,12 @@ class PlayerPanel(object):
 
         font = CHARACTER_SELECTION_FONT
         textHeight = font.get_linesize() + 2
-        tempRect = pygame.Rect( (0, 0), (self.rect.width, textHeight) )
+        tempRect = Rect( (0, 0), (self.rect.width, textHeight) )
 
         text = textrect.render_textrect(self.name, font, tempRect,
                                         CHARACTER_SELECTION_FONT_COLOR,
                                         ALMOST_BLACK, 0, True)
-        tempRect = pygame.Rect((0, 0), text.get_size())
+        tempRect = Rect((0, 0), text.get_size())
         tempRect.top = ((CHARACTER_SELECT_PANEL_SIZE[1] / 2) -
                          (tempRect.height / 2))
         loc = (tempRect.left + CHARACTER_SELECT_PANEL_BORDER_WIDTH +
@@ -313,12 +315,12 @@ class Button(object):
 
             font = CHARACTER_SELECTION_FONT
             textHeight = font.get_linesize() + 2
-            tempRect = pygame.Rect( (0, 0), (self.rect.width, textHeight) )
+            tempRect = Rect( (0, 0), (self.rect.width, textHeight) )
 
             text = textrect.render_textrect(self.msg, font, tempRect,
                                             color,
                                             ALMOST_BLACK, 1, True)
-            tempRect = pygame.Rect((0, 0), text.get_size())
+            tempRect = Rect((0, 0), text.get_size())
             tempRect.top = ((CHARACTER_SELECT_PANEL_SIZE[1] / 2) -
                              (tempRect.height / 2))
             self.panel.blit(text, tempRect.topleft)
@@ -353,14 +355,14 @@ class CharacterPanel(object):
             font = CHARACTER_SELECTION_FONT
             msg = self.character.name
             textHeight = font.get_linesize() + 2
-            tempRect = pygame.Rect( (0, 0),
-                                    (CHARACTER_SELECT_PANEL_SIZE[0],
-                                     textHeight) )
+            tempRect = Rect( (0, 0),
+                             (CHARACTER_SELECT_PANEL_SIZE[0],
+                              textHeight) )
 
             text = textrect.render_textrect(msg, font, tempRect,
                                             CHARACTER_SELECTION_FONT_COLOR,
                                             ALMOST_BLACK, 1, True)
-            tempRect = pygame.Rect((0, 0), text.get_size())
+            tempRect = Rect((0, 0), text.get_size())
             tempRect.left = ((CHARACTER_SELECT_PANEL_SIZE[0] / 2) -
                              (tempRect.width / 2))
             tempRect.top = ((CHARACTER_SELECT_PANEL_SIZE[1] / 2) -
@@ -394,7 +396,7 @@ class CharacterPanelGroup(object):
         for i in range(len(numOfPanelsInCol)):
             colMid = (SCREEN_SIZE[0] / (len(numOfPanelsInCol) + 1)) * (i+1)
             for j in range(numOfPanelsInCol[i]):
-                rect = pygame.Rect((0, 0), CHARACTER_SELECT_PANEL_SIZE)
+                rect = Rect((0, 0), CHARACTER_SELECT_PANEL_SIZE)
                 rect.centerx = colMid
                 rect.top = (CHARACTER_SELECT_GROUP_FROM_TOP +
                             ((CHARACTER_SELECT_PANEL_SIZE[1] +

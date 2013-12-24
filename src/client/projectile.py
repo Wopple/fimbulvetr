@@ -8,6 +8,8 @@ import copy
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class Projectile(object):
     def __init__(self):
         self.preciseLoc = [50.0, 50.0]
@@ -90,7 +92,7 @@ class Projectile(object):
             self.image = pygame.transform.flip(inImage, True, False)
         
         self.offset = offset
-        self.rect = pygame.Rect(self.getRectPos(), size)
+        self.rect = Rect(self.getRectPos(), size)
 
     def draw(self, screen, inOffset):
         screen.blit(self.image, add_points(self.rect.topleft, inOffset))
@@ -198,7 +200,7 @@ class Projectile(object):
 
         topleft = add_points(add_points(self.preciseLoc, boxPos), inOffset)
 
-        return pygame.Rect(topleft, box.rect.size)
+        return Rect(topleft, box.rect.size)
 
     def getBoxRect(self, box):
         return self.getBoxAbsRect(box, (0, 0))

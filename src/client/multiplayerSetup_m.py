@@ -11,11 +11,13 @@ import boundint
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 class Model(mvc.Model):
     def __init__(self):
         super(Model, self).__init__()
 
-        self.tempRect = pygame.Rect( (50, 50), (200, 0) )
+        self.tempRect = Rect( (50, 50), (200, 0) )
         menuOptions = ["Host", "Client"]
         self.menuHostClient = minimenu.MiniMenu(self.tempRect, menuOptions,
                                            MAIN_MENU_FONT, MAIN_MENU_COLOR_ON,

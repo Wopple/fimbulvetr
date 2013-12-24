@@ -5,6 +5,8 @@ import pygame
 from common.constants import *
 from client.constants import *
 
+from common.util.rect import Rect
+
 import mvc
 import string
 import textrect
@@ -31,7 +33,7 @@ class Model(mvc.Model):
         pos = [0, 0]
         for i in range(2):
             pos[i] = (SCREEN_SIZE[i] / 2) - (size[i] / 2)
-        self.rect = pygame.Rect(pos, size)
+        self.rect = Rect(pos, size)
 
         self.base = pygame.Surface(size)
         self.base.fill(BLACK)
@@ -47,7 +49,7 @@ class Model(mvc.Model):
 
         size = (self.rect.width,
                 self.font.get_linesize() + self.font.get_height())
-        self.titleRect = pygame.Rect((0, 0), size)
+        self.titleRect = Rect((0, 0), size)
         self.titleRect.bottom = self.rect.top
         self.titleRect.left = self.rect.left
         temp = textrect.render_textrect(title, self.font,
