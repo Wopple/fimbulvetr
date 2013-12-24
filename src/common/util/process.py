@@ -18,3 +18,11 @@ def process_fn(fn, queue, state):
         ret = fn()
 
     queue.put(ret)
+
+def get_latest(queue):
+    ret = None
+
+    while not queue.empty():
+        ret = queue.get()
+
+    return ret
