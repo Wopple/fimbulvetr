@@ -16,6 +16,10 @@ class View(mvc.View):
         super(View, self).__init__()
         self.scene = scenery.Scenery(terrainLeft, terrainRight)
 
+        self.superVeil = pygame.Surface(SCREEN_SIZE)
+        self.superVeil.fill(BLACK)
+        self.superVeil.set_alpha(100)
+
     def update(self, tickClock=True):
         self.screen.blit(BLACK_SCREEN, (0, 0))
         
@@ -30,7 +34,7 @@ class View(mvc.View):
                 self.drawYouIcon(i, p, self.model.rect.topleft)
                 
         if self.model.superDarken():
-            self.screen.blit(self.model.superVeil, (0, 0))
+            self.screen.blit(self.superVeil, (0, 0))
             
         for i, p in enumerate(self.model.players):
             if self.model.returnCode[i] != 1 and not self.drawToBack(p):

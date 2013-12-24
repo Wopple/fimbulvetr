@@ -1,6 +1,5 @@
 import os
 import sys
-import pygame
 import copy
 import math
 
@@ -92,10 +91,6 @@ class Model(mvc.Model):
             
         self.damageTag = textrect.render_textrect("Strength", STRUCTURE_COUNT_FONT, self.damageTagRects[0],
                                                   ALMOST_BLACK, BLACK, 1, True)
-        
-        self.superVeil = pygame.Surface(SCREEN_SIZE)
-        self.superVeil.fill(BLACK)
-        self.superVeil.set_alpha(100)
         
         
 
