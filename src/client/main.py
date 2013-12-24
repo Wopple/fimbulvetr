@@ -156,10 +156,18 @@ def goBattle(data, net):
         cp = 2
         cam = 1
         
-    changeMVC(battle_m.Model(data[0], data[1], data[2]), battle_v.View(), battle_c.Controller(), screen)
+    terrainLeft = data[1]
+    terrainRight = data[2]
+
+    model = battle_m.Model(data[0], terrainLeft, terrainRight)
+    view = battle_v.View(terrainLeft, terrainRight)
+    controller = battle_c.Controller()
+    changeMVC(model, view, controller, screen)
+
     c.setPlayer(cp)
     m.setNetPlayer(cp)
     m.setCameraPlayer(cam)
+
     while not m.advance():
         proceed(clock, net)
 

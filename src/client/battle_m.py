@@ -4,24 +4,21 @@ import pygame
 import copy
 import math
 
-import mvc
-
-import boundint
-import energybar
-import countdown
-import fx
-import platform
-import textrect
-import drawable
-
-import scenery
-
-import colorswapper
-
-import hare, fox, cat
-
 from common.constants import *
 from client.constants import *
+
+from client import mvc
+
+from client import boundint
+from client import energybar
+from client import countdown
+from client import fx
+from client import platform
+from client import textrect
+
+from client import colorswapper
+
+from client import hare, fox, cat
 
 from common.util.rect import Rect
 
@@ -61,7 +58,6 @@ class Model(mvc.Model):
         self.cameraPlayer = 0
         self.netPlayer = 0
         self.catBar = None
-        self.createInterfaceExtras()
         self.createBars()
         self.resetHitMemory()
 
@@ -70,7 +66,6 @@ class Model(mvc.Model):
 
         self.fx = []
 
-        self.scene = scenery.Scenery(terrainLeft, terrainRight)
         self.platforms = getPlatforms(terrainLeft, terrainRight)
 
         self.countdown = countdown.Countdown(BATTLE_COUNTDOWN_LENGTH)
@@ -260,7 +255,6 @@ class Model(mvc.Model):
         if (c >= 0) and (c <= 1):
             self.cameraPlayer = c
         self.createBars()
-        self.createInterfaceExtras()
         
         self.youIconImage = INTERFACE_GRAPHICS[18]
         colorSwap(self.youIconImage, (215, 215, 215, 255), TOKEN_BORDER_HIGHLIGHTED[self.cameraPlayer], 200)
@@ -1130,27 +1124,6 @@ class Model(mvc.Model):
         sublist.append(image)
         self.endingText.append(sublist)
         
-    def createInterfaceExtras(self):
-        self.portraits = []
-        for i in range(2):
-            s = pygame.Surface(BATTLE_PORTRAIT_SIZE)
-            s.fill(BLACK)
-            if (i == 0):
-                x = BATTLE_PORTRAIT_OFFSET[0]
-            else:
-                x = SCREEN_SIZE[0] - BATTLE_PORTRAIT_OFFSET[0] - BATTLE_PORTRAIT_SIZE[0]
-            y = BATTLE_PORTRAIT_OFFSET[1]
-            p = drawable.Drawable(Rect((x, y), BATTLE_PORTRAIT_SIZE), s)
-            self.portraits.append(p)
-            
-        
-        x = self.portraits[0].rect.left
-        y = self.portraits[0].rect.bottom + BATTLE_PORTRAIT_OFFSET[1]
-        
-        c = self.players[self.cameraPlayer]
-        
-        self.superIcon = SuperIcon(Rect((x, y), BATTLE_SUPER_ICON_SIZE), c.getSuperIcon(), c.superEnergy)
-        
     def getDamagePercentText(self, i):
         if self.cameraPlayer == 1:
             if i == 0:
@@ -1167,49 +1140,6 @@ class Model(mvc.Model):
                 return True
             
         return False
-        
-        
-class SuperIcon(drawable.Drawable):
-    def __init__(self, inRect, inImage, energy):
-        self.imageBase = inImage
-        self.energy = energy
-        self.oldValue = self.energy.value
-        
-        super(SuperIcon, self).__init__(inRect, None)
-        
-        self.updateImage()
-        
-    def draw(self, screen):
-        
-        if self.oldValue != self.energy.value:
-            self.oldValue = self.energy.value
-            self.updateImage()
-            
-        super(SuperIcon, self).draw(screen)
-        
-    def updateImage(self):
-        
-        temp = pygame.Surface(BATTLE_SUPER_ICON_SIZE)
-        temp.fill(BLACK)
-        
-        if self.energy.isMax():
-            temp.blit(self.imageBase, (0,0))
-        else:
-            percent = float(self.energy.value) / float(self.energy.maximum)
-            leftSideWidth = int(BATTLE_SUPER_ICON_SIZE[0] * percent)
-            rightSideWidth = int(BATTLE_SUPER_ICON_SIZE[0] * (1 - percent))
-            
-            leftSide = pygame.Surface((leftSideWidth, BATTLE_SUPER_ICON_SIZE[1]))
-            leftSide.blit(self.imageBase, (0, 0))
-            leftSide.set_alpha(BATTLE_SUPER_ICON_ALPHA_FILL)
-            temp.blit(leftSide, (0, 0))
-            
-            rightSide = pygame.Surface((rightSideWidth, BATTLE_SUPER_ICON_SIZE[1]))
-            rightSide.blit(self.imageBase, (-leftSideWidth, 0))
-            rightSide.set_alpha(BATTLE_SUPER_ICON_ALPHA_EMPTY)
-            temp.blit(rightSide, (leftSideWidth, 0))
-            
-        self.image = temp
                 
 
 def testData():
