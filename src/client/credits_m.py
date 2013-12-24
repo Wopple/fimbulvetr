@@ -21,11 +21,12 @@ class Model(mvc.Model):
         creditData =    [
                             ["Christopher \"Southpaw Hare\" Czyzewski", ["Lead Designer", "Lead Programmer", "Creative Director",
                                                                          "Marketing Director", "Distribution Director"]],
+                            ["Daniel \"Wopple\" Tashjian", ["Programmer", "Tester"]]
                             ["Matthew Grisham", ["Gameplay Designer", "Map Designer"]],
                             ["Kit", ["Character Artist", "Map Artist", "Background Artist"]],
                             ["Raquel M. Richardson", ["Portrait Artist"]],
                             
-                            ["Additional Testers", ["Randy Sabella", "Robert Morris", "Eric Collins", "Daniel Tashjian", "Fox Zeta", "Coffeefox"]]
+                            ["Additional Testers", ["Randy Sabella", "Robert Morris", "Eric Collins", "Fox Zeta", "Coffeefox"]]
                         ]
         
         for data in creditData:
