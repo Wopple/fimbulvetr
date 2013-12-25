@@ -1,3 +1,3 @@
 To run client:
 
-/parent/src $ python client.py
+/fimbulvetr/src$ python client.py
