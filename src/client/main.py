@@ -4,10 +4,8 @@ import pygame
 
 import time
 
-from common import mvc
-
 import debug_m, debug_v, menu_c, mapmode_m, mapmode_v, mapmode_c
-import battle_m, battle_v, battle_c
+import battle_v, battle_c
 import title_m, title_v
 import mainmenu_m, mainmenu_v
 import charactereditor_m, charactereditor_v, charactereditor_c
@@ -23,6 +21,8 @@ import gamemap
 from common.constants import *
 from client.constants import *
 
+from common import mvc
+from common import battle_m
 from common.util import framerate
 
 
