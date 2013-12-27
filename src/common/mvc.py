@@ -1,10 +1,3 @@
-import sys
-import os
-import pygame
-
-from common.constants import *
-from client.constants import *
-
 class MVCObject(object):
     def __init__(self):
         self.undefUpdate = False
