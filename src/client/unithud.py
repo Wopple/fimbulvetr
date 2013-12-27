@@ -6,7 +6,7 @@ import copy
 import textrect
 import energybar
 
-import battle_m
+import battle_v
 
 from common.constants import *
 from client.constants import *
@@ -292,7 +292,7 @@ class UnitHUD(object):
         y = self.iconRect.top + self.iconRect.height + UNIT_HUD_BORDER_WIDTH
         
         for c in self.characters:
-            icon = battle_m.SuperIcon(Rect((x, y), BATTLE_SUPER_ICON_SIZE),
+            icon = battle_v.SuperIcon(Rect((x, y), BATTLE_SUPER_ICON_SIZE),
                                       c.battleChar.getSuperIcon(), c.battleChar.superEnergy)
             
             self.superIcons.append(icon)
