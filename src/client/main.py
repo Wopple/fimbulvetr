@@ -96,6 +96,16 @@ def changeC(newC):
     c.setView(v)
     c.setModel(m)
 
+def proceedNew():
+    global m
+    global v
+    global c
+
+    m.update()
+    v.update()
+    c.update()
+    checkError()
+    clock.next()
 
 def proceed(clock, net=None):
     #Progresses by one frame, updating each component of the MVC system.
@@ -146,15 +156,19 @@ def checkError():
         criticalError(1)
 
 def goBattle(data, net):
-    if net is None:
+    if NEW_SERVER:
         cp = 1
         cam = 0
-    elif net.netID == 1:
-        cp = 1
-        cam = 0
-    elif net.netID == 2:
-        cp = 2
-        cam = 1
+    else:
+        if net is None:
+            cp = 1
+            cam = 0
+        elif net.netID == 1:
+            cp = 1
+            cam = 0
+        elif net.netID == 2:
+            cp = 2
+            cam = 1
         
     terrainLeft = data[1]
     terrainRight = data[2]
@@ -169,7 +183,10 @@ def goBattle(data, net):
     m.setCameraPlayer(cam)
 
     while not m.advance():
-        proceed(clock, net)
+        if NEW_SERVER:
+            proceedNew()
+        else:
+            proceed(clock, net)
 
 def goBattlePrompt(data):
     chars = [data[0], data[1]]
