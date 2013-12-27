@@ -5,7 +5,7 @@ import pygame
 from common.constants import *
 from client.constants import *
 
-from client import mvc
+from common import mvc
 
 from client import drawable
 from client import scenery

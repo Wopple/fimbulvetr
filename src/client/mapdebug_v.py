@@ -1,7 +1,7 @@
 import sys
 import pygame
 
-import mvc
+from common import mvc
 
 from common.constants import *
 from client.constants import *

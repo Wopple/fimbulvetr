@@ -1,6 +1,7 @@
 import pygame
 
-import mvc
+from common import mvc
+
 import gamemap
 import mapchar
 import util

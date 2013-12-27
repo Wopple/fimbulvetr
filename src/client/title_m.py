@@ -2,7 +2,7 @@ import os
 import sys
 import pygame
 
-import mvc
+from common import mvc
 import boundint
 import textrect
 

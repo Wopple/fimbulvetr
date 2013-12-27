@@ -6,7 +6,7 @@ import math
 from common.constants import *
 from client.constants import *
 
-from client import mvc
+from common import mvc
 
 from client import boundint
 from client import energybar

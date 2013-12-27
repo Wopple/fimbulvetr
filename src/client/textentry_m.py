@@ -7,7 +7,7 @@ from client.constants import *
 
 from common.util.rect import Rect
 
-import mvc
+from common import mvc
 import string
 import textrect
 

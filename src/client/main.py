@@ -4,7 +4,7 @@ import pygame
 
 import time
 
-import mvc
+from common import mvc
 
 import debug_m, debug_v, menu_c, mapmode_m, mapmode_v, mapmode_c
 import battle_m, battle_v, battle_c
