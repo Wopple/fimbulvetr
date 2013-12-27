@@ -1,6 +1,6 @@
 from common import mvc
 
-class Model(mvc.Model):
+class QueueModel(mvc.Model):
     def __init__(self, queue):
         super(Model, self).__init__()
         self.queue = queue
