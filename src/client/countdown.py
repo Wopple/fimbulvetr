@@ -1,11 +1,11 @@
 import pygame
 
-import boundint
 import textrect
 
 from common.constants import *
 from client.constants import *
 
+from common import boundint
 from common.util.rect import Rect
 
 class Countdown(object):

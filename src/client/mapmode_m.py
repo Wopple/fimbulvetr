@@ -5,7 +5,6 @@ from common import mvc
 import gamemap
 import mapchar
 import util
-import boundint
 import pauseplayicon
 import mapcharacterbar
 import targetmarker
@@ -22,6 +21,7 @@ import hare, fox, cat
 from common.constants import *
 from client.constants import *
 
+from common import boundint
 from common.util.rect import Rect
 
 class Model(mvc.Model):

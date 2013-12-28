@@ -1,8 +1,8 @@
 import pygame
 from pygame.locals import *
 import textrect
-import boundint
 
+from common import boundint
 from common.util.rect import Rect
 
 class MiniMenu(object):

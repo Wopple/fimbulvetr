@@ -1,12 +1,13 @@
 import os
 import sys
 import pygame
-import boundint
+
+import drawable
 
 from common.constants import *
 from client.constants import *
 
-import drawable
+from common import boundint
 
 class MapInterfaceItem(drawable.Drawable):
     def __init__(self):

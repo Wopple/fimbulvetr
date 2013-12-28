@@ -7,7 +7,6 @@ from pygame.locals import *
 
 import drawable
 import util
-import boundint
 import energybar
 
 import mapitem
@@ -15,6 +14,7 @@ import mapitem
 from common.constants import *
 from client.constants import *
 
+from common import boundint
 from common.util.rect import Rect
 
 class MapStructure(mapitem.MapItem):

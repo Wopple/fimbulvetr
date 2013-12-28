@@ -2,11 +2,10 @@ import os
 import sys
 import pygame
 
-import boundint
-
 from common.constants import *
 from client.constants import *
 
+from common import boundint
 from common.util.rect import Rect
 
 class FX(object):

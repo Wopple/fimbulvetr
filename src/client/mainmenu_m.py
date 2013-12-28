@@ -6,13 +6,13 @@ from common import mvc
 
 import minimenu
 import textrect
-import boundint
 
 import scrollingbackground
 
 from common.constants import *
 from client.constants import *
 
+from common import boundint
 from common.util.rect import Rect
 
 class Model(mvc.Model):

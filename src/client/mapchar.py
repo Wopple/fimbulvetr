@@ -7,7 +7,6 @@ from pygame.locals import *
 
 import drawable
 import util
-import boundint
 
 import mapitem
 
@@ -15,6 +14,8 @@ import hare, cat, fox
 
 from common.constants import *
 from client.constants import *
+
+from common import boundint
 
 class MapChar(mapitem.MapItem):
     def __init__(self, mapCloneMethod, battleCloneMethod, speciesAbbrev, inImages,

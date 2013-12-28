@@ -1,6 +1,6 @@
 import sys
 import pygame
-import boundint
+
 import textrect
 import colorswapper
 from pygame.locals import *
@@ -8,8 +8,8 @@ from pygame.locals import *
 from common.constants import *
 from client.constants import *
 
+from common import boundint
 from common.util import framerate
-
 from common.util.rect import Rect
 
 def setImage():

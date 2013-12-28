@@ -8,7 +8,7 @@ from client.constants import *
 
 from common import mvc
 
-from client import boundint
+from common import boundint
 from client import energybar
 from client import countdown
 from client import fx

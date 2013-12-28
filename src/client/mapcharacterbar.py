@@ -5,11 +5,11 @@ import copy
 
 import mapinterfaceitem
 import energybar
-import boundint
 
 from common.constants import *
 from client.constants import *
 
+from common import boundint
 from common.util.rect import Rect
 
 class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):

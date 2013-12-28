@@ -3,12 +3,12 @@ import sys
 import pygame
 
 from common import mvc
-import boundint
 import textrect
 
 from common.constants import *
 from client.constants import *
 
+from common import boundint
 from common.util.rect import Rect
 
 class Model(mvc.Model):

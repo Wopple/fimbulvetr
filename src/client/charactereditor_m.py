@@ -8,13 +8,13 @@ import chardata
 
 import minimenu
 import textrect
-import boundint
 
 import hare, fox, cat
 
 from common.constants import *
 from client.constants import *
 
+from common import boundint
 from common.util.rect import Rect
 
 class Model(mvc.Model):
