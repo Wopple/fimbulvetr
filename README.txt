@@ -7,4 +7,4 @@ Linux:
 Windows:
 
 cd src
-python client.py
+python run_client.py
