@@ -1,11 +1,11 @@
-import os
 import sys
-import pygame
 
 import time
 
 import debug_m, debug_v, menu_c, mapmode_m, mapmode_v, mapmode_c
-import battle_v, battle_c
+
+import battle_c
+
 import title_m, title_v
 import mainmenu_m, mainmenu_v
 import charactereditor_m, charactereditor_v, charactereditor_c
@@ -18,12 +18,23 @@ import characterSelect2_m, characterSelect2_v, characterSelect2_c
 import mapdebug_m, mapdebug_v, mapdebug_c
 import gamemap
 
+from multiprocessing import Queue
+
 from common.constants import *
 from client.constants import *
 
 from common import mvc
-from common import battle_m
+
+from common.result_m import ResultModel
 from common.util import framerate
+from common.util.process import process
+
+if NEW_SERVER:
+    from common import battle_m_new as battle_m
+    from client import battle_v_new as battle_v
+else:
+    from common import battle_m
+    from client import battle_v
 
 
 def changeMVC(newM, newV, newC, screen, emptyLists=True):
@@ -96,17 +107,6 @@ def changeC(newC):
     c.setView(v)
     c.setModel(m)
 
-def proceedNew():
-    global m
-    global v
-    global c
-
-    m.update()
-    v.update()
-    c.update()
-    checkError()
-    clock.next()
-
 def proceed(clock, net=None):
     #Progresses by one frame, updating each component of the MVC system.
     global m
@@ -173,18 +173,34 @@ def goBattle(data, net):
     terrainLeft = data[1]
     terrainRight = data[2]
 
-    model = battle_m.Model(data[0], terrainLeft, terrainRight)
-    view = battle_v.View(terrainLeft, terrainRight)
+
+    if NEW_SERVER:
+        stateQueue = Queue()
+        resultQueue = Queue(1)
+        resultModel = ResultModel(resultQueue)
+        processModel = battle_m.Model(stateQueue, resultQueue, data[0], terrainLeft, terrainRight)
+        model = resultModel
+        view = battle_v.View(stateQueue, processModel)
+    else:
+        model = battle_m.Model(data[0], terrainLeft, terrainRight)
+        view = battle_v.View(terrainLeft, terrainRight)
+
     controller = battle_c.Controller()
     changeMVC(model, view, controller, screen)
 
-    c.setPlayer(cp)
-    m.setNetPlayer(cp)
-    m.setCameraPlayer(cam)
+    if NEW_SERVER:
+        c.setPlayer(cp)
+        processModel.setNetPlayer(cp)
+        v.setCameraPlayer(cam)
+        processModel.process()
+    else:
+        c.setPlayer(cp)
+        m.setNetPlayer(cp)
+        m.setCameraPlayer(cam)
 
     while not m.advance():
         if NEW_SERVER:
-            proceedNew()
+            proceed(clock)
         else:
             proceed(clock, net)
 

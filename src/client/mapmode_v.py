@@ -9,6 +9,8 @@ import mapchar
 from common.constants import *
 from client.constants import *
 
+from client.countdown_d import CountdownDrawable
+
 class View(mvc.View):
     def __init__(self, model=None, screen=None):
         super(View, self).__init__()
@@ -62,7 +64,7 @@ class View(mvc.View):
         
         self.model.unitHUD.draw(screen)
 
-        self.model.countdown.draw(self.screen)
+        CountdownDrawable(self.model.countdown).draw(self.screen)
 
 
         if tickClock:

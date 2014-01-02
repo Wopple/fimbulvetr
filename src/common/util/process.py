@@ -2,18 +2,21 @@ from multiprocessing import Process, Queue
 
 # PUBLIC
 
-def process(fn, state=None):
+def process(fn, queue=None, state=None):
     """
     Runs a function on a new process. The return value is passed to the queue
     returned by this function. An optional argument can be provided to the
     function.
 
     fn: function to call, 1 arg if state is not None, 0 args otherwise
+    queue: optional queue to use as the result queue
     state: optional state to pass to the function
     return: the queue which will be provided the return value of the function
     """
 
-    queue = Queue(1)
+    if queue is None:
+        queue = Queue(1)
+
     Process(target=process_fn, args=(fn, queue, state)).start()
     return queue
 

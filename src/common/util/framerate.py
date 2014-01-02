@@ -5,9 +5,12 @@ class FrameRate(object):
 
     def __init__(self, fps=60):
         self.fps = fps
-        self.prev = time.time()
+        self.start()
 
     # public
+
+    def start(self):
+        self.prev = time.time()
 
     def next(self):
         self.prev = self.endFrame(self.prev)
