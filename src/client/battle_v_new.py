@@ -26,6 +26,26 @@ class View(mvc.View):
         self.cameraPlayer = 0
 
         self.createEndingText()
+        
+        self.damageTagRects = []
+        self.damagePercentRects = []
+
+        for i in range(2):
+            rect = Rect((0, 0), (80, 100))
+            if (i == 0):
+                rect.left = 0
+            else:
+                rect.right = SCREEN_SIZE[0]
+            rect.top = SCREEN_SIZE[1] - 55
+            self.damageTagRects.append(rect)
+            
+            rect2 = Rect((0, 0), (80, 100))
+            if (i == 0):
+                rect2.left = 0
+            else:
+                rect2.right = SCREEN_SIZE[0]
+            rect2.top = rect.top + 18
+            self.damagePercentRects.append(rect2)
 
     def update(self, tickClock=True):
         self.screen.blit(BLACK_SCREEN, (0, 0))
@@ -57,11 +77,17 @@ class View(mvc.View):
         for b in self.model.bars:
             b.draw(self.screen)
         self.drawInterfaceExtras()
-        
+
+        damageTag = render_textrect("Strength",
+                                    STRUCTURE_COUNT_FONT,
+                                    self.damageTagRects[0],
+                                    ALMOST_BLACK, BLACK, 1, True)
+
         for i in range(2):
-            self.screen.blit(self.model.damageTag, self.model.damageTagRects[i].topleft)
-            self.screen.blit(self.model.getDamagePercentText(i), self.model.damagePercentRects[i].topleft)
-        
+            self.screen.blit(damageTag, self.damageTagRects[i].topleft)
+            self.screen.blit(self.getDamagePercentText(i),
+                             self.damagePercentRects[i].topleft)
+
         self.scene.drawForeground(self.screen, self.model.rect.topleft)
 
         CountdownDrawable(self.model.countdown).draw(self.screen)
@@ -69,6 +95,18 @@ class View(mvc.View):
 
         if tickClock:
             pygame.display.flip()
+
+    def getDamagePercentText(self, i):
+        if self.model.cameraPlayer == 1:
+            if i == 0:
+                i = 1
+            else:
+                i = 0
+        c = self.model.players[i]
+        return render_textrect(c.getDamagePercentText(),
+                               DAMAGE_PERCENT_FONT,
+                               self.damagePercentRects[i],
+                               ALMOST_BLACK, BLACK, 1, True)
 
     def createEndingText(self):
         tempText = ["is defeated", "is victorious", "retreats"]

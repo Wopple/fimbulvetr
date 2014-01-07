@@ -1,10 +1,8 @@
-import os
 import sys
 import copy
 import math
 
 from common.constants import *
-from client.constants import *
 
 from common import mvc
 from common import process_m
@@ -12,10 +10,7 @@ from common import process_m
 from common import boundint
 from common import countdown
 from common import fx
-from client import platform
-from client import textrect
-
-from client import colorswapper
+from common import platform
 
 from client import hare, fox, cat
 
@@ -70,30 +65,6 @@ class Model(process_m.ProcessModel):
         self.platforms = getPlatforms(terrainLeft, terrainRight)
 
         self.countdown = countdown.Countdown(BATTLE_COUNTDOWN_LENGTH)
-        
-        self.damageTagRects = []
-        self.damagePercentRects = []
-        for i in range(2):
-            rect = Rect((0, 0), (80, 100))
-            if (i == 0):
-                rect.left = 0
-            else:
-                rect.right = SCREEN_SIZE[0]
-            rect.top = SCREEN_SIZE[1] - 55
-            self.damageTagRects.append(rect)
-            
-            rect2 = Rect((0, 0), (80, 100))
-            if (i == 0):
-                rect2.left = 0
-            else:
-                rect2.right = SCREEN_SIZE[0]
-            rect2.top = rect.top + 18
-            self.damagePercentRects.append(rect2)
-            
-        self.damageTag = textrect.render_textrect("Strength", STRUCTURE_COUNT_FONT, self.damageTagRects[0],
-                                                  ALMOST_BLACK, BLACK, 1, True)
-        
-        
 
     def checkFrameByFrame(self):
         highest = 0
@@ -1017,22 +988,12 @@ class Model(process_m.ProcessModel):
                         self.returnCode[i] = -1
                     else:
                         self.returnCode[i] = 0
-        
-    def getDamagePercentText(self, i):
-        if self.cameraPlayer == 1:
-            if i == 0:
-                i = 1
-            else:
-                i = 0
-        c = self.players[i]
-        return textrect.render_textrect(c.getDamagePercentText(), DAMAGE_PERCENT_FONT, self.damagePercentRects[i],
-                                                 ALMOST_BLACK, BLACK, 1, True)
-        
+
     def superDarken(self):
         for p in self.players:
             if p.currMove.isSuperFlash:
                 return True
-            
+
         return False
 
     def isFlash(self):
