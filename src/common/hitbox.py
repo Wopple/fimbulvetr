@@ -1,10 +1,4 @@
-import os
-import sys
-import pygame
-import copy
-
 from common.constants import *
-from client.constants import *
 
 class Hitbox(object):
     def __init__(self, inRect, damage, stun, knockback, angle, properties,
@@ -18,10 +12,6 @@ class Hitbox(object):
         self.properties = properties
         self.freezeFrame = freezeFrame
         self.chipDamagePercentage = chipDamagePercentage
-
-        self.image = pygame.Surface(self.rect.size)
-        self.image.fill(HITBOX_COLOR)
-        self.image.set_alpha(HITBOX_ALPHA)
 
     def ignoreBlock(self):
         for p in self.properties:

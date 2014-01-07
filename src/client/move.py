@@ -1,13 +1,8 @@
-import os
-import sys
-import pygame
-
-import hitbox
-import hurtbox
-import blockbox
+from common import hitbox
+from common import hurtbox
+from common import blockbox
 
 from common.constants import *
-from client.constants import *
 
 from common.util.rect import Rect
 
