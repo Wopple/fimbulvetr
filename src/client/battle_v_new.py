@@ -1,5 +1,3 @@
-import os
-import sys
 import pygame
 
 from common.constants import *
@@ -12,6 +10,7 @@ from client import scenery
 from client import energybar
 from client.countdown_d import CountdownDrawable
 from client.fx_d import FXDrawable
+from client.platform_d import PlatformDrawable
 from client.textrect import render_textrect
 
 class View(mvc.View):
@@ -34,7 +33,7 @@ class View(mvc.View):
         self.scene.drawBackground(self.screen, self.model.rect.topleft)
 
         for p in self.model.platforms:
-            p.draw(self.screen, self.model.rect.topleft)
+            PlatformDrawable(p).draw(self.screen, self.model.rect.topleft)
 
         for i, p in enumerate(self.model.players):
             if self.model.returnCode[i] != 1 and self.drawToBack(p):

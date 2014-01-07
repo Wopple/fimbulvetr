@@ -1051,21 +1051,14 @@ def testData():
     
     return [heroes, PLAINS, PLAINS]
 
-
 def getPlatforms(leftTerrain, rightTerrain):
-    
     platformsLeft = getPlatformsForSingleTerrain(leftTerrain, False)
     platformsRight = getPlatformsForSingleTerrain(rightTerrain, True)
-    
     masterList = []
-    for i in range(len(platformsLeft)):
-        masterList.append(platformsLeft[i])
-    for i in range(len(platformsRight)):
-        masterList.append(platformsRight[i])
-        
+    masterList.extend(platformsLeft)
+    masterList.extend(platformsRight)
     return masterList
-    
-    
+
 def getPlatformsForSingleTerrain(terrain, isRight):
     
     platforms = []
