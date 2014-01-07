@@ -2,12 +2,12 @@ import os
 import sys
 import pygame
 
-import move
 import copy
 
 from common.constants import *
 from client.constants import *
 
+from common import move
 from common.util.rect import Rect
 
 class Projectile(object):

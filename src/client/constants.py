@@ -1,11 +1,11 @@
 import os
 import pygame
-import sys
-
-import math
 
 from common.constants import *
 
+from common.hare import Hare
+from common.cat import Cat
+from common.fox import Fox
 from common.util.rect import Rect
 
 FULL_SCREEN = False
@@ -839,6 +839,9 @@ CAT_SUPER_ICONS = []
 for i in temp:
     CAT_SUPER_ICONS.append(pygame.image.load(os.path.join(DIREC_CAT_GRAPHICS, i)).convert_alpha())
 
+SUPER_ICONS_MAP = {Hare : HARE_SUPER_ICONS,
+                   Cat : CAT_SUPER_ICONS,
+                   Fox : FOX_SUPER_ICONS}
 
 mapItemsList = [["fortress", "fortressneutral.png", "fortressblue.png", "fortressred.png", (29, 53)],
                 ["spire", "spireneutral.png", "spireblue.png", "spirered.png", (15, 51)],

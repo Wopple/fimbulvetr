@@ -1,10 +1,6 @@
-import pygame
-
-import move
-
 from common.constants import *
-from client.constants import *
 
+from common import move
 from common import boundint
 from common.util.rect import Rect
 
@@ -251,6 +247,19 @@ class BattleChar(object):
     def getRectPos(self):
         return ( int(self.preciseLoc[0]) - self.offset[0],
                  int(self.preciseLoc[1]) - self.offset[1] )
+
+    def getBoxAbsRect(self, box, inOffset):
+        if self.facingRight:
+            boxPos = box.rect.topleft
+        else:
+            boxPos = flipRect(box.rect)
+
+        topleft = add_points(add_points(self.preciseLoc, boxPos), inOffset)
+
+        return Rect(topleft, box.rect.size)
+
+    def getBoxRect(self, box):
+        return self.getBoxAbsRect(box, (0, 0))
 
     def initMoves(self):
         self.moves = {}
@@ -531,21 +540,9 @@ class BattleChar(object):
             self.moves['superFlashAir'] = m.flash
         
     def appendSuperMove(self, ground, air):
-        
         self.superMoves.append(ground)
         self.superMovesAir.append(air)
-        
-        
-    def getSuperIcon(self):
-        
-        if (self.currSuperMove >= len(self.superIcons)):
-            s = pygame.Surface(BATTLE_SUPER_ICON_SIZE)
-            s.fill(BLACK)
-        else:
-            s = self.superIcons[self.currSuperMove]
-            
-        return s
-    
+
     def getDamagePercentText(self):
         return str(self.damagePercent) + "%"
     

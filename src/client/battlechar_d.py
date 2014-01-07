@@ -44,18 +44,16 @@ class BattleCharDrawable(ItemDrawable):
 
     def drawBoxes(self, boxes, screen, inOffset):
         for b in boxes:
-            boxpos = self.getBoxAbsRect(b, inOffset).topleft
+            boxpos = self.item.getBoxAbsRect(b, inOffset).topleft
             screen.blit(b.image, boxpos)
 
-    def getBoxAbsRect(self, box, inOffset):
-        if self.item.facingRight:
-            boxPos = box.rect.topleft
+    def getSuperIcon(self):
+        icons = SUPER_ICONS_MAP[type(self.item)]
+
+        if self.item.currSuperMove >= len(icons):
+            icon = pygame.Surface(BATTLE_SUPER_ICON_SIZE)
+            icon.fill(BLACK)
         else:
-            boxPos = flipRect(box.rect)
+            icon = icons[self.item.currSuperMove]
 
-        topleft = add_points(add_points(self.preciseLoc, boxPos), inOffset)
-
-        return Rect(topleft, box.rect.size)
-
-    def getBoxRect(self, box):
-        return self.getBoxAbsRect(box, (0, 0))
+        return icon

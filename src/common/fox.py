@@ -1,13 +1,9 @@
-import os
-import sys
-import pygame
-
-import move
 import projectile
 
 from common.constants import *
 from client.constants import *
 
+from common import move
 from common import battlechar
 
 class Fox(battlechar.BattleChar):
