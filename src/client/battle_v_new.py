@@ -8,6 +8,7 @@ from common import mvc
 from client import drawable
 from client import scenery
 from client import energybar
+from client.battlechar_d import BattleCharDrawable
 from client.countdown_d import CountdownDrawable
 from client.fx_d import FXDrawable
 from client.platform_d import PlatformDrawable
@@ -57,7 +58,7 @@ class View(mvc.View):
 
         for i, p in enumerate(self.model.players):
             if self.model.returnCode[i] != 1 and self.drawToBack(p):
-                p.draw(self.screen, self.model.rect.topleft)
+                BattleCharDrawable(p).draw(self.screen, self.model.rect.topleft)
                 self.drawYouIcon(i, p, self.model.rect.topleft)
                 
         if self.model.superDarken():
@@ -65,7 +66,7 @@ class View(mvc.View):
             
         for i, p in enumerate(self.model.players):
             if self.model.returnCode[i] != 1 and not self.drawToBack(p):
-                p.draw(self.screen, self.model.rect.topleft)
+                BattleCharDrawable(p).draw(self.screen, self.model.rect.topleft)
                 self.drawYouIcon(i, p, self.model.rect.topleft)
 
         for p in self.model.projectiles:

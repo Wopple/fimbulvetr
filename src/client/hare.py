@@ -2,7 +2,6 @@ import os
 import sys
 import pygame
 
-import battlechar
 import move
 
 import colorswapper
@@ -10,6 +9,7 @@ import colorswapper
 from common.constants import *
 from client.constants import *
 
+from common import battlechar
 from common import boundint
 
 # DAMAGE STUN KNOCKBACK ANGLE

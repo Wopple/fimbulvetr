@@ -38,10 +38,6 @@ class BattleChar(object):
         self.superMoves = []
         self.superMovesAir = []
         self.currSuperMove = None
-        
-        temp = pygame.Surface((50, 80))
-        temp.fill((2, 2, 2))
-        self.setImage(temp, (40, 25))
 
         self.initMoves()
         self.createColors()
@@ -107,10 +103,7 @@ class BattleChar(object):
                 self.speedCap([speedCap, self.vertVelMax], i)
                 self.preciseLoc[i] += self.vel[i]
 
-        self.rect.topleft = self.getRectPos()
         self.positionFootRect()
-
-        self.setImage(frame.image, frame.offset)
 
         if self.freezeFrame > 0:
             self.freezeFrame -= 1
@@ -123,13 +116,9 @@ class BattleChar(object):
         self.actLeft = True
         self.proceedFrame()
         self.frameSpecial()
-        frame = self.getCurrentFrame()
-        self.setImage(frame.image, frame.offset)
-
 
     def positionFootRect(self):
         self.footRect.center = add_points(self.preciseLoc, (0, 0))
-        
 
     def speedCap(self, caps, i):
         if not self.getCurrentFrame().ignoreSpeedCap:
@@ -164,50 +153,6 @@ class BattleChar(object):
 
     def accelToZero(self):
         self.accel = [0.0, 0.0]
-
-    def setImage(self, inImage, o):
-        size = inImage.get_size()
-        
-        if self.facingRight:
-            offset = o
-            self.image = inImage
-        else:
-            offset = (-o[0] + size[0], o[1])
-            self.image = pygame.transform.flip(inImage, True, False)
-        
-        self.offset = offset
-        self.rect = Rect(self.getRectPos(), size)
-
-    def draw(self, screen, inOffset):
-        screen.blit(self.image, add_points(self.rect.topleft, inOffset))
-
-        if SHOW_HURTBOXES:
-            self.drawBoxes(self.getCurrentFrame().hurtboxes, screen, inOffset)
-        if SHOW_HITBOXES:
-            self.drawBoxes(self.getCurrentFrame().hitboxes, screen, inOffset)
-        if SHOW_BLOCKBOXES:
-            self.drawBoxes(self.getCurrentFrame().blockboxes, screen, inOffset)
-        
-        if SHOW_RED_DOT:
-            screen.blit(RED_DOT, add_points(self.preciseLoc, inOffset))
-
-    def drawBoxes(self, boxes, screen, inOffset):
-        for b in boxes:
-            boxpos = self.getBoxAbsRect(b, inOffset).topleft
-            screen.blit(b.image, boxpos)
-
-    def getBoxAbsRect(self, box, inOffset):
-        if self.facingRight:
-            boxPos = box.rect.topleft
-        else:
-            boxPos = flipRect(box.rect)
-
-        topleft = add_points(add_points(self.preciseLoc, boxPos), inOffset)
-
-        return Rect(topleft, box.rect.size)
-
-    def getBoxRect(self, box):
-        return self.getBoxAbsRect(box, (0, 0))
 
     def testMove(self, t):
         self.accel[0] = self.airAccel * t

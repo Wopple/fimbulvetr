@@ -2,13 +2,13 @@ import os
 import sys
 import pygame
 
-import battlechar
 import move
 import projectile
 
 from common.constants import *
 from client.constants import *
 
+from common import battlechar
 from common import boundint
 
 class Cat(battlechar.BattleChar):
