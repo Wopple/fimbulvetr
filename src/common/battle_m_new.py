@@ -11,7 +11,7 @@ from common import process_m
 
 from common import boundint
 from common import countdown
-from client import fx
+from common import fx
 from client import platform
 from client import textrect
 
@@ -220,12 +220,12 @@ class Model(process_m.ProcessModel):
                 self.checkDisplacement()
                 self.centerCamera(self.players[self.cameraPlayer])
 
+            newList = []
             for f in self.fx:
                 f.update()
-            newList = []
-            for i in range(len(self.fx)):
-                if not self.fx[i].removeFlag:
-                    newList.append(self.fx[i])
+                if not f.removeFlag:
+                    newList.append(f)
+
             self.fx = newList
 
         for b in self.bars:

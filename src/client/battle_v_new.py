@@ -11,6 +11,7 @@ from client import drawable
 from client import scenery
 from client import energybar
 from client.countdown_d import CountdownDrawable
+from client.fx_d import FXDrawable
 from client.textrect import render_textrect
 
 class View(mvc.View):
@@ -52,7 +53,7 @@ class View(mvc.View):
             p.draw(self.screen, self.model.rect.topleft)
 
         for f in self.model.fx:
-            f.draw(self.screen, self.model.rect.topleft)
+            FXDrawable(f).draw(self.screen, self.model.rect.topleft)
 
         for b in self.model.bars:
             b.draw(self.screen)

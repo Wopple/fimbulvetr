@@ -1,65 +1,35 @@
-import os
-import sys
-import pygame
-
 from common.constants import *
 from client.constants import *
 
 from common import boundint
 from common.util.rect import Rect
 
+LENGTH = 1
+
 class FX(object):
     def __init__(self, inPos, inFacing, inType):
         self.preciseLoc = inPos
         self.facingRight = inFacing
 
-        self.frames = []
-        self.setType(inType)
+        self.frames = self.getFrames(inType)
 
         self.frameNum = 0
         self.subframeNum = 0
         self.removeFlag = False
 
-        self.setImage()
-        
-
     def update(self):
         self.subframeNum += 1
-        if self.subframeNum >= self.frames[self.frameNum].length:
+        if self.subframeNum >= self.frames[self.frameNum][LENGTH]:
             self.subframeNum = 0
             self.frameNum += 1
             if self.frameNum == len(self.frames):
                 self.removeFlag = True
-            else:
-                self.setImage()
         
         self.rect.topleft = self.getRectPos()
 
-    def draw(self, screen, inOffset):
-        screen.blit(self.image, add_points(self.rect.topleft, inOffset))
+    def getFrames(self, t):
+        f = []
 
-    def setImage(self):
-        f = self.frames[self.frameNum]
-        inImage = f.image
-        o = f.offset
-        
-        size = inImage.get_size()
-        
-        if self.facingRight:
-            offset = o
-            self.image = inImage
-        else:
-            offset = (-o[0] + size[0], o[1])
-            self.image = pygame.transform.flip(inImage, True, False)
-        
-        self.offset = offset
-        self.rect = Rect(self.getRectPos(), size)
-
-    def getRectPos(self):
-        return ( int(self.preciseLoc[0]) - self.offset[0],
-                 int(self.preciseLoc[1]) - self.offset[1] )
-
-    def setType(self, t):
         if t == 'pow':
             f = [ [0, 3],
                   [1, 1],
@@ -69,7 +39,7 @@ class FX(object):
             f = [ [7, 3],
                   [4, 1],
                   [5, 1],
-                  [6 , 1] ]
+                  [6, 1] ]
         elif t == 'block':
             f = [ [8, 3],
                   [9, 1],
@@ -123,13 +93,4 @@ class FX(object):
                   [49, 2],
                   [50, 2] ]
 
-        for i in f:
-            self.frames.append(Frame(FX_IMAGES[i[0]][0],
-                                     FX_IMAGES[i[0]][1], i[1]))
-
-class Frame(object):
-    def __init__(self, inImage, inOffset, inLength):
-        self.image = inImage
-        self.offset = inOffset
-        self.length = inLength
-        
+        return f
