@@ -211,6 +211,14 @@ LOCK_CIRCLE_TICK_MAX = 2
 LOCK_CIRCLE_INCREASE = 3
 LOCK_CIRCLE_MAX_SIZE = 100
 
+# frame data constants
+
+FD_KEY = 0
+FD_LEN = 1
+FD_HURT = 2
+FD_HIT = 3
+FD_BLOCK = 4
+
 def add_points(i, j):
     i = (int(i[0]), int(i[1]))
     j = (int(j[0]), int(j[1]))

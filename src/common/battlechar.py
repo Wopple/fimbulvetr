@@ -466,8 +466,12 @@ class BattleChar(object):
         if not c:
             self.setCurrMove('idle')
 
-    def frameData(self, i, j, r=[], h=[], b=[]):
-        return [self.spriteSet[i][0], self.spriteSet[i][1], j, r, h, b]
+    def frameData(self, key, length, r=[], h=[], b=[]):
+        return {FD_KEY : key,
+                FD_LEN : length,
+                FD_HURT : r,
+                FD_HIT : h,
+                FD_BLOCK : b}
 
     def getHitboxes(self):
         return self.getCurrentFrame().hitboxes

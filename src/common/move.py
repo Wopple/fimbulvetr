@@ -45,7 +45,7 @@ class Move(object):
 
     def append(self, f, t):
         for i in f:
-            self.frames.append(Frame(i[0], i[1], i[2], i[3], i[4], i[5]))
+            self.frames.append(Frame(i))
 
         for i in t:
             self.transitions[i[0]] = i[1]
@@ -67,14 +67,11 @@ class SuperMove(Move):
         self.isSuper = True
         self.flash = None
         self.canRetreat = False
-        
 
 class Frame(object):
-    def __init__(self, inImage, inOffset, inLength, hurtboxData,
-                 hitboxData, blockboxData):
-        self.image = inImage
-        self.offset = inOffset
-        self.length = inLength
+    def __init__(self, frameData):
+        self.frameKey = frameData[FD_KEY]
+        self.length = frameData[FD_LEN]
         self.setVelX = None
         self.setVelY = None
         self.addVelX = None
@@ -88,9 +85,9 @@ class Frame(object):
         self.ignoreFriction = False
         self.setFrictionX = None
         self.resetHitPotential = False
-        self.buildHurtboxes(hurtboxData)
-        self.buildHitboxes(hitboxData)
-        self.buildBlockboxes(blockboxData)
+        self.buildHurtboxes(frameData[FD_HURT])
+        self.buildHitboxes(frameData[FD_HIT])
+        self.buildBlockboxes(frameData[FD_BLOCK])
         self.fx = []
         self.resetCanEffect = False
 
@@ -98,33 +95,18 @@ class Frame(object):
         self.blockboxes = []
 
         for d in data:
-            topleft = (d[0], d[1])
-            width = d[2] - d[0]
-            height = d[3] - d[1]
-            size = (width, height)
-            rect = Rect(topleft, size)
-            self.blockboxes.append(blockbox.Blockbox(rect))
+            self.blockboxes.append(blockbox.Blockbox(makeRect(d)))
 
     def buildHurtboxes(self, data):
         self.hurtboxes = []
 
         for d in data:
-            topleft = (d[0], d[1])
-            width = d[2] - d[0]
-            height = d[3] - d[1]
-            size = (width, height)
-            rect = Rect(topleft, size)
-            self.hurtboxes.append(hurtbox.Hurtbox(rect))
+            self.hurtboxes.append(hurtbox.Hurtbox(makeRect(d)))
 
     def buildHitboxes(self, data):
         self.hitboxes = []
 
         for d in data:
-            topleft = (d[0], d[1])
-            width = d[2] - d[0]
-            height = d[3] - d[1]
-            size = (width, height)
-            rect = Rect(topleft, size)
             damage = d[4]
             stun = d[5]
             knockback = d[6]
@@ -135,8 +117,15 @@ class Frame(object):
                 chip = d[10]
             else:
                 chip = CHIP_DAMAGE_PERCENTAGE_DEFAULT
-            self.hitboxes.append(hitbox.Hitbox(rect, damage, stun, knockback,
+            self.hitboxes.append(hitbox.Hitbox(makeRect(d), damage, stun, knockback,
                                                angle, properties, freezeFrame, chip))
+
+def makeRect(d)
+    topleft = (d[0], d[1])
+    width = d[2] - d[0]
+    height = d[3] - d[1]
+    size = (width, height)
+    return Rect(topleft, size)
 
 class Transition(object):
     def __init__(self, var1, var2, rangeMin, rangeMax, dest):
@@ -145,7 +134,6 @@ class Transition(object):
         self.rangeMin = rangeMin
         self.rangeMax = rangeMax
         self.destination = dest
-        
 
 def baseIdle():
     t = [ ['exitFrame', Transition(-1, 0, None, None, 'idle')],
@@ -435,5 +423,3 @@ def baseSuperFlash():
     m.ignoreGroundAir = True
     m.canRetreat = False
     return m
-
-
