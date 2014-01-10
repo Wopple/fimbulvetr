@@ -1,4 +1,3 @@
-import time
 import copy
 import math
 
@@ -817,24 +816,26 @@ class Model(process_m.ProcessModel):
 
         return False
 
+BOOLEAN = True
+
 class State(Model):
     def __init__(self, model):
-        self.terrainLeft = copy.copy(model.terrainLeft)
-        self.terrainRight = copy.copy(model.terrainRight)
-        self.arena = copy.copy(model.arena)
-        self.players = copy.copy(model.players)
-        self.keys = copy.copy(model.keys)
-        self.keysNow = copy.copy(model.keysNow)
-        self.frameByFrame = copy.copy(model.frameByFrame)
-        self.returnCode = copy.copy(model.returnCode)
-        self.projectiles = copy.copy(model.projectiles)
-        self.retreatProhibitTime = copy.copy(model.retreatProhibitTime)
-        self.retreatPhase = copy.copy(model.retreatPhase)
-        self.endingVal = copy.copy(model.endingVal)
-        self.endingValTick = copy.copy(model.endingValTick)
-        self.fx = copy.copy(model.fx)
-        self.platforms = copy.copy(model.platforms)
-        self.countdown = copy.copy(model.countdown)
+        self.terrainLeft = copy.deepcopy(model.terrainLeft)
+        self.terrainRight = copy.deepcopy(model.terrainRight)
+        self.arena = copy.deepcopy(model.arena)
+        self.players = copy.deepcopy(model.players)
+        self.keys = copy.deepcopy(model.keys)
+        self.keysNow = copy.deepcopy(model.keysNow)
+        self.frameByFrame = copy.deepcopy(model.frameByFrame)
+        self.returnCode = copy.deepcopy(model.returnCode)
+        self.projectiles = copy.deepcopy(model.projectiles)
+        self.retreatProhibitTime = copy.deepcopy(model.retreatProhibitTime)
+        self.retreatPhase = copy.deepcopy(model.retreatPhase)
+        self.endingVal = copy.deepcopy(model.endingVal)
+        self.endingValTick = copy.deepcopy(model.endingValTick)
+        self.fx = copy.deepcopy(model.fx)
+        self.platforms = copy.deepcopy(model.platforms)
+        self.countdown = copy.deepcopy(model.countdown)
 
 def testData():
     heroes = [hare.Hare(), hare.Hare()]
