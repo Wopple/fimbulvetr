@@ -127,16 +127,15 @@ class Scenery(object):
     def update(self):
         pass
     
-    def drawForeground(self, screen, inOffset):
-        self.draw(self.foregroundItems, screen, inOffset)
+    def drawForeground(self, screen, camera):
+        self.draw(self.foregroundItems, screen, camera)
     
-    def drawBackground(self, screen, inOffset):
-        self.draw(self.backgroundItems, screen, inOffset)
+    def drawBackground(self, screen, camera):
+        self.draw(self.backgroundItems, screen, camera)
         
-    def draw(self, itemList, screen, inOffset):
-        
+    def draw(self, itemList, screen, camera):
         for item in itemList:
-            item.draw(screen, inOffset)
+            item.draw(screen, camera)
         
     
     
@@ -154,14 +153,14 @@ class SceneryItem(object):
         
         print self.rect.topleft
         
-    def draw(self, screen, inOffset):
+    def draw(self, screen, camera):
         rect = Rect(self.rect.topleft, self.rect.size)
-        rect.left += inOffset[0]
-        rect.top += inOffset[1]
+        rect.topleft = adjustToCamera(rect.topleft, camera)
         
         adjust = [0.0, 0.0]
         for i in range(2):
-            screenCenter = (SCREEN_SIZE[i] / 2) - inOffset[i]
+            screenCenter = (SCREEN_SIZE[i] / 2) + camera.topleft[i]
+
             if (i == 1):
                 screenCenter += BATTLE_AREA_FLOOR_HEIGHT
             anchoredPos = self.rect.topleft[i] + self.anchor[i]

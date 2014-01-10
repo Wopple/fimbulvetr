@@ -1,7 +1,5 @@
-import sys
 import pygame
 from pygame.locals import *
-from math import sqrt
 import textrect
 
 from common.constants import *

@@ -17,21 +17,21 @@ class BattleCharDrawable(ItemDrawable):
 #        temp.fill((2, 2, 2))
 #        self.setImage(temp, (40, 25))
 
-    def draw(self, screen, inOffset=(0, 0)):
+    def draw(self, screen, camera):
         frame = self.item.getCurrentFrame()
         images = IMAGES_MAP[type(self.item)][frame.frameKey]
         self.setImage(images[IMAGE], images[OFFSET])
-        screen.blit(self.image, add_points(self.rect.topleft, inOffset))
+        screen.blit(self.image, adjustToCamera(self.rect.topleft, camera))
 
         if SHOW_HURTBOXES:
-            self.drawBoxes(frame.hurtboxes, screen, inOffset)
+            self.drawBoxes(frame.hurtboxes, screen, camera)
         if SHOW_HITBOXES:
-            self.drawBoxes(frame.hitboxes, screen, inOffset)
+            self.drawBoxes(frame.hitboxes, screen, camera)
         if SHOW_BLOCKBOXES:
-            self.drawBoxes(frame.blockboxes, screen, inOffset)
+            self.drawBoxes(frame.blockboxes, screen, camera)
 
         if SHOW_RED_DOT:
-            screen.blit(RED_DOT, add_points(self.item.preciseLoc, inOffset))
+            screen.blit(RED_DOT, adjustToCamera(self.item.preciseLoc, camera))
 
     def setImage(self, inImage, o):
         size = inImage.get_size()
@@ -50,10 +50,10 @@ class BattleCharDrawable(ItemDrawable):
         return (int(self.item.preciseLoc[0]) - self.offset[0],
                 int(self.item.preciseLoc[1]) - self.offset[1])
 
-    def drawBoxes(self, boxes, screen, inOffset):
+    def drawBoxes(self, boxes, screen, camera):
         for b in boxes:
-            boxpos = self.item.getBoxAbsRect(b, inOffset).topleft
-            screen.blit(b.image, boxpos)
+            boxLoc = self.item.getBoxLocation(b)
+            screen.blit(b.image, adjustToCamera(boxLoc, camera))
 
     def getSuperIcon(self):
         icons = SUPER_ICONS_MAP[type(self.item)]

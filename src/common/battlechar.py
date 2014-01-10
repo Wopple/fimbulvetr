@@ -243,18 +243,11 @@ class BattleChar(object):
             return True
         return False
 
-    def getBoxAbsRect(self, box, inOffset):
+    def getBoxLocation(self, box):
         if self.facingRight:
-            boxPos = box.rect.topleft
+            return box.rect.topleft
         else:
-            boxPos = flipRect(box.rect)
-
-        topleft = add_points(add_points(self.preciseLoc, boxPos), inOffset)
-
-        return Rect(topleft, box.rect.size)
-
-    def getBoxRect(self, box):
-        return self.getBoxAbsRect(box, (0, 0))
+            return flipRect(box.rect)
 
     def initMoves(self):
         self.moves = {}

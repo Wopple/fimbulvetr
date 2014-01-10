@@ -8,7 +8,6 @@ from common.constants import *
 from client.constants import *
 
 class RezSpark:
-
     def __init__(self, inCharacter):
         self.character = inCharacter
         self.pos = [int(self.character.precisePos[0]),
@@ -17,9 +16,7 @@ class RezSpark:
         self.circles = []
         self.tick = REZ_SPARK_TICK_MAX
 
-
     def update(self):
-
         if (not self.character is None) and (not self.character.rezzing):
             self.character = None
             self.circles = [1, (1+REZ_SPARK_TICK_MAX)]
@@ -42,11 +39,9 @@ class RezSpark:
         else:
             self.tick = 0
 
-
-    def draw(self, screen, inZoom, inOffset):
-
-        pos = ( int((self.pos[0] * inZoom) + inOffset[0]),
-                int((self.pos[1] * inZoom) + inOffset[1]) )
+    def draw(self, screen, inZoom, camera):
+        pos = ( int((self.pos[0] * inZoom) - camera.left),
+                int((self.pos[1] * inZoom) - camera.top) )
 
         for c in self.circles:
             alpha = self.getAlpha(c)
@@ -70,7 +65,6 @@ class RezSpark:
             result = 0
 
         return result
-
 
     def isRemovable(self):
         return ((self.character is None) and (len(self.circles) == 0))

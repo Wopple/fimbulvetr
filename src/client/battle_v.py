@@ -60,7 +60,7 @@ class View(mvc.View):
             self.state = lastState
 
         self.screen.blit(BLACK_SCREEN, (0, 0))
-        self.scene.drawBackground(self.screen, self.camera.topleft)
+        self.scene.drawBackground(self.screen, self.camera)
         isFlash = self.state.isFlash()
 
         if not isFlash:
@@ -74,26 +74,26 @@ class View(mvc.View):
                 self.retreatBar.threshold = self.retreatBar.value.maximum + 1
 
         for p in self.state.platforms:
-            PlatformDrawable(p).draw(self.screen, self.camera.topleft)
+            PlatformDrawable(p).draw(self.screen, self.camera)
 
         for i, p in enumerate(self.state.players):
             if self.state.returnCode[i] != 1 and self.drawToBack(p):
-                BattleCharDrawable(p).draw(self.screen, self.camera.topleft)
-                self.drawYouIcon(i, p, self.camera.topleft)
+                BattleCharDrawable(p).draw(self.screen, self.camera)
+                self.drawYouIcon(i, p, self.camera)
                 
         if self.state.superDarken():
             self.screen.blit(self.superVeil, (0, 0))
             
         for i, p in enumerate(self.state.players):
             if self.state.returnCode[i] != 1 and not self.drawToBack(p):
-                BattleCharDrawable(p).draw(self.screen, self.camera.topleft)
-                self.drawYouIcon(i, p, self.camera.topleft)
+                BattleCharDrawable(p).draw(self.screen, self.camera)
+                self.drawYouIcon(i, p, self.camera)
 
         for p in self.state.projectiles:
-            p.draw(self.screen, self.camera.topleft)
+            p.draw(self.screen, self.camera)
 
         for f in self.state.fx:
-            FXDrawable(f).draw(self.screen, self.camera.topleft)
+            FXDrawable(f).draw(self.screen, self.camera)
 
         if not self.catBar is None:
             self.updateCatBarColors()
@@ -116,7 +116,7 @@ class View(mvc.View):
             self.screen.blit(self.getDamagePercentText(i),
                              self.damagePercentRects[i].topleft)
 
-        self.scene.drawForeground(self.screen, self.camera.topleft)
+        self.scene.drawForeground(self.screen, self.camera)
 
         CountdownDrawable(self.state.countdown).draw(self.screen)
         self.drawEndingText()
@@ -132,7 +132,6 @@ class View(mvc.View):
     def centerCamera(self, target):
         self.camera.centerx = int(target.preciseLoc[0])
         self.camera.centery = int(target.preciseLoc[1])
-        print self.camera
 
         if self.camera.left < 0:
             self.camera.left = 0
@@ -143,7 +142,6 @@ class View(mvc.View):
             self.camera.top = 0
         elif self.camera.bottom > BATTLE_ARENA_SIZE[1]:
             self.camera.bottom = BATTLE_ARENA_SIZE[1]
-        print self.camera
 
     def getDamagePercentText(self, i):
         if self.cameraPlayer == 1:
@@ -221,14 +219,12 @@ class View(mvc.View):
 
         self.superIcon = SuperIcon(Rect((x, y), BATTLE_SUPER_ICON_SIZE), BattleCharDrawable(c).getSuperIcon(), c.superEnergy)
 
-    def drawYouIcon(self, i, p, offset):
+    def drawYouIcon(self, i, p, camera):
         if i == self.cameraPlayer:
             self.youIconRect.centerx = int(p.preciseLoc[0])
             self.youIconRect.bottom = int(p.preciseLoc[1] - p.youIconHeight)
-            
-            self.screen.blit(self.youIconImage, add_points(self.youIconRect.topleft, offset))
-            
-    
+            self.screen.blit(self.youIconImage, adjustToCamera(self.youIconRect.topleft, camera))
+
     def drawToBack(self, p):
         return p.currMove.drawToBack or (self.otherPersonDoingSuperFlash(p))
     

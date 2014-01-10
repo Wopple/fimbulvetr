@@ -1,8 +1,3 @@
-import os
-
-import pygame
-
-from common.constants import *
 from client.constants import *
 
 class Drawable(object):
@@ -10,8 +5,11 @@ class Drawable(object):
         self.rect = rect
         self.image = image
 
-    def draw(self, screen):
-        screen.blit(self.image, self.rect.topleft)
+    def draw(self, screen, camera=None):
+        if camera is None:
+            screen.blit(self.image, self.rect.topleft)
+        else:
+            screen.blit(self.image, adjustToCamera(self.rect.topleft, camera))
 
 class ItemDrawable(Drawable):
     """

@@ -9,11 +9,12 @@ class PlatformDrawable(ItemDrawable):
     def __init__(self, item):
         super(PlatformDrawable, self).__init__(item, rect=item.rect)
 
-    def draw(self, screen, inOffset=(0, 0)):
+    def draw(self, screen, camera=None):
         image = pygame.Surface((self.rect.width, self.rect.height))
         image.fill(BLACK)
         innerImage = pygame.Surface((self.rect.width,
                                      self.rect.height - (PLATFORM_BORDER_SIZE * 2)))
         innerImage.fill(PLATFORM_COLORS[self.item.terrain])
         image.blit(innerImage, (0, PLATFORM_BORDER_SIZE))
-        screen.blit(image, add_points(self.rect.topleft, inOffset))
+        self.image = image
+        super(PlatformDrawable, self).draw(screen, camera)

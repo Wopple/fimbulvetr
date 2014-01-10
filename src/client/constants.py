@@ -1060,3 +1060,6 @@ VALID_INPUT_CHARACTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                           'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
                           'Y', 'Z', '-', '1', '2', '3', '4', '5', '6', '7',
                           '8', '9', '0', '.']
+
+def adjustToCamera(point, camera):
+    return (int(point[0] - camera.left), int(point[1] - camera.top))
