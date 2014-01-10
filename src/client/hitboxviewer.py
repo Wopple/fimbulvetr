@@ -2,7 +2,6 @@ import sys
 import pygame
 
 import textrect
-import colorswapper
 from pygame.locals import *
 
 from common.constants import *
@@ -20,15 +19,6 @@ def setImage():
     preSize = preImage.get_size()
     currImage = pygame.transform.scale(preImage, (preSize[0] * zoom, preSize[1] * zoom))
 
-    
-    swapData = [
-                    colorswapper.ColorData((70, 181, 255, 255), 5, (255, 70, 70, 255), (255, 70, 70, 255)),
-                    colorswapper.ColorData((0, 134, 223, 255), 5, (221, 0, 0, 255), (221, 0, 0, 255)),
-                    colorswapper.ColorData((23, 163, 255, 255), 5, (255, 17, 17, 255), (255, 17, 17, 255))
-               ]
-    
-    #currImage = colorswapper.ColorSwapImage(currImage, swapData, True)
-    
     preOffset = images[imageInc.value][1]
     offset = (preOffset[0] * zoom, preOffset[1] * zoom)
     imageLoc = (  (anchorPoint[0] - offset[0]),

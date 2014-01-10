@@ -9,11 +9,11 @@ class Drawable(object):
     def __init__(self, rect, image):
         self.rect = rect
         self.image = image
-    
+
     def draw(self, screen):
         screen.blit(self.image, self.rect.topleft)
 
-class ItemDrawable(object):
+class ItemDrawable(Drawable):
     """
     This is intended to wrap a model-only item with a Drawable
     so it can be drawn in a view.

@@ -36,7 +36,6 @@ class BattleChar(object):
         self.currSuperMove = None
 
         self.initMoves()
-        self.createColors()
         self.setCurrMove('idle')
 
         self.createDust = None
@@ -243,10 +242,6 @@ class BattleChar(object):
         if r and self.facingRight:
             return True
         return False
-
-    def getRectPos(self):
-        return ( int(self.preciseLoc[0]) - self.offset[0],
-                 int(self.preciseLoc[1]) - self.offset[1] )
 
     def getBoxAbsRect(self, box, inOffset):
         if self.facingRight:

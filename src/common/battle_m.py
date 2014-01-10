@@ -1,39 +1,32 @@
-import os
-import sys
+import time
 import copy
 import math
 
 from common.constants import *
-from client.constants import *
 
 from common import mvc
-
+from common import process_m
 from common import boundint
-from client import energybar
-from client import countdown
-from client import fx
-from client import platform
-from client import textrect
-
-from client import colorswapper
-
-from client import hare, fox, cat
-
+from common import countdown
+from common import fx
+from common import platform
+from common import hare, fox, cat
 from common.util.rect import Rect
 
-class Model(mvc.Model):
-    def __init__(self, inChars, terrainLeft, terrainRight):
-        super(Model, self).__init__()
-        self.rect = Rect((0, 0), BATTLE_ARENA_SIZE)
-
-        self.testBool = False
-        self.testBool2 = False
+class Model(process_m.ProcessModel):
+    def __init__(self, resultQueue, stateQueue, inputQueue, inChars, terrainLeft, terrainRight):
+        super(Model, self).__init__(resultQueue)
+        self.stateQueue = stateQueue
+        self.inputQueue = inputQueue
+        self.terrainLeft = terrainLeft
+        self.terrainRight = terrainRight
+        self.arena = Rect((0, 0), BATTLE_ARENA_SIZE)
         
         self.players = inChars
         for p in self.players:
             p.beginBattle()
-            pos = (self.rect.centerx,
-                   self.rect.height - BATTLE_AREA_FLOOR_HEIGHT)
+            pos = (self.arena.centerx,
+                   self.arena.height - BATTLE_AREA_FLOOR_HEIGHT)
             self.players[0].setLoc(add_points(pos,
                             ((-BATTLE_PLAYER_START_DISTANCE / 2), 0)))
             self.players[0].facingRight = True
@@ -54,10 +47,6 @@ class Model(mvc.Model):
                                                      RETREAT_PROHIBIT_TIME)
         self.retreatPhase = 0
         
-        self.cameraPlayer = 0
-        self.netPlayer = 0
-        self.catBar = None
-        self.createBars()
         self.resetHitMemory()
 
         self.endingVal = -1
@@ -68,42 +57,9 @@ class Model(mvc.Model):
         self.platforms = getPlatforms(terrainLeft, terrainRight)
 
         self.countdown = countdown.Countdown(BATTLE_COUNTDOWN_LENGTH)
-        self.createEndingText()
-        
-        self.damageTagRects = []
-        self.damagePercentRects = []
-        for i in range(2):
-            rect = Rect((0, 0), (80, 100))
-            if (i == 0):
-                rect.left = 0
-            else:
-                rect.right = SCREEN_SIZE[0]
-            rect.top = SCREEN_SIZE[1] - 55
-            self.damageTagRects.append(rect)
-            
-            rect2 = Rect((0, 0), (80, 100))
-            if (i == 0):
-                rect2.left = 0
-            else:
-                rect2.right = SCREEN_SIZE[0]
-            rect2.top = rect.top + 18
-            self.damagePercentRects.append(rect2)
-            
-        self.damageTag = textrect.render_textrect("Strength", STRUCTURE_COUNT_FONT, self.damageTagRects[0],
-                                                  ALMOST_BLACK, BLACK, 1, True)
-        
-        
 
-    def checkFrameByFrame(self):
-        highest = 0
-
-        for i in range(len(self.frameByFrame)):
-            if self.frameByFrame[i] > highest:
-                highest = self.frameByFrame[i]
-            if self.frameByFrame[i] == 2:
-                self.frameByFrame[i] = 1
-
-        return (highest == 1)
+    def getState(self):
+        return State(self)
 
     def update(self):
         #if self.testBool:
@@ -122,10 +78,13 @@ class Model(mvc.Model):
         #self.keys[1][7] = True
         #self.keysNow[1][7] = 0
 
+        # process all the input
+        while not self.inputQueue.empty():
+            self.key(self.inputQueue.get())
+
         fbf = self.checkFrameByFrame()
 
         if not fbf:
-
             self.checkEnding()
 
             if self.endingVal >= 0:
@@ -143,24 +102,14 @@ class Model(mvc.Model):
                     p.countdownComplete()
                 self.retreatPhase = 1
                 
-            isFlash = False
-            for p in self.players:
-                if p.currMove.isSuperFlash:
-                    isFlash = True
+            isFlash = self.isFlash()
 
             if self.retreatPhase == 1 and self.endingVal == -1 and not isFlash:
                 self.retreatProhibitTime.add(-1)
                 if self.retreatProhibitTime.value == 0:
                     self.retreatPhase = 2
-                    self.retreatBar.createText("Retreat", 1)
-                    self.retreatBar.value.maximum = RETREAT_HOLD_TOTAL
-                    self.retreatBar.threshold = self.retreatBar.value.maximum + 1
 
-            
-
-            
             for i, p in enumerate(self.players):
-
                 if (isFlash) and (not p.currMove.isSuperFlash):
                     continue
                 
@@ -188,7 +137,6 @@ class Model(mvc.Model):
                     p.dropThroughPlatform = self.checkForPlatform(p)
 
             if (not isFlash):
-                self.checkRetreat()
                 self.resetHitMemory()
                 
                 self.updateProjectiles()
@@ -218,23 +166,29 @@ class Model(mvc.Model):
                 self.checkShoot(p)
                 p.DI(l, r)
 
-            if (not isFlash):
+            if not isFlash:
                 self.checkDisplacement()
-                self.centerCamera(self.players[self.cameraPlayer])
+                #self.centerCamera(self.players[0])
 
+            newList = []
             for f in self.fx:
                 f.update()
-            newList = []
-            for i in range(len(self.fx)):
-                if not self.fx[i].removeFlag:
-                    newList.append(self.fx[i])
+                if not f.removeFlag:
+                    newList.append(f)
+
             self.fx = newList
 
-        for b in self.bars:
-            if not self.catBar is None:
-                self.updateCatBarColors()
-            b.update()
-            
+    def checkFrameByFrame(self):
+        highest = 0
+
+        # I have no idea what's going on here lol
+        for i in range(len(self.frameByFrame)):
+            if self.frameByFrame[i] > highest:
+                highest = self.frameByFrame[i]
+            if self.frameByFrame[i] == 2:
+                self.frameByFrame[i] = 1
+
+        return (highest == 1)
             
     def updateProjectiles(self):
         temp = []
@@ -246,21 +200,8 @@ class Model(mvc.Model):
                 temp.append(self.projectiles[i])
         self.projectiles = temp
 
-    def setCameraPlayer(self, c):
-        if (c >= 0) and (c <= 1):
-            self.cameraPlayer = c
-        self.createBars()
-        
-        self.youIconImage = INTERFACE_GRAPHICS[18]
-        colorSwap(self.youIconImage, (215, 215, 215, 255), TOKEN_BORDER_HIGHLIGHTED[self.cameraPlayer], 200)
-        self.youIconRect = Rect((0, 0), self.youIconImage.get_size())
-
-    def key(self, k, t, p):
-        if p == 0:
-            return
-        self.keys[p-1][k] = t
-        if t:
-            self.keysNow[p-1][k] = KEY_BUFFER
+    def key(self, k):
+        self.keys[k.player][k.index] = k.isDown
 
     def resetKeysNow(self, keysNow):
         for k in range(len(keysNow)):
@@ -282,20 +223,6 @@ class Model(mvc.Model):
     def keyTowardFacing(self, p, keys):
         l, r = self.exclusiveKeys(keys[2], keys[3])
         return p.keyTowardFacing(l, r)
-
-    def centerCamera(self, target):
-        self.rect.left = -(int(target.preciseLoc[0]) - (SCREEN_SIZE[0] / 2))
-        self.rect.top = -(int(target.preciseLoc[1]) - (SCREEN_SIZE[1] / 2))
-
-        if self.rect.left > 0:
-            self.rect.left = 0
-        if self.rect.right < SCREEN_SIZE[0]:
-            self.rect.right = SCREEN_SIZE[0]
-
-        if self.rect.top > 0:
-            self.rect.top = 0
-        if self.rect.bottom < SCREEN_SIZE[1]:
-            self.rect.bottom = SCREEN_SIZE[1]
 
     def act(self, p, keys, keysNow):
         p.actLeft = True
@@ -432,8 +359,8 @@ class Model(mvc.Model):
         p = self.checkForPlatform(c)
         if p == c.dropThroughPlatform:
             p = None
-        if (c.preciseLoc[1] >= self.rect.height - BATTLE_AREA_FLOOR_HEIGHT):
-            c.preciseLoc[1] = self.rect.height - BATTLE_AREA_FLOOR_HEIGHT
+        if (c.preciseLoc[1] >= self.arena.height - BATTLE_AREA_FLOOR_HEIGHT):
+            c.preciseLoc[1] = self.arena.height - BATTLE_AREA_FLOOR_HEIGHT
             landed = True
         elif (not p is None):
             landed = True
@@ -486,8 +413,8 @@ class Model(mvc.Model):
         if p.preciseLoc[0] < BATTLE_EDGE_COLLISION_WIDTH:
             p.preciseLoc[0] = BATTLE_EDGE_COLLISION_WIDTH
             check = True
-        if p.preciseLoc[0] > self.rect.width - BATTLE_EDGE_COLLISION_WIDTH:
-            p.preciseLoc[0] = self.rect.width - BATTLE_EDGE_COLLISION_WIDTH
+        if p.preciseLoc[0] > self.arena.width - BATTLE_EDGE_COLLISION_WIDTH:
+            p.preciseLoc[0] = self.arena.width - BATTLE_EDGE_COLLISION_WIDTH
             check = True
 
         if not p.currMove.canRetreat:
@@ -509,18 +436,17 @@ class Model(mvc.Model):
             else:
                 p.retreat.add(-RETREAT_RECEED_FAST)
 
-    def checkRetreat(self):
-        high = 0
-        highestP = None
+    def getHighestRetreat(self):
+        high = -1
+        highest = None
+
         for i, p in enumerate(self.players):
             if p.retreat.value > high:
                 high = p.retreat.value
-                highestP = i
+                highest = i
 
-        if high > 0:
-            self.retreatBar.changeColor(RETREAT_TEAM_COLORS[highestP])
-            self.retreatBar.value = self.players[highestP].retreat
-            
+        return highest
+
     def checkShoot(self, p):
         m = p.currMove
         for s in m.shoot:
@@ -546,7 +472,7 @@ class Model(mvc.Model):
                 
 
     def testKey(self, k):
-        p = self.players[self.cameraPlayer]
+        p = self.players[0]
         
         #xVel = -10;
         #if (not p.facingRight):
@@ -558,14 +484,14 @@ class Model(mvc.Model):
 
     def checkProjForEdge(self, p):
         if ( (p.preciseLoc[0] < (0 - PROJECTILE_SCREEN_ALLOWANCE))
-             or (p.preciseLoc[0] > (self.rect.width + PROJECTILE_SCREEN_ALLOWANCE))
+             or (p.preciseLoc[0] > (self.arena.width + PROJECTILE_SCREEN_ALLOWANCE))
              or (p.preciseLoc[1] < (0 - PROJECTILE_SCREEN_ALLOWANCE))
-             or (p.preciseLoc[1] > (self.rect.height + PROJECTILE_SCREEN_ALLOWANCE)) ):
+             or (p.preciseLoc[1] > (self.arena.height + PROJECTILE_SCREEN_ALLOWANCE)) ):
             p.destroy = True
 
     def checkProjForDissolve(self, p):
         if (p.dissolveOnPhysical) and (not p.isEndingAnimation()):
-            if p.preciseLoc[1] >= self.rect.height - BATTLE_AREA_FLOOR_HEIGHT:
+            if p.preciseLoc[1] >= self.arena.height - BATTLE_AREA_FLOOR_HEIGHT:
                 p.liveTime = 0
         if (p.hitsRemaining <= 0):
             p.liveTime = 0
@@ -573,152 +499,6 @@ class Model(mvc.Model):
         if (p.isEndingAnimation()) and (p.currFrame == len(p.currMove.frames)-1):
             p.destroy = True
             p.currFrame = 0
-
-    def setNetPlayer(self, p):
-        self.netPlayer = p
-
-##    def buildNetMessage(self):
-##        p = self.netPlayer - 1
-##        msg = ''
-##        for i in self.keys[p]:
-##            if i:
-##                j = '1'
-##            else:
-##                j = '0'
-##            msg += j
-##        for i in self.keysNow[p]:
-##            msg += str(i)
-##
-##        msg += str(self.frameByFrame[p])
-##
-##        return msg
-
-    def buildNetMessage(self):
-
-        keys = self.keys[self.netPlayer-1]
-        keysNow = self.keysNow[self.netPlayer-1]
-
-        byte1S = ""
-        for k in keys[0:8]:
-            if k:
-                byte1S += "1"
-            else:
-                byte1S += "0"
-        byte1 = chr(int(byte1S, 2))
-
-        msg = byte1
-        moreBytes = ""
-        for i in range(4):
-            byteS = ""
-            for j in range(2):
-                byteS += convertIntToBinary(keysNow[i + (j*4)], 4)
-                
-            byte = chr(int(byteS, 2))
-
-            msg += byte
-            
-        if keys[8]:
-            superByte = "0001"
-        else:
-            superByte = "0000"
-        superByte += convertIntToBinary(keysNow[8], 4)
-        
-        msg += chr(int(superByte, 2))
-        
-        
-
-        checksum = self.getChecksum()
-        msg += checksum
-
-        return msg
-
-
-    def parseNetMessage(self, msg, p):
-        if p == 0:
-            return
-
-        #print msg
-
-        msgC = list(msg)
-
-        keysByte = convertIntToBinary(ord(msgC[0]), 8)
-
-        for i in range(8):
-            self.keys[p-1][i] = (keysByte[i] == "1")
-
-        for i in range(4):
-            nowByte = convertIntToBinary(ord(msgC[i+1]), 8)
-
-            for j in range(2):
-                plus = 4 * j
-                bits = nowByte[plus:4+plus]
-                value = int(bits, 2)
-
-                self.keysNow[p-1][i + (j*4)] = value
-                
-        superByte = convertIntToBinary(ord(msgC[5]), 8)
-        self.keys[p-1][8] = (superByte[3] == "1")
-        self.keysNow[p-1][8] = int(superByte[4:], 2)
-
-
-        recvChecksum = ord(msgC[6])
-        myChecksum = ord(self.getChecksum())
-
-        if (recvChecksum != myChecksum):
-            print "Checksums to not match!!"
-
-
-        
-
-##    def parseNetMessage(self, msg, p):
-##        if p == 0:
-##            return
-##        else:
-##            keys = self.keys[p-1]
-##            keysNow = self.keysNow[p-1]
-##            
-##        msg1 = msg[0:8]
-##        if len(msg1) != 8:
-##            print "!"
-##            print msg1
-##            sys.exit()
-##        msg2 = msg[8:16]
-##        if len(msg2) != 8:
-##            print "!!"
-##            print msg2
-##            sys.exit()
-##        msg3 = msg[16:]
-##        if len(msg3) != 1:
-##            print "!!!"
-##            print msg3
-##            sys.exit()
-##        
-##        for i, c in enumerate(msg1):
-##            if c == '1':
-##                keys[i] = True
-##            elif c == '0':
-##                keys[i] = False
-##            else:
-##                print "Error in message parsing"
-##                sys.exit()
-##
-##        for i, c in enumerate(msg2):
-##            try:
-##                keysNow[i] = int(c)
-##            except:
-##                print "Error in message parsing"
-##                sys.exit()
-##
-##        if keys[7] and (keysNow[7] == KEY_BUFFER):
-##            if self.players[p-1].techBuffer == TECH_BUFFER_MIN:
-##                self.players[p-1].techBuffer = TECH_BUFFER_MAX
-##
-##        try:
-##            self.frameByFrame[p-1] = int(msg3)
-##        except:
-##            print "Error in message parsing"
-##            print "Message:", msg3
-##            sys.exit()
 
     def getChecksum(self):
         tempsum = 0
@@ -737,76 +517,6 @@ class Model(mvc.Model):
             return 0
         return val
 
-    def createBars(self):
-        self.bars = []
-        p = self.players[self.cameraPlayer]
-        q = self.players[self.reverse01(self.cameraPlayer)]
-        
-        x = BATTLE_PORTRAIT_SIZE[0] + HEALTH_BAR_OFFSET[0] + BATTLE_PORTRAIT_OFFSET[0]
-        y = HEALTH_BAR_OFFSET[1]
-
-        self.bars.append(energybar.EnergyBar(p.hp,
-                                             Rect((x, y), HEALTH_BAR_SIZE),
-                                             HEALTH_BAR_BORDERS,
-                                             HEALTH_BAR_COLORS,
-                                             HEALTH_BAR_PULSE,
-                                             p.name)
-            )
-
-        x = SCREEN_SIZE[0] - HEALTH_BAR_OFFSET[0] - HEALTH_BAR_SIZE[0] - BATTLE_PORTRAIT_SIZE[0] - BATTLE_PORTRAIT_OFFSET[0]
-        y = HEALTH_BAR_OFFSET[1]
-
-        self.bars.append(energybar.EnergyBar(q.hp,
-                                             Rect((x, y), HEALTH_BAR_SIZE),
-                                             HEALTH_BAR_BORDERS,
-                                             HEALTH_BAR_COLORS,
-                                             HEALTH_BAR_PULSE,
-                                             q.name, None, 2, False)
-            )
-
-        x = (SCREEN_SIZE[0] / 2) - (RETREAT_BAR_SIZE[0] / 2)
-        y = HEALTH_BAR_OFFSET[1]
-
-        self.retreatBar = energybar.EnergyBar(self.retreatProhibitTime,
-                                             Rect((x, y), RETREAT_BAR_SIZE),
-                                             RETREAT_BAR_BORDERS,
-                                             RETREAT_BAR_COLORS,
-                                             5, "Battle", None, 1)
-        self.bars.append(self.retreatBar)
-        
-
-        x = BATTLE_PORTRAIT_SIZE[0] + HEALTH_BAR_OFFSET[0] + BATTLE_PORTRAIT_OFFSET[0]
-        y = HEALTH_BAR_OFFSET[1] + HEALTH_BAR_SIZE[1] + SPECIAL_BAR_OFFSET
-        if isinstance(p, hare.Hare):
-            self.bars.append(energybar.EnergyBar(p.hareEnergy,
-                                                 Rect((x, y), SPECIAL_BAR_SIZE),
-                                                 SPECIAL_BAR_BORDERS,
-                                                 SPECIAL_BAR_COLORS,
-                                                 SPECIAL_BAR_PULSE,
-                                                 HARE_ENERGY_NAME,
-                                                 HARE_ENERGY_USAGE)
-                             )
-
-        if isinstance(p, cat.Cat):
-            self.catBar = energybar.EnergyBar(p.catEnergy,
-                                                 Rect((x, y), SPECIAL_BAR_SIZE),
-                                                 SPECIAL_BAR_BORDERS,
-                                                 SPECIAL_BAR_COLORS,
-                                                 SPECIAL_BAR_PULSE,
-                                                 CAT_ENERGY_NAME,
-                                                 CAT_ENERGY_MAX+1)
-            self.bars.append(self.catBar)
-            
-
-    def updateCatBarColors(self):
-        x = len(CAT_ENERGY_SECTIONS)
-        for i in range(x):
-            if self.catBar.value.value <= CAT_ENERGY_SECTIONS[i]:
-                if self.catBar.fillColor is not CAT_ENERGY_BAR_COLORS[i]:
-                    self.catBar.changeColor(CAT_ENERGY_BAR_COLORS[i])
-                return
-        self.catBar.changeColor(CAT_ENERGY_BAR_COLORS[x])
-                                                 
     def resetHitMemory(self):
         self.hitMemory = [None, None]
         self.blockMemory = [None, None]
@@ -851,7 +561,6 @@ class Model(mvc.Model):
             
 
     def checkForBlock(self):
-        offset = self.rect.topleft
         for i, p in enumerate(self.players):
             for j, q in enumerate(self.players):
                 if (not q is p) and (p.attackCanHit):
@@ -876,13 +585,10 @@ class Model(mvc.Model):
                                     ind = 2
 
                                 self.fxMemory[j].append(q.getBlockFXPoint(ind))
-                                
-                                
 
     def checkForHits(self):
         if self.blockMemory is None:
             self.fxMemory = [[], []]
-        offset = self.rect.topleft
         for i, p in enumerate(self.players):
             for j, q in enumerate(self.players):
                 if (not q is p) and (p.attackCanHit):
@@ -1068,13 +774,12 @@ class Model(mvc.Model):
         self.fx.append(fx.FX(pos, False, 'dust'))
 
     def checkEnding(self):
-
         if self.endingVal in [-1, 0, 1]:
             for i, p in enumerate(self.players):
                 if self.players[i].retreat.isMax():
                     self.returnCode[i] = 1
                     self.players[i].retreat.setToMin()
-                    self.players[i].preciseLoc[1] = self.rect.height - BATTLE_AREA_FLOOR_HEIGHT
+                    self.players[i].preciseLoc[1] = self.arena.height - BATTLE_AREA_FLOOR_HEIGHT
                     if self.endingVal == -1:
                         self.endingVal = 0
 
@@ -1097,45 +802,38 @@ class Model(mvc.Model):
                     else:
                         self.returnCode[i] = 0
 
-    def createEndingText(self):
-        tempText = ["is defeated", "is victorious", "retreats"]
-        self.endingText = []
-        for i in range(2):
-            sublist = []
-            p = self.players[i]
-            for j in range(3):
-                t = p.name + " " + tempText[j]
-                image = textrect.render_textrect(t, COUNTDOWN_FONT,
-                                                self.countdown.rect,
-                                                COUNTDOWN_COLOR, ALMOST_BLACK,
-                                                1, True)
-                sublist.append(image)
-            self.endingText.append(sublist)
-
-        sublist = []
-        t = "FINISH!"
-        image = textrect.render_textrect(t, COUNTDOWN_FONT, self.countdown.rect,
-                                        COUNTDOWN_COLOR, ALMOST_BLACK, 1, True)
-        sublist.append(image)
-        self.endingText.append(sublist)
-        
-    def getDamagePercentText(self, i):
-        if self.cameraPlayer == 1:
-            if i == 0:
-                i = 1
-            else:
-                i = 0
-        c = self.players[i]
-        return textrect.render_textrect(c.getDamagePercentText(), DAMAGE_PERCENT_FONT, self.damagePercentRects[i],
-                                                 ALMOST_BLACK, BLACK, 1, True)
-        
     def superDarken(self):
         for p in self.players:
             if p.currMove.isSuperFlash:
                 return True
-            
+
         return False
-                
+
+    def isFlash(self):
+        for p in self.players:
+            if p.currMove.isSuperFlash:
+                return True
+
+        return False
+
+class State(Model):
+    def __init__(self, model):
+        self.terrainLeft = copy.copy(model.terrainLeft)
+        self.terrainRight = copy.copy(model.terrainRight)
+        self.arena = copy.copy(model.arena)
+        self.players = copy.copy(model.players)
+        self.keys = copy.copy(model.keys)
+        self.keysNow = copy.copy(model.keysNow)
+        self.frameByFrame = copy.copy(model.frameByFrame)
+        self.returnCode = copy.copy(model.returnCode)
+        self.projectiles = copy.copy(model.projectiles)
+        self.retreatProhibitTime = copy.copy(model.retreatProhibitTime)
+        self.retreatPhase = copy.copy(model.retreatPhase)
+        self.endingVal = copy.copy(model.endingVal)
+        self.endingValTick = copy.copy(model.endingValTick)
+        self.fx = copy.copy(model.fx)
+        self.platforms = copy.copy(model.platforms)
+        self.countdown = copy.copy(model.countdown)
 
 def testData():
     heroes = [hare.Hare(), hare.Hare()]
@@ -1145,27 +843,20 @@ def testData():
     
     return [heroes, PLAINS, PLAINS]
 
-
 def getPlatforms(leftTerrain, rightTerrain):
-    
     platformsLeft = getPlatformsForSingleTerrain(leftTerrain, False)
     platformsRight = getPlatformsForSingleTerrain(rightTerrain, True)
-    
     masterList = []
-    for i in range(len(platformsLeft)):
-        masterList.append(platformsLeft[i])
-    for i in range(len(platformsRight)):
-        masterList.append(platformsRight[i])
-        
+    masterList.extend(platformsLeft)
+    masterList.extend(platformsRight)
     return masterList
-    
-    
+
 def getPlatformsForSingleTerrain(terrain, isRight):
-    
+
     platforms = []
-    
+
     HALF_SCREEN = (BATTLE_ARENA_SIZE[0] / 2)
-    
+
     if terrain == PLAINS:
         platforms.append( platform.Platform(
             (200, BATTLE_ARENA_SIZE[1] - BATTLE_AREA_FLOOR_HEIGHT - 180), HALF_SCREEN - 200, terrain ) )
@@ -1191,15 +882,9 @@ def getPlatformsForSingleTerrain(terrain, isRight):
             (200, BATTLE_ARENA_SIZE[1] - BATTLE_AREA_FLOOR_HEIGHT - 180), HALF_SCREEN - 200, terrain ) )
         platforms.append( platform.Platform(
             (200, BATTLE_ARENA_SIZE[1] - BATTLE_AREA_FLOOR_HEIGHT - 380), HALF_SCREEN - 200, terrain ) )
-        
-        
+
     if isRight:
         for p in platforms:
             p.rect.right = BATTLE_ARENA_SIZE[0] - p.rect.left
-    
+
     return platforms
-    
-    
-    
-    
-    

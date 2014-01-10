@@ -11,8 +11,6 @@ class Hare(battlechar.BattleChar):
     def __init__(self, name="Unnamed Hare", inSuper=0):
         self.name = name
         self.speciesName = "Hare"
-        self.spriteSet = HARE_IMAGES
-        self.superIcons = HARE_SUPER_ICONS
         self.walkVelMax = 7.5
         self.dashVelMax = 26.0
         self.runVelMax = 13.0
@@ -3402,17 +3400,3 @@ class Hare(battlechar.BattleChar):
         s = move.SuperMove(n, d, [], [])
 
         self.superMoves.append(s)
-
-
-#    def createColors(self):
-#        self.colors =   [
-#                            colorswapper.ColorSlot("Clothing 1",
-#                            [
-#                                colorswapper.ColorDataSet("Team-colored",
-#                                [
-#                                    colorswapper.ColorData((70, 181, 255, 255), 5, (255, 70, 70, 255), (255, 70, 70, 255)),
-#                                    colorswapper.ColorData((0, 134, 223, 255), 5, (221, 0, 0, 255), (221, 0, 0, 255)),
-#                                    colorswapper.ColorData((23, 163, 255, 255), 5, (255, 17, 17, 255), (255, 17, 17, 255))
-#                                ])
-#                            ])
-#                        ]

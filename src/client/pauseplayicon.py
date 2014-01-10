@@ -41,10 +41,6 @@ class PausePlayIcon(mapinterfaceitem.MapInterfaceItem):
             self.moveFactor = 0
 
         size = self.images[0].get_size()
-        
-        if not colorMod is None:
-            for i in self.images:
-                i = colorSwap(i, PAUSE_PLAY_ORIG_COLOR, colorMod, 80)
 
         if not resize is None:
             for i, s in enumerate(self.images):

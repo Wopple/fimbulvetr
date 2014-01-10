@@ -1,21 +1,16 @@
-import os
-import sys
 import pygame
-
-from common import mvc
-
-import chardata
-
-import minimenu
-import textrect
-
-import hare, fox, cat
 
 from common.constants import *
 from client.constants import *
 
+from common import mvc
 from common import boundint
+from common import hare, fox, cat
 from common.util.rect import Rect
+
+from client import chardata
+from client import minimenu
+from client import textrect
 
 class Model(mvc.Model):
     def __init__(self, isSelection=False):

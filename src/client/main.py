@@ -1,23 +1,5 @@
 import sys
 
-import time
-
-import debug_m, debug_v, menu_c, mapmode_m, mapmode_v, mapmode_c
-
-import battle_c
-
-import title_m, title_v
-import mainmenu_m, mainmenu_v
-import charactereditor_m, charactereditor_v, charactereditor_c
-import textentry_m, textentry_v, textentry_c
-import cutscene_c
-import netclient, netserver, netcode
-import chardata
-import multiplayerSetup_m, multiplayerSetup_v, multiplayerSetup_c
-import characterSelect2_m, characterSelect2_v, characterSelect2_c
-import mapdebug_m, mapdebug_v, mapdebug_c
-import gamemap
-
 from multiprocessing import Queue
 
 from common.constants import *
@@ -29,13 +11,23 @@ from common.result_m import ResultModel
 from common.util import framerate
 from common.util.process import process
 
-if NEW_SERVER:
-    from common import battle_m_new as battle_m
-    from client import battle_v_new as battle_v
-else:
-    from common import battle_m
-    from client import battle_v
+from common import battle_m
+from client import battle_v
+from client import battle_c
 
+from client import debug_m, debug_v, menu_c, mapmode_m, mapmode_v, mapmode_c
+
+from client import title_m, title_v
+from client import mainmenu_m, mainmenu_v
+from client import charactereditor_m, charactereditor_v, charactereditor_c
+from client import textentry_m, textentry_v, textentry_c
+from client import cutscene_c
+from client import netclient, netserver, netcode
+from client import chardata
+from client import multiplayerSetup_m, multiplayerSetup_v, multiplayerSetup_c
+from client import characterSelect2_m, characterSelect2_v, characterSelect2_c
+from client import mapdebug_m, mapdebug_v, mapdebug_c
+from client import gamemap
 
 def changeMVC(newM, newV, newC, screen, emptyLists=True):
     #Changes the Model/View/Controller currently in use
@@ -117,7 +109,7 @@ def proceed(clock, net=None):
     v.update()
     c.update()
     checkError()
-    if not net is None:
+    if net is not None:
         proceedOnNet(m, net)
     clock.next()
 
@@ -155,54 +147,30 @@ def checkError():
         print m.checkError(), v.checkError(), c.checkError()
         criticalError(1)
 
-def goBattle(data, net):
-    if NEW_SERVER:
-        cp = 1
-        cam = 0
-    else:
-        if net is None:
-            cp = 1
-            cam = 0
-        elif net.netID == 1:
-            cp = 1
-            cam = 0
-        elif net.netID == 2:
-            cp = 2
-            cam = 1
-        
+def goBattle(data):
+    cp = 1
+    cam = 0
+
     terrainLeft = data[1]
     terrainRight = data[2]
 
+    resultQueue = Queue(1)
+    stateQueue = Queue()
+    inputQueue = Queue()
+    resultModel = ResultModel(resultQueue)
+    processModel = battle_m.Model(resultQueue, stateQueue, inputQueue, data[0], terrainLeft, terrainRight)
+    model = resultModel
+    view = battle_v.View(stateQueue, processModel.getState())
 
-    if NEW_SERVER:
-        stateQueue = Queue()
-        resultQueue = Queue(1)
-        resultModel = ResultModel(resultQueue)
-        processModel = battle_m.Model(stateQueue, resultQueue, data[0], terrainLeft, terrainRight)
-        model = resultModel
-        view = battle_v.View(stateQueue, processModel)
-    else:
-        model = battle_m.Model(data[0], terrainLeft, terrainRight)
-        view = battle_v.View(terrainLeft, terrainRight)
-
-    controller = battle_c.Controller()
+    controller = battle_c.Controller(inputQueue)
     changeMVC(model, view, controller, screen)
 
-    if NEW_SERVER:
-        c.setPlayer(cp)
-        processModel.setNetPlayer(cp)
-        v.setCameraPlayer(cam)
-        processModel.process()
-    else:
-        c.setPlayer(cp)
-        m.setNetPlayer(cp)
-        m.setCameraPlayer(cam)
+    c.setPlayer(cp)
+    v.setCameraPlayer(cam)
+    processModel.process()
 
     while not m.advance():
-        if NEW_SERVER:
-            proceed(clock)
-        else:
-            proceed(clock, net)
+        proceed(clock)
 
 def goBattlePrompt(data):
     chars = [data[0], data[1]]
@@ -408,7 +376,7 @@ def goGame(theMap, hostChars, clientChars, playerNum, conn):
             oldM = m
             realData = m.getBattleData()
             data = [realData[0], realData[1][0], realData[1][1]]
-            goBattle(data, conn)
+            goBattle(data)
             resolution = m.returnCode
             changeMVC(oldM, mapmode_v.View(), mapmode_c.Controller(), screen)
             m.resolveBattle(resolution)
@@ -439,7 +407,7 @@ def run():
             while not m.advance():
                 proceed(clock)
             if m.debugMenu.value() == 1:
-                goBattle(battle_m.testData(), None)
+                goBattle(battle_m.testData())
             elif m.debugMenu.value() == 2:
                 currMap = gamemap.getMap("00")
                 changeMVC(mapdebug_m.Model(currMap), mapdebug_v.View(),

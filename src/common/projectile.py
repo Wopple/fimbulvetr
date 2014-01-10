@@ -1,8 +1,6 @@
-import os
-import sys
-import pygame
-
 import copy
+
+import pygame
 
 from common.constants import *
 from client.constants import *

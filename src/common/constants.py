@@ -5,9 +5,7 @@ import math
 VERSION = "0.1.5"
 
 FRAME_RATE = 40
-SCREEN_SIZE = (800, 600)
 DEBUG_MODE = True
-NEW_SERVER = False
 
 BATTLE_ARENA_SIZE = (1000, 900)
 
@@ -277,56 +275,4 @@ def convertIntToBinary(n, digits=16):
 
 def convertIntToTwoASCII(n):
     binary = convertIntToBinary(n)
-
-
     return chr(int(binary[:8], 2)), chr(int(binary[8:], 2))
-
-
-
-def colorSwap(i, color1, color2, tolerance):
-    lowerBound = []
-    upperBound = []
-
-    for k in range(4):
-        c = color1[k]
-        
-        d = c - tolerance
-        if d < 0:
-            d = 0
-        lowerBound.append(d)
-
-        d = c + tolerance
-        if d > 255:
-            d = 255
-        upperBound.append(d)
-    
-    size = i.get_size()
-    for x in range(size[0]):
-        for y in range(size[1]):
-            c = i.get_at((x, y))
-            variance = []
-            for j in range(4):
-                if c[j] <= upperBound[j] and c[j] >= lowerBound[j]:
-                    variance.append(c[j] - color1[j])
-                else:
-                    variance.append(None)
-
-            checker = True
-            for j in range(4):
-                if variance[j] is None:
-                    checker = False
-
-            if checker:
-                newColor = []
-                for j in range(4):
-                    temp = color2[j] + variance[j]
-                    if temp < 0:
-                        temp = 0
-                    if temp > 255:
-                        temp = 255
-                    newColor.append(temp)
-
-                complete = (newColor[0], newColor[1],
-                            newColor[2], newColor[3])
-
-                i.set_at((x,y), complete)

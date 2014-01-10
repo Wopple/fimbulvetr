@@ -2,7 +2,7 @@ from common import mvc
 
 class ResultModel(mvc.Model):
     def __init__(self, resultQueue):
-        super(Model, self).__init__()
+        super(ResultModel, self).__init__()
         self.resultQueue = resultQueue
 
     def update(self):

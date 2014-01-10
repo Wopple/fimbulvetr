@@ -1,3 +1,6 @@
+import time
+import copy
+
 from common.constants import FRAME_RATE
 
 from common import mvc
@@ -12,9 +15,10 @@ class ProcessModel(mvc.MVCObject):
     putting the result in the given queue.
     """
 
-    def __init__(self, resultQueue=None, fps=FRAME_RATE):
+    def __init__(self, resultQueue=None, stateQueue=None, fps=FRAME_RATE):
         super(ProcessModel, self).__init__()
         self.resultQueue = resultQueue
+        self.stateQueue = stateQueue
         self.framerate = FrameRate(fps)
         self.done = False
 
@@ -27,6 +31,7 @@ class ProcessModel(mvc.MVCObject):
 
         while not self.done:
             self.update()
+            self.stateQueue.put(self.getState())
             self.framerate.next()
 
     def process(self):

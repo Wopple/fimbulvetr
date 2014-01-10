@@ -16,8 +16,6 @@ class TargetMarker(object):
         else:
             self.image = INTERFACE_GRAPHICS[2]
             
-        colorSwap(self.image, (250, 250, 250, 255), TOKEN_BORDER_OFF[team], 200)
-            
         self.rect = Rect((0, 0), self.image.get_size())
 
     def draw(self, screen, charPos, inZoom, inOffset):

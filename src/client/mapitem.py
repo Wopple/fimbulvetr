@@ -27,7 +27,6 @@ class MapItem(object):
         self.triggerArea = None
         self.triggerRect = None
 
-        self.modifyImages()
         self.setImage(0)
         
 

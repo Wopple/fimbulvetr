@@ -7,6 +7,9 @@ from common.util.rect import Rect
 
 from client.drawable import ItemDrawable
 
+IMAGE = 0
+OFFSET = 1
+
 class BattleCharDrawable(ItemDrawable):
     def __init__(self, item):
         super(BattleCharDrawable, self).__init__(item)
@@ -16,7 +19,8 @@ class BattleCharDrawable(ItemDrawable):
 
     def draw(self, screen, inOffset=(0, 0)):
         frame = self.item.getCurrentFrame()
-        self.setImage(frame.image, frame.offset)
+        images = IMAGES_MAP[type(self.item)][frame.frameKey]
+        self.setImage(images[IMAGE], images[OFFSET])
         screen.blit(self.image, add_points(self.rect.topleft, inOffset))
 
         if SHOW_HURTBOXES:
@@ -40,7 +44,11 @@ class BattleCharDrawable(ItemDrawable):
             self.image = pygame.transform.flip(inImage, True, False)
         
         self.offset = offset
-        self.rect = Rect(self.item.getRectPos(), size)
+        self.rect = Rect(self.getRectPos(), size)
+
+    def getRectPos(self):
+        return (int(self.item.preciseLoc[0]) - self.offset[0],
+                int(self.item.preciseLoc[1]) - self.offset[1])
 
     def drawBoxes(self, boxes, screen, inOffset):
         for b in boxes:

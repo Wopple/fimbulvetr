@@ -13,7 +13,7 @@ class CountdownDrawable(ItemDrawable):
             if self.item.time == 0:
                 msg = "GO!"
             else:
-                msg = str(self.time)
+                msg = str(self.item.time)
 
             self.image = render_textrect(msg, COUNTDOWN_FONT, self.item.rect,
                                          COUNTDOWN_COLOR, ALMOST_BLACK, 1, True)

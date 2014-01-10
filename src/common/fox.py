@@ -1,17 +1,14 @@
-import projectile
-
 from common.constants import *
 from client.constants import *
 
 from common import move
 from common import battlechar
+from common import projectile
 
 class Fox(battlechar.BattleChar):
     def __init__(self, name="Unnamed Fox", inSpecial=0):
         self.name = name
         self.speciesName = "Fox"
-        self.spriteSet = FOX_IMAGES
-        self.superIcons = FOX_SUPER_ICONS
         self.groundAccel = 1.2
         self.groundVelMax = 12.5
         self.groundFriction = 2.2

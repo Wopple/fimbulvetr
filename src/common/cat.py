@@ -1,18 +1,15 @@
-import projectile
-
 from common.constants import *
 from client.constants import *
 
 from common import move
 from common import battlechar
 from common import boundint
+from common import projectile
 
 class Cat(battlechar.BattleChar):
     def __init__(self, name="Unnamed Cat", inSuper=0):
         self.name = name
         self.speciesName = "Cat"
-        self.spriteSet = CAT_IMAGES
-        self.superIcons = CAT_SUPER_ICONS
         self.walkVelMax = 7.0
         self.dashVelMax = 11.5
         self.runVelMax = 9.5

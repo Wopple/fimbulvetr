@@ -1,19 +1,15 @@
-import os
-import sys
 import pygame
-
-from common import mvc
-import gamemap
-import util
-
-import mapchar
-
-import mapmode_m
-import hare, fox, cat
-
 
 from common.constants import *
 from client.constants import *
+
+from common import mvc
+from common import hare, fox, cat
+
+from client import gamemap
+from client import mapchar
+from client import mapmode_m
+from client import util
 
 class Model(mvc.Model):
     def __init__(self, inMap):

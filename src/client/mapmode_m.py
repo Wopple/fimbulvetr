@@ -1,28 +1,23 @@
 import pygame
-
-from common import mvc
-
-import gamemap
-import mapchar
-import util
-import pauseplayicon
-import mapcharacterbar
-import targetmarker
-import countdown
-import lockcircle
-
-import unithud
-
-import rezspark
-import mapstructure
-
-import hare, fox, cat
-
 from common.constants import *
 from client.constants import *
 
+from common import mvc
 from common import boundint
+from common import countdown
+from common import hare, fox, cat
 from common.util.rect import Rect
+
+from client import gamemap
+from client import mapchar
+from client import pauseplayicon
+from client import mapcharacterbar
+from client import targetmarker
+from client import lockcircle
+from client import unithud
+from client import rezspark
+from client import mapstructure
+from client import util
 
 class Model(mvc.Model):
     def __init__(self, inMap, inChars, team):

@@ -2,7 +2,6 @@ from common.constants import *
 from client.constants import *
 
 from common import boundint
-from common.util.rect import Rect
 
 LENGTH = 1
 
@@ -10,9 +9,7 @@ class FX(object):
     def __init__(self, inPos, inFacing, inType):
         self.preciseLoc = inPos
         self.facingRight = inFacing
-
         self.frames = self.getFrames(inType)
-
         self.frameNum = 0
         self.subframeNum = 0
         self.removeFlag = False
@@ -24,8 +21,6 @@ class FX(object):
             self.frameNum += 1
             if self.frameNum == len(self.frames):
                 self.removeFlag = True
-        
-        self.rect.topleft = self.getRectPos()
 
     def getFrames(self, t):
         f = []

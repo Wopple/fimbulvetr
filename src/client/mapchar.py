@@ -1,21 +1,16 @@
-import os
-import sys
 import pygame
-import copy
 
 from pygame.locals import *
-
-import drawable
-import util
-
-import mapitem
-
-import hare, cat, fox
 
 from common.constants import *
 from client.constants import *
 
 from common import boundint
+from common import hare, cat, fox
+
+from client import drawable
+from client import mapitem
+from client import util
 
 class MapChar(mapitem.MapItem):
     def __init__(self, mapCloneMethod, battleCloneMethod, speciesAbbrev, inImages,
@@ -112,17 +107,6 @@ class MapChar(mapitem.MapItem):
         self.target = None
         self.targetBuffer = []
 
-    def modifyImages(self):
-        colorSwap(self.images[0][0], TOKEN_BORDER_NEUTRAL,
-                  TOKEN_BORDER_OFF[self.team], 5)
-
-        colorSwap(self.images[1][0], TOKEN_BORDER_NEUTRAL,
-                  TOKEN_BORDER_HIGHLIGHTED[self.team], 5)
-
-        colorSwap(self.images[2][0], TOKEN_BORDER_NEUTRAL,
-                  TOKEN_BORDER_SELECTED[self.team], 5)
-
-    
     def setTarget(self, target, waypoint):
         if self.isDead() and (not self.rezzing):
             waypoint = False

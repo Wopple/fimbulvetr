@@ -16,4 +16,4 @@ class PlatformDrawable(ItemDrawable):
                                      self.rect.height - (PLATFORM_BORDER_SIZE * 2)))
         innerImage.fill(PLATFORM_COLORS[self.item.terrain])
         image.blit(innerImage, (0, PLATFORM_BORDER_SIZE))
-        screen.blit(self.image, add_points(self.rect.topleft, inOffset))
+        screen.blit(image, add_points(self.rect.topleft, inOffset))

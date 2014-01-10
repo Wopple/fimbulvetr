@@ -120,7 +120,7 @@ class Frame(object):
             self.hitboxes.append(hitbox.Hitbox(makeRect(d), damage, stun, knockback,
                                                angle, properties, freezeFrame, chip))
 
-def makeRect(d)
+def makeRect(d):
     topleft = (d[0], d[1])
     width = d[2] - d[0]
     height = d[3] - d[1]

@@ -1,27 +1,19 @@
-import os
-import sys
-import pygame
-
-from common import mvc
-import textrect
-import minimenu
-
-import math
-
 import random
 
-import gamemap
-import scrollingbackground
-import mapchar
-
-import copy
-
-import hare, cat, fox
+import pygame
 
 from common.constants import *
 from client.constants import *
 
+from common import mvc
+from common import hare, cat, fox
 from common.util.rect import Rect
+
+from client import textrect
+from client import minimenu
+from client import gamemap
+from client import scrollingbackground
+from client import mapchar
 
 class Model(mvc.Model):
     def __init__(self, isHost):

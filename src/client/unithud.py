@@ -247,9 +247,7 @@ class UnitHUD(object):
             icon = pygame.Surface(EFFECT_ICON_SIZE)
             icon.fill(bgColor)
 
-
             if not flag is None:
-                colorSwap(flag, FLAG_NEUTRAL_COLOR, flagColor, 30)
                 icon.blit(flag, (0,0))
 
             self.territoryEffectIcons[o] = icon

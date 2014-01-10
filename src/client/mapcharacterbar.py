@@ -43,9 +43,6 @@ class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
         for i in range(2):
             self.staticSurfaces.append(copy.copy(staticSurface))
 
-        colorSwap(self.staticSurfaces[1], MAP_CHAR_BAR_COLOR_BORDER[team],
-                  MAP_CHAR_BAR_COLOR_SELECTED, 5)
-
         for s in self.staticSurfaces:
             s.blit(self.character.portrait, ((b+p), (b+p)))
 
@@ -146,7 +143,6 @@ class MapCharacterBar(mapinterfaceitem.MapInterfaceItem):
 
 
             if not flag is None:
-                colorSwap(flag, FLAG_NEUTRAL_COLOR, flagColor, 30)
                 icon.blit(flag, (0,0))
 
             self.territoryEffectIcons[o] = icon
