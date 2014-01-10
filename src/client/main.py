@@ -377,7 +377,8 @@ def goGame(theMap, hostChars, clientChars, playerNum, conn):
             realData = m.getBattleData()
             data = [realData[0], realData[1][0], realData[1][1]]
             goBattle(data)
-            resolution = m.returnCode
+            resolution = m.getResult()
+            print "result:", resolution
             changeMVC(oldM, mapmode_v.View(), mapmode_c.Controller(), screen)
             m.resolveBattle(resolution)
             m.pendingBattle = None            

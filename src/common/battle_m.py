@@ -93,7 +93,8 @@ class Model(process_m.ProcessModel):
                     self.endingValTick = 0
                     self.endingVal += 1
                     if self.endingVal == len(BATTLE_ENDING_TIME_LENGTHS):
-                        self.advanceNow = True
+                        self.setResult(self.returnCode)
+                        #self.advanceNow = True
             
             self.countdown.update()
 

@@ -9,3 +9,9 @@ class ResultModel(mvc.Model):
         if not self.resultQueue.empty():
             self.result = self.resultQueue.get()
             self.advanceNow = True
+
+    def getResult(self):
+        if self.resultQueue.empty():
+            return None
+        else:
+            return self.resultQueue.get()
