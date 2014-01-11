@@ -2,7 +2,12 @@ from common.constants import *
 
 from common import move
 from common import boundint
+from common.data import hare_stats
+from common.data import hare_moves
 from common.util.rect import Rect
+
+STATS_MAP = {HARE : hare_stats}
+MOVES_MAP = {HARE : hare_moves}
 
 class BattleChar(object):
     def __init__(self, hp, footRectSize=30):
@@ -31,11 +36,8 @@ class BattleChar(object):
         
         self.damagePercent = 100
 
-        self.superMoves = []
-        self.superMovesAir = []
         self.currSuperMove = None
 
-        self.initMoves()
         self.setCurrMove('idle')
 
         self.createDust = None
@@ -52,8 +54,6 @@ class BattleChar(object):
         self.setCurrMove('idle')
         self.dashBuffer = [0, 0]
         self.inAir = False
-        
-        self.setupSuper()
 
     def countdownComplete(self):
         pass
@@ -74,7 +74,7 @@ class BattleChar(object):
 
         frame = self.getCurrentFrame()
 
-        if not (self.currMove.isStun or (self.currMove == self.moves['groundHit'])):
+        if not (self.currMove.isStun or (self.currMove == self.getMoves()['groundHit'])):
             self.canTech = True
 
         if self.techBuffer > TECH_BUFFER_MIN:
@@ -84,18 +84,18 @@ class BattleChar(object):
             if not frame.setSpeedCapX is None:
                 speedCap = frame.setSpeedCapX
             elif self.inAir:
-                speedCap = self.airVelMax
+                speedCap = self.getStats().airVelMax
             else:
-                if (self.currMove == self.moves['dashing']) or (self.currMove == self.moves['grabbing']):
-                    speedCap = self.dashVelMax
-                elif self.currMove == self.moves['running']:
-                    speedCap = self.runVelMax
+                if (self.currMove == self.getMoves()['dashing']) or (self.currMove == self.getMoves()['grabbing']):
+                    speedCap = self.getStats().dashVelMax
+                elif self.currMove == self.getMoves()['running']:
+                    speedCap = self.getStats().runVelMax
                 else:
-                    speedCap = self.walkVelMax
+                    speedCap = self.getStats().walkVelMax
 
             for i in range(2):
                 self.vel[i] += self.accel[i]
-                self.speedCap([speedCap, self.vertVelMax], i)
+                self.speedCap([speedCap, self.getStats().vertVelMax], i)
                 self.preciseLoc[i] += self.vel[i]
 
         self.positionFootRect()
@@ -150,7 +150,7 @@ class BattleChar(object):
         self.accel = [0.0, 0.0]
 
     def testMove(self, t):
-        self.accel[0] = self.airAccel * t
+        self.accel[0] = self.getStats().airAccel * t
 
     def facingMultiplier(self):
         if self.facingRight:
@@ -172,14 +172,14 @@ class BattleChar(object):
             if not self.canDI():
                 f = 0
             if not self.inAir:
-                if self.currMove == self.moves['dashing']:
-                    accel = self.dashAccel
+                if self.currMove == self.getMoves()['dashing']:
+                    accel = self.getStats().dashAccel
                 elif not self.keyTowardFacing(l, r):
                     f = 0
                 else:
-                    accel = self.walkAccel
+                    accel = self.getStats().walkAccel
             else:
-                accel = self.airAccel
+                accel = self.getStats().airAccel
 
             if not self.getCurrentFrame().setAccelX is None:
                 accel = self.getCurrentFrame().setAccelX
@@ -210,7 +210,7 @@ class BattleChar(object):
                 if not self.getCurrentFrame().setAccelY is None:
                     accel = self.getCurrentFrame().setAccelY
                 else:
-                    accel = self.vertAccel
+                    accel = self.getStats().vertAccel
                 self.accel[1] = accel
             else:
                 self.accel[1] = 0
@@ -222,11 +222,11 @@ class BattleChar(object):
                 friction = c.setFrictionX
             elif self.inAir:
                 if self.currMove.isStun:
-                    friction = self.airFrictionStunned
+                    friction = self.getStats().airFrictionStunned
                 else:
-                    friction = self.airFriction
+                    friction = self.getStats().airFriction
             else:
-                friction = self.groundFriction
+                friction = self.getStats().groundFriction
             
             if self.vel[0] > friction:
                 self.accel[0] = -friction
@@ -249,78 +249,20 @@ class BattleChar(object):
         else:
             return flipRect(box.rect)
 
-    def initMoves(self):
-        self.moves = {}
-        self.moves['idle'] = move.baseIdle()
-        self.moves['idleLike'] = move.baseBlank()
-        self.moves['walking'] = move.baseWalking()
-        self.moves['dashing'] = move.baseDashing()
-        self.moves['running'] = move.baseRunning()
-        self.moves['air'] = move.baseAir()
-        self.moves['flipping'] = move.baseAir()
-        self.moves['airLike'] = move.baseBlank()
-        self.moves['landing'] = move.baseLanding()
-        self.moves['jumping'] = move.baseJumping()
-        self.moves['jumpingLike'] = move.baseJumping()
-        self.moves['ducking'] = move.baseDucking()
-        self.moves['jabA'] = move.baseBlank()
-        self.moves['jabB'] = move.baseBlank()
-        self.moves['dashAttackA'] = move.baseBlank()
-        self.moves['dashAttackB'] = move.baseBlank()
-        self.moves['downA'] = move.baseBlank()
-        self.moves['downB'] = move.baseBlank()
-        self.moves['upA'] = move.baseBlank()
-        self.moves['upB'] = move.baseBlank()
-        self.moves['neutralAirA'] = move.baseBlank()
-        self.moves['neutralAirB'] = move.baseBlank()
-        self.moves['upAirA'] = move.baseBlank()
-        self.moves['upAirB'] = move.baseBlank()
-        self.moves['downAirA'] = move.baseBlank()
-        self.moves['downAirB'] = move.baseBlank()
-        self.moves['droppingThrough'] = move.baseDroppingThrough()
+    def getStats(self):
+        return STATS_MAP[self.type]
 
-        self.moves['grabbing'] = move.baseGrabbing()
-        self.moves['grabHold'] = move.baseGrabHold()
-        self.moves['grabbed'] = move.baseGrabbed()
-        self.moves['grabbed2'] = move.baseGrabbed2()
-        self.moves['grabRelease'] = move.baseGrabRelease()
-        self.moves['grabbedRelease'] = move.baseGrabbedRelease()
+    def getMoves(self):
+        return MOVES_MAP[self.type].moves
 
-        self.moves['throwBackward'] = move.baseThrow()
-        self.moves['throwForward'] = move.baseThrow()
+    def getSuperMoves(self):
+        return MOVES_MAP[self.type].superMoves
 
-        self.moves['blocking'] = move.baseBlocking()
-        self.moves['lowBlocking'] = move.baseLowBlocking()
-        self.moves['airBlocking'] = move.baseAirBlocking()
-
-        self.moves['stun1'] = move.baseStun()
-        self.moves['stun2'] = move.baseStun()
-        self.moves['stun3'] = move.baseStunNeedTech()
-        self.moves['stun4'] = move.baseStunNeedTech()
-
-        self.moves['groundHit'] = move.baseGroundHit()
-        self.moves['standUp'] = move.baseStand()
-        self.moves['standForward'] = move.baseStand()
-        self.moves['standBackward'] = move.baseStand()
-        self.moves['standAttack'] = move.baseStand()
-
-        self.moves['teching'] = move.baseTeching()
-        self.moves['techUp'] = move.baseTechRoll()
-        self.moves['techForward'] = move.baseTechRoll()
-        self.moves['techBackward'] = move.baseTechRoll()
-
-        self.moves['deadFalling'] = move.baseDeadFalling()
-        self.moves['deadGroundHit'] = move.baseDeadGroundHit()
-        self.moves['deadLaying'] = move.baseDeadLaying()
-        
-        self.moves['superFlash'] = None
-        self.moves['superMove'] = None
-        
-        self.moves['superFlashAir'] = None
-        self.moves['superMoveAir'] = None
+    def getSuperMovesAir(self):
+        return MOVES_MAP[self.type].superMovesAir
 
     def setCurrMove(self, index, frame=0):
-        self.currMove = self.moves[index]
+        self.currMove = self.getMoves()[index]
         self.currFrame = frame
         self.currSubframe = 0
         self.attackCanHit = True
@@ -329,9 +271,9 @@ class BattleChar(object):
 
         if (self.currMove is None) or (len(self.currMove.frames) == 0):
             if (self.inAir):
-                self.currMove = self.moves['air']
+                self.currMove = self.getMoves()['air']
             else:
-                self.currMove = self.moves['idle']
+                self.currMove = self.getMoves()['idle']
 
     def getCurrentFrame(self):
         if len(self.currMove.frames) > self.currFrame:
@@ -369,7 +311,7 @@ class BattleChar(object):
     def jump(self):
         self.inAir = True
         self.holdJump = True
-        self.vel[1] = self.jumpVel
+        self.vel[1] = self.getStats().jumpVel
 
     def unholdJump(self):
         self.holdJump = False
@@ -408,7 +350,7 @@ class BattleChar(object):
                         
         t = self.currMove.transitions[key]
         
-        if (key == 'super') and (not t is None) and (self.moves[t.destination] is None):
+        if (key == 'super') and (not t is None) and (self.getMoves()[t.destination] is None):
             return 
         
         if self.actLeft and self.checkTransition(key, var1, var2):
@@ -454,13 +396,6 @@ class BattleChar(object):
         if not c:
             self.setCurrMove('idle')
 
-    def frameData(self, key, length, r=[], h=[], b=[]):
-        return {FD_KEY : key,
-                FD_LEN : length,
-                FD_HURT : r,
-                FD_HIT : h,
-                FD_BLOCK : b}
-
     def getHitboxes(self):
         return self.getCurrentFrame().hitboxes
 
@@ -492,12 +427,9 @@ class BattleChar(object):
 
         self.vel[0] = vel[0]
         self.vel[1] = vel[1]
-        
-        
-        
 
     def getSuper(self):
-        return self.superMoves[self.currSuperMove]
+        return self.getSuperMoves()[self.currSuperMove]
 
     def getCatEnergyLevel(self):
         return 0
@@ -509,31 +441,10 @@ class BattleChar(object):
         return add_points(self.preciseLoc, p)
     
     def setSuperValue(self, s):
-        if (s < 0) or (s >= len(self.superMoves)) or (s >= len(self.superMovesAir)):
+        if (s < 0) or (s >= len(self.getSuperMoves())) or (s >= len(self.getSuperMovesAir())):
             s = 0
             
         self.currSuperMove = s
-        
-    def setupSuper(self):
-        
-        self.moves['superMove'] = None
-        self.moves['superFlash'] = None
-        self.moves['superMoveAir'] = None
-        self.moves['superFlashAir'] = None
-        
-        m = self.superMoves[self.currSuperMove]
-        self.moves['superMove'] = m
-        if (not m is None):
-            self.moves['superFlash'] = m.flash
-        
-        m = self.superMovesAir[self.currSuperMove]
-        self.moves['superMoveAir'] = m
-        if (not m is None):
-            self.moves['superFlashAir'] = m.flash
-        
-    def appendSuperMove(self, ground, air):
-        self.superMoves.append(ground)
-        self.superMovesAir.append(air)
 
     def getDamagePercentText(self):
         return str(self.damagePercent) + "%"

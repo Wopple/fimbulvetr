@@ -1,0 +1,13 @@
+airAccel = 1.2
+airFriction = 0.9
+airFrictionStunned = airFriction * 0.3
+airVelMax = 7.3
+dashAccel = 12.0
+dashVelMax = 26.0
+groundFriction = 2.2
+jumpVel = -24.0
+runVelMax = 13.0
+vertAccel = 1.4
+vertVelMax = 14.5
+walkAccel = 2.5
+walkVelMax = 7.5

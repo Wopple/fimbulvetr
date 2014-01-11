@@ -3,9 +3,6 @@ import pygame
 
 from common.constants import *
 
-from common.hare import Hare
-from common.cat import Cat
-from common.fox import Fox
 from common.util.rect import Rect
 
 SCREEN_SIZE = (800, 600)
@@ -792,9 +789,9 @@ CAT_IMAGES = []
 for i in temp:
     CAT_IMAGES.append([pygame.image.load(os.path.join(DIREC_CAT_GRAPHICS, i[0])).convert_alpha(), i[1]])
 
-IMAGES_MAP = {Hare : HARE_IMAGES,
-              Cat : CAT_IMAGES,
-              Fox : FOX_IMAGES}
+IMAGES_MAP = {HARE : HARE_IMAGES,
+              CAT : CAT_IMAGES,
+              FOX : FOX_IMAGES}
 
 temp = [ ['face1.png', (29, 48)],
          ['face1.png', (29, 48)],
@@ -843,9 +840,9 @@ CAT_SUPER_ICONS = []
 for i in temp:
     CAT_SUPER_ICONS.append(pygame.image.load(os.path.join(DIREC_CAT_GRAPHICS, i)).convert_alpha())
 
-SUPER_ICONS_MAP = {Hare : HARE_SUPER_ICONS,
-                   Cat : CAT_SUPER_ICONS,
-                   Fox : FOX_SUPER_ICONS}
+SUPER_ICONS_MAP = {HARE : HARE_SUPER_ICONS,
+                   CAT : CAT_SUPER_ICONS,
+                   FOX : FOX_SUPER_ICONS}
 
 mapItemsList = [["fortress", "fortressneutral.png", "fortressblue.png", "fortressred.png", (29, 53)],
                 ["spire", "spireneutral.png", "spireblue.png", "spirered.png", (15, 51)],

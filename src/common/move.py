@@ -423,3 +423,97 @@ def baseSuperFlash():
     m.ignoreGroundAir = True
     m.canRetreat = False
     return m
+
+def initBattlecharMoves(moves):
+    moves['idle'] = baseIdle()
+    moves['idleLike'] = baseBlank()
+    moves['walking'] = baseWalking()
+    moves['dashing'] = baseDashing()
+    moves['running'] = baseRunning()
+    moves['air'] = baseAir()
+    moves['flipping'] = baseAir()
+    moves['airLike'] = baseBlank()
+    moves['landing'] = baseLanding()
+    moves['jumping'] = baseJumping()
+    moves['jumpingLike'] = baseJumping()
+    moves['ducking'] = baseDucking()
+    moves['jabA'] = baseBlank()
+    moves['jabB'] = baseBlank()
+    moves['dashAttackA'] = baseBlank()
+    moves['dashAttackB'] = baseBlank()
+    moves['downA'] = baseBlank()
+    moves['downB'] = baseBlank()
+    moves['upA'] = baseBlank()
+    moves['upB'] = baseBlank()
+    moves['neutralAirA'] = baseBlank()
+    moves['neutralAirB'] = baseBlank()
+    moves['upAirA'] = baseBlank()
+    moves['upAirB'] = baseBlank()
+    moves['downAirA'] = baseBlank()
+    moves['downAirB'] = baseBlank()
+    moves['droppingThrough'] = baseDroppingThrough()
+
+    moves['grabbing'] = baseGrabbing()
+    moves['grabHold'] = baseGrabHold()
+    moves['grabbed'] = baseGrabbed()
+    moves['grabbed2'] = baseGrabbed2()
+    moves['grabRelease'] = baseGrabRelease()
+    moves['grabbedRelease'] = baseGrabbedRelease()
+
+    moves['throwBackward'] = baseThrow()
+    moves['throwForward'] = baseThrow()
+
+    moves['blocking'] = baseBlocking()
+    moves['lowBlocking'] = baseLowBlocking()
+    moves['airBlocking'] = baseAirBlocking()
+
+    moves['stun1'] = baseStun()
+    moves['stun2'] = baseStun()
+    moves['stun3'] = baseStunNeedTech()
+    moves['stun4'] = baseStunNeedTech()
+
+    moves['groundHit'] = baseGroundHit()
+    moves['standUp'] = baseStand()
+    moves['standForward'] = baseStand()
+    moves['standBackward'] = baseStand()
+    moves['standAttack'] = baseStand()
+
+    moves['teching'] = baseTeching()
+    moves['techUp'] = baseTechRoll()
+    moves['techForward'] = baseTechRoll()
+    moves['techBackward'] = baseTechRoll()
+
+    moves['deadFalling'] = baseDeadFalling()
+    moves['deadGroundHit'] = baseDeadGroundHit()
+    moves['deadLaying'] = baseDeadLaying()
+
+    moves['superFlash'] = None
+    moves['superMove'] = None
+
+    moves['superFlashAir'] = None
+    moves['superMoveAir'] = None
+
+def frameData(key, length, r=[], h=[], b=[]):
+    return {FD_KEY : key,
+            FD_LEN : length,
+            FD_HURT : r,
+            FD_HIT : h,
+            FD_BLOCK : b}
+
+def setupSuper(moves, superMoves, superMovesAir, superMove=0):
+    moves['superMove'] = None
+    moves['superFlash'] = None
+    moves['superMoveAir'] = None
+    moves['superFlashAir'] = None
+
+    m = superMoves[superMove]
+    moves['superMove'] = m
+
+    if m is not None:
+        moves['superFlash'] = m.flash
+
+    m = superMovesAir[superMove]
+    moves['superMoveAir'] = m
+
+    if m is not None:
+        moves['superFlashAir'] = m.flash

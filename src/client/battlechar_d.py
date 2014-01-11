@@ -19,7 +19,7 @@ class BattleCharDrawable(ItemDrawable):
 
     def draw(self, screen, camera):
         frame = self.item.getCurrentFrame()
-        images = IMAGES_MAP[type(self.item)][frame.frameKey]
+        images = IMAGES_MAP[self.item.type][frame.frameKey]
         self.setImage(images[IMAGE], images[OFFSET])
         screen.blit(self.image, adjustToCamera(self.rect.topleft, camera))
 
@@ -56,7 +56,7 @@ class BattleCharDrawable(ItemDrawable):
             screen.blit(b.image, adjustToCamera(boxLoc, camera))
 
     def getSuperIcon(self):
-        icons = SUPER_ICONS_MAP[type(self.item)]
+        icons = SUPER_ICONS_MAP[self.item.type]
 
         if self.item.currSuperMove >= len(icons):
             icon = pygame.Surface(BATTLE_SUPER_ICON_SIZE)
