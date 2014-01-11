@@ -4,10 +4,15 @@ from common import move
 from common import boundint
 from common.data import hare_stats
 from common.data import hare_moves
+from common.data import cat_stats
+from common.data import cat_moves
 from common.util.rect import Rect
 
-STATS_MAP = {HARE : hare_stats}
-MOVES_MAP = {HARE : hare_moves}
+STATS_MAP = {HARE : hare_stats,
+             CAT : cat_stats}
+
+MOVES_MAP = {HARE : hare_moves,
+             CAT : cat_moves}
 
 class BattleChar(object):
     def __init__(self, hp, footRectSize=30):
@@ -454,4 +459,3 @@ class BattleChar(object):
     
     def performHit(self):
         pass
-        
