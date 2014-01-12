@@ -1,4 +1,5 @@
 from common.constants import *
+from client.constants import *
 
 from common import move
 from common import projectile
@@ -2341,6 +2342,10 @@ def createSuperFlash1():
     s.frames[0].setVelX = 0
 
     return s
+        
+def appendSuperMove(ground, air):
+    superMoves.append(ground)
+    superMovesAir.append(air)
 
 moves = {}
 projectiles = []
