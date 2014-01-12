@@ -3,6 +3,7 @@ from client.constants import *
 
 from common import boundint
 
+IMAGE_DATA = 0
 LENGTH = 1
 
 class FX(object):

@@ -1,12 +1,6 @@
 import copy
 
-import pygame
-
-from common.constants import *
-from client.constants import *
-
 from common import move
-from common.util.rect import Rect
 
 class Projectile(object):
     def __init__(self):
@@ -21,16 +15,11 @@ class Projectile(object):
         self.hitsRemaining = 1
         self.freezeFrame = 0
 
-        temp = pygame.Surface((50, 80))
-        temp.fill((2, 2, 2))
-        self.setImage(temp, (40, 25))
-
         self.initMoves()
         self.setCurrMove('flying')
         self.destroy = False
 
     def update(self):
-                
         if self.freezeFrame == 0:
             
             if not self.liveTime is None:
@@ -53,8 +42,6 @@ class Projectile(object):
                 
         if self.freezeFrame > 0:
             self.freezeFrame -= 1
-
-        self.rect.topleft = self.getRectPos()
 
     def getCurrentFrame(self):
         return self.currMove.frames[self.currFrame]
@@ -79,42 +66,11 @@ class Projectile(object):
     def accelToZero(self):
         self.accel = [0.0, 0.0]
 
-    def setImage(self, inImage, o):
-        size = inImage.get_size()
-        
-        if self.facingRight:
-            offset = o
-            self.image = inImage
-        else:
-            offset = (-o[0] + size[0], o[1])
-            self.image = pygame.transform.flip(inImage, True, False)
-        
-        self.offset = offset
-        self.rect = Rect(self.getRectPos(), size)
-
-    def draw(self, screen, inOffset):
-        screen.blit(self.image, add_points(self.rect.topleft, inOffset))
-        if SHOW_HITBOXES:
-            self.drawBoxes(self.getCurrentFrame().hitboxes, screen, inOffset)
-        if SHOW_RED_DOT:
-            screen.blit(RED_DOT, add_points(self.preciseLoc, inOffset))
-            
-            
-    def drawBoxes(self, boxes, screen, inOffset):
-        for b in boxes:
-            boxpos = self.getBoxAbsRect(b, inOffset).topleft
-            screen.blit(b.image, boxpos)
-
-
     def facingMultiplier(self):
         if self.facingRight:
             return 1
         else:
             return -1
-
-    def getRectPos(self):
-        return ( int(self.preciseLoc[0]) - self.offset[0],
-                 int(self.preciseLoc[1]) - self.offset[1] )
 
     def initMoves(self):
         self.moves = {}
@@ -167,7 +123,7 @@ class Projectile(object):
                 return False
 
         return True
-    
+
     def actTransition(self, key, var1=None, var2=None):
         t = self.currMove.transitions[key]
         if self.actLeft and self.checkTransition(key, var1, var2):
@@ -183,34 +139,21 @@ class Projectile(object):
         self.accel = copy.copy(self.accel)
         self.vel = copy.copy(self.vel)
         return self
-    
+
     def canHit(self):
         return (self.freezeFrame == 0 and self.hitsRemaining > 0)
-    
+
     def getHitboxes(self):
         return self.getCurrentFrame().hitboxes
-    
-    def getBoxAbsRect(self, box, inOffset):
-        if self.facingRight:
-            boxPos = box.rect.topleft
-        else:
-            boxPos = flipRect(box.rect)
 
-        topleft = add_points(add_points(self.preciseLoc, boxPos), inOffset)
-
-        return Rect(topleft, box.rect.size)
-
-    def getBoxRect(self, box):
-        return self.getBoxAbsRect(box, (0, 0))
-    
     def getDamageMultiplier(self):
         if not self.shooter is None:
             return self.shooter.getDamageMultiplier()
         else:
             return 1.0
-        
+
     def performHit(self):
         self.hitsRemaining -= 1
-        
+
     def isEndingAnimation(self):
         return self.currMove == self.moves['dissolve'] or self.currMove == self.moves['explode']

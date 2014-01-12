@@ -9,7 +9,7 @@ from common.util.rect import Rect
 class Move(object):
     def __init__(self, f, t):
         self.frames = []
-        
+
         temp = ['exitFrame', 'doWalk', 'doDash', 'noXMove', 'noXVel', 'land', 'jump',
                 'doDuck', 'stopDuck', 'attackA', 'attackB', 'releaseA',
                 'releaseB', 'attackAUp', 'attackBUp', 'attackADown',
@@ -41,7 +41,6 @@ class Move(object):
         self.isSuperFlash = False
         self.ignoreGroundAir = False
         self.drawToBack = False
-
 
     def append(self, f, t):
         for i in f:

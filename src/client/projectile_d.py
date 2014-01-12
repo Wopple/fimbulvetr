@@ -1,34 +1,28 @@
 import pygame
 
-from common.constants import *
 from client.constants import *
-
-from common.util.rect import Rect
 
 from client.drawable import ItemDrawable
 
-IMAGE = 0
-OFFSET = 1
-
-class BattleCharDrawable(ItemDrawable):
+class BlockboxDrawable(ItemDrawable):
     def __init__(self, item):
-        super(BattleCharDrawable, self).__init__(item)
+        super(BlockboxDrawable, self).__init__(item, rect=item.rect)
 
-    def draw(self, screen, camera):
+    def draw(self, screen, camera=None):
         frame = self.item.getCurrentFrame()
         images = IMAGES_MAP[self.item.type][frame.frameKey]
         self.setImage(images[IMAGE], images[OFFSET])
+
+        frame = self.item.currMove.frames[self.item.currFrame]
+        image = frame.image
+        offset = frame.offset
+
         screen.blit(self.image, adjustToCamera(self.rect.topleft, camera))
 
-        if SHOW_HURTBOXES:
-            self.drawBoxes(frame.hurtboxes, screen, camera)
         if SHOW_HITBOXES:
             self.drawBoxes(frame.hitboxes, screen, camera)
-        if SHOW_BLOCKBOXES:
-            self.drawBoxes(frame.blockboxes, screen, camera)
-
         if SHOW_RED_DOT:
-            screen.blit(RED_DOT, adjustToCamera(self.item.preciseLoc, camera))
+            screen.blit(RED_DOT, adjustToCamera(self.preciseLoc, camera))
 
     def setImage(self, inImage, o):
         size = inImage.get_size()
@@ -48,16 +42,15 @@ class BattleCharDrawable(ItemDrawable):
 
     def drawBoxes(self, boxes, screen, camera):
         for b in boxes:
-            boxLoc = self.item.getBoxLocation(b)
-            screen.blit(b.image, adjustToCamera(boxLoc, camera))
+            boxpos = self.getBoxAbsRect(b, camera).topleft
+            screen.blit(b.image, boxpos)
 
-    def getSuperIcon(self):
-        icons = SUPER_ICONS_MAP[self.item.type]
-
-        if self.item.currSuperMove >= len(icons):
-            icon = pygame.Surface(BATTLE_SUPER_ICON_SIZE)
-            icon.fill(BLACK)
+    def getBoxAbsRect(self, box, camera):
+        if self.item.facingRight:
+            boxPos = box.rect.topleft
         else:
-            icon = icons[self.item.currSuperMove]
+            boxPos = flipRect(box.rect)
 
-        return icon
+        topleft = add_points(adjustToCamera(self.preciseLoc, boxPos), camera)
+
+        return Rect(topleft, box.rect.size)

@@ -3,12 +3,9 @@ import pygame
 from common.constants import *
 from client.constants import *
 
+from common import fx
 from client.drawable import ItemDrawable
 from client.textrect import render_textrect
-
-IMAGE_DATA = 0
-IMAGE = 0
-OFFSET = 1
 
 class FXDrawable(ItemDrawable):
     def __init__(self, item):
@@ -16,7 +13,7 @@ class FXDrawable(ItemDrawable):
 
     def draw(self, screen, camera=None):
         frame = self.item.frames[self.item.frameNum]
-        imageData = FX_IMAGES[frame[IMAGE_DATA]]
+        imageData = FX_IMAGES[frame[fx.IMAGE_DATA]]
         image = imageData[IMAGE]
         offset = imageData[OFFSET]
         width = image.get_size()[0]

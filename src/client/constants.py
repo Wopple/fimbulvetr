@@ -399,6 +399,9 @@ UNIT_HUD_SUPER_ICON_SIZE = (40, 40)
 UNIT_HUD_STRUCTURE_PANEL_HEIGHT = 55
 UNIT_HUD_STRUCTURE_PANEL_SPACING = 70
 
+IMAGE = 0
+OFFSET = 1
+
 temp = [ ["00.png", (54, 75)],
          ["01.png", (54, 75)],
          ["02.png", (54, 75)],
