@@ -48,8 +48,8 @@ class BattleCharDrawable(ItemDrawable):
 
     def drawBoxes(self, boxes, screen, camera):
         for b in boxes:
-            boxLoc = self.item.getBoxLocation(b)
-            screen.blit(b.image, adjustToCamera(boxLoc, camera))
+            rect = getAdjustedBox(self.item, b)
+            screen.blit(b.image, adjustToCamera(rect.topleft, camera))
 
     def getSuperIcon(self):
         icons = SUPER_ICONS_MAP[self.item.type]

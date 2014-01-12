@@ -248,12 +248,6 @@ class BattleChar(object):
             return True
         return False
 
-    def getBoxLocation(self, box):
-        if self.facingRight:
-            return box.rect.topleft
-        else:
-            return flipRect(box.rect)
-
     def getStats(self):
         return STATS_MAP[self.type]
 

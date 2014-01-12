@@ -1,11 +1,9 @@
-import os
 import sys
 import pygame
 from pygame.locals import *
 
 from common import mvc
 
-from common.constants import *
 from client.constants import *
 
 class Controller(mvc.Controller):

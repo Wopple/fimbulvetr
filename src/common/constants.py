@@ -264,9 +264,29 @@ def degreesToPoint(deg, mag, pos=[0,0]):
     y = pos[1] + (math.sin(deg) * mag)
 
     return [x, y]
-    
-def flipRect(i):
-    return ( ((i.left * -1) - i.width), i.top )
+
+def flipRectHoriz(rect):
+    """ Returns a new Rect flipped over the y-axis. """
+
+    r = rect.copy()
+    r.left = -rect.right
+    return r
+
+def flipRectVert(rect):
+    """ Returns a new Rect flipped over the x-axis. """
+
+    r = rect.copy()
+    r.top = -rect.bottom
+    return r
+
+def getAdjustedBox(owner, box):
+    if owner.facingRight:
+        rect = box.rect.copy()
+    else:
+        rect = flipRectHoriz(box.rect)
+
+    rect.move_ip(owner.preciseLoc[0], owner.preciseLoc[1])
+    return rect
 
 def getSuperEnergyGain(i):
     if i < len(SUPER_ENERGY_GAIN_FINAL):

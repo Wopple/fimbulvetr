@@ -1,5 +1,6 @@
 import pygame
 
+from common.constants import *
 from client.constants import *
 
 from client.drawable import ItemDrawable
@@ -42,15 +43,5 @@ class BlockboxDrawable(ItemDrawable):
 
     def drawBoxes(self, boxes, screen, camera):
         for b in boxes:
-            boxpos = self.getBoxAbsRect(b, camera).topleft
-            screen.blit(b.image, boxpos)
-
-    def getBoxAbsRect(self, box, camera):
-        if self.item.facingRight:
-            boxPos = box.rect.topleft
-        else:
-            boxPos = flipRect(box.rect)
-
-        topleft = add_points(adjustToCamera(self.preciseLoc, boxPos), camera)
-
-        return Rect(topleft, box.rect.size)
+            rect = getAdjustedBox(self.item, b)
+            screen.blit(b.image, adjustToCamera(rect.topleft, camera))

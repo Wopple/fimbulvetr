@@ -203,6 +203,9 @@ class Model(process_m.ProcessModel):
     def key(self, k):
         self.keys[k.player][k.index] = k.isDown
 
+        if k.isDown:
+            self.keysNow[k.player][k.index] = KEY_BUFFER
+
     def resetKeysNow(self, keysNow):
         for k in range(len(keysNow)):
             if keysNow[k] > 0:
@@ -233,7 +236,7 @@ class Model(process_m.ProcessModel):
             p.setCurrMove('deadFalling')
             p.inAir = True
             return
-        
+
         if not self.keyTowardFacing(p, keys):
             p.actTransition('noXMove')
         if p.holdJump:
@@ -568,8 +571,8 @@ class Model(process_m.ProcessModel):
                         if h.ignoreBlock():
                             continue
                         for r in q.getBlockboxes():
-                            hRect = p.getBoxRect(h)
-                            rRect = q.getBoxRect(r)
+                            hRect = getAdjustedBox(p, h)
+                            rRect = getAdjustedBox(q, r)
                             
                             if hRect.colliderect(rRect):
                                 if (self.blockMemory[j] is None):
@@ -591,11 +594,11 @@ class Model(process_m.ProcessModel):
             self.fxMemory = [[], []]
         for i, p in enumerate(self.players):
             for j, q in enumerate(self.players):
-                if (not q is p) and (p.attackCanHit):
+                if not q is not p and p.attackCanHit:
                     for h in p.getHitboxes():
                         for r in q.getHurtboxes():
-                            hRect = p.getBoxRect(h)
-                            rRect = q.getBoxRect(r)
+                            hRect = getAdjustedBox(p, h)
+                            rRect = getAdjustedBox(q, r)
                             if hRect.colliderect(rRect):
                                 if q.blockstun > 0:
                                     if (self.blockMemory[j] is None):
@@ -623,8 +626,8 @@ class Model(process_m.ProcessModel):
                         if h.ignoreBlock():
                             continue
                         for r in q.getBlockboxes():
-                            hRect = proj.getBoxRect(h)
-                            rRect = q.getBoxRect(r)
+                            hRect = getAdjustedBox(proj, h)
+                            rRect = getAdjustedBox(q, r)
                             if hRect.colliderect(rRect):
                                 if (self.blockMemory[j] is None):
                                     self.blockMemory[j] = [h, proj]
@@ -649,8 +652,8 @@ class Model(process_m.ProcessModel):
                 if (not q is proj.shooter):
                     for h in proj.getHitboxes():
                         for r in q.getHurtboxes():
-                            hRect = proj.getBoxRect(h)
-                            rRect = q.getBoxRect(r)
+                            hRect = getAdjustedBox(proj, h)
+                            rRect = getAdjustedBox(q, r)
                             if hRect.colliderect(rRect):
                                 if (self.hitMemory[j] is None):
                                     self.hitMemory[j] = [h, proj]

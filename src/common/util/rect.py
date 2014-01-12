@@ -279,6 +279,13 @@ class Rect(object):
         else:
             return 1
 
+    def move(self, x, y):
+        return Rect(self._x + int(x), self._y + int(y), self._w, self._h)
+
+    def move_ip(self, x, y):
+        self._x += int(x)
+        self._y += int(y)
+
 
 
 # not imlemented:
@@ -294,8 +301,6 @@ class Rect(object):
 #   fit
 #   inflate
 #   inflate_ip
-#   move
-#   move_ip
 #   normalize
 #   union
 #   union_ip
