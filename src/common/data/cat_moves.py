@@ -65,8 +65,8 @@ def load():
     move.setupSuper(moves, superMoves, superMovesAir)
 
 def createSuperMoves():
-    self.createSuperMove1()
-    #self.createSuperMove2()
+    createSuperMove1()
+    #createSuperMove2()
 
 def createMoveIdle():
     r = [
@@ -398,7 +398,7 @@ def createMoveJabB():
     moves['jabB'].append(f, t)
     moves['jabB'].canDI = False
 
-    self.createMoveSwordBeamGroundEnd()
+    createMoveSwordBeamGroundEnd()
 
 def createMoveDashAttackA():
 
@@ -634,7 +634,7 @@ def createNeutralAirA():
     moves['neutralAirA'].append(f, t)
     moves['neutralAirA'].reversable = True
 
-    self.createMoveNeutralAirALag()
+    createMoveNeutralAirALag()
 
 def createNeutralAirB():
     r = [
@@ -666,9 +666,9 @@ def createNeutralAirB():
     moves['neutralAirB'].append(f, t)
     moves['neutralAirB'].reversable = True
 
-    self.createMoveSwordBeamAirEnd()
+    createMoveSwordBeamAirEnd()
 
-    self.createMoveNeutralAirBLag()
+    createMoveNeutralAirBLag()
 
 def createMoveNeutralAirALag():
     r = [
@@ -805,8 +805,7 @@ def createMoveDownAirA():
 
     moves['downAirA'].reversable = True
 
-    self.createMoveDownAirALag()
-
+    createMoveDownAirALag()
 
 def createMoveDownAirALag():
     r = [
@@ -849,7 +848,7 @@ def createMoveDownAirB():
 
     moves['downAirB'].append(f, t)
 
-    self.createMoveDownBoltShooting()
+    createMoveDownBoltShooting()
 
 
 def createMoveDownBoltShooting():
@@ -877,7 +876,7 @@ def createMoveDownBoltShooting():
     moves['downAirBolt3'] = move.Move(f, t)
     moves['downAirBolt3'].shoot.append( (0, 5, (6, 5)) )
 
-    self.createMoveDownBoltEnd()
+    createMoveDownBoltEnd()
 
 def createMoveDownBoltEnd():
 
@@ -1067,7 +1066,7 @@ def createMoveUpA():
     moves['upA'].frames[7].resetHitPotential = True
     moves['upA'].frames[17].resetHitPotential = True
 
-    self.createMoveAetherPiercer()
+    createMoveAetherPiercer()
 
 def createMoveAetherPiercer():
 
@@ -1151,7 +1150,7 @@ def createMoveUpB():
     moves['upB'].append(f, t)
     moves['upB'].canDI = False
 
-    self.createMoveChargeSword()
+    createMoveChargeSword()
 
 def createMoveChargeSword():
     r = [
@@ -1464,7 +1463,7 @@ def createMoveDownB():
     moves['downB'].frames[18].resetHitPotential = True
     moves['downB'].frames[22].resetHitPotential = True
 
-    self.createMoveLowExplosion()
+    createMoveLowExplosion()
 
 def createMoveLowExplosion():
 
@@ -1518,7 +1517,7 @@ def createMoveLowExplosion():
     for m in moves['lowexplosion'].frames:
         m.setFrictionX = 0.32
 
-    self.createMoveLowExplosionDash()
+    createMoveLowExplosionDash()
 
 def createMoveLowExplosionDash():
     f = [move.frameData(97, 4,)]
@@ -1531,9 +1530,9 @@ def createMoveLowExplosionDash():
     moves['lowexplosiondash'].frames[0].ignoreFriction = True
 
 def createProjectiles():
-    self.createProjectileSwordBeams()
-    self.createProjectileDownBolt()
-    self.addSuperProjectile()
+    createProjectileSwordBeams()
+    createProjectileDownBolt()
+    addSuperProjectile()
 
 def createProjectileSwordBeams():
 
@@ -1573,9 +1572,9 @@ def createProjectileSwordBeams():
     temp.moves['flying'].frames[0].setVelX = 5.5
     temp.moves['flying'].frames[0].setVelY = 0
     temp.liveTime = 20
-    self.createProjectileEnding1(temp)
-    self.createProjectileExplosion1(temp)
-    self.projectiles.append(temp)
+    createProjectileEnding1(temp)
+    createProjectileExplosion1(temp)
+    projectiles.append(temp)
 
     temp = projectile.Projectile()
     temp.hitsRemaining = 2
@@ -1583,9 +1582,9 @@ def createProjectileSwordBeams():
     temp.moves['flying'].frames[0].setVelX = 7.5
     temp.moves['flying'].frames[0].setVelY = 0
     temp.liveTime = 35
-    self.createProjectileEnding1(temp)
-    self.createProjectileExplosion1(temp)
-    self.projectiles.append(temp)
+    createProjectileEnding1(temp)
+    createProjectileExplosion1(temp)
+    projectiles.append(temp)
 
     temp = projectile.Projectile()
     temp.hitsRemaining = 2
@@ -1593,11 +1592,11 @@ def createProjectileSwordBeams():
     temp.moves['flying'].frames[0].setVelX = 8.8
     temp.moves['flying'].frames[0].setVelY = 0
     temp.liveTime = 40
-    self.createProjectileEnding1(temp)
-    self.createProjectileExplosion1(temp)
-    self.projectiles.append(temp)
+    createProjectileEnding1(temp)
+    createProjectileExplosion1(temp)
+    projectiles.append(temp)
 
-def createProjectileEnding1(self, m):
+def createProjectileEnding1(m):
     f = [ move.frameData(31, 3),
           move.frameData(32, 3),
           move.frameData(33, 3) ]
@@ -1607,7 +1606,7 @@ def createProjectileEnding1(self, m):
 
     m.dissolveOnPhysical = True
 
-def createProjectileExplosion1(self, m):
+def createProjectileExplosion1(m):
     f = [ move.frameData(166, 3),
           move.frameData(167, 2),
           move.frameData(168, 3) ]
@@ -1653,8 +1652,8 @@ def createProjectileDownBolt():
     temp.moves['flying'].frames[0].setVelX = 0
     temp.moves['flying'].frames[0].setVelY = 8.0
     temp.liveTime = 15
-    self.createProjectileEnding2(temp)
-    self.projectiles.append(temp)
+    createProjectileEnding2(temp)
+    projectiles.append(temp)
 
     temp = projectile.Projectile()
     temp.hitsRemaining = 1
@@ -1662,8 +1661,8 @@ def createProjectileDownBolt():
     temp.moves['flying'].frames[0].setVelX = 0
     temp.moves['flying'].frames[0].setVelY = 11.0
     temp.liveTime = 15
-    self.createProjectileEnding2(temp)
-    self.projectiles.append(temp)
+    createProjectileEnding2(temp)
+    projectiles.append(temp)
 
     temp = projectile.Projectile()
     temp.hitsRemaining = 1
@@ -1671,11 +1670,11 @@ def createProjectileDownBolt():
     temp.moves['flying'].frames[0].setVelX = 0
     temp.moves['flying'].frames[0].setVelY = 14.0
     temp.liveTime = 15
-    self.createProjectileEnding2(temp)
-    self.projectiles.append(temp)
+    createProjectileEnding2(temp)
+    projectiles.append(temp)
 
 
-def createProjectileEnding2(self, m):
+def createProjectileEnding2(m):
     f = [ move.frameData(142, 3),
           move.frameData(143, 2),
           move.frameData(144, 2) ]
@@ -1724,9 +1723,9 @@ def addSuperProjectile():
     temp.moves['flying'].frames[0].setVelX = 16
     temp.moves['flying'].frames[0].setVelY = 0
     temp.liveTime = 300
-    self.createProjectileEnding1(temp)
-    self.createProjectileExplosion1(temp)
-    self.projectiles.append(temp)
+    createProjectileEnding1(temp)
+    createProjectileExplosion1(temp)
+    projectiles.append(temp)
 
 
 def createMoveStun1():
@@ -2305,14 +2304,14 @@ def createSuperMove1():
 
 
     sg = move.SuperMove(n, d, f, [])
-    sg.flash = self.createSuperFlash1()
+    sg.flash = createSuperFlash1()
 
     sg.shoot.append( (0, 6, (45, -30)) )
 
     sg.canDI = False
     sg.frames[0].setVelX = 0
 
-    self.appendSuperMove(sg, None)
+    appendSuperMove(sg, None)
 
 def createSuperFlash1():
     f = [ move.frameData(10, 2),
@@ -2344,6 +2343,7 @@ def createSuperFlash1():
     return s
 
 moves = {}
+projectiles = []
 superMoves = []
 superMovesAir = []
 load()
