@@ -148,9 +148,6 @@ def checkError():
         criticalError(1)
 
 def goBattle(data):
-    cp = 1
-    cam = 0
-
     terrainLeft = data[1]
     terrainRight = data[2]
 
@@ -165,8 +162,6 @@ def goBattle(data):
     controller = battle_c.Controller(inputQueue)
     changeMVC(model, view, controller, screen)
 
-    c.setPlayer(cp)
-    v.setCameraPlayer(cam)
     processModel.process()
 
     while not m.advance():

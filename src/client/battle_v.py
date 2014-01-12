@@ -53,6 +53,10 @@ class View(mvc.View):
             rect2.top = rect.top + 18
             self.damagePercentRects.append(rect2)
 
+        self.createBars()
+        self.youIconImage = INTERFACE_GRAPHICS[18]
+        self.youIconRect = Rect((0, 0), self.youIconImage.get_size())
+
     def update(self, tickClock=True):
         lastState = process.getLast(self.stateQueue)
 
@@ -149,6 +153,7 @@ class View(mvc.View):
                 i = 1
             else:
                 i = 0
+
         c = self.state.players[i]
         return render_textrect(c.getDamagePercentText(),
                                DAMAGE_PERCENT_FONT,
@@ -234,14 +239,6 @@ class View(mvc.View):
                continue
            if p.currMove.isSuperFlash:
                return True
-
-    def setCameraPlayer(self, c):
-        if (c >= 0) and (c <= 1):
-            self.cameraPlayer = c
-
-        self.createBars()
-        self.youIconImage = INTERFACE_GRAPHICS[18]
-        self.youIconRect = Rect((0, 0), self.youIconImage.get_size())
 
     def createBars(self):
         self.bars = []

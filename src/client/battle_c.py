@@ -12,9 +12,6 @@ class Controller(mvc.Controller):
         self.inputQueue = inputQueue
         self.player = 0
 
-    def setPlayer(self, p):
-        self.player = p
-
     def update(self):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:

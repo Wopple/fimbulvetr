@@ -168,7 +168,6 @@ class Model(process_m.ProcessModel):
 
             if not isFlash:
                 self.checkDisplacement()
-                #self.centerCamera(self.players[0])
 
             newList = []
             for f in self.fx:
@@ -395,7 +394,6 @@ class Model(process_m.ProcessModel):
         return None
     
     def checkDisplacement(self):
-        
         for i in range(2):
             m = self.players[i].currMove
             if (not m.grabPos is None) or (m.grabVal != 0) or (m.isDead) or (m.isOnGround) or (self.returnCode[i] == 1):
@@ -472,7 +470,6 @@ class Model(process_m.ProcessModel):
                 
                 proj.preciseLoc = [x, y]
                 self.projectiles.append(proj)
-                
 
     def testKey(self, k):
         p = self.players[0]
@@ -561,15 +558,15 @@ class Model(process_m.ProcessModel):
                  p2.currMove.grabPos[1] ]
 
         return sub_points(offset, temp)
-            
 
     def checkForBlock(self):
         for i, p in enumerate(self.players):
             for j, q in enumerate(self.players):
-                if (not q is p) and (p.attackCanHit):
+                if (q is not p) and p.attackCanHit:
                     for h in p.getHitboxes():
                         if h.ignoreBlock():
                             continue
+
                         for r in q.getBlockboxes():
                             hRect = getAdjustedBox(p, h)
                             rRect = getAdjustedBox(q, r)
@@ -580,9 +577,9 @@ class Model(process_m.ProcessModel):
                                     p.attackCanHit = False
                                     p.onHitTrigger = True
 
-                                if q.currMove == q.moves['blocking']:
+                                if q.currMove == q.getMoves()['blocking']:
                                     ind = 0
-                                elif q.currMove == q.moves['lowBlocking']:
+                                elif q.currMove == q.getMoves()['lowBlocking']:
                                     ind = 1
                                 else:
                                     ind = 2
@@ -594,11 +591,12 @@ class Model(process_m.ProcessModel):
             self.fxMemory = [[], []]
         for i, p in enumerate(self.players):
             for j, q in enumerate(self.players):
-                if not q is not p and p.attackCanHit:
+                if (q is not p) and p.attackCanHit:
                     for h in p.getHitboxes():
                         for r in q.getHurtboxes():
                             hRect = getAdjustedBox(p, h)
                             rRect = getAdjustedBox(q, r)
+
                             if hRect.colliderect(rRect):
                                 if q.blockstun > 0:
                                     if (self.blockMemory[j] is None):
@@ -618,23 +616,24 @@ class Model(process_m.ProcessModel):
     def checkForProjectileBlock(self):
         for proj in self.projectiles:
             if not proj.canHit():
-                return
+                continue
         
             for j, q in enumerate(self.players):
-                if (not q is proj.shooter):
+                if q is not proj.shooter:
                     for h in proj.getHitboxes():
                         if h.ignoreBlock():
                             continue
                         for r in q.getBlockboxes():
                             hRect = getAdjustedBox(proj, h)
                             rRect = getAdjustedBox(q, r)
+
                             if hRect.colliderect(rRect):
                                 if (self.blockMemory[j] is None):
                                     self.blockMemory[j] = [h, proj]
 
-                                if q.currMove == q.moves['blocking']:
+                                if q.currMove == q.getMoves()['blocking']:
                                     ind = 0
-                                elif q.currMove == q.moves['lowBlocking']:
+                                elif q.currMove == q.getMoves()['lowBlocking']:
                                     ind = 1
                                 else:
                                     ind = 2
@@ -645,23 +644,23 @@ class Model(process_m.ProcessModel):
     def checkForProjectileHit(self):
         for proj in self.projectiles:
             print proj.freezeFrame
+
             if not proj.canHit():
                 continue
-        
+
             for j, q in enumerate(self.players):
-                if (not q is proj.shooter):
+                if q is not proj.shooter:
                     for h in proj.getHitboxes():
                         for r in q.getHurtboxes():
                             hRect = getAdjustedBox(proj, h)
                             rRect = getAdjustedBox(q, r)
+
                             if hRect.colliderect(rRect):
                                 if (self.hitMemory[j] is None):
                                     self.hitMemory[j] = [h, proj]
-                                
+
                                 self.fxMemory[j].append(average_points(
                                     hRect.center, rRect.center))
-
-                                
 
     def createFX(self, h, hitter, hittee, pointList, blocked):
         fxPos = average_point_list(pointList)
@@ -769,7 +768,7 @@ class Model(process_m.ProcessModel):
                 p.canEffect = False
 
     def createTransitionDust(self, i, p):
-        if p.currMove == p.moves['groundHit'] or p.currMove.isStun or self.returnCode[i] == 1:
+        if p.currMove == p.getMoves()['groundHit'] or p.currMove.isStun or self.returnCode[i] == 1:
             return
         
         pos = add_points(p.preciseLoc, (0,0))
