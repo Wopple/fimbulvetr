@@ -1,6 +1,6 @@
 airAccel = 1.5
 airFriction = 1.2
-airFrictionStunned = self.airFriction * 0.3
+airFrictionStunned = airFriction * 0.3
 airVelMax = 8.2
 dashAccel = 13.0
 dashVelMax = 11.5
