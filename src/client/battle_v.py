@@ -34,7 +34,6 @@ class View(mvc.View):
         
         self.damageTagRects = []
         self.damagePercentRects = []
-        self.catBar = None
 
         for i in range(2):
             rect = Rect((0, 0), (80, 100))
@@ -99,14 +98,29 @@ class View(mvc.View):
         for f in self.state.fx:
             FXDrawable(f).draw(self.screen, self.camera)
 
-        if not self.catBar is None:
+        # All this bar stuff is very hard coded, this needs abstraction and mappings
+
+        for i, p in enumerate(self.state.players):
+            self.hpBars[i].value = p.hp
+
+        p = self.state.players[0]
+
+        if isinstance(p, hare.Hare):
+            self.energyBar.value = p.hareEnergy
+        elif isinstance(p, cat.Cat):
+            self.energyBar.value = p.catEnergy
+
+        if self.catBar is not None:
             self.updateCatBarColors()
 
-        for b in self.bars:
+        for b in self.hpBars:
             b.update()
-
-        for b in self.bars:
             b.draw(self.screen)
+
+        for b in (self.retreatBar, self.energyBar):
+            if b is not None:
+                b.update()
+                b.draw(self.screen)
 
         self.drawInterfaceExtras()
 
@@ -129,9 +143,10 @@ class View(mvc.View):
             pygame.display.flip()
 
     def updateRetreat(self):
-        highest = self.state.getHighestRetreat()
-        self.retreatBar.changeColor(RETREAT_TEAM_COLORS[highest])
-        self.retreatBar.value = self.state.players[highest].retreat
+        if self.retreatBar is not None:
+            highest = self.state.getHighestRetreat()
+            self.retreatBar.changeColor(RETREAT_TEAM_COLORS[highest])
+            self.retreatBar.value = self.state.players[highest].retreat
 
     def centerCamera(self, target):
         self.camera.centerx = int(target.preciseLoc[0])
@@ -241,25 +256,29 @@ class View(mvc.View):
                return True
 
     def createBars(self):
-        self.bars = []
+        self.hpBars = []
+        self.retreatBar = None
+        self.catBar = None
+        self.energyBar = None
+
         p = self.state.players[self.cameraPlayer]
-        q = self.state.players[self.state.reverse01(self.cameraPlayer)]
-        
+        q = self.state.players[(self.cameraPlayer + 1) % 2]
+
         x = BATTLE_PORTRAIT_SIZE[0] + HEALTH_BAR_OFFSET[0] + BATTLE_PORTRAIT_OFFSET[0]
         y = HEALTH_BAR_OFFSET[1]
 
-        self.bars.append(energybar.EnergyBar(p.hp,
-                                             Rect((x, y), HEALTH_BAR_SIZE),
-                                             HEALTH_BAR_BORDERS,
-                                             HEALTH_BAR_COLORS,
-                                             HEALTH_BAR_PULSE,
-                                             p.name)
+        self.hpBars.append(energybar.EnergyBar(p.hp,
+                                               Rect((x, y), HEALTH_BAR_SIZE),
+                                               HEALTH_BAR_BORDERS,
+                                               HEALTH_BAR_COLORS,
+                                               HEALTH_BAR_PULSE,
+                                               p.name)
             )
 
         x = SCREEN_SIZE[0] - HEALTH_BAR_OFFSET[0] - HEALTH_BAR_SIZE[0] - BATTLE_PORTRAIT_SIZE[0] - BATTLE_PORTRAIT_OFFSET[0]
         y = HEALTH_BAR_OFFSET[1]
 
-        self.bars.append(energybar.EnergyBar(q.hp,
+        self.hpBars.append(energybar.EnergyBar(q.hp,
                                              Rect((x, y), HEALTH_BAR_SIZE),
                                              HEALTH_BAR_BORDERS,
                                              HEALTH_BAR_COLORS,
@@ -275,20 +294,18 @@ class View(mvc.View):
                                              RETREAT_BAR_BORDERS,
                                              RETREAT_BAR_COLORS,
                                              5, "Battle", None, 1)
-        self.bars.append(self.retreatBar)
-        
 
         x = BATTLE_PORTRAIT_SIZE[0] + HEALTH_BAR_OFFSET[0] + BATTLE_PORTRAIT_OFFSET[0]
         y = HEALTH_BAR_OFFSET[1] + HEALTH_BAR_SIZE[1] + SPECIAL_BAR_OFFSET
+
         if isinstance(p, hare.Hare):
-            self.bars.append(energybar.EnergyBar(p.hareEnergy,
+            self.energyBar = energybar.EnergyBar(p.hareEnergy,
                                                  Rect((x, y), SPECIAL_BAR_SIZE),
                                                  SPECIAL_BAR_BORDERS,
                                                  SPECIAL_BAR_COLORS,
                                                  SPECIAL_BAR_PULSE,
                                                  HARE_ENERGY_NAME,
                                                  HARE_ENERGY_USAGE)
-                             )
 
         if isinstance(p, cat.Cat):
             self.catBar = energybar.EnergyBar(p.catEnergy,
@@ -298,7 +315,7 @@ class View(mvc.View):
                                                  SPECIAL_BAR_PULSE,
                                                  CAT_ENERGY_NAME,
                                                  CAT_ENERGY_MAX+1)
-            self.bars.append(self.catBar)
+            self.energyBar = self.catBar
 
     def updateCatBarColors(self):
         x = len(CAT_ENERGY_SECTIONS)
