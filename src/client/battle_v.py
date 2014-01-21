@@ -81,7 +81,7 @@ class View(mvc.View):
 
         for i, p in enumerate(self.state.players):
             if self.state.returnCode[i] != 1 and self.drawToBack(p):
-                BattleCharDrawable(p).draw(self.screen, self.camera)
+                BattleCharDrawable(p.char).draw(self.screen, self.camera)
                 self.drawYouIcon(i, p, self.camera)
                 
         if self.state.superDarken():
@@ -89,7 +89,7 @@ class View(mvc.View):
             
         for i, p in enumerate(self.state.players):
             if self.state.returnCode[i] != 1 and not self.drawToBack(p):
-                BattleCharDrawable(p).draw(self.screen, self.camera)
+                BattleCharDrawable(p.char).draw(self.screen, self.camera)
                 self.drawYouIcon(i, p, self.camera)
 
         for p in self.state.projectiles:
@@ -101,14 +101,14 @@ class View(mvc.View):
         # All this bar stuff is very hard coded, this needs abstraction and mappings
 
         for i, p in enumerate(self.state.players):
-            self.hpBars[i].value = p.hp
+            self.hpBars[i].value = p.char.hp
 
         p = self.state.players[0]
 
-        if isinstance(p, hare.Hare):
-            self.energyBar.value = p.hareEnergy
-        elif isinstance(p, cat.Cat):
-            self.energyBar.value = p.catEnergy
+        if p.char.type == HARE:
+            self.energyBar.value = p.char.hareEnergy
+        elif p.char.type == CAT:
+            self.energyBar.value = p.char.catEnergy
 
         if self.catBar is not None:
             self.updateCatBarColors()
@@ -146,11 +146,11 @@ class View(mvc.View):
         if self.retreatBar is not None:
             highest = self.state.getHighestRetreat()
             self.retreatBar.changeColor(RETREAT_TEAM_COLORS[highest])
-            self.retreatBar.value = self.state.players[highest].retreat
+            self.retreatBar.value = self.state.players[highest].char.retreat
 
     def centerCamera(self, target):
-        self.camera.centerx = int(target.preciseLoc[0])
-        self.camera.centery = int(target.preciseLoc[1])
+        self.camera.centerx = int(target.char.preciseLoc[0])
+        self.camera.centery = int(target.char.preciseLoc[1])
 
         if self.camera.left < 0:
             self.camera.left = 0
@@ -170,7 +170,7 @@ class View(mvc.View):
                 i = 0
 
         c = self.state.players[i]
-        return render_textrect(c.getDamagePercentText(),
+        return render_textrect(c.char.getDamagePercentText(),
                                DAMAGE_PERCENT_FONT,
                                self.damagePercentRects[i],
                                ALMOST_BLACK, BLACK, 1, True)
@@ -182,7 +182,7 @@ class View(mvc.View):
             sublist = []
             p = self.state.players[i]
             for j in range(3):
-                t = p.name + " " + tempText[j]
+                t = p.char.name + " " + tempText[j]
                 image = render_textrect(t, COUNTDOWN_FONT,
                                         self.state.countdown.rect,
                                         COUNTDOWN_COLOR, ALMOST_BLACK,
@@ -237,22 +237,22 @@ class View(mvc.View):
 
         c = self.state.players[self.cameraPlayer]
 
-        self.superIcon = SuperIcon(Rect((x, y), BATTLE_SUPER_ICON_SIZE), BattleCharDrawable(c).getSuperIcon(), c.superEnergy)
+        self.superIcon = SuperIcon(Rect((x, y), BATTLE_SUPER_ICON_SIZE), BattleCharDrawable(c.char).getSuperIcon(), c.char.superEnergy)
 
     def drawYouIcon(self, i, p, camera):
         if i == self.cameraPlayer:
-            self.youIconRect.centerx = int(p.preciseLoc[0])
-            self.youIconRect.bottom = int(p.preciseLoc[1] - p.youIconHeight)
+            self.youIconRect.centerx = int(p.char.preciseLoc[0])
+            self.youIconRect.bottom = int(p.char.preciseLoc[1] - p.char.youIconHeight)
             self.screen.blit(self.youIconImage, adjustToCamera(self.youIconRect.topleft, camera))
 
     def drawToBack(self, p):
-        return p.currMove.drawToBack or (self.otherPersonDoingSuperFlash(p))
+        return p.char.currMove.drawToBack or (self.otherPersonDoingSuperFlash(p))
     
-    def otherPersonDoingSuperFlash(self, thisP):
-       for p in self.state.players:
-           if p == thisP:
+    def otherPersonDoingSuperFlash(self, current):
+       for other in self.state.players:
+           if other.char == current.char:
                continue
-           if p.currMove.isSuperFlash:
+           if other.char.currMove.isSuperFlash:
                return True
 
     def createBars(self):
@@ -267,24 +267,22 @@ class View(mvc.View):
         x = BATTLE_PORTRAIT_SIZE[0] + HEALTH_BAR_OFFSET[0] + BATTLE_PORTRAIT_OFFSET[0]
         y = HEALTH_BAR_OFFSET[1]
 
-        self.hpBars.append(energybar.EnergyBar(p.hp,
+        self.hpBars.append(energybar.EnergyBar(p.char.hp,
                                                Rect((x, y), HEALTH_BAR_SIZE),
                                                HEALTH_BAR_BORDERS,
                                                HEALTH_BAR_COLORS,
                                                HEALTH_BAR_PULSE,
-                                               p.name)
-            )
+                                               p.char.name))
 
         x = SCREEN_SIZE[0] - HEALTH_BAR_OFFSET[0] - HEALTH_BAR_SIZE[0] - BATTLE_PORTRAIT_SIZE[0] - BATTLE_PORTRAIT_OFFSET[0]
         y = HEALTH_BAR_OFFSET[1]
 
-        self.hpBars.append(energybar.EnergyBar(q.hp,
-                                             Rect((x, y), HEALTH_BAR_SIZE),
-                                             HEALTH_BAR_BORDERS,
-                                             HEALTH_BAR_COLORS,
-                                             HEALTH_BAR_PULSE,
-                                             q.name, None, 2, False)
-            )
+        self.hpBars.append(energybar.EnergyBar(q.char.hp,
+                                               Rect((x, y), HEALTH_BAR_SIZE),
+                                               HEALTH_BAR_BORDERS,
+                                               HEALTH_BAR_COLORS,
+                                               HEALTH_BAR_PULSE,
+                                               q.char.name, None, 2, False))
 
         x = (SCREEN_SIZE[0] / 2) - (RETREAT_BAR_SIZE[0] / 2)
         y = HEALTH_BAR_OFFSET[1]
@@ -298,8 +296,8 @@ class View(mvc.View):
         x = BATTLE_PORTRAIT_SIZE[0] + HEALTH_BAR_OFFSET[0] + BATTLE_PORTRAIT_OFFSET[0]
         y = HEALTH_BAR_OFFSET[1] + HEALTH_BAR_SIZE[1] + SPECIAL_BAR_OFFSET
 
-        if isinstance(p, hare.Hare):
-            self.energyBar = energybar.EnergyBar(p.hareEnergy,
+        if p.char.type == HARE:
+            self.energyBar = energybar.EnergyBar(p.char.hareEnergy,
                                                  Rect((x, y), SPECIAL_BAR_SIZE),
                                                  SPECIAL_BAR_BORDERS,
                                                  SPECIAL_BAR_COLORS,
@@ -307,14 +305,14 @@ class View(mvc.View):
                                                  HARE_ENERGY_NAME,
                                                  HARE_ENERGY_USAGE)
 
-        if isinstance(p, cat.Cat):
+        if p.char.type == CAT:
             self.catBar = energybar.EnergyBar(p.catEnergy,
-                                                 Rect((x, y), SPECIAL_BAR_SIZE),
-                                                 SPECIAL_BAR_BORDERS,
-                                                 SPECIAL_BAR_COLORS,
-                                                 SPECIAL_BAR_PULSE,
-                                                 CAT_ENERGY_NAME,
-                                                 CAT_ENERGY_MAX+1)
+                                              Rect((x, y), SPECIAL_BAR_SIZE),
+                                              SPECIAL_BAR_BORDERS,
+                                              SPECIAL_BAR_COLORS,
+                                              SPECIAL_BAR_PULSE,
+                                              CAT_ENERGY_NAME,
+                                              CAT_ENERGY_MAX+1)
             self.energyBar = self.catBar
 
     def updateCatBarColors(self):

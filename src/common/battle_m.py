@@ -1,5 +1,8 @@
+import sys
 import copy
 import math
+
+import settings
 
 from common.constants import *
 
@@ -9,7 +12,9 @@ from common import boundint
 from common import countdown
 from common import fx
 from common import platform
+from common import player
 from common import hare, fox, cat
+from common.util import *
 from common.util.rect import Rect
 
 class Model(process_m.ProcessModel):
@@ -20,32 +25,38 @@ class Model(process_m.ProcessModel):
         self.terrainLeft = terrainLeft
         self.terrainRight = terrainRight
         self.arena = Rect((0, 0), BATTLE_ARENA_SIZE)
-        
-        self.players = inChars
-        for p in self.players:
-            p.beginBattle()
-            pos = (self.arena.centerx,
-                   self.arena.height - BATTLE_AREA_FLOOR_HEIGHT)
-            self.players[0].setLoc(add_points(pos,
-                            ((-BATTLE_PLAYER_START_DISTANCE / 2), 0)))
-            self.players[0].facingRight = True
-            self.players[1].setLoc(add_points(pos,
-                            ((BATTLE_PLAYER_START_DISTANCE / 2), 0)))
-            self.players[1].facingRight = False
-            
-        self.keys = [[False, False, False, False, False, False, False, False, False],
-                     [False, False, False, False, False, False, False, False, False]]
-        self.keysNow = [[0, 0, 0, 0, 0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+        self.players = []
 
+        # create the players
+        if settings.ENV is settings.CLIENT:
+            self.players.append(player.Player(LOCAL, inChars[0]))
+
+            for c in inChars[1:]:
+                self.players.append(player.Player(REMOTE, c))
+        elif settings.ENV is settings.SERVER:
+            for c in inChars:
+                self.players.append(player.Player(HUMAN, c))
+
+        # init the players
+        for p in self.players:
+            p.char.beginBattle()
+
+        pos = (self.arena.centerx,
+               self.arena.height - BATTLE_AREA_FLOOR_HEIGHT)
+        self.players[0].char.setLoc(add_points(pos, ((-BATTLE_PLAYER_START_DISTANCE / 2), 0)))
+        self.players[0].facingRight = True
+        self.players[1].char.setLoc(add_points(pos, ((BATTLE_PLAYER_START_DISTANCE / 2), 0)))
+        self.players[1].facingRight = False
+
+        # init the battle
         self.frameByFrame = [0, 0]
-        
+
         self.returnCode = [0, 0]
         self.projectiles = []
         self.retreatProhibitTime = boundint.BoundInt(0, RETREAT_PROHIBIT_TIME,
                                                      RETREAT_PROHIBIT_TIME)
         self.retreatPhase = 0
-        
+
         self.resetHitMemory()
 
         self.endingVal = -1
@@ -60,26 +71,43 @@ class Model(process_m.ProcessModel):
     def getState(self):
         return State(self)
 
-    def update(self):
-        #if self.testBool:
-        #    self.keys[1][1] = True
-        #    self.keysNow[1][1] = 3
-        #else:
-        #    self.keys[1][1] = False
-        #    self.keysNow[1][1] = 0
-        #if self.testBool2:
-        #    self.keys[1][7] = True
-        #    self.keysNow[1][7] = 3
-        #else:
-        #    self.keys[1][7] = False
-        #    self.keysNow[1][7] = 0
-        
-        #self.keys[1][7] = True
-        #self.keysNow[1][7] = 0
+    def setState(self, state):
+        self.players = copy.deepcopy(state.players)
+        self.returnCode = copy.deepcopy(state.returnCode)
+        self.projectiles = copy.deepcopy(state.projectiles)
+        self.retreatProhibitTime = copy.deepcopy(state.retreatProhibitTime)
+        self.retreatPhase = copy.deepcopy(state.retreatPhase)
+        self.endingVal = copy.deepcopy(state.endingVal)
+        self.endingValTick = copy.deepcopy(state.endingValTick)
+        self.fx = copy.deepcopy(state.fx)
+        self.countdown = copy.deepcopy(state.countdown)
 
+    def getLocalPlayer(self):
+        for p in self.players:
+            if p.type == LOCAL:
+                return p
+
+        return None
+
+    def getOtherPlayers(self, player):
+        otherPlayers = []
+
+        for p in self.players:
+            if p is not player:
+                otherPlayers.append(p)
+
+        return otherPlayers
+
+    def update(self):
         # process all the input
-        while not self.inputQueue.empty():
-            self.key(self.inputQueue.get())
+        if settings.ENV == settings.CLIENT:
+            while not self.inputQueue.empty():
+                key = self.inputQueue.get()
+
+                if key is None:
+                    sys.exit(0)
+                else:
+                    self.key(key)
 
         fbf = self.checkFrameByFrame()
 
@@ -94,14 +122,15 @@ class Model(process_m.ProcessModel):
                     if self.endingVal == len(BATTLE_ENDING_TIME_LENGTHS):
                         self.setResult(self.returnCode)
                         #self.advanceNow = True
-            
+
             self.countdown.update()
 
             if self.countdown.checkStartFlag():
                 for p in self.players:
-                    p.countdownComplete()
+                    p.char.countdownComplete()
+
                 self.retreatPhase = 1
-                
+
             isFlash = self.isFlash()
 
             if self.retreatPhase == 1 and self.endingVal == -1 and not isFlash:
@@ -110,45 +139,47 @@ class Model(process_m.ProcessModel):
                     self.retreatPhase = 2
 
             for i, p in enumerate(self.players):
-                if (isFlash) and (not p.currMove.isSuperFlash):
+                if (isFlash) and (not p.char.currMove.isSuperFlash):
                     continue
-                
+
                 if self.countdown.isGoing() or self.returnCode[i] == 1:
-                    keys = [False, False, False, False, False, False, False, False, False]
-                    keysNow = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    keys = player.makeKeys()
                 else:
-                    keys = self.keys[i]
-                    keysNow = self.keysNow[i]
+                    keys = p.keys
 
-                if keys[7] and (keysNow[7] == KEY_BUFFER):
-                    if p.techBuffer == TECH_BUFFER_MIN:
-                        p.techBuffer = TECH_BUFFER_MAX
-                    
-                l, r = self.exclusiveKeys(keys[2], keys[3])
-                self.resetKeysNow(keysNow)
-                self.act(p, keys, keysNow)
-                self.checkReversable(l, r, p)
+                if keys[BLOCK].isDown and keys[BLOCK].buffer == KEY_BUFFER:
+                    if p.char.techBuffer == TECH_BUFFER_MIN:
+                        p.char.techBuffer = TECH_BUFFER_MAX
+
+                self.updateBuffers(keys)
+                self.act(p, keys)
+                self.checkReversable(p)
                 self.checkForGround(i, p)
-                self.checkForEdge(l, r, p, isFlash)
-                if self.returnCode[i] != 0:
-                    p.retreat.value = 0
-                self.checkForFX(i, p)
-                if not p.dropThroughPlatform is None:
-                    p.dropThroughPlatform = self.checkForPlatform(p)
+                self.checkForEdge(p, isFlash)
 
-            if (not isFlash):
+                if self.returnCode[i] != 0:
+                    p.char.retreat.value = 0
+
+                self.checkForFX(i, p)
+
+                if not p.char.dropThroughPlatform is None:
+                    p.char.dropThroughPlatform = self.checkForPlatform(p)
+
+            if not isFlash:
                 self.resetHitMemory()
-                
+
                 self.updateProjectiles()
 
                 self.checkForBlock()
                 self.checkForProjectileBlock()
+
                 for i, p in enumerate(self.players):
                     if self.returnCode[i] != 1:
                         self.actOnBlock(i, p)
-                
+
                 self.checkForHits()
                 self.checkForProjectileHit()
+
                 for i, p in enumerate(self.players):
                     if self.returnCode[i] != 1:
                         self.actOnHit(i, p)
@@ -158,20 +189,19 @@ class Model(process_m.ProcessModel):
             for i, p in enumerate(self.players):
                 if (isFlash) and (not p.currMove.isSuperFlash):
                     continue
-                
-                keys = self.keys[i]
-                keysNow = self.keysNow[i]
-                l, r = self.exclusiveKeys(keys[2], keys[3])
+
                 p.update()
                 self.checkShoot(p)
-                p.DI(l, r)
+                p.char.di()
 
             if not isFlash:
                 self.checkDisplacement()
 
             newList = []
+
             for f in self.fx:
                 f.update()
+
                 if not f.removeFlag:
                     newList.append(f)
 
@@ -181,249 +211,251 @@ class Model(process_m.ProcessModel):
         highest = 0
 
         # I have no idea what's going on here lol
-        for i in range(len(self.frameByFrame)):
+        for i in xrange(len(self.frameByFrame)):
             if self.frameByFrame[i] > highest:
                 highest = self.frameByFrame[i]
             if self.frameByFrame[i] == 2:
                 self.frameByFrame[i] = 1
 
         return (highest == 1)
-            
+
     def updateProjectiles(self):
-        temp = []
-        for i in range(len(self.projectiles)):
-            self.projectiles[i].update()
-            self.checkProjForEdge(self.projectiles[i])
-            self.checkProjForDissolve(self.projectiles[i])
-            if not self.projectiles[i].destroy:
-                temp.append(self.projectiles[i])
-        self.projectiles = temp
+        for p in self.projectiles:
+            p.update()
+            self.checkProjForEdge(p)
+            self.checkProjForDissolve(p)
 
-    def key(self, k):
-        self.keys[k.player][k.index] = k.isDown
+        self.projectiles = filter(lambda p: not p.destroy, self.projectiles)
 
-        if k.isDown:
-            self.keysNow[k.player][k.index] = KEY_BUFFER
+    def key(self, inKey):
+        if settings.ENV == settings.CLIENT:
+            key = self.getLocalPlayer().keys[inKey.key]
+            key.isDown = inKey.isDown
 
-    def resetKeysNow(self, keysNow):
-        for k in range(len(keysNow)):
-            if keysNow[k] > 0:
-                keysNow[k] -= 1
+            if key.isDown:
+                key.buffer = KEY_BUFFER
 
-    def wasKeyPressed(self, k, keysNow):
+    def updateBuffers(self, keys):
+        for k in keys.values():
+            if k.buffer > 0:
+                k.buffer -= 1
+
+    def wasKeyPressed(self, k, keys):
         if k == -1:
-            return ((keysNow[2] > 0) or (keysNow[3] > 0))
+            return ((keys[LEFT].buffer > 0) or (keys[RIGHT].buffer > 0))
         else:
-            return (keysNow[k] > 0)
+            return (keys[k].buffer > 0)
 
-    def exclusiveKeys(self, k1, k2):
-        if k1 and k2:
-            k1 = False
-            k2 = False
-        return k1, k2
+    def act(self, p, keys):
+        char = p.char
+        char.actLeft = True
+        u, d = p.upOrDown()
+        l, r = p.leftOrRight()
 
-    def keyTowardFacing(self, p, keys):
-        l, r = self.exclusiveKeys(keys[2], keys[3])
-        return p.keyTowardFacing(l, r)
-
-    def act(self, p, keys, keysNow):
-        p.actLeft = True
-        u, d = self.exclusiveKeys(keys[0], keys[1])
-        l, r = self.exclusiveKeys(keys[2], keys[3])
-
-        if p.hp.value <= 0 and not p.currMove.isDead:
-            p.setCurrMove('deadFalling')
-            p.inAir = True
+        if char.hp.value <= 0 and not char.currMove.isDead:
+            char.setCurrMove('deadFalling')
+            char.inAir = True
             return
 
-        if not self.keyTowardFacing(p, keys):
-            p.actTransition('noXMove')
-        if p.holdJump:
-            if p.vel[1] > 0 or (not keys[6]):
-                p.unholdJump()
-        if p.onHitTrigger:
-            p.actTransition('onHit')
-        if p.techBuffer >= 0 and p.canTech:
-            if p.actTransition('tech'):
-                p.techBuffer = TECH_BUFFER_MIN
-        if p.canAct():
+        if not char.keyTowardFacing():
+            char.actTransition('noXMove')
+        if char.holdJump:
+            if char.vel[1] > 0 or (not keys[JUMP].isDown):
+                char.unholdJump()
+        if char.onHitTrigger:
+            char.actTransition('onHit')
+        if char.techBuffer >= 0 and char.canTech:
+            if char.actTransition('tech'):
+                char.techBuffer = TECH_BUFFER_MIN
+        if char.canAct():
             if d:
-                p.actTransition('doDuck')
+                char.actTransition('doDuck')
             if l or r:
-                if (l and self.wasKeyPressed(2, keysNow)):
-                    keysNow[2] = 0
-                    if (p.dashBuffer[0] > 0 and p.dashBuffer[0] < DASH_BUFFER_MAX):
-                        if p.actTransitionFacing('doDash', l, r):
-                            p.dashBuffer = [0, 0]
+                if (l and self.wasKeyPressed(LEFT, keys)):
+                    keys[LEFT].buffer = 0
+                    if (char.dashBuffer[0] > 0 and char.dashBuffer[0] < DASH_BUFFER_MAX):
+                        if char.actTransitionFacing('doDash', l, r):
+                            char.dashBuffer = [0, 0]
                     else:
-                        p.dashBuffer[0] = DASH_BUFFER_MAX
-                        p.dashBuffer[1] = 0
-                        
-                if (r and self.wasKeyPressed(3, keysNow)):
-                    keysNow[3] = 0
-                    if (p.dashBuffer[1] > 0 and p.dashBuffer[1] < DASH_BUFFER_MAX):
-                        if p.actTransitionFacing('doDash', l, r):
-                            p.dashBuffer = [0, 0]
+                        char.dashBuffer[0] = DASH_BUFFER_MAX
+                        char.dashBuffer[1] = 0
+
+                if (r and self.wasKeyPressed(RIGHT, keys)):
+                    keys[RIGHT].buffer = 0
+                    if (char.dashBuffer[1] > 0 and char.dashBuffer[1] < DASH_BUFFER_MAX):
+                        if char.actTransitionFacing('doDash', l, r):
+                            char.dashBuffer = [0, 0]
                     else:
-                        p.dashBuffer[1] = DASH_BUFFER_MAX
-                        p.dashBuffer[0] = 0
-                        
-                p.actTransitionFacing('doWalk', l, r)
+                        char.dashBuffer[1] = DASH_BUFFER_MAX
+                        char.dashBuffer[0] = 0
+
+                char.actTransitionFacing('doWalk', l, r)
                 if l:
-                    if p.facingRight:
-                        p.actTransition('backward')
+                    if char.facingRight:
+                        char.actTransition('backward')
                     else:
-                        p.actTransition('forward')
+                        char.actTransition('forward')
                 elif r:
-                    if p.facingRight:
-                        p.actTransition('forward')
+                    if char.facingRight:
+                        char.actTransition('forward')
                     else:
-                        p.actTransition('backward')
+                        char.actTransition('backward')
             if u:
-                p.actTransition('up')
+                char.actTransition('up')
             if not d:
-                p.actTransition('stopDuck')
-            if self.wasKeyPressed(4, keysNow):
+                char.actTransition('stopDuck')
+            if self.wasKeyPressed(ATT_A, keys):
                 if u:
-                    if p.actTransition('attackAUp'):
-                        keysNow[4] = 0
+                    if char.actTransition('attackAUp'):
+                        keys[ATT_A].buffer = 0
                 elif d:
-                    if p.actTransition('attackADown'):
-                        keysNow[4] = 0
+                    if char.actTransition('attackADown'):
+                        keys[ATT_A].buffer = 0
                 else:
-                    if p.actTransition('attackA'):
-                        keysNow[4] = 0
-            if self.wasKeyPressed(5, keysNow):
+                    if char.actTransition('attackA'):
+                        keys[ATT_A].buffer = 0
+            if self.wasKeyPressed(ATT_B, keys):
                 if u:
-                    if p.actTransition('attackBUp'):
-                        keysNow[5] = 0
-                    elif p.aerialCharge:
-                        if p.actTransition('attackBUpCharge'):
-                            keysNow[5] = 0
-                            p.aerialCharge = False
-                        
+                    if char.actTransition('attackBUp'):
+                        keys[ATT_B].buffer = 0
+                    elif char.aerialCharge:
+                        if char.actTransition('attackBUpCharge'):
+                            keys[ATT_B].buffer = 0
+                            char.aerialCharge = False
+
                 elif d:
-                    if p.actTransition('attackBDown'):
-                        keysNow[5] = 0
-                    elif p.aerialCharge:
-                        if p.actTransition('attackBDownCharge'):
-                            keysNow[5] = 0
-                            p.aerialCharge = False
-                            
+                    if char.actTransition('attackBDown'):
+                        keys[ATT_B].buffer = 0
+                    elif char.aerialCharge:
+                        if char.actTransition('attackBDownCharge'):
+                            keys[ATT_B].buffer = 0
+                            char.aerialCharge = False
+
                 else:
-                    if p.actTransition('attackB'):
-                        keysNow[4] = 0
-            if self.wasKeyPressed(6, keysNow):
+                    if char.actTransition('attackB'):
+                        keys[ATT_A].buffer = 0
+            if self.wasKeyPressed(JUMP, keys):
                 if not self.checkForPlatform(p) is None:
-                    if p.actTransition('dropThrough'):
+                    if char.actTransition('dropThrough'):
                         self.dropThrough(p)
-                if p.actTransitionFacing('jump', l, r):
-                    keysNow[6] = 0
-            if keys[7]:
+                if char.actTransitionFacing('jump', l, r):
+                    keys[JUMP].buffer = 0
+            if keys[BLOCK].isDown:
                 if d:
-                    if p.actTransition('downBlock'):
-                        keysNow[7] = 0
+                    if char.actTransition('downBlock'):
+                        keys[BLOCK].buffer = 0
                 else:
-                    if p.actTransition('block'):
-                        keysNow[7] = 0
-            if self.wasKeyPressed(8, keysNow):
-                if p.superEnergy.isMax() and self.endingVal == -1:
-                    if p.actTransition('super'):
-                        keysNow[8] = 0
-                        p.superEnergy.setToMin()
-                        
-            if not keys[4]:
-                p.actTransition('releaseA')
-            if not keys[5]:
-                p.actTransition('releaseB')
-            if not keys[7]:
-                p.actTransition('releaseBlock')
+                    if char.actTransition('block'):
+                        keys[BLOCK].buffer = 0
+            if self.wasKeyPressed(SUPER, keys):
+                if char.superEnergy.isMax() and self.endingVal == -1:
+                    if char.actTransition('super'):
+                        keys[SUPER].buffer = 0
+                        char.superEnergy.setToMin()
 
-            lev = p.getCatEnergyLevel()
+            if not keys[ATT_A].isDown:
+                char.actTransition('releaseA')
+            if not keys[ATT_B].isDown:
+                char.actTransition('releaseB')
+            if not keys[BLOCK].isDown:
+                char.actTransition('releaseBlock')
+
+            lev = char.getCatEnergyLevel()
             if lev == 1:
-                p.actTransition('bladelv1')
+                char.actTransition('bladelv1')
             if lev == 2:
-                p.actTransition('bladelv2')
+                char.actTransition('bladelv2')
             if lev == 3:
-                p.actTransition('bladelv3')
+                char.actTransition('bladelv3')
 
-    def checkReversable(self, l, r, p):
-        if p.currFrame == 0 and p.currSubframe == 1:
-            if p.currMove.reversable:
+    def checkReversable(self, p):
+        if p.char.currFrame == 0 and p.char.currSubframe == 1:
+            if p.char.currMove.reversable:
+                l, r = p.leftOrRight()
+
                 if l:
-                    p.facingRight = False
+                    p.char.facingRight = False
                 if r:
-                    p.facingRight = True
+                    p.char.facingRight = True
 
     def checkForGround(self, i, c):
-        old = c.inAir
+        old = c.char.inAir
         landed = False
         p = self.checkForPlatform(c)
-        if p == c.dropThroughPlatform:
+        if p == c.char.dropThroughPlatform:
             p = None
-        if (c.preciseLoc[1] >= self.arena.height - BATTLE_AREA_FLOOR_HEIGHT):
-            c.preciseLoc[1] = self.arena.height - BATTLE_AREA_FLOOR_HEIGHT
+        if (c.char.preciseLoc[1] >= self.arena.height - BATTLE_AREA_FLOOR_HEIGHT):
+            c.char.preciseLoc[1] = self.arena.height - BATTLE_AREA_FLOOR_HEIGHT
             landed = True
         elif (not p is None):
             landed = True
-            c.preciseLoc[1] = p.rect.top
+            c.char.preciseLoc[1] = p.rect.top
 
         if landed:
-            if (c.vel[1] > 0):
-                c.inAir = False
-                c.vel[1] = 0.0
-                c.aerialCharge = True
-                if old and (not c.currMove.ignoreGroundAir):
-                    c.transToGround()
+            if (c.char.vel[1] > 0):
+                c.char.inAir = False
+                c.char.vel[1] = 0.0
+                c.char.aerialCharge = True
+                if old and (not c.char.currMove.ignoreGroundAir):
+                    c.char.transToGround()
                     self.createTransitionDust(i, c)
         else:
-            c.inAir = True
-            if not old and (not c.currMove.ignoreGroundAir):
-                c.transToAir()
+            c.char.inAir = True
+            if not old and (not c.char.currMove.ignoreGroundAir):
+                c.char.transToAir()
 
     def dropThrough(self, p):
-        p.dropThroughPlatform = self.checkForPlatform(p)
+        p.char.dropThroughPlatform = self.checkForPlatform(p)
 
     def checkForPlatform(self, c):
-        if c.vel[1] < 0:
+        if c.char.vel[1] < 0:
             return None
-        
+
         for p in self.platforms:
-            if p.rect.colliderect(c.footRect):
+            if p.rect.colliderect(c.char.footRect):
                 return p
         return None
-    
+
     def checkDisplacement(self):
-        for i in range(2):
-            m = self.players[i].currMove
-            if (not m.grabPos is None) or (m.grabVal != 0) or (m.isDead) or (m.isOnGround) or (self.returnCode[i] == 1):
+        for i in xrange(2):
+            m = self.players[i].char.currMove
+            if (m.grabPos is not None) or (m.grabVal != 0) or (m.isDead) or (m.isOnGround) or (self.returnCode[i] == 1):
                 return
-        
-        if self.players[0].footRect.colliderect(self.players[1].footRect):
-            if (self.players[0].footRect.left <= self.players[1].footRect.left):
-                displace = [-1, 1]
-            else:
-                displace = [1, -1]
-                
-            for i in range(2):
-                self.players[i].preciseLoc[0] += DISPLACEMENT_AMOUNT * displace[i]
-            
 
-    def checkForEdge(self, l, r, p, isFlash):
+        displace = {}
+
+        for p in self.players:
+            displace[p] = 0
+
+        for p, q in combinations(self.players):
+            pFoot = p.char.footRect
+            qFoot = q.char.footRect
+
+            if pFoot.colliderect(qFoot):
+                if pFoot.left <= qFoot.left:
+                    displace[p] -= 1
+                    displace[q] += 1
+                else:
+                    displace[p] += 1
+                    displace[q] -= 1
+
+        for p in self.players:
+            p.char.preciseLoc[0] += displace[p] * DISPLACEMENT_AMOUNT
+
+    def checkForEdge(self, p, isFlash):
         check = False
-        if p.preciseLoc[0] < BATTLE_EDGE_COLLISION_WIDTH:
-            p.preciseLoc[0] = BATTLE_EDGE_COLLISION_WIDTH
+        if p.char.preciseLoc[0] < BATTLE_EDGE_COLLISION_WIDTH:
+            p.char.preciseLoc[0] = BATTLE_EDGE_COLLISION_WIDTH
             check = True
-        if p.preciseLoc[0] > self.arena.width - BATTLE_EDGE_COLLISION_WIDTH:
-            p.preciseLoc[0] = self.arena.width - BATTLE_EDGE_COLLISION_WIDTH
+        if p.char.preciseLoc[0] > self.arena.width - BATTLE_EDGE_COLLISION_WIDTH:
+            p.char.preciseLoc[0] = self.arena.width - BATTLE_EDGE_COLLISION_WIDTH
             check = True
 
-        if not p.currMove.canRetreat:
+        if not p.char.currMove.canRetreat:
             check = False
-            
 
-        if p.currMove.isDead:
-            p.retreat.value = 0
+        if p.char.currMove.isDead:
+            p.char.retreat.value = 0
         elif self.retreatPhase == 2 and not isFlash:
             if self.endingVal in [-1, 0, 1]: 
                 if check:
@@ -431,63 +463,50 @@ class Model(process_m.ProcessModel):
                         amount = RETREAT_ADD
                     else:
                         amount = RETREAT_ADD_FAST
-                    p.retreat.add(amount)
+                    p.char.retreat.add(amount)
                 else:
-                    p.retreat.add(-RETREAT_RECEED)
+                    p.char.retreat.add(-RETREAT_RECEED)
             else:
-                p.retreat.add(-RETREAT_RECEED_FAST)
+                p.char.retreat.add(-RETREAT_RECEED_FAST)
 
     def getHighestRetreat(self):
         high = -1
         highest = None
 
         for i, p in enumerate(self.players):
-            if p.retreat.value > high:
-                high = p.retreat.value
+            if p.char.retreat.value > high:
+                high = p.char.retreat.value
                 highest = i
 
         return highest
 
     def checkShoot(self, p):
-        m = p.currMove
+        m = p.char.currMove
         for s in m.shoot:
-            if s[0] == p.currFrame and p.canShoot:
-                proj = copy.copy(p.projectiles[s[1]].copySelf())
-                proj.shooter = p
-                p.canShoot = False
-                
+            if s[0] == p.char.currFrame and p.char.canShoot:
+                proj = copy.copy(p.char.projectiles[s[1]].copySelf())
+                proj.shooter = p.char
+                p.char.canShoot = False
 
                 poffset = s[2]
-                temp = p.preciseLoc
+                temp = p.char.preciseLoc
                 y = temp[1] + poffset[1]
 
-                if p.facingRight:
+                if p.char.facingRight:
                     x = temp[0] + poffset[0]
                 else:
                     x = temp[0] - poffset[0]
 
-                proj.facingRight = p.facingRight
-                
+                proj.facingRight = p.char.facingRight
                 proj.preciseLoc = [x, y]
                 self.projectiles.append(proj)
 
-    def testKey(self, k):
-        p = self.players[0]
-        
-        #xVel = -10;
-        #if (not p.facingRight):
-        #    xVel *= -1
-        #p.getHit(5, 150, [xVel, -8])
-
-        #self.players[0].superEnergy.add(self.players[0].superEnergy.maximum / 5)
-
-
     def checkProjForEdge(self, p):
-        if ( (p.preciseLoc[0] < (0 - PROJECTILE_SCREEN_ALLOWANCE))
-             or (p.preciseLoc[0] > (self.arena.width + PROJECTILE_SCREEN_ALLOWANCE))
-             or (p.preciseLoc[1] < (0 - PROJECTILE_SCREEN_ALLOWANCE))
-             or (p.preciseLoc[1] > (self.arena.height + PROJECTILE_SCREEN_ALLOWANCE)) ):
-            p.destroy = True
+        if ( (p.char.preciseLoc[0] < (0 - PROJECTILE_SCREEN_ALLOWANCE))
+             or (p.char.preciseLoc[0] > (self.arena.width + PROJECTILE_SCREEN_ALLOWANCE))
+             or (p.char.preciseLoc[1] < (0 - PROJECTILE_SCREEN_ALLOWANCE))
+             or (p.char.preciseLoc[1] > (self.arena.height + PROJECTILE_SCREEN_ALLOWANCE)) ):
+            p.char.destroy = True
 
     def checkProjForDissolve(self, p):
         if (p.dissolveOnPhysical) and (not p.isEndingAnimation()):
@@ -495,7 +514,7 @@ class Model(process_m.ProcessModel):
                 p.liveTime = 0
         if (p.hitsRemaining <= 0):
             p.liveTime = 0
-                
+
         if (p.isEndingAnimation()) and (p.currFrame == len(p.currMove.frames)-1):
             p.destroy = True
             p.currFrame = 0
@@ -503,8 +522,8 @@ class Model(process_m.ProcessModel):
     def getChecksum(self):
         tempsum = 0
         for p in self.players:
-            for i in range(2):
-                tempsum += int(p.preciseLoc[i])
+            for i in p.char.preciseLoc:
+                tempsum += int(i)
 
         checksum = chr(tempsum % 256)
 
@@ -523,7 +542,7 @@ class Model(process_m.ProcessModel):
         self.fxMemory = [[], []]
 
     def checkGrabPair(self):
-        for i in range(2):
+        for i in xrange(2):
             if i == 0:
                 a = 0
                 b = 1
@@ -531,129 +550,128 @@ class Model(process_m.ProcessModel):
                 a = 1
                 b = 0
 
-            if not self.players[a].currMove.isThrow():
-                if ( ((self.players[a].currMove.isGrab()) and (not self.players[b].currMove.isGrabbed()))
-                     or ((not self.players[a].currMove.isGrab()) and (self.players[b].currMove.isGrabbed())) ):
-                    self.players[a].setCurrMove('grabRelease')
-                    self.players[b].setCurrMove('grabbedRelease')
+            aChar = self.players[a].char
+            bChar = self.players[b].char
+
+            if not aChar.currMove.isThrow():
+                if ( ((aChar.currMove.isGrab()) and (not bChar.currMove.isGrabbed()))
+                     or ((not aChar.currMove.isGrab()) and (bChar.currMove.isGrabbed())) ):
+                    aChar.setCurrMove('grabRelease')
+                    bChar.setCurrMove('grabbedRelease')
                     return
 
-            if self.players[a].currMove.isGrab() and self.players[b].currMove.isGrabbed():
-                offset = self.getGrabOffset(self.players[a], self.players[b])
-                
-                self.players[a].preciseLoc = sub_points(self.players[b].preciseLoc, offset)
-                self.players[b].preciseLoc = add_points(self.players[a].preciseLoc, offset)
-                self.players[b].inAir = False
+            if aChar.currMove.isGrab() and bChar.currMove.isGrabbed():
+                offset = self.getGrabOffset(aChar, bChar)
+
+                aChar.preciseLoc = sub_points(bChar.preciseLoc, offset)
+                bChar.preciseLoc = add_points(aChar.preciseLoc, offset)
+                bChar.inAir = False
 
     def getGrabOffset(self, p1, p2):
-        if p1.facingRight:
+        if p1.char.facingRight:
             mult = 1
         else:
             mult = -1
 
-        offset = [ p1.currMove.grabPos[0] * mult,
-                   p1.currMove.grabPos[1] ]
+        offset = [ p1.char.currMove.grabPos[0] * mult,
+                   p1.char.currMove.grabPos[1] ]
 
-        temp = [ p2.currMove.grabPos[0] * (mult * -1),
-                 p2.currMove.grabPos[1] ]
+        temp = [ p2.char.currMove.grabPos[0] * (mult * -1),
+                 p2.char.currMove.grabPos[1] ]
 
         return sub_points(offset, temp)
 
     def checkForBlock(self):
         for i, p in enumerate(self.players):
             for j, q in enumerate(self.players):
-                if (q is not p) and p.attackCanHit:
-                    for h in p.getHitboxes():
+                if (q.char is not p.char) and p.char.attackCanHit:
+                    for h in p.char.getHitboxes():
                         if h.ignoreBlock():
                             continue
 
-                        for r in q.getBlockboxes():
-                            hRect = getAdjustedBox(p, h)
-                            rRect = getAdjustedBox(q, r)
-                            
+                        for r in q.char.getBlockboxes():
+                            hRect = getAdjustedBox(p.char, h)
+                            rRect = getAdjustedBox(q.char, r)
+
                             if hRect.colliderect(rRect):
                                 if (self.blockMemory[j] is None):
                                     self.blockMemory[j] = [h, p]
-                                    p.attackCanHit = False
-                                    p.onHitTrigger = True
+                                    p.char.attackCanHit = False
+                                    p.char.onHitTrigger = True
 
-                                if q.currMove == q.getMoves()['blocking']:
+                                if q.char.currMove == q.char.getMoves()['blocking']:
                                     ind = 0
-                                elif q.currMove == q.getMoves()['lowBlocking']:
+                                elif q.char.currMove == q.char.getMoves()['lowBlocking']:
                                     ind = 1
                                 else:
                                     ind = 2
 
-                                self.fxMemory[j].append(q.getBlockFXPoint(ind))
+                                self.fxMemory[j].append(q.char.getBlockFXPoint(ind))
 
     def checkForHits(self):
         if self.blockMemory is None:
             self.fxMemory = [[], []]
         for i, p in enumerate(self.players):
             for j, q in enumerate(self.players):
-                if (q is not p) and p.attackCanHit:
-                    for h in p.getHitboxes():
-                        for r in q.getHurtboxes():
-                            hRect = getAdjustedBox(p, h)
-                            rRect = getAdjustedBox(q, r)
+                if (q.char is not p.char) and p.char.attackCanHit:
+                    for h in p.char.getHitboxes():
+                        for r in q.char.getHurtboxes():
+                            hRect = getAdjustedBox(p.char, h)
+                            rRect = getAdjustedBox(q.char, r)
 
                             if hRect.colliderect(rRect):
-                                if q.blockstun > 0:
+                                if q.char.blockstun > 0:
                                     if (self.blockMemory[j] is None):
                                         self.blockMemory[j] = [h, p]
-                                        p.attackCanHit = False
-                                        p.onHitTrigger = True
+                                        p.char.attackCanHit = False
+                                        p.char.onHitTrigger = True
                                 else:
                                     if (self.hitMemory[j] is None):
                                         self.hitMemory[j] = [h, p]
-                                        p.attackCanHit = False
-                                        p.onHitTrigger = True
+                                        p.char.attackCanHit = False
+                                        p.char.onHitTrigger = True
 
                                 self.fxMemory[j].append(average_points(
                                     hRect.center, rRect.center))
-                 
-                 
+
     def checkForProjectileBlock(self):
         for proj in self.projectiles:
             if not proj.canHit():
                 continue
-        
+
             for j, q in enumerate(self.players):
-                if q is not proj.shooter:
+                if q.char is not proj.shooter:
                     for h in proj.getHitboxes():
                         if h.ignoreBlock():
                             continue
-                        for r in q.getBlockboxes():
+                        for r in q.char.getBlockboxes():
                             hRect = getAdjustedBox(proj, h)
-                            rRect = getAdjustedBox(q, r)
+                            rRect = getAdjustedBox(q.char, r)
 
                             if hRect.colliderect(rRect):
                                 if (self.blockMemory[j] is None):
                                     self.blockMemory[j] = [h, proj]
 
-                                if q.currMove == q.getMoves()['blocking']:
+                                if q.char.currMove == q.char.getMoves()['blocking']:
                                     ind = 0
-                                elif q.currMove == q.getMoves()['lowBlocking']:
+                                elif q.char.currMove == q.char.getMoves()['lowBlocking']:
                                     ind = 1
                                 else:
                                     ind = 2
 
-                                self.fxMemory[j].append(q.getBlockFXPoint(ind))
-    
-    
+                                self.fxMemory[j].append(q.char.getBlockFXPoint(ind))
+
     def checkForProjectileHit(self):
         for proj in self.projectiles:
-            print proj.freezeFrame
-
             if not proj.canHit():
                 continue
 
             for j, q in enumerate(self.players):
-                if q is not proj.shooter:
+                if q.char is not proj.shooter:
                     for h in proj.getHitboxes():
-                        for r in q.getHurtboxes():
+                        for r in q.char.getHurtboxes():
                             hRect = getAdjustedBox(proj, h)
-                            rRect = getAdjustedBox(q, r)
+                            rRect = getAdjustedBox(q.char, r)
 
                             if hRect.colliderect(rRect):
                                 if (self.hitMemory[j] is None):
@@ -666,37 +684,35 @@ class Model(process_m.ProcessModel):
         fxPos = average_point_list(pointList)
 
         if blocked:
-            self.fx.append(fx.FX(fxPos, hitter.facingRight, 'block'))
-        elif hitter.currMove.isGrab():
-            self.fx.append(fx.FX(fxPos, hitter.facingRight, 'grab'))
+            self.fx.append(fx.FX(fxPos, hitter.char.facingRight, 'block'))
+        elif hitter.char.currMove.isGrab():
+            self.fx.append(fx.FX(fxPos, hitter.char.facingRight, 'grab'))
         else:
             if not h.noStandardFX():
-                self.fx.append(fx.FX(fxPos, hitter.facingRight, 'pow'))
-                self.fx.append(fx.FX(fxPos, hitter.facingRight, 'side'))
-        
+                self.fx.append(fx.FX(fxPos, hitter.char.facingRight, 'pow'))
+                self.fx.append(fx.FX(fxPos, hitter.char.facingRight, 'side'))
 
     def actOnBlock(self, i, p):
         self.actOnHit(i, p, True)
-            
 
     def actOnHit(self, i, p, blocked=False):
         if blocked:
             memory = self.blockMemory
         else:
             memory = self.hitMemory
-        
+
         if not memory[i] is None:
             mem = memory[i][0]
             hitter = memory[i][1]
 
-            p.facingRight = not hitter.facingRight
+            p.char.facingRight = not hitter.char.facingRight
 
             grab = mem.getGrabData()
             if grab is not None:
                 self.actOnGrab(i, p, mem, hitter, grab)
                 return
 
-            damage = int(mem.damage * hitter.getDamageMultiplier())
+            damage = int(mem.damage * hitter.char.getDamageMultiplier())
             chip = mem.chipDamagePercentage
             stun = mem.stun
             prop = mem.properties
@@ -712,113 +728,112 @@ class Model(process_m.ProcessModel):
                 yVel *= BLOCKED_LIFT_RESIST
 
             yVel *= -1
-            if p.facingRight:
+            if p.char.facingRight:
                 xVel *= -1
 
-            if not p.inAir:
+            if not p.char.inAir:
                 if (mem.angle > 180) and (not blocked):
                     yVel *= -1
 
             if not blocked:
-                p.getHit(damage, stun, (xVel, yVel))
+                p.char.getHit(damage, stun, (xVel, yVel))
 
-            p.freezeFrame = mem.freezeFrame
-            hitter.freezeFrame = mem.freezeFrame
-            
-            hitter.performHit()
+            p.char.freezeFrame = mem.freezeFrame
+            hitter.char.freezeFrame = mem.freezeFrame
 
-            p.canTech = not mem.untechable()
-            p.techBuffer = TECH_BUFFER_MIN
+            hitter.char.performHit()
+
+            p.char.canTech = not mem.untechable()
+            p.char.techBuffer = TECH_BUFFER_MIN
 
             if blocked:
                 damage = int(damage * chip)
-                p.getBlockstun(damage, stun, (xVel, yVel), prop)
+                p.char.getBlockstun(damage, stun, (xVel, yVel), prop)
 
             if mem.reverseUserFacing():
                 hitter.facingRight = (not hitter.facingRight)
 
             if mem.reverseTargetFacing():
-                p.facingRight = (not p.facingRight)
+                p.char.facingRight = (not p.char.facingRight)
 
             self.createFX(mem, hitter, p, self.fxMemory[i], blocked)
 
     def actOnGrab(self, i, p, mem, hitter, grab):
-        hitter.setCurrMove(grab[1])
-        p.setCurrMove(grab[2])
+        hitter.char.setCurrMove(grab[1])
+        p.char.setCurrMove(grab[2])
 
         offset = self.getGrabOffset(hitter, p)
-                
-        p.preciseLoc = add_points(hitter.preciseLoc, offset)
+
+        p.char.preciseLoc = add_points(hitter.char.preciseLoc, offset)
 
         self.createFX(mem, hitter, p, self.fxMemory[i], False)
 
-    def netMessageSize(self):
-        return NET_MESSAGE_SIZE
-
     def checkForFX(self, i, p):
-        if self.returnCode[i] != 1 and p.currSubframe == 0 and p.canEffect:
-            for i in p.getCurrentFrame().fx:
+        if self.returnCode[i] != 1 and p.char.currSubframe == 0 and p.char.canEffect:
+            for i in p.char.getCurrentFrame().fx:
                 facing = i[2]
                 basePos = [i[1][0], i[1][1]]
-                if not p.facingRight:
+                if not p.char.facingRight:
                     facing = not facing
                     basePos[0] *= -1
-                pos = add_points(p.preciseLoc, basePos)
+                pos = add_points(p.char.preciseLoc, basePos)
                 self.fx.append(fx.FX(pos, facing, i[0]))
-                p.canEffect = False
+                p.char.canEffect = False
 
     def createTransitionDust(self, i, p):
-        if p.currMove == p.getMoves()['groundHit'] or p.currMove.isStun or self.returnCode[i] == 1:
+        if p.char.currMove == p.char.getMoves()['groundHit'] or p.char.currMove.isStun or self.returnCode[i] == 1:
             return
-        
-        pos = add_points(p.preciseLoc, (0,0))
+
+        pos = add_points(p.char.preciseLoc, (0,0))
         self.fx.append(fx.FX(pos, True, 'dust'))
         self.fx.append(fx.FX(pos, False, 'dust'))
 
     def checkEnding(self):
         if self.endingVal in [-1, 0, 1]:
             for i, p in enumerate(self.players):
-                if self.players[i].retreat.isMax():
+                if p.char.retreat.isMax():
                     self.returnCode[i] = 1
-                    self.players[i].retreat.setToMin()
-                    self.players[i].preciseLoc[1] = self.arena.height - BATTLE_AREA_FLOOR_HEIGHT
+                    p.char.retreat.setToMin()
+                    p.char.preciseLoc[1] = self.arena.height - BATTLE_AREA_FLOOR_HEIGHT
+
                     if self.endingVal == -1:
                         self.endingVal = 0
 
-        
         if self.endingVal == -1:
-            temp = False
+            anyDead = False
+
             for p in self.players:
-                if p.currMove.isDead:
-                    temp = True
-            if temp:
+                if p.char.currMove.isDead:
+                    anyDead = True
+
+            if anyDead:
                 self.endingVal = 0
+
                 for proj in self.projectiles:
                     proj.freezeFrame += DEATH_FREEZE_FRAME
+
                 for i, p in enumerate(self.players):
-                    p.freezeFrame += DEATH_FREEZE_FRAME
-                    if p.currMove.isDead:
-                        if p.vel[1] > DEATH_FLY_VERT_VEL_MIN:
-                            p.vel[1] = DEATH_FLY_VERT_VEL_MIN
+                    p.char.freezeFrame += DEATH_FREEZE_FRAME
+                    if p.char.currMove.isDead:
+                        if p.char.vel[1] > DEATH_FLY_VERT_VEL_MIN:
+                            p.char.vel[1] = DEATH_FLY_VERT_VEL_MIN
                         self.returnCode[i] = -1
                     else:
                         self.returnCode[i] = 0
 
     def superDarken(self):
         for p in self.players:
-            if p.currMove.isSuperFlash:
+            if p.char.currMove.isSuperFlash:
                 return True
 
         return False
 
     def isFlash(self):
         for p in self.players:
-            if p.currMove.isSuperFlash:
+            if p.char.currMove.isSuperFlash:
                 return True
 
         return False
-
-BOOLEAN = True
 
 class State(Model):
     def __init__(self, model):
@@ -826,8 +841,6 @@ class State(Model):
         self.terrainRight = copy.deepcopy(model.terrainRight)
         self.arena = copy.deepcopy(model.arena)
         self.players = copy.deepcopy(model.players)
-        self.keys = copy.deepcopy(model.keys)
-        self.keysNow = copy.deepcopy(model.keysNow)
         self.frameByFrame = copy.deepcopy(model.frameByFrame)
         self.returnCode = copy.deepcopy(model.returnCode)
         self.projectiles = copy.deepcopy(model.projectiles)
@@ -841,10 +854,10 @@ class State(Model):
 
 def testData():
     heroes = [hare.Hare(), hare.Hare()]
-    
+
     for h in heroes:
         h.superEnergy.change(h.superEnergy.maximum)
-    
+
     return [heroes, PLAINS, PLAINS]
 
 def getPlatforms(leftTerrain, rightTerrain):
@@ -856,7 +869,6 @@ def getPlatforms(leftTerrain, rightTerrain):
     return masterList
 
 def getPlatformsForSingleTerrain(terrain, isRight):
-
     platforms = []
 
     HALF_SCREEN = (BATTLE_ARENA_SIZE[0] / 2)

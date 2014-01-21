@@ -16,6 +16,7 @@ MOVES_MAP = {HARE : hare_moves,
 
 class BattleChar(object):
     def __init__(self, hp, footRectSize=30):
+        self.player = None
         self.hp = boundint.BoundInt(0, hp, hp)
         self.superEnergy = boundint.BoundInt(0, SUPER_ENERGY_MAX,
                     int(SUPER_ENERGY_MAX * SUPER_ENERGY_INITIAL_FACTOR))
@@ -49,6 +50,14 @@ class BattleChar(object):
 
         self.footRect = Rect((0, 0), ((footRectSize * 2)+1, 5))
         self.positionFootRect()
+
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        state.pop('player')
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__ = state
 
     def beginBattle(self):
         self.retreat.change(0)
@@ -163,7 +172,8 @@ class BattleChar(object):
         else:
             return -1
 
-    def DI(self, l, r):
+    def di(self):
+        l, r = self.player().leftOrRight()
         if self.freezeFrame == 0:
             if not self.inAir:
                 f = self.facingMultiplier()
@@ -179,7 +189,7 @@ class BattleChar(object):
             if not self.inAir:
                 if self.currMove == self.getMoves()['dashing']:
                     accel = self.getStats().dashAccel
-                elif not self.keyTowardFacing(l, r):
+                elif not self.keyTowardFacing():
                     f = 0
                 else:
                     accel = self.getStats().walkAccel
@@ -241,11 +251,14 @@ class BattleChar(object):
                 self.accel[0] = 0
                 self.vel[0] = 0
 
-    def keyTowardFacing(self, l, r):
+    def keyTowardFacing(self):
+        l, r = self.player().leftOrRight()
+
         if l and not self.facingRight:
             return True
         if r and self.facingRight:
             return True
+
         return False
 
     def getStats(self):

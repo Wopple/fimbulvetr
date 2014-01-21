@@ -4,6 +4,7 @@ from pygame.locals import *
 
 from common import mvc
 
+from common.constants import *
 from client.constants import *
 
 class Controller(mvc.Controller):
@@ -14,63 +15,39 @@ class Controller(mvc.Controller):
 
     def update(self):
         for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
+            if event.type in (pygame.KEYDOWN, pygame.KEYUP):
+                k = None
+
                 if event.key == K_UP:
-                    self.inputQueue.put(Key(0, True, self.player))
+                    k = UP
                 elif event.key == K_DOWN:
-                    self.inputQueue.put(Key(1, True, self.player))
+                    k = DOWN
                 elif event.key == K_LEFT:
-                    self.inputQueue.put(Key(2, True, self.player))
+                    k = LEFT
                 elif event.key == K_RIGHT:
-                    self.inputQueue.put(Key(3, True, self.player))
-                elif event.key == KEY_ATTACK_A:
-                    self.inputQueue.put(Key(4, True, self.player))
-                elif event.key == KEY_ATTACK_B:
-                    self.inputQueue.put(Key(5, True, self.player))
-                elif event.key == KEY_JUMP:
-                    self.inputQueue.put(Key(6, True, self.player))
-                elif event.key == KEY_BLOCK:
-                    self.inputQueue.put(Key(7, True, self.player))
-                elif event.key == KEY_SUPER:
-                    self.inputQueue.put(Key(8, True, self.player))
-#                elif event.key == K_F1:
-#                    self.model.testKey(1)
-#                elif event.key == K_F2:
-#                    self.model.testKey(2)
-#                elif event.key == K_F3:
-#                    self.model.testKey(3)
-#                elif event.key == K_F4:
-#                    self.model.testKey(4)
-#                elif event.key == K_F5:
-#                    self.model.testKey(5)
-#                elif event.key == K_F6:
-#                    self.model.testKey(6)
+                    k = RIGHT
+                elif event.key == PY_ATTACK_A:
+                    k = ATT_A
+                elif event.key == PY_ATTACK_B:
+                    k = ATT_B
+                elif event.key == PY_JUMP:
+                    k = JUMP
+                elif event.key == PY_BLOCK:
+                    k = BLOCK
+                elif event.key == PY_SUPER:
+                    k = SUPER
                 elif event.key == K_ESCAPE:
+                    self.inputQueue.put(None)
                     sys.exit(0)
-            elif event.type == pygame.KEYUP:
-                if event.key == K_UP:
-                    self.inputQueue.put(Key(0, False, self.player))
-                elif event.key == K_DOWN:
-                    self.inputQueue.put(Key(1, False, self.player))
-                elif event.key == K_LEFT:
-                    self.inputQueue.put(Key(2, False, self.player))
-                elif event.key == K_RIGHT:
-                    self.inputQueue.put(Key(3, False, self.player))
-                elif event.key == KEY_ATTACK_A:
-                    self.inputQueue.put(Key(4, False, self.player))
-                elif event.key == KEY_ATTACK_B:
-                    self.inputQueue.put(Key(5, False, self.player))
-                elif event.key == KEY_JUMP:
-                    self.inputQueue.put(Key(6, False, self.player))
-                elif event.key == KEY_BLOCK:
-                    self.inputQueue.put(Key(7, False, self.player))
-                elif event.key == KEY_SUPER:
-                    self.inputQueue.put(Key(8, False, self.player))
+
+                if k is not None:
+                    isDown = event.type == pygame.KEYDOWN
+                    self.inputQueue.put(Key(k, isDown))
             elif event.type == pygame.QUIT:
+                self.inputQueue.put(None)
                 sys.exit(0)
 
 class Key(object):
-    def __init__(self, index, isDown, player):
-        self.index = index
+    def __init__(self, key, isDown):
+        self.key = key
         self.isDown = isDown
-        self.player = player

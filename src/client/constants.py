@@ -232,11 +232,11 @@ HITBOX_ALPHA = 100
 BLOCKBOX_COLOR = (100, 149, 237)
 BLOCKBOX_ALPHA = 120
 
-KEY_ATTACK_A = pygame.K_e
-KEY_ATTACK_B = pygame.K_w
-KEY_JUMP = pygame.K_SPACE
-KEY_BLOCK = pygame.K_q
-KEY_SUPER = pygame.K_d
+PY_ATTACK_A = pygame.K_e
+PY_ATTACK_B = pygame.K_w
+PY_JUMP = pygame.K_SPACE
+PY_BLOCK = pygame.K_q
+PY_SUPER = pygame.K_d
 
 PLATFORM_COLOR = (120, 120, 120)
 

@@ -1,0 +1,3 @@
+CLIENT = 0
+SERVER = 1
+ENV = None

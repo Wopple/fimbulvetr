@@ -9,9 +9,37 @@ DEBUG_MODE = True
 
 BATTLE_ARENA_SIZE = (1000, 900)
 
+# player types
+
+# client
+LOCAL = 0  # player is on the current machine
+REMOTE = 1 # player is on another machine
+
+# server
+HUMAN = 2 # player is a human
+BOT = 3    # player is a bot
+
+PLAYER_TYPES = [LOCAL, REMOTE, HUMAN, BOT]
+
+# key types
+UP = 0
+DOWN = 1
+LEFT = 2
+RIGHT = 3
+ATT_A = 4
+ATT_B = 5
+JUMP = 6
+BLOCK = 7
+SUPER = 8
+
+KEY_TYPES = [UP, DOWN, LEFT, RIGHT, ATT_A, ATT_B, JUMP, BLOCK, SUPER]
+
+# character types
 HARE = 0
 CAT = 1
 FOX = 2
+
+CHAR_TYPES = [HARE, CAT, FOX]
 
 DASH_BUFFER_MAX = 8
 
@@ -89,13 +117,6 @@ ENCOUNTER_START_BLINK = 3
 ENCOUNTER_END_BLINK = 5
 
 MULTIPLAYER_PORT = 1338
-NET_MESSAGE_SIZE = 7
-NET_ICON_SPEED = 8
-
-MAP_MODE_NET_MESSAGE_SIZE = 5
-
-CHARACTER_SELECT_NET_MESSAGE_SIZE = 3
-CHARACTER_TRANSFER_NET_MESSAGE_SIZE = 30
 
 CHARACTER_NAME_MAX_LENGTH = 10
 
