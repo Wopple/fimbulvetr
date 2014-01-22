@@ -1,2 +1,2 @@
 def run():
-    print 'SUCCESS'
+    pass

@@ -1,5 +1,12 @@
 #!/bin/sh
 
 cd src
-./run_client.py
+
+if [ $1 = "server" ]
+then
+	./run_server.py
+else
+	./run_client.py
+fi
+
 ../bin/rmpyc
