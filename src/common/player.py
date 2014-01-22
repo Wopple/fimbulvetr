@@ -6,11 +6,12 @@ from common.constants import KEY_TYPES
 from common.util import exclusiveKeys
 
 class Player(object):
-    def __init__(self, type, char=None, keys=None, socket=None):
+    def __init__(self, type, char=None, keys=None, socket=None, netID=None):
         self.type = type
         self.char = char
         self.keys = keys
         self.socket = socket
+        self.netID = netID
 
         if keys is None:
             self.keys = makeKeys()
