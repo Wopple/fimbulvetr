@@ -1,3 +1,5 @@
+import struct
+
 from common.constants import *
 
 from common import move
@@ -8,11 +10,11 @@ from common.data import cat_stats
 from common.data import cat_moves
 from common.util.rect import Rect
 
-STATS_MAP = {HARE : hare_stats,
-             CAT : cat_stats}
+STATS_MAP = {C_HARE : hare_stats,
+             C_CAT : cat_stats}
 
-MOVES_MAP = {HARE : hare_moves,
-             CAT : cat_moves}
+MOVES_MAP = {C_HARE : hare_moves,
+             C_CAT : cat_moves}
 
 class BattleChar(object):
     def __init__(self, hp, footRectSize=30):
@@ -44,7 +46,7 @@ class BattleChar(object):
 
         self.currSuperMove = None
 
-        self.setCurrMove('idle')
+        self.setCurrMove(M_IDLE)
 
         self.createDust = None
 
@@ -53,11 +55,30 @@ class BattleChar(object):
 
     def __getstate__(self):
         state = self.__dict__.copy()
-        state.pop('player')
+
+        if state.has_key('player'):
+            state.pop('player')
+
         return state
 
-    def __setstate__(self, state):
-        self.__dict__ = state
+    def getRenderableState(self):
+        packed = ""
+        packed = struct.pack('sb', packed, self.type)
+
+        x = int(self.preciseLoc[0] * PRECISION)
+        y = int(self.preciseLoc[1] * PRECISION)
+        packed = struct.pack('sii', packed, self.type)
+
+        packed = struct.pack('sb', packed, self.facingRight)
+
+    def setRenderableState(self, state):
+        pass
+
+    def getNetworkState(self):
+        pass
+
+    def setNetworkState(self):
+        pass
 
     def beginBattle(self):
         self.retreat.change(0)
@@ -65,7 +86,7 @@ class BattleChar(object):
         self.blockstun = 0
         if self.hp.value == 0:
             self.hp.value = 1
-        self.setCurrMove('idle')
+        self.setCurrMove(M_IDLE)
         self.dashBuffer = [0, 0]
         self.inAir = False
 
@@ -88,7 +109,7 @@ class BattleChar(object):
 
         frame = self.getCurrentFrame()
 
-        if not (self.currMove.isStun or (self.currMove == self.getMoves()['groundHit'])):
+        if not (self.currMove.isStun or (self.currMove == self.getMoves()[M_GROUND_HIT])):
             self.canTech = True
 
         if self.techBuffer > TECH_BUFFER_MIN:
@@ -100,9 +121,9 @@ class BattleChar(object):
             elif self.inAir:
                 speedCap = self.getStats().airVelMax
             else:
-                if (self.currMove == self.getMoves()['dashing']) or (self.currMove == self.getMoves()['grabbing']):
+                if (self.currMove == self.getMoves()[M_DASHING]) or (self.currMove == self.getMoves()[M_GRABBING]):
                     speedCap = self.getStats().dashVelMax
-                elif self.currMove == self.getMoves()['running']:
+                elif self.currMove == self.getMoves()[M_RUNNING]:
                     speedCap = self.getStats().runVelMax
                 else:
                     speedCap = self.getStats().walkVelMax
@@ -187,7 +208,7 @@ class BattleChar(object):
             if not self.canDI():
                 f = 0
             if not self.inAir:
-                if self.currMove == self.getMoves()['dashing']:
+                if self.currMove == self.getMoves()[M_DASHING]:
                     accel = self.getStats().dashAccel
                 elif not self.keyTowardFacing():
                     f = 0
@@ -283,9 +304,9 @@ class BattleChar(object):
 
         if (self.currMove is None) or (len(self.currMove.frames) == 0):
             if (self.inAir):
-                self.currMove = self.getMoves()['air']
+                self.currMove = self.getMoves()[M_AIR]
             else:
-                self.currMove = self.getMoves()['idle']
+                self.currMove = self.getMoves()[M_IDLE]
 
     def getCurrentFrame(self):
         if len(self.currMove.frames) > self.currFrame:
@@ -305,7 +326,7 @@ class BattleChar(object):
         self.currSubframe += 1
         if self.currSubframe == frame.length:
             self.currSubframe = 0
-            t = self.actTransition('exitFrame', self.currFrame)
+            t = self.actTransition(T_EXIT_FRAME, self.currFrame)
             if not t:
                 self.currFrame += 1
                 if (not self.getCurrentFrame() is None) and (self.getCurrentFrame().resetCanEffect):
@@ -314,11 +335,11 @@ class BattleChar(object):
         if self.currFrame >= len(self.currMove.frames):
             if self.currMove.isJump:
                 self.jump()
-                self.setCurrMove('flipping')
+                self.setCurrMove(M_FLIPPING)
             elif self.inAir:
-                self.setCurrMove('air')
+                self.setCurrMove(M_AIR)
             else:
-                self.setCurrMove('idle')
+                self.setCurrMove(M_IDLE)
 
     def jump(self):
         self.inAir = True
@@ -349,7 +370,7 @@ class BattleChar(object):
             if self.currFrame > rMax:
                 return False
 
-        if (key == 'exitFrame'):
+        if key == T_EXIT_FRAME:
             i = t.var1
             if i == -1:
                 i = len(self.currMove.frames) - 1
@@ -362,7 +383,7 @@ class BattleChar(object):
                         
         t = self.currMove.transitions[key]
         
-        if (key == 'super') and (not t is None) and (self.getMoves()[t.destination] is None):
+        if (key == T_SUPER) and (not t is None) and (self.getMoves()[t.destination] is None):
             return 
         
         if self.actLeft and self.checkTransition(key, var1, var2):
@@ -376,7 +397,7 @@ class BattleChar(object):
                 if self.energy.value < t.var2:
                     return False
             self.setCurrMove(t.destination)
-            if not key == 'exitFrame':
+            if not key == T_EXIT_FRAME:
                 self.actLeft = False
             return True
         else:
@@ -394,19 +415,19 @@ class BattleChar(object):
 
     def transToAir(self):
         if (self.blockstun > 0):
-            self.setCurrMove('airBlocking')
+            self.setCurrMove(M_AIR_BLOCKING)
         elif (not self.currMove.liftOff) and (not self.currMove.isStun):
-            self.setCurrMove('flipping')
+            self.setCurrMove(M_FLIPPING)
 
     def transToGround(self):
         if self.currMove.isStun:
             if self.currMove.needTech:
-                self.setCurrMove('groundHit')
+                self.setCurrMove(M_GROUND_HIT)
                 self.createDust = 0
             return
-        c = self.actTransition('land')
+        c = self.actTransition(T_LAND)
         if not c:
-            self.setCurrMove('idle')
+            self.setCurrMove(M_IDLE)
 
     def getHitboxes(self):
         return self.getCurrentFrame().hitboxes
@@ -424,13 +445,13 @@ class BattleChar(object):
         self.vel[1] = vel[1]
 
         if stun <= STUN_THRESHOLD_1:
-            self.setCurrMove('stun1')
+            self.setCurrMove(M_STUN_1)
         elif stun <= STUN_THRESHOLD_2:
-            self.setCurrMove('stun2')
+            self.setCurrMove(M_STUN_2)
         elif stun <= STUN_THRESHOLD_3:
-            self.setCurrMove('stun3')
+            self.setCurrMove(M_STUN_3)
         else:
-            self.setCurrMove('stun4')
+            self.setCurrMove(M_STUN_4)
 
     def getBlockstun(self, damage, stun, vel, properties):
         self.hp.add(-damage)

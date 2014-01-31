@@ -232,6 +232,41 @@ HITBOX_ALPHA = 100
 BLOCKBOX_COLOR = (100, 149, 237)
 BLOCKBOX_ALPHA = 120
 
+PY_A = pygame.K_a
+PY_B = pygame.K_b
+PY_C = pygame.K_c
+PY_D = pygame.K_d
+PY_E = pygame.K_e
+PY_F = pygame.K_f
+PY_G = pygame.K_g
+PY_H = pygame.K_h
+PY_I = pygame.K_i
+PY_J = pygame.K_j
+PY_K = pygame.K_k
+PY_L = pygame.K_l
+PY_M = pygame.K_m
+PY_N = pygame.K_n
+PY_O = pygame.K_o
+PY_P = pygame.K_p
+PY_Q = pygame.K_q
+PY_R = pygame.K_r
+PY_S = pygame.K_s
+PY_T = pygame.K_t
+PY_U = pygame.K_u
+PY_V = pygame.K_v
+PY_W = pygame.K_w
+PY_X = pygame.K_x
+PY_Y = pygame.K_y
+PY_Z = pygame.K_z
+
+PY_RETURN = pygame.K_RETURN
+PY_ESCAPE = pygame.K_ESCAPE
+
+PY_UP = pygame.K_UP
+PY_DOWN = pygame.K_DOWN
+PY_LEFT = pygame.K_LEFT
+PY_RIGHT = pygame.K_RIGHT
+
 PY_ATTACK_A = pygame.K_e
 PY_ATTACK_B = pygame.K_w
 PY_JUMP = pygame.K_SPACE
@@ -792,9 +827,9 @@ CAT_IMAGES = []
 for i in temp:
     CAT_IMAGES.append([pygame.image.load(os.path.join(DIREC_CAT_GRAPHICS, i[0])).convert_alpha(), i[1]])
 
-IMAGES_MAP = {HARE : HARE_IMAGES,
-              CAT : CAT_IMAGES,
-              FOX : FOX_IMAGES}
+IMAGES_MAP = {C_HARE : HARE_IMAGES,
+              C_CAT : CAT_IMAGES,
+              C_FOX : FOX_IMAGES}
 
 temp = [ ['face1.png', (29, 48)],
          ['face1.png', (29, 48)],
@@ -843,9 +878,9 @@ CAT_SUPER_ICONS = []
 for i in temp:
     CAT_SUPER_ICONS.append(pygame.image.load(os.path.join(DIREC_CAT_GRAPHICS, i)).convert_alpha())
 
-SUPER_ICONS_MAP = {HARE : HARE_SUPER_ICONS,
-                   CAT : CAT_SUPER_ICONS,
-                   FOX : FOX_SUPER_ICONS}
+SUPER_ICONS_MAP = {C_HARE : HARE_SUPER_ICONS,
+                   C_CAT : CAT_SUPER_ICONS,
+                   C_FOX : FOX_SUPER_ICONS}
 
 mapItemsList = [["fortress", "fortressneutral.png", "fortressblue.png", "fortressred.png", (29, 53)],
                 ["spire", "spireneutral.png", "spireblue.png", "spirered.png", (15, 51)],

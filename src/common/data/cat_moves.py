@@ -82,7 +82,7 @@ def createMoveIdle():
          ]
 
     f = [ move.frameData(0, 2, r[0]) ]
-    moves['idle'].append(f, [])
+    moves[M_IDLE].append(f, [])
 
 def createMoveBlock():
 
@@ -96,7 +96,7 @@ def createMoveBlock():
 
     f = [ move.frameData(95, 2, [], [], b[0]) ]
 
-    moves['blocking'].append(f, [])
+    moves[M_BLOCKING].append(f, [])
 
 
 def createMoveLowBlock():
@@ -111,7 +111,7 @@ def createMoveLowBlock():
 
     f = [ move.frameData(96, 2, [], [], b[0]) ]
 
-    moves['lowBlocking'].append(f, [])
+    moves[M_LOW_BLOCKING].append(f, [])
 
 
 def createMoveWalking():
@@ -132,7 +132,7 @@ def createMoveWalking():
           move.frameData(2, 3, r[0]),
           move.frameData(3, 3, r[0]),
           move.frameData(4, 3, r[0]) ]
-    moves['walking'].append(f, [])
+    moves[M_WALKING].append(f, [])
 
 def createMoveDashing():
 
@@ -168,7 +168,7 @@ def createMoveDashing():
     f = [move.frameData(47, 2, r[0]),
          move.frameData(44, 8, r[1])]
 
-    moves['dashing'].append(f, [])
+    moves[M_DASHING].append(f, [])
 
 def createMoveRunning():
 
@@ -228,7 +228,7 @@ def createMoveRunning():
          move.frameData(47, 3, r[3]),
          move.frameData(44, 3, r[0]) ]
 
-    moves['running'].append(f, [])
+    moves[M_RUNNING].append(f, [])
 
 def createMoveAir():
     r = [
@@ -245,10 +245,10 @@ def createMoveAir():
          ]
 
     f = [ move.frameData(5, 2, r[0]) ]
-    moves['air'].append(f, [])
+    moves[M_AIR].append(f, [])
 
-    moves['air'].transitions['attackBDown'] = None
-    moves['air'].transitions['attackBDownCharge'] = move.Transition(None, None, None, None, 'downAirB')
+    moves[M_AIR].transitions[T_ATTACK_B_DOWN] = None
+    moves[M_AIR].transitions[T_ATTACK_B_DOWN_CHARGE] = move.Transition(None, None, None, None, M_DOWN_AIR_B)
 
 def createMoveFlipping():
     r = [
@@ -265,7 +265,7 @@ def createMoveFlipping():
          ]
 
     f = [ move.frameData(5, 2, r[0]) ]
-    moves['flipping'].append(f, [])
+    moves[M_FLIPPING].append(f, [])
 
 def createMoveJumping():
     r = [
@@ -282,7 +282,7 @@ def createMoveJumping():
          ]
 
     f = [ move.frameData(5, 2, r[0]) ]
-    moves['jumping'].append(f, [])
+    moves[M_JUMPING].append(f, [])
 
 def createMoveDucking():
     r = [
@@ -295,7 +295,7 @@ def createMoveDucking():
             ]
         ]
     f = [ move.frameData(18, 2, r[0]) ]
-    moves['ducking'].append(f, [])
+    moves[M_DUCKING].append(f, [])
 
 
 def createMoveJabA():
@@ -363,9 +363,9 @@ def createMoveJabA():
 
 
 
-    moves['jabA'].append(f, [])
+    moves[M_JAB_A].append(f, [])
 
-    moves['jabA'].canDI = False
+    moves[M_JAB_A].canDI = False
 
 def createMoveJabB():
     r = [
@@ -396,8 +396,8 @@ def createMoveJabB():
           ['bladelv2', move.Transition(None, None, 4, 4, 'swordbeamGround2')],
           ['bladelv3', move.Transition(None, None, 4, 4, 'swordbeamGround3')] ]
 
-    moves['jabB'].append(f, t)
-    moves['jabB'].canDI = False
+    moves[M_JAB_B].append(f, t)
+    moves[M_JAB_B].canDI = False
 
     createMoveSwordBeamGroundEnd()
 
@@ -479,14 +479,14 @@ def createMoveDashAttackA():
           move.frameData(43, 5, r[3], h[1]),
           move.frameData(43, 7, r[3])]
 
-    moves['dashAttackA'].append(f, [])
-    moves['dashAttackA'].canDI = False
+    moves[M_DASH_ATTACK_A].append(f, [])
+    moves[M_DASH_ATTACK_A].canDI = False
 
-    moves['dashAttackA'].frames[2].setVelX = 30
-    moves['dashAttackA'].frames[2].ignoreSpeedCap = True
-    moves['dashAttackA'].frames[2].ignoreFriction = True
-    moves['dashAttackA'].frames[3].setVelX = 0
-    moves['dashAttackA'].frames[3].resetHitPotential = True
+    moves[M_DASH_ATTACK_A].frames[2].setVelX = 30
+    moves[M_DASH_ATTACK_A].frames[2].ignoreSpeedCap = True
+    moves[M_DASH_ATTACK_A].frames[2].ignoreFriction = True
+    moves[M_DASH_ATTACK_A].frames[3].setVelX = 0
+    moves[M_DASH_ATTACK_A].frames[3].resetHitPotential = True
 
 
 def createMoveDashAttackB():
@@ -542,9 +542,9 @@ def createMoveDashAttackB():
 
     t = [ ['super', move.Transition(None, None, 9, 11, 'superFlash')] ]
 
-    moves['dashAttackB'].append(f, t)
+    moves[M_DASH_ATTACK_B].append(f, t)
 
-    frames = moves['dashAttackB'].frames
+    frames = moves[M_DASH_ATTACK_B].frames
 
     frames[0].setVelX = 10
 
@@ -632,8 +632,8 @@ def createNeutralAirA():
 
     t = [['land', move.Transition(None, None, None, None, 'neutralAirALag')]]
 
-    moves['neutralAirA'].append(f, t)
-    moves['neutralAirA'].reversable = True
+    moves[M_NEUTRAL_AIR_A].append(f, t)
+    moves[M_NEUTRAL_AIR_A].reversable = True
 
     createMoveNeutralAirALag()
 
@@ -664,8 +664,8 @@ def createNeutralAirB():
           ['bladelv3', move.Transition(None, None, 4, 4, 'swordbeamAir3')],
           ['land', move.Transition(None, None, None, None, 'neutralAirBLag')] ]
 
-    moves['neutralAirB'].append(f, t)
-    moves['neutralAirB'].reversable = True
+    moves[M_NEUTRAL_AIR_B].append(f, t)
+    moves[M_NEUTRAL_AIR_B].reversable = True
 
     createMoveSwordBeamAirEnd()
 
@@ -800,11 +800,11 @@ def createMoveDownAirA():
           move.frameData(159, 4, r[0] ) ]
 
     t = [ ['land', move.Transition(None, None, None, None, 'downAirALag')],
-          ['attackADown', move.Transition(None, None, 9, 10, 'downAirA')] ]
+          ['attackADown', move.Transition(None, None, 9, 10, M_DOWN_AIR_A)] ]
 
-    moves['downAirA'] = move.Move(f, t)
+    moves[M_DOWN_AIR_A] = move.Move(f, t)
 
-    moves['downAirA'].reversable = True
+    moves[M_DOWN_AIR_A].reversable = True
 
     createMoveDownAirALag()
 
@@ -847,7 +847,7 @@ def createMoveDownAirB():
           ['bladelv3', move.Transition(None, None, 1, 1, 'downAirBolt3')] ]
 
 
-    moves['downAirB'].append(f, t)
+    moves[M_DOWN_AIR_B].append(f, t)
 
     createMoveDownBoltShooting()
 
@@ -1057,15 +1057,15 @@ def createMoveUpA():
           move.frameData(115, 3, r[0], h[18]),
           move.frameData(116, 6, r[0]) ]
 
-    t = [['attackA', move.Transition(None, None, 17, 20, 'jabA')],
-         ['attackAUp', move.Transition(None, None, 17, 20, 'jabA')],
+    t = [['attackA', move.Transition(None, None, 17, 20, M_JAB_A)],
+         ['attackAUp', move.Transition(None, None, 17, 20, M_JAB_A)],
          ['attackB', move.Transition(3, CAT_ENERGY_SECTIONS[1], 17, 20, 'aetherpiercer')],
          ['attackBUp', move.Transition(3, CAT_ENERGY_SECTIONS[1], 17, 20, 'aetherpiercer')]]
 
-    moves['upA'].append(f, t)
-    moves['upA'].canDI = False
-    moves['upA'].frames[7].resetHitPotential = True
-    moves['upA'].frames[17].resetHitPotential = True
+    moves[M_UP_A].append(f, t)
+    moves[M_UP_A].canDI = False
+    moves[M_UP_A].frames[7].resetHitPotential = True
+    moves[M_UP_A].frames[17].resetHitPotential = True
 
     createMoveAetherPiercer()
 
@@ -1146,10 +1146,10 @@ def createMoveUpB():
           move.frameData(7, 4, r[0]),
           move.frameData(8, 3, r[0]),
           move.frameData(9, 3, r[0])]
-    t = [ ['releaseB', move.Transition(None, None, 2, None, 'idle')],
+    t = [ ['releaseB', move.Transition(None, None, 2, None, M_IDLE)],
           ['exitFrame', move.Transition(-1, None, None, None, 'chargeSword')] ]
-    moves['upB'].append(f, t)
-    moves['upB'].canDI = False
+    moves[M_UP_B].append(f, t)
+    moves[M_UP_B].canDI = False
 
     createMoveChargeSword()
 
@@ -1180,7 +1180,7 @@ def createMoveChargeSword():
           move.frameData(13, 2, r[0]),
           move.frameData(11, 2, r[0]) ]
 
-    t = [ ['releaseB', move.Transition(None, None, None, None, 'idle')],
+    t = [ ['releaseB', move.Transition(None, None, None, None, M_IDLE)],
           ['exitFrame', move.Transition(-1, None, None, None, 'chargeSword')] ]
     moves['chargeSword'] = move.Move(f, t)
     moves['chargeSword'].canDI = False
@@ -1317,11 +1317,11 @@ def createMoveDownA():
           move.frameData(177, 2, r[2]),
           move.frameData(172, 2, r[0]) ]
 
-    t = [ ['exitFrame', move.Transition(-1, None, None, None, 'ducking')],
-          ['jump', move.Transition(None, None, 6, 8, 'jumping')] ]
+    t = [ ['exitFrame', move.Transition(-1, None, None, None, M_DUCKING)],
+          ['jump', move.Transition(None, None, 6, 8, M_JUMPING)] ]
 
-    moves['downA'].append(f, t)
-    moves['downA'].canDI = False
+    moves[M_DOWN_A].append(f, t)
+    moves[M_DOWN_A].canDI = False
 
 
 def createOldMoveDownA():
@@ -1390,10 +1390,10 @@ def createOldMoveDownA():
           move.frameData(42, 2, r[0]),
           move.frameData(18, 2, r[2])]
 
-    t = [ ['exitFrame', move.Transition(-1, None, None, None, 'ducking')] ]
+    t = [ ['exitFrame', move.Transition(-1, None, None, None, M_DUCKING)] ]
 
-    moves['downA'].append(f, t)
-    moves['downA'].canDI = False
+    moves[M_DOWN_A].append(f, t)
+    moves[M_DOWN_A].canDI = False
 
 def createMoveDownB():
 
@@ -1454,15 +1454,15 @@ def createMoveDownB():
          move.frameData(22, 10, r[0]) ]
 
     t = [['attackB', move.Transition(3, CAT_ENERGY_SECTIONS[0], 6, 25, 'lowexplosion')],
-         ['attackBDown', move.Transition(3, CAT_ENERGY_SECTIONS[0], 6, 25, 'lowexplosion')]]
+         [T_ATTACK_B_DOWN, move.Transition(3, CAT_ENERGY_SECTIONS[0], 6, 25, 'lowexplosion')]]
 
-    moves['downB'].append(f, t)
-    moves['downB'].canDI = False
+    moves[M_DOWN_B].append(f, t)
+    moves[M_DOWN_B].canDI = False
 
-    moves['downB'].frames[10].resetHitPotential = True
-    moves['downB'].frames[14].resetHitPotential = True
-    moves['downB'].frames[18].resetHitPotential = True
-    moves['downB'].frames[22].resetHitPotential = True
+    moves[M_DOWN_B].frames[10].resetHitPotential = True
+    moves[M_DOWN_B].frames[14].resetHitPotential = True
+    moves[M_DOWN_B].frames[18].resetHitPotential = True
+    moves[M_DOWN_B].frames[22].resetHitPotential = True
 
     createMoveLowExplosion()
 
@@ -1522,7 +1522,7 @@ def createMoveLowExplosion():
 
 def createMoveLowExplosionDash():
     f = [move.frameData(97, 4,)]
-    t = [['exitFrame', move.Transition(-1, None, None, None, 'upA')]]
+    t = [['exitFrame', move.Transition(-1, None, None, None, M_UP_A)]]
 
 
     moves['lowexplosiondash'] = move.Move(f, t)
@@ -1744,10 +1744,10 @@ def createMoveStun1():
 
     f = [ move.frameData(64, 9, r[0]) ]
 
-    moves['stun1'].append(f, [])
+    moves[M_STUN_1].append(f, [])
 
-    for i in range(len(moves['stun1'].frames)):
-        moves['stun1'].frames[i].ignoreSpeedCap = True
+    for i in range(len(moves[M_STUN_1].frames)):
+        moves[M_STUN_1].frames[i].ignoreSpeedCap = True
 
 def createMoveStun2():
     r = [
@@ -1769,10 +1769,10 @@ def createMoveStun2():
 
     f = [ move.frameData(65, 14, r[0]) ]
 
-    moves['stun2'].append(f, [])
+    moves[M_STUN_2].append(f, [])
 
-    for i in range(len(moves['stun2'].frames)):
-        moves['stun2'].frames[i].ignoreSpeedCap = True
+    for i in range(len(moves[M_STUN_2].frames)):
+        moves[M_STUN_2].frames[i].ignoreSpeedCap = True
 
 def createMoveStun3():
     r = [
@@ -1841,10 +1841,10 @@ def createMoveStun3():
           move.frameData(69, 1, r[3]),
           move.frameData(70, 12, r[4])]
 
-    moves['stun3'].append(f, [])
+    moves[M_STUN_3].append(f, [])
 
-    for i in range(len(moves['stun3'].frames)):
-        moves['stun3'].frames[i].ignoreSpeedCap = True
+    for i in range(len(moves[M_STUN_3].frames)):
+        moves[M_STUN_3].frames[i].ignoreSpeedCap = True
 
 
 def createMoveStun4():
@@ -1914,19 +1914,19 @@ def createMoveStun4():
           move.frameData(69, 1, r[3]),
           move.frameData(70, 24, r[4])]
 
-    moves['stun4'].append(f, [])
+    moves[M_STUN_4].append(f, [])
 
-    for i in range(len(moves['stun4'].frames)):
-        moves['stun4'].frames[i].ignoreSpeedCap = True
+    for i in range(len(moves[M_STUN_4].frames)):
+        moves[M_STUN_4].frames[i].ignoreSpeedCap = True
 
 def createMoveGrabbing():
 
     h = [
             [
-                (-12, -44, 40, -34, 0, 0, 0, 0, [('grab', 'grabHold', 'grabbed')], 0)
+                (-12, -44, 40, -34, 0, 0, 0, 0, [('grab', M_GRAB_HOLD, M_GRABBED)], 0)
             ],
             [
-                (-8, -42, 28, -36, 0, 0, 0, 0, [('grab', 'grabHold', 'grabbed')], 0)
+                (-8, -42, 28, -36, 0, 0, 0, 0, [('grab', M_GRAB_HOLD, M_GRABBED)], 0)
             ]
          ]
 
@@ -1940,20 +1940,20 @@ def createMoveGrabbing():
           move.frameData(129, 8, []),
           move.frameData(126, 2, []) ]
 
-    moves['grabbing'].append(f, [])
-    moves['grabbing'].frames[1].setVelX = 8.0
-    moves['grabbing'].frames[1].ignoreFriction = True
-    moves['grabbing'].frames[2].ignoreFriction = True
-    moves['grabbing'].frames[5].setVelX = -8.0
-    moves['grabbing'].frames[5].ignoreFriction = True
+    moves[M_GRABBING].append(f, [])
+    moves[M_GRABBING].frames[1].setVelX = 8.0
+    moves[M_GRABBING].frames[1].ignoreFriction = True
+    moves[M_GRABBING].frames[2].ignoreFriction = True
+    moves[M_GRABBING].frames[5].setVelX = -8.0
+    moves[M_GRABBING].frames[5].ignoreFriction = True
 
 def createMoveGrabHold():
     f = [ move.frameData(129, 10, []),
           move.frameData(129, 42, []),
           move.frameData(129, 2, [])]
 
-    moves['grabHold'].append(f, [])
-    moves['grabHold'].grabPos = (13, 0)
+    moves[M_GRAB_HOLD].append(f, [])
+    moves[M_GRAB_HOLD].grabPos = (13, 0)
 
 def createMoveGrabbed():
     r = [
@@ -1973,8 +1973,8 @@ def createMoveGrabbed():
           move.frameData(66, 5, r[0]),
           move.frameData(66, 2, r[0]) ]
 
-    moves['grabbed'].append(f, [])
-    moves['grabbed'].grabPos = (12, 0)
+    moves[M_GRABBED].append(f, [])
+    moves[M_GRABBED].grabPos = (12, 0)
 
 def createMoveGrabbed2():
 
@@ -1993,18 +1993,18 @@ def createMoveGrabbed2():
 
     f = [ move.frameData(66, 2, r[0]) ]
 
-    moves['grabbed2'].append(f, [])
-    moves['grabbed2'].grabPos = (12, 0)
+    moves[M_GRABBED_2].append(f, [])
+    moves[M_GRABBED_2].grabPos = (12, 0)
 
 def createMoveGrabRelease():
     f = [ move.frameData(126, 2, []),
           move.frameData(126, 1, []),
           move.frameData(126, 22, [])]
 
-    moves['grabRelease'].append(f, [])
-    moves['grabRelease'].frames[1].setVelX = -20.0
-    moves['grabRelease'].frames[1].setFrictionX = 0.5
-    moves['grabRelease'].frames[2].setFrictionX = 0.75
+    moves[M_GRAB_RELEASE].append(f, [])
+    moves[M_GRAB_RELEASE].frames[1].setVelX = -20.0
+    moves[M_GRAB_RELEASE].frames[1].setFrictionX = 0.5
+    moves[M_GRAB_RELEASE].frames[2].setFrictionX = 0.75
 
 def createMoveGrabbedRelease():
 
@@ -2012,10 +2012,10 @@ def createMoveGrabbedRelease():
           move.frameData(65, 1),
           move.frameData(65, 22)]
 
-    moves['grabbedRelease'].append(f, [])
-    moves['grabbedRelease'].frames[1].setVelX = -20.0
-    moves['grabbedRelease'].frames[1].setFrictionX = 0.5
-    moves['grabbedRelease'].frames[2].setFrictionX = 0.75
+    moves[M_GRABBED_RELEASE].append(f, [])
+    moves[M_GRABBED_RELEASE].frames[1].setVelX = -20.0
+    moves[M_GRABBED_RELEASE].frames[1].setFrictionX = 0.5
+    moves[M_GRABBED_RELEASE].frames[2].setFrictionX = 0.75
 
 
 
@@ -2040,12 +2040,12 @@ def createMoveThrowBackward():
            move.frameData(171, 2, [], h[0]),
            move.frameData(171, 12, []) ]
 
-    moves['throwBackward'].append(f, [])
+    moves[M_THROW_BACKWARD].append(f, [])
 
-    moves['throwBackward'].frames[0].setVelX = 10
-    moves['throwBackward'].frames[0].ignoreFriction = True
-    moves['throwBackward'].frames[0].ignoreSpeedCap = True
-    moves['throwBackward'].frames[1].setVelX = 0
+    moves[M_THROW_BACKWARD].frames[0].setVelX = 10
+    moves[M_THROW_BACKWARD].frames[0].ignoreFriction = True
+    moves[M_THROW_BACKWARD].frames[0].ignoreSpeedCap = True
+    moves[M_THROW_BACKWARD].frames[1].setVelX = 0
 
 
 
@@ -2091,29 +2091,29 @@ def createMoveThrowForward():
 
     t = []
 
-    moves['throwForward'].append(f, t)
+    moves[M_THROW_FORWARD].append(f, t)
 
-    moves['throwForward'].frames[12].setVelX = -16.0
-    moves['throwForward'].frames[12].setFrictionX = 0.5
-    moves['throwForward'].frames[13].setFrictionX = 0.5
+    moves[M_THROW_FORWARD].frames[12].setVelX = -16.0
+    moves[M_THROW_FORWARD].frames[12].setFrictionX = 0.5
+    moves[M_THROW_FORWARD].frames[13].setFrictionX = 0.5
 
-    for f in moves['throwForward'].frames:
+    for f in moves[M_THROW_FORWARD].frames:
         f.resetHitPotential = True
         f.resetCanEffect = True
 
-    moves['throwForward'].frames[1].fx.append(['runicflame3', (22, -43), True])
-    moves['throwForward'].frames[2].fx.append(['runicflame1', (20, -49), True])
-    moves['throwForward'].frames[3].fx.append(['runicflame3', (20, -44), True])
-    moves['throwForward'].frames[4].fx.append(['runicflame2', (19, -42), True])
-    moves['throwForward'].frames[5].fx.append(['runicflame1', (22, -47), True])
-    moves['throwForward'].frames[6].fx.append(['runicflame3', (20, -45), True])
-    moves['throwForward'].frames[7].fx.append(['runicflame2', (21, -41), True])
-    moves['throwForward'].frames[8].fx.append(['runicflame1', (24, -44), True])
-    moves['throwForward'].frames[9].fx.append(['runicflame3', (19, -43), True])
-    moves['throwForward'].frames[10].fx.append(['runicflame2', (23, -49), True])
-    moves['throwForward'].frames[11].fx.append(['runicflame1', (22, -47), True])
+    moves[M_THROW_FORWARD].frames[1].fx.append(['runicflame3', (22, -43), True])
+    moves[M_THROW_FORWARD].frames[2].fx.append(['runicflame1', (20, -49), True])
+    moves[M_THROW_FORWARD].frames[3].fx.append(['runicflame3', (20, -44), True])
+    moves[M_THROW_FORWARD].frames[4].fx.append(['runicflame2', (19, -42), True])
+    moves[M_THROW_FORWARD].frames[5].fx.append(['runicflame1', (22, -47), True])
+    moves[M_THROW_FORWARD].frames[6].fx.append(['runicflame3', (20, -45), True])
+    moves[M_THROW_FORWARD].frames[7].fx.append(['runicflame2', (21, -41), True])
+    moves[M_THROW_FORWARD].frames[8].fx.append(['runicflame1', (24, -44), True])
+    moves[M_THROW_FORWARD].frames[9].fx.append(['runicflame3', (19, -43), True])
+    moves[M_THROW_FORWARD].frames[10].fx.append(['runicflame2', (23, -49), True])
+    moves[M_THROW_FORWARD].frames[11].fx.append(['runicflame1', (22, -47), True])
 
-    moves['throwForward'].frames[12].fx.append(['runicexplosion', (19, -48), True])
+    moves[M_THROW_FORWARD].frames[12].fx.append(['runicexplosion', (19, -48), True])
 
 
 
@@ -2121,11 +2121,11 @@ def createMoveThrowForward():
 def createMoveDeadFalling():
     f = [ move.frameData(70, 3) ]
 
-    moves['deadFalling'].append(f, [])
+    moves[M_DEAD_FALLING].append(f, [])
 
-    for i in range(len(moves['deadFalling'].frames)):
-        moves['deadFalling'].frames[i].ignoreSpeedCap = True
-        moves['deadFalling'].frames[i].ignoreFriction = True
+    for i in range(len(moves[M_DEAD_FALLING].frames)):
+        moves[M_DEAD_FALLING].frames[i].ignoreSpeedCap = True
+        moves[M_DEAD_FALLING].frames[i].ignoreFriction = True
 
 def createMoveDeadGroundHit():
     f = [ move.frameData(71, 2),
@@ -2133,12 +2133,12 @@ def createMoveDeadGroundHit():
           move.frameData(73, 2),
           move.frameData(74, 1) ]
 
-    moves['deadGroundHit'].append(f, [])
+    moves[M_DEAD_GROUND_HIT].append(f, [])
 
 def createMoveDeadLaying():
     f = [ move.frameData(74, 3) ]
 
-    moves['deadLaying'].append(f, [])
+    moves[M_DEAD_LAYING].append(f, [])
 
 
 def createMoveGroundHit():
@@ -2161,17 +2161,17 @@ def createMoveGroundHit():
           move.frameData(74, 2),
           move.frameData(74, 80, r[0]) ]
 
-    moves['groundHit'].append(f, [])
-    moves['groundHit'].frames[0].fx.append(['dust', (28, 0), True])
-    moves['groundHit'].frames[0].fx.append(['dust', (-28, 0), False])
-    moves['groundHit'].frames[1].fx.append(['shockwave', (0, 0), True])
+    moves[M_GROUND_HIT].append(f, [])
+    moves[M_GROUND_HIT].frames[0].fx.append(['dust', (28, 0), True])
+    moves[M_GROUND_HIT].frames[0].fx.append(['dust', (-28, 0), False])
+    moves[M_GROUND_HIT].frames[1].fx.append(['shockwave', (0, 0), True])
 
 def createMoveStandUp():
     f = [ move.frameData(75, 4),
           move.frameData(76, 7),
           move.frameData(85, 4)]
 
-    moves['standUp'].append(f, [])
+    moves[M_STAND_UP].append(f, [])
 
 def createMoveStandForward():
     f = [ move.frameData(75, 3),
@@ -2185,14 +2185,14 @@ def createMoveStandForward():
           move.frameData(84, 1),
           move.frameData(85, 4) ]
 
-    moves['standForward'].append(f, [])
+    moves[M_STAND_FORWARD].append(f, [])
 
-    moves['standForward'].frames[1].setVelX = 16.0
-    moves['standForward'].frames[9].setVelX = 0
+    moves[M_STAND_FORWARD].frames[1].setVelX = 16.0
+    moves[M_STAND_FORWARD].frames[9].setVelX = 0
 
-    for i in range(len(moves['standForward'].frames)):
-        moves['standForward'].frames[i].setFrictionX = groundFriction * 0.55
-        moves['standForward'].frames[i].ignoreSpeedCap = True
+    for i in range(len(moves[M_STAND_FORWARD].frames)):
+        moves[M_STAND_FORWARD].frames[i].setFrictionX = groundFriction * 0.55
+        moves[M_STAND_FORWARD].frames[i].ignoreSpeedCap = True
 
 def createMoveStandBackward():
     f = [ move.frameData(75, 3),
@@ -2206,14 +2206,14 @@ def createMoveStandBackward():
           move.frameData(77, 1),
           move.frameData(85, 4) ]
 
-    moves['standBackward'].append(f, [])
+    moves[M_STAND_BACKWARD].append(f, [])
 
-    moves['standBackward'].frames[1].setVelX = -16.0
-    moves['standBackward'].frames[9].setVelX = 0
+    moves[M_STAND_BACKWARD].frames[1].setVelX = -16.0
+    moves[M_STAND_BACKWARD].frames[9].setVelX = 0
 
-    for i in range(len(moves['standBackward'].frames)):
-        moves['standBackward'].frames[i].setFrictionX = groundFriction * 0.55
-        moves['standBackward'].frames[i].ignoreSpeedCap = True
+    for i in range(len(moves[M_STAND_BACKWARD].frames)):
+        moves[M_STAND_BACKWARD].frames[i].setFrictionX = groundFriction * 0.55
+        moves[M_STAND_BACKWARD].frames[i].ignoreSpeedCap = True
 
 
 
@@ -2221,13 +2221,13 @@ def createMoveTeching():
     f = [ move.frameData(81, 4),
           move.frameData(81, 1)]
 
-    moves['teching'].append(f, [])
+    moves[M_TECHING].append(f, [])
 
 def createMoveTechUp():
     f = [ move.frameData(84, 3),
           move.frameData(85, 2) ]
 
-    moves['techUp'].append(f, [])
+    moves[M_TECH_UP].append(f, [])
 
 def createMoveTechForward():
     f = [ move.frameData(75, 3),
@@ -2241,14 +2241,14 @@ def createMoveTechForward():
           move.frameData(84, 1),
           move.frameData(85, 4) ]
 
-    moves['techForward'].append(f, [])
+    moves[M_TECH_FORWARD].append(f, [])
 
-    moves['techForward'].frames[1].setVelX = 16
-    moves['techForward'].frames[9].setVelX = 0
+    moves[M_TECH_FORWARD].frames[1].setVelX = 16
+    moves[M_TECH_FORWARD].frames[9].setVelX = 0
 
-    for i in range(len(moves['techForward'].frames)):
-        moves['techForward'].frames[i].setFrictionX = groundFriction * 0.55
-        moves['techForward'].frames[i].ignoreSpeedCap = True
+    for i in range(len(moves[M_TECH_FORWARD].frames)):
+        moves[M_TECH_FORWARD].frames[i].setFrictionX = groundFriction * 0.55
+        moves[M_TECH_FORWARD].frames[i].ignoreSpeedCap = True
 
 def createMoveTechBackward():
 
@@ -2264,14 +2264,14 @@ def createMoveTechBackward():
           move.frameData(85, 4) ]
 
 
-    moves['techBackward'].append(f, [])
+    moves[M_TECH_BACKWARD].append(f, [])
 
-    moves['techBackward'].frames[1].setVelX = -16
-    moves['techBackward'].frames[9].setVelX = 0
+    moves[M_TECH_BACKWARD].frames[1].setVelX = -16
+    moves[M_TECH_BACKWARD].frames[9].setVelX = 0
 
-    for i in range(len(moves['techBackward'].frames)):
-        moves['techBackward'].frames[i].setFrictionX = groundFriction * 0.55
-        moves['techBackward'].frames[i].ignoreSpeedCap = True
+    for i in range(len(moves[M_TECH_BACKWARD].frames)):
+        moves[M_TECH_BACKWARD].frames[i].setFrictionX = groundFriction * 0.55
+        moves[M_TECH_BACKWARD].frames[i].ignoreSpeedCap = True
 
 def createSuperMove1():
     n = "Great Shockwave"

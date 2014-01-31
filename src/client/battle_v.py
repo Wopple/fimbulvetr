@@ -105,9 +105,9 @@ class View(mvc.View):
 
         p = self.state.players[0]
 
-        if p.char.type == HARE:
+        if p.char.type == C_HARE:
             self.energyBar.value = p.char.hareEnergy
-        elif p.char.type == CAT:
+        elif p.char.type == C_CAT:
             self.energyBar.value = p.char.catEnergy
 
         if self.catBar is not None:
@@ -296,7 +296,7 @@ class View(mvc.View):
         x = BATTLE_PORTRAIT_SIZE[0] + HEALTH_BAR_OFFSET[0] + BATTLE_PORTRAIT_OFFSET[0]
         y = HEALTH_BAR_OFFSET[1] + HEALTH_BAR_SIZE[1] + SPECIAL_BAR_OFFSET
 
-        if p.char.type == HARE:
+        if p.char.type == C_HARE:
             self.energyBar = energybar.EnergyBar(p.char.hareEnergy,
                                                  Rect((x, y), SPECIAL_BAR_SIZE),
                                                  SPECIAL_BAR_BORDERS,
@@ -305,7 +305,7 @@ class View(mvc.View):
                                                  HARE_ENERGY_NAME,
                                                  HARE_ENERGY_USAGE)
 
-        if p.char.type == CAT:
+        if p.char.type == C_CAT:
             self.catBar = energybar.EnergyBar(p.catEnergy,
                                               Rect((x, y), SPECIAL_BAR_SIZE),
                                               SPECIAL_BAR_BORDERS,

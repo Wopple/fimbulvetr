@@ -7,7 +7,7 @@ from common import boundint
 
 class Hare(battlechar.BattleChar):
     def __init__(self, name="Unnamed Hare", inSuper=0):
-        self.type = HARE
+        self.type = C_HARE
         self.name = name
         self.speciesName = "Hare"
         self.youIconHeight = 75

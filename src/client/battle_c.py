@@ -1,6 +1,5 @@
 import sys
 import pygame
-from pygame.locals import *
 
 from common import mvc
 
@@ -18,25 +17,25 @@ class Controller(mvc.Controller):
             if event.type in (pygame.KEYDOWN, pygame.KEYUP):
                 k = None
 
-                if event.key == K_UP:
-                    k = UP
-                elif event.key == K_DOWN:
-                    k = DOWN
-                elif event.key == K_LEFT:
-                    k = LEFT
-                elif event.key == K_RIGHT:
-                    k = RIGHT
+                if event.key == PY_UP:
+                    k = K_UP
+                elif event.key == PY_DOWN:
+                    k = K_DOWN
+                elif event.key == PY_LEFT:
+                    k = K_LEFT
+                elif event.key == PY_RIGHT:
+                    k = K_RIGHT
                 elif event.key == PY_ATTACK_A:
-                    k = ATT_A
+                    k = K_ATT_A
                 elif event.key == PY_ATTACK_B:
-                    k = ATT_B
+                    k = K_ATT_B
                 elif event.key == PY_JUMP:
-                    k = JUMP
+                    k = K_JUMP
                 elif event.key == PY_BLOCK:
-                    k = BLOCK
+                    k = K_BLOCK
                 elif event.key == PY_SUPER:
-                    k = SUPER
-                elif event.key == K_ESCAPE:
+                    k = K_SUPER
+                elif event.key == PY_ESCAPE:
                     self.inputQueue.put(None)
                     sys.exit(0)
 

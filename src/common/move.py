@@ -9,16 +9,9 @@ from common.util.rect import Rect
 class Move(object):
     def __init__(self, f, t):
         self.frames = []
-
-        temp = ['exitFrame', 'doWalk', 'doDash', 'noXMove', 'noXVel', 'land', 'jump',
-                'doDuck', 'stopDuck', 'attackA', 'attackB', 'releaseA',
-                'releaseB', 'attackAUp', 'attackBUp', 'attackADown',
-                'attackBDown', 'attackBUpCharge', 'attackBDownCharge', 'bladelv1', 'bladelv2',
-                'bladelv3', 'onHit', 'attackAAtMax', 'attackBAtMax',
-                'block', 'releaseBlock', 'downBlock', 'forward', 'backward',
-                'up', 'tech', 'dropThrough', 'super']
         self.transitions = {}
-        for i in temp:
+
+        for i in TRANSITION_TYPES:
             self.transitions[i] = None
 
         self.shoot = []
@@ -119,12 +112,16 @@ class Frame(object):
             self.hitboxes.append(hitbox.Hitbox(makeRect(d), damage, stun, knockback,
                                                angle, properties, freezeFrame, chip))
 
-def makeRect(d):
-    topleft = (d[0], d[1])
-    width = d[2] - d[0]
-    height = d[3] - d[1]
-    size = (width, height)
-    return Rect(topleft, size)
+def makeRect(rectData):
+    left = rectData[0]
+    top = rectData[1]
+    right = rectData[2]
+    bottom = rectData[3]
+
+    width = right - left
+    height = bottom - top
+
+    return Rect(left, top, width, height)
 
 class Transition(object):
     def __init__(self, var1, var2, rangeMin, rangeMax, dest):
@@ -135,84 +132,84 @@ class Transition(object):
         self.destination = dest
 
 def baseIdle():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'idle')],
-          ['doWalk', Transition(None, None, None, None, 'walking')],
-          ['doDash', Transition(None, None, None, None, 'dashing')],
-          ['jump', Transition(None, None, None, None, 'jumping')],
-          ['doDuck', Transition(None, None, None, None, 'ducking')],
-          ['attackAUp', Transition(None, None, None, None, 'upA')],
-          ['attackBUp', Transition(None, None, None, None, 'upB')],
-          ['attackA', Transition(None, None, None, None, 'jabA')],
-          ['attackB', Transition(None, None, None, None, 'jabB')],
-          ['block', Transition(None, None, None, None, 'blocking')],
-          ['downBlock', Transition(None, None, None, None, 'lowBlocking')],
-          ['super', Transition(None, None, None, None, 'superFlash')]]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_IDLE)],
+          [T_DO_WALK, Transition(None, None, None, None, M_WALKING)],
+          [T_DO_DASH, Transition(None, None, None, None, M_DASHING)],
+          [T_JUMP, Transition(None, None, None, None, M_JUMPING)],
+          [T_DO_DUCK, Transition(None, None, None, None, M_DUCKING)],
+          [T_ATTACK_A_UP, Transition(None, None, None, None, M_UP_A)],
+          [T_ATTACK_B_UP, Transition(None, None, None, None, M_UP_B)],
+          [T_ATTACK_A, Transition(None, None, None, None, M_JAB_A)],
+          [T_ATTACK_B, Transition(None, None, None, None, M_JAB_B)],
+          [T_BLOCK, Transition(None, None, None, None, M_BLOCKING)],
+          [T_DOWN_BLOCK, Transition(None, None, None, None, M_LOW_BLOCKING)],
+          [T_SUPER, Transition(None, None, None, None, M_SUPER_FLASH)]]
     m = Move([], t)
     m.canDI = False
     return m
     
 def baseWalking():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'walking')],
-          ['doDash', Transition(None, None, None, None, 'dashing')],
-          ['noXMove', Transition(None, None, None, None, 'idle')],
-          ['jump', Transition(None, None, None, None, 'jumping')],
-          ['doDuck', Transition(None, None, None, None, 'ducking')],
-          ['attackAUp', Transition(None, None, None, None, 'upA')],
-          ['attackBUp', Transition(None, None, None, None, 'upB')],
-          ['attackA', Transition(None, None, None, None, 'jabA')],
-          ['attackB', Transition(None, None, None, None, 'jabB')],
-          ['block', Transition(None, None, None, None, 'blocking')],
-          ['downBlock', Transition(None, None, None, None, 'lowBlocking')],
-          ['super', Transition(None, None, None, None, 'superFlash')]]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_WALKING)],
+          [T_DO_DASH, Transition(None, None, None, None, M_DASHING)],
+          [T_NO_X_MOVE, Transition(None, None, None, None, M_IDLE)],
+          [T_JUMP, Transition(None, None, None, None, M_JUMPING)],
+          [T_DO_DUCK, Transition(None, None, None, None, M_DUCKING)],
+          [T_ATTACK_A_UP, Transition(None, None, None, None, M_UP_A)],
+          [T_ATTACK_B_UP, Transition(None, None, None, None, M_UP_B)],
+          [T_ATTACK_A, Transition(None, None, None, None, M_JAB_A)],
+          [T_ATTACK_B, Transition(None, None, None, None, M_JAB_B)],
+          [T_BLOCK, Transition(None, None, None, None, M_BLOCKING)],
+          [T_DOWN_BLOCK, Transition(None, None, None, None, M_LOW_BLOCKING)],
+          [T_SUPER, Transition(None, None, None, None, M_SUPER_FLASH)]]
     m = Move([], t)
     return m
 
 def baseDashing():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'running')],
-          ['jump', Transition(None, None, None, None, 'jumping')],
-          ['doDuck', Transition(None, None, None, None, 'ducking')],
-          ['attackAUp', Transition(None, None, None, None, 'upA')],
-          ['attackBUp', Transition(None, None, None, None, 'upB')],
-          ['attackA', Transition(None, None, None, None, 'dashAttackA')],
-          ['attackB', Transition(None, None, None, None, 'dashAttackB')],
-          ['block', Transition(None, None, None, None, 'blocking')],
-          ['downBlock', Transition(None, None, None, None, 'lowBlocking')],
-          ['super', Transition(None, None, None, None, 'superFlash')]]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_RUNNING)],
+          [T_JUMP, Transition(None, None, None, None, M_JUMPING)],
+          [T_DO_DUCK, Transition(None, None, None, None, M_DUCKING)],
+          [T_ATTACK_A_UP, Transition(None, None, None, None, M_UP_A)],
+          [T_ATTACK_B_UP, Transition(None, None, None, None, M_UP_B)],
+          [T_ATTACK_A, Transition(None, None, None, None, M_DASH_ATTACK_A)],
+          [T_ATTACK_B, Transition(None, None, None, None, M_DASH_ATTACK_B)],
+          [T_BLOCK, Transition(None, None, None, None, M_BLOCKING)],
+          [T_DOWN_BLOCK, Transition(None, None, None, None, M_LOW_BLOCKING)],
+          [T_SUPER, Transition(None, None, None, None, M_SUPER_FLASH)]]
     m = Move([], t)
     return m
 
 def baseRunning():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'running')],
-          ['noXMove', Transition(None, None, None, None, 'idle')],
-          ['jump', Transition(None, None, None, None, 'jumping')],
-          ['doDuck', Transition(None, None, None, None, 'ducking')],
-          ['attackAUp', Transition(None, None, None, None, 'upA')],
-          ['attackBUp', Transition(None, None, None, None, 'upB')],
-          ['attackA', Transition(None, None, None, None, 'dashAttackA')],
-          ['attackB', Transition(None, None, None, None, 'dashAttackB')],
-          ['block', Transition(None, None, None, None, 'blocking')],
-          ['downBlock', Transition(None, None, None, None, 'lowBlocking')],
-          ['super', Transition(None, None, None, None, 'superFlash')]]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_RUNNING)],
+          [T_NO_X_MOVE, Transition(None, None, None, None, M_IDLE)],
+          [T_JUMP, Transition(None, None, None, None, M_JUMPING)],
+          [T_DO_DUCK, Transition(None, None, None, None, M_DUCKING)],
+          [T_ATTACK_A_UP, Transition(None, None, None, None, M_UP_A)],
+          [T_ATTACK_B_UP, Transition(None, None, None, None, M_UP_B)],
+          [T_ATTACK_A, Transition(None, None, None, None, M_DASH_ATTACK_A)],
+          [T_ATTACK_B, Transition(None, None, None, None, M_DASH_ATTACK_B)],
+          [T_BLOCK, Transition(None, None, None, None, M_BLOCKING)],
+          [T_DOWN_BLOCK, Transition(None, None, None, None, M_LOW_BLOCKING)],
+          [T_SUPER, Transition(None, None, None, None, M_SUPER_FLASH)]]
     m = Move([], t)
     return m
 
 def baseAir():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'air')],
-          ['land', Transition(None, None, None, None, 'landing')],
-          ['attackA', Transition(None, None, None, None, 'neutralAirA')],
-          ['attackB', Transition(None, None, None, None, 'neutralAirB')],
-          ['attackAUp', Transition(None, None, None, None, 'upAirA')],
-          ['attackBUpCharge', Transition(None, None, None, None, 'upAirB')],
-          ['attackADown', Transition(None, None, None, None, 'downAirA')],
-          ['attackBDown', Transition(None, None, None, None, 'downAirB')],
-          ['block', Transition(None, None, None, None, 'airBlocking')],
-          ['downBlock', Transition(None, None, None, None, 'airBlocking')],
-          ['super', Transition(None, None, None, None, 'superFlashAir')] ]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_AIR)],
+          [T_LAND, Transition(None, None, None, None, M_LANDING)],
+          [T_ATTACK_A, Transition(None, None, None, None, M_NEUTRAL_AIR_A)],
+          [T_ATTACK_B, Transition(None, None, None, None, M_NEUTRAL_AIR_B)],
+          [T_ATTACK_A_UP, Transition(None, None, None, None, M_UP_AIR_A)],
+          [T_ATTACK_B_UP_CHARGE, Transition(None, None, None, None, M_UP_AIR_B)],
+          [T_ATTACK_A_DOWN, Transition(None, None, None, None, M_DOWN_AIR_A)],
+          [T_ATTACK_B_DOWN, Transition(None, None, None, None, M_DOWN_AIR_B)],
+          [T_BLOCK, Transition(None, None, None, None, M_AIR_BLOCKING)],
+          [T_DOWN_BLOCK, Transition(None, None, None, None, M_AIR_BLOCKING)],
+          [T_SUPER, Transition(None, None, None, None, M_SUPER_FLASH_AIR)] ]
     m = Move([], t)
     return m
 
 def baseLanding():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'idle')] ]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_IDLE)] ]
     m = Move([], t)
     m.canDI = False
     return m
@@ -224,29 +221,29 @@ def baseJumping():
     return m
 
 def baseDucking():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'ducking')],
-          ['stopDuck', Transition(None, None, None, None, 'idle')],
-          ['jump', Transition(None, None, None, None, 'jumping')],
-          ['dropThrough', Transition(None, None, None, None, 'droppingThrough')],
-          ['attackADown', Transition(None, None, None, None, 'downA')],
-          ['attackBDown', Transition(None, None, None, None, 'downB')],
-          ['downBlock', Transition(None, None, None, None, 'lowBlocking')],
-          ['super', Transition(None, None, None, None, 'superFlash')]]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_DUCKING)],
+          [T_STOP_DUCK, Transition(None, None, None, None, M_IDLE)],
+          [T_JUMP, Transition(None, None, None, None, M_JUMPING)],
+          [T_DROP_THROUGH, Transition(None, None, None, None, M_DROPPING_THROUGH)],
+          [T_ATTACK_A_DOWN, Transition(None, None, None, None, M_DOWN_A)],
+          [T_ATTACK_B_DOWN, Transition(None, None, None, None, M_DOWN_B)],
+          [T_DOWN_BLOCK, Transition(None, None, None, None, M_LOW_BLOCKING)],
+          [T_SUPER, Transition(None, None, None, None, M_SUPER_FLASH)]]
     m = Move([], t)
     m.canDI = False
     return m
 
 def baseGrabbing():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'idle')],
-          ['block', Transition(None, None, -1, -1, 'blocking')]]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_IDLE)],
+          [T_BLOCK, Transition(None, None, -1, -1, M_BLOCKING)]]
     m = Move([], t)
     m.canDI = False
     return m
 
 def baseGrabHold():
-    t = [ ['exitFrame', Transition(-1, None, None, None, 'grabRelease')],
-          ['backward', Transition(None, None, 1, 1, 'throwBackward')],
-          ['forward', Transition(None, None, 1, 1, 'throwForward')]]
+    t = [ [T_EXIT_FRAME, Transition(-1, None, None, None, M_GRAB_RELEASE)],
+          [T_BACKWARD, Transition(None, None, 1, 1, M_THROW_BACKWARD)],
+          [T_FORWARD, Transition(None, None, 1, 1, M_THROW_FORWARD)]]
     m = Move([], t)
     m.canDI = False
     m.grabVal = 1
@@ -254,9 +251,9 @@ def baseGrabHold():
     return m
 
 def baseGrabbed():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'grabbed2')],
-          ['attackA', Transition(None, None, 1, 1, 'idle')],
-          ['attackB', Transition(None, None, 1, 1, 'idle')]  ]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_GRABBED_2)],
+          [T_ATTACK_A, Transition(None, None, 1, 1, M_IDLE)],
+          [T_ATTACK_B, Transition(None, None, 1, 1, M_IDLE)]  ]
     m = Move([], t)
     m.canDI = False
     m.grabVal = -1
@@ -265,7 +262,7 @@ def baseGrabbed():
     return m
 
 def baseGrabbed2():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'grabbed2')] ]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_GRABBED_2)] ]
     m = Move([], t)
     m.canDI = False
     m.grabVal = -1
@@ -273,20 +270,20 @@ def baseGrabbed2():
     return m
 
 def baseGrabRelease():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'idle')] ]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_IDLE)] ]
     m = Move([], t)
     m.canDI = False
     return m
 
 def baseGrabbedRelease():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'idle')] ]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_IDLE)] ]
     m = Move([], t)
     m.canDI = False
     m.drawToBack = True
     return m
 
 def baseThrow():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'idle')] ]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_IDLE)] ]
     m = Move([], t)
     m.canDI = False
     m.grabVal = 2
@@ -294,31 +291,31 @@ def baseThrow():
     return m
 
 def baseBlocking():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'blocking')],
-          ['jump', Transition(None, None, None, None, 'jumping')],
-          ['releaseBlock', Transition(None, None, None, None, 'idle')],
-          ['doDuck', Transition(None, None, None, None, 'lowBlocking')],
-          ['attackA', Transition(None, None, None, None, 'grabbing')]]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_BLOCKING)],
+          [T_JUMP, Transition(None, None, None, None, M_JUMPING)],
+          [T_RELEASE_BLOCK, Transition(None, None, None, None, M_IDLE)],
+          [T_DO_DUCK, Transition(None, None, None, None, M_LOW_BLOCKING)],
+          [T_ATTACK_A, Transition(None, None, None, None, M_GRABBING)]]
 
     m = Move([], t)
     m.canDI = False
     return m
 
 def baseLowBlocking():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'lowBlocking')],
-          ['jump', Transition(None, None, None, None, 'jumping')],
-          ['releaseBlock', Transition(None, None, None, None, 'ducking')],
-          ['stopDuck', Transition(None, None, None, None, 'blocking')],
-          ['attackB', Transition(None, None, None, None, 'grabbing')]]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_LOW_BLOCKING)],
+          [T_JUMP, Transition(None, None, None, None, M_JUMPING)],
+          [T_RELEASE_BLOCK, Transition(None, None, None, None, M_DUCKING)],
+          [T_STOP_DUCK, Transition(None, None, None, None, M_BLOCKING)],
+          [T_ATTACK_B, Transition(None, None, None, None, M_GRABBING)]]
 
     m = Move([], t)
     m.canDI = False
     return m
 
 def baseAirBlocking():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'airBlocking')],
-          ['releaseBlock', Transition(None, None, None, None, 'air')],
-          ['land', Transition(None, None, None, None, 'blocking')]]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_AIR_BLOCKING)],
+          [T_RELEASE_BLOCK, Transition(None, None, None, None, M_AIR)],
+          [T_LAND, Transition(None, None, None, None, M_BLOCKING)]]
 
     m = Move([], t)
     return m
@@ -338,12 +335,12 @@ def baseStunNeedTech():
     
 
 def baseGroundHit():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'standUp')],
-          ['up', Transition(None, None, -2, -1, 'standUp')],
-          ['forward', Transition(None, None, -2, -1, 'standForward')],
-          ['backward', Transition(None, None, -2, -1, 'standBackward')],
-          ['attackA', Transition(None, None, -2, -1, 'standAttack')],
-          ['tech', Transition(None, None, 0, 0, 'teching')]]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_STAND_UP)],
+          [T_UP, Transition(None, None, -2, -1, M_STAND_UP)],
+          [T_FORWARD, Transition(None, None, -2, -1, M_STAND_FORWARD)],
+          [T_BACKWARD, Transition(None, None, -2, -1, M_STAND_BACKWARD)],
+          [T_ATTACK_A, Transition(None, None, -2, -1, M_STAND_ATTACK)],
+          [T_TECH, Transition(None, None, 0, 0, M_TECHING)]]
     m = Move([], t)
     m.canDI = False
     m.isOnGround = True
@@ -351,9 +348,9 @@ def baseGroundHit():
     return m
 
 def baseTeching():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'techUp')],
-          ['forward', Transition(None, None, 1, 1, 'techForward')],
-          ['backward', Transition(None, None, 1, 1, 'techBackward')] ]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_TECH_UP)],
+          [T_FORWARD, Transition(None, None, 1, 1, M_TECH_FORWARD)],
+          [T_BACKWARD, Transition(None, None, 1, 1, M_TECH_BACKWARD)] ]
 
     m = Move([], t)
     m.canDI = False
@@ -376,7 +373,7 @@ def baseBlank():
     return m
 
 def baseProjFlying():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'flying')] ]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_FLYING)] ]
     m = Move([], t)
     return m
 
@@ -386,8 +383,8 @@ def baseDroppingThrough():
     return m
 
 def baseDeadFalling():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'deadFalling')],
-          ['land', Transition(None, None, None, None, 'deadGroundHit')]]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_DEAD_FALLING)],
+          [T_LAND, Transition(None, None, None, None, M_DEAD_GROUND_HIT)]]
     m = Move([], t)
     m.canDI = False
     m.isDead = True
@@ -395,7 +392,7 @@ def baseDeadFalling():
     return m
 
 def baseDeadGroundHit():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'deadLaying')] ]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_DEAD_LAYING)] ]
     m = Move([], t)
     m.canDI = False
     m.isDead = True
@@ -404,7 +401,7 @@ def baseDeadGroundHit():
     return m
 
 def baseDeadLaying():
-    t = [ ['exitFrame', Transition(-1, 0, None, None, 'deadLaying')] ]
+    t = [ [T_EXIT_FRAME, Transition(-1, 0, None, None, M_DEAD_LAYING)] ]
     m = Move([], t)
     m.canDI = False
     m.isDead = True
@@ -413,7 +410,7 @@ def baseDeadLaying():
     return m
 
 def baseSuperFlash():
-    t = [['exitFrame', Transition(-1, 0, None, None, 'superMove')]]
+    t = [[T_EXIT_FRAME, Transition(-1, 0, None, None, M_SUPER_MOVE)]]
     
     m = Move([], t)
     m.canDI = False
@@ -424,73 +421,73 @@ def baseSuperFlash():
     return m
 
 def initBattlecharMoves(moves):
-    moves['idle'] = baseIdle()
-    moves['idleLike'] = baseBlank()
-    moves['walking'] = baseWalking()
-    moves['dashing'] = baseDashing()
-    moves['running'] = baseRunning()
-    moves['air'] = baseAir()
-    moves['flipping'] = baseAir()
-    moves['airLike'] = baseBlank()
-    moves['landing'] = baseLanding()
-    moves['jumping'] = baseJumping()
-    moves['jumpingLike'] = baseJumping()
-    moves['ducking'] = baseDucking()
-    moves['jabA'] = baseBlank()
-    moves['jabB'] = baseBlank()
-    moves['dashAttackA'] = baseBlank()
-    moves['dashAttackB'] = baseBlank()
-    moves['downA'] = baseBlank()
-    moves['downB'] = baseBlank()
-    moves['upA'] = baseBlank()
-    moves['upB'] = baseBlank()
-    moves['neutralAirA'] = baseBlank()
-    moves['neutralAirB'] = baseBlank()
-    moves['upAirA'] = baseBlank()
-    moves['upAirB'] = baseBlank()
-    moves['downAirA'] = baseBlank()
-    moves['downAirB'] = baseBlank()
-    moves['droppingThrough'] = baseDroppingThrough()
+    moves[M_IDLE] = baseIdle()
+    moves[M_IDLE_LIKE] = baseBlank()
+    moves[M_WALKING] = baseWalking()
+    moves[M_DASHING] = baseDashing()
+    moves[M_RUNNING] = baseRunning()
+    moves[M_AIR] = baseAir()
+    moves[M_FLIPPING] = baseAir()
+    moves[M_AIR_LIKE] = baseBlank()
+    moves[M_LANDING] = baseLanding()
+    moves[M_JUMPING] = baseJumping()
+    moves[M_JUMPING_LIKE] = baseJumping()
+    moves[M_DUCKING] = baseDucking()
+    moves[M_JAB_A] = baseBlank()
+    moves[M_JAB_B] = baseBlank()
+    moves[M_DASH_ATTACK_A] = baseBlank()
+    moves[M_DASH_ATTACK_B] = baseBlank()
+    moves[M_DOWN_A] = baseBlank()
+    moves[M_DOWN_B] = baseBlank()
+    moves[M_UP_A] = baseBlank()
+    moves[M_UP_B] = baseBlank()
+    moves[M_NEUTRAL_AIR_A] = baseBlank()
+    moves[M_NEUTRAL_AIR_B] = baseBlank()
+    moves[M_UP_AIR_A] = baseBlank()
+    moves[M_UP_AIR_B] = baseBlank()
+    moves[M_DOWN_AIR_A] = baseBlank()
+    moves[M_DOWN_AIR_B] = baseBlank()
+    moves[M_DROPPING_THROUGH] = baseDroppingThrough()
 
-    moves['grabbing'] = baseGrabbing()
-    moves['grabHold'] = baseGrabHold()
-    moves['grabbed'] = baseGrabbed()
-    moves['grabbed2'] = baseGrabbed2()
-    moves['grabRelease'] = baseGrabRelease()
-    moves['grabbedRelease'] = baseGrabbedRelease()
+    moves[M_GRABBING] = baseGrabbing()
+    moves[M_GRAB_HOLD] = baseGrabHold()
+    moves[M_GRABBED] = baseGrabbed()
+    moves[M_GRABBED_2] = baseGrabbed2()
+    moves[M_GRAB_RELEASE] = baseGrabRelease()
+    moves[M_GRABBED_RELEASE] = baseGrabbedRelease()
 
-    moves['throwBackward'] = baseThrow()
-    moves['throwForward'] = baseThrow()
+    moves[M_THROW_BACKWARD] = baseThrow()
+    moves[M_THROW_FORWARD] = baseThrow()
 
-    moves['blocking'] = baseBlocking()
-    moves['lowBlocking'] = baseLowBlocking()
-    moves['airBlocking'] = baseAirBlocking()
+    moves[M_BLOCKING] = baseBlocking()
+    moves[M_LOW_BLOCKING] = baseLowBlocking()
+    moves[M_AIR_BLOCKING] = baseAirBlocking()
 
-    moves['stun1'] = baseStun()
-    moves['stun2'] = baseStun()
-    moves['stun3'] = baseStunNeedTech()
-    moves['stun4'] = baseStunNeedTech()
+    moves[M_STUN_1] = baseStun()
+    moves[M_STUN_2] = baseStun()
+    moves[M_STUN_3] = baseStunNeedTech()
+    moves[M_STUN_4] = baseStunNeedTech()
 
-    moves['groundHit'] = baseGroundHit()
-    moves['standUp'] = baseStand()
-    moves['standForward'] = baseStand()
-    moves['standBackward'] = baseStand()
-    moves['standAttack'] = baseStand()
+    moves[M_GROUND_HIT] = baseGroundHit()
+    moves[M_STAND_UP] = baseStand()
+    moves[M_STAND_FORWARD] = baseStand()
+    moves[M_STAND_BACKWARD] = baseStand()
+    moves[M_STAND_ATTACK] = baseStand()
 
-    moves['teching'] = baseTeching()
-    moves['techUp'] = baseTechRoll()
-    moves['techForward'] = baseTechRoll()
-    moves['techBackward'] = baseTechRoll()
+    moves[M_TECHING] = baseTeching()
+    moves[M_TECH_UP] = baseTechRoll()
+    moves[M_TECH_FORWARD] = baseTechRoll()
+    moves[M_TECH_BACKWARD] = baseTechRoll()
 
-    moves['deadFalling'] = baseDeadFalling()
-    moves['deadGroundHit'] = baseDeadGroundHit()
-    moves['deadLaying'] = baseDeadLaying()
+    moves[M_DEAD_FALLING] = baseDeadFalling()
+    moves[M_DEAD_GROUND_HIT] = baseDeadGroundHit()
+    moves[M_DEAD_LAYING] = baseDeadLaying()
 
-    moves['superFlash'] = None
-    moves['superMove'] = None
+    moves[M_SUPER_FLASH] = None
+    moves[M_SUPER_MOVE] = None
 
-    moves['superFlashAir'] = None
-    moves['superMoveAir'] = None
+    moves[M_SUPER_FLASH_AIR] = None
+    moves[M_SUPER_MOVE_AIR] = None
 
 def frameData(key, length, r=[], h=[], b=[]):
     return {FD_KEY : key,
@@ -500,19 +497,19 @@ def frameData(key, length, r=[], h=[], b=[]):
             FD_BLOCK : b}
 
 def setupSuper(moves, superMoves, superMovesAir, superMove=0):
-    moves['superMove'] = None
-    moves['superFlash'] = None
-    moves['superMoveAir'] = None
-    moves['superFlashAir'] = None
+    moves[M_SUPER_MOVE] = None
+    moves[M_SUPER_FLASH] = None
+    moves[M_SUPER_MOVE_AIR] = None
+    moves[M_SUPER_FLASH_AIR] = None
 
     m = superMoves[superMove]
-    moves['superMove'] = m
+    moves[M_SUPER_MOVE] = m
 
     if m is not None:
-        moves['superFlash'] = m.flash
+        moves[M_SUPER_FLASH] = m.flash
 
     m = superMovesAir[superMove]
-    moves['superMoveAir'] = m
+    moves[M_SUPER_MOVE_AIR] = m
 
     if m is not None:
-        moves['superFlashAir'] = m.flash
+        moves[M_SUPER_FLASH_AIR] = m.flash

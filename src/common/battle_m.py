@@ -29,13 +29,13 @@ class Model(process_m.ProcessModel):
 
         # create the players
         if settings.ENV is settings.CLIENT:
-            self.players.append(player.Player(LOCAL, inChars[0]))
+            self.players.append(player.Player(P_LOCAL, inChars[0]))
 
             for c in inChars[1:]:
-                self.players.append(player.Player(REMOTE, c))
+                self.players.append(player.Player(P_REMOTE, c))
         elif settings.ENV is settings.SERVER:
             for c in inChars:
-                self.players.append(player.Player(HUMAN, c))
+                self.players.append(player.Player(P_HUMAN, c))
 
         # init the players
         for p in self.players:
@@ -84,7 +84,7 @@ class Model(process_m.ProcessModel):
 
     def getLocalPlayer(self):
         for p in self.players:
-            if p.type == LOCAL:
+            if p.type == P_LOCAL:
                 return p
 
         return None
@@ -147,7 +147,7 @@ class Model(process_m.ProcessModel):
                 else:
                     keys = p.keys
 
-                if keys[BLOCK].isDown and keys[BLOCK].buffer == KEY_BUFFER:
+                if keys[K_BLOCK].isDown and keys[K_BLOCK].buffer == KEY_BUFFER:
                     if p.char.techBuffer == TECH_BUFFER_MIN:
                         p.char.techBuffer = TECH_BUFFER_MAX
 
@@ -187,7 +187,7 @@ class Model(process_m.ProcessModel):
                 self.checkGrabPair()
 
             for i, p in enumerate(self.players):
-                if (isFlash) and (not p.currMove.isSuperFlash):
+                if (isFlash) and (not p.char.currMove.isSuperFlash):
                     continue
 
                 p.update()
@@ -242,7 +242,7 @@ class Model(process_m.ProcessModel):
 
     def wasKeyPressed(self, k, keys):
         if k == -1:
-            return ((keys[LEFT].buffer > 0) or (keys[RIGHT].buffer > 0))
+            return ((keys[K_LEFT].buffer > 0) or (keys[K_RIGHT].buffer > 0))
         else:
             return (keys[k].buffer > 0)
 
@@ -253,120 +253,120 @@ class Model(process_m.ProcessModel):
         l, r = p.leftOrRight()
 
         if char.hp.value <= 0 and not char.currMove.isDead:
-            char.setCurrMove('deadFalling')
+            char.setCurrMove(M_DEAD_FALLING)
             char.inAir = True
             return
 
         if not char.keyTowardFacing():
-            char.actTransition('noXMove')
+            char.actTransition(T_NO_X_MOVE)
         if char.holdJump:
-            if char.vel[1] > 0 or (not keys[JUMP].isDown):
+            if char.vel[1] > 0 or (not keys[K_JUMP].isDown):
                 char.unholdJump()
         if char.onHitTrigger:
-            char.actTransition('onHit')
+            char.actTransition(T_ON_HIT)
         if char.techBuffer >= 0 and char.canTech:
-            if char.actTransition('tech'):
+            if char.actTransition(T_TECH):
                 char.techBuffer = TECH_BUFFER_MIN
         if char.canAct():
             if d:
-                char.actTransition('doDuck')
+                char.actTransition(T_DO_DUCK)
             if l or r:
-                if (l and self.wasKeyPressed(LEFT, keys)):
-                    keys[LEFT].buffer = 0
+                if (l and self.wasKeyPressed(K_LEFT, keys)):
+                    keys[K_LEFT].buffer = 0
                     if (char.dashBuffer[0] > 0 and char.dashBuffer[0] < DASH_BUFFER_MAX):
-                        if char.actTransitionFacing('doDash', l, r):
+                        if char.actTransitionFacing(T_DO_DASH, l, r):
                             char.dashBuffer = [0, 0]
                     else:
                         char.dashBuffer[0] = DASH_BUFFER_MAX
                         char.dashBuffer[1] = 0
 
-                if (r and self.wasKeyPressed(RIGHT, keys)):
-                    keys[RIGHT].buffer = 0
+                if (r and self.wasKeyPressed(K_RIGHT, keys)):
+                    keys[K_RIGHT].buffer = 0
                     if (char.dashBuffer[1] > 0 and char.dashBuffer[1] < DASH_BUFFER_MAX):
-                        if char.actTransitionFacing('doDash', l, r):
+                        if char.actTransitionFacing(T_DO_DASH, l, r):
                             char.dashBuffer = [0, 0]
                     else:
                         char.dashBuffer[1] = DASH_BUFFER_MAX
                         char.dashBuffer[0] = 0
 
-                char.actTransitionFacing('doWalk', l, r)
+                char.actTransitionFacing(T_DO_WALK, l, r)
                 if l:
                     if char.facingRight:
-                        char.actTransition('backward')
+                        char.actTransition(T_BACKWARD)
                     else:
-                        char.actTransition('forward')
+                        char.actTransition(T_FORWARD)
                 elif r:
                     if char.facingRight:
-                        char.actTransition('forward')
+                        char.actTransition(T_FORWARD)
                     else:
-                        char.actTransition('backward')
+                        char.actTransition(T_BACKWARD)
             if u:
-                char.actTransition('up')
+                char.actTransition(T_UP)
             if not d:
-                char.actTransition('stopDuck')
-            if self.wasKeyPressed(ATT_A, keys):
+                char.actTransition(T_STOP_DUCK)
+            if self.wasKeyPressed(K_ATT_A, keys):
                 if u:
-                    if char.actTransition('attackAUp'):
-                        keys[ATT_A].buffer = 0
+                    if char.actTransition(T_ATTACK_A_UP):
+                        keys[K_ATT_A].buffer = 0
                 elif d:
-                    if char.actTransition('attackADown'):
-                        keys[ATT_A].buffer = 0
+                    if char.actTransition(T_ATTACK_A_DOWN):
+                        keys[K_ATT_A].buffer = 0
                 else:
-                    if char.actTransition('attackA'):
-                        keys[ATT_A].buffer = 0
-            if self.wasKeyPressed(ATT_B, keys):
+                    if char.actTransition(T_ATTACK_A):
+                        keys[K_ATT_A].buffer = 0
+            if self.wasKeyPressed(K_ATT_B, keys):
                 if u:
-                    if char.actTransition('attackBUp'):
-                        keys[ATT_B].buffer = 0
+                    if char.actTransition(T_ATTACK_B_UP):
+                        keys[K_ATT_B].buffer = 0
                     elif char.aerialCharge:
-                        if char.actTransition('attackBUpCharge'):
-                            keys[ATT_B].buffer = 0
+                        if char.actTransition(T_ATTACK_B_UP_CHARGE):
+                            keys[K_ATT_B].buffer = 0
                             char.aerialCharge = False
 
                 elif d:
-                    if char.actTransition('attackBDown'):
-                        keys[ATT_B].buffer = 0
+                    if char.actTransition(T_ATTACK_B_DOWN):
+                        keys[K_ATT_B].buffer = 0
                     elif char.aerialCharge:
-                        if char.actTransition('attackBDownCharge'):
-                            keys[ATT_B].buffer = 0
+                        if char.actTransition(T_ATTACK_B_DOWN_CHARGE):
+                            keys[K_ATT_B].buffer = 0
                             char.aerialCharge = False
 
                 else:
-                    if char.actTransition('attackB'):
-                        keys[ATT_A].buffer = 0
-            if self.wasKeyPressed(JUMP, keys):
+                    if char.actTransition(T_ATTACK_B):
+                        keys[K_ATT_A].buffer = 0
+            if self.wasKeyPressed(K_JUMP, keys):
                 if not self.checkForPlatform(p) is None:
-                    if char.actTransition('dropThrough'):
+                    if char.actTransition(T_DROP_THROUGH):
                         self.dropThrough(p)
-                if char.actTransitionFacing('jump', l, r):
-                    keys[JUMP].buffer = 0
-            if keys[BLOCK].isDown:
+                if char.actTransitionFacing(T_JUMP, l, r):
+                    keys[K_JUMP].buffer = 0
+            if keys[K_BLOCK].isDown:
                 if d:
-                    if char.actTransition('downBlock'):
-                        keys[BLOCK].buffer = 0
+                    if char.actTransition(T_DOWN_BLOCK):
+                        keys[K_BLOCK].buffer = 0
                 else:
-                    if char.actTransition('block'):
-                        keys[BLOCK].buffer = 0
-            if self.wasKeyPressed(SUPER, keys):
+                    if char.actTransition(T_BLOCK):
+                        keys[K_BLOCK].buffer = 0
+            if self.wasKeyPressed(K_SUPER, keys):
                 if char.superEnergy.isMax() and self.endingVal == -1:
-                    if char.actTransition('super'):
-                        keys[SUPER].buffer = 0
+                    if char.actTransition(T_SUPER):
+                        keys[K_SUPER].buffer = 0
                         char.superEnergy.setToMin()
 
-            if not keys[ATT_A].isDown:
-                char.actTransition('releaseA')
-            if not keys[ATT_B].isDown:
-                char.actTransition('releaseB')
-            if not keys[BLOCK].isDown:
-                char.actTransition('releaseBlock')
+            if not keys[K_ATT_A].isDown:
+                char.actTransition(T_RELEASE_A)
+            if not keys[K_ATT_B].isDown:
+                char.actTransition(T_RELEASE_B)
+            if not keys[K_BLOCK].isDown:
+                char.actTransition(T_RELEASE_BLOCK)
 
             lev = char.getCatEnergyLevel()
             if lev == 1:
-                char.actTransition('bladelv1')
+                char.actTransition(T_BLADE_LV_1)
             if lev == 2:
-                char.actTransition('bladelv2')
+                char.actTransition(T_BLADE_LV_2)
             if lev == 3:
-                char.actTransition('bladelv3')
+                char.actTransition(T_BLADE_LV_3)
 
     def checkReversable(self, p):
         if p.char.currFrame == 0 and p.char.currSubframe == 1:
@@ -556,8 +556,8 @@ class Model(process_m.ProcessModel):
             if not aChar.currMove.isThrow():
                 if ( ((aChar.currMove.isGrab()) and (not bChar.currMove.isGrabbed()))
                      or ((not aChar.currMove.isGrab()) and (bChar.currMove.isGrabbed())) ):
-                    aChar.setCurrMove('grabRelease')
-                    bChar.setCurrMove('grabbedRelease')
+                    aChar.setCurrMove(M_GRAB_RELEASE)
+                    bChar.setCurrMove(M_GRABBED_RELEASE)
                     return
 
             if aChar.currMove.isGrab() and bChar.currMove.isGrabbed():
@@ -599,9 +599,9 @@ class Model(process_m.ProcessModel):
                                     p.char.attackCanHit = False
                                     p.char.onHitTrigger = True
 
-                                if q.char.currMove == q.char.getMoves()['blocking']:
+                                if q.char.currMove == q.char.getMoves()[M_BLOCKING]:
                                     ind = 0
-                                elif q.char.currMove == q.char.getMoves()['lowBlocking']:
+                                elif q.char.currMove == q.char.getMoves()[M_LOW_BLOCKING]:
                                     ind = 1
                                 else:
                                     ind = 2
@@ -652,9 +652,9 @@ class Model(process_m.ProcessModel):
                                 if (self.blockMemory[j] is None):
                                     self.blockMemory[j] = [h, proj]
 
-                                if q.char.currMove == q.char.getMoves()['blocking']:
+                                if q.char.currMove == q.char.getMoves()[M_BLOCKING]:
                                     ind = 0
-                                elif q.char.currMove == q.char.getMoves()['lowBlocking']:
+                                elif q.char.currMove == q.char.getMoves()[M_LOW_BLOCKING]:
                                     ind = 1
                                 else:
                                     ind = 2
@@ -684,13 +684,13 @@ class Model(process_m.ProcessModel):
         fxPos = average_point_list(pointList)
 
         if blocked:
-            self.fx.append(fx.FX(fxPos, hitter.char.facingRight, 'block'))
+            self.fx.append(fx.FX(fxPos, hitter.char.facingRight, FX_BLOCK))
         elif hitter.char.currMove.isGrab():
-            self.fx.append(fx.FX(fxPos, hitter.char.facingRight, 'grab'))
+            self.fx.append(fx.FX(fxPos, hitter.char.facingRight, FX_GRAB))
         else:
             if not h.noStandardFX():
-                self.fx.append(fx.FX(fxPos, hitter.char.facingRight, 'pow'))
-                self.fx.append(fx.FX(fxPos, hitter.char.facingRight, 'side'))
+                self.fx.append(fx.FX(fxPos, hitter.char.facingRight, FX_POW))
+                self.fx.append(fx.FX(fxPos, hitter.char.facingRight, FX_SIDE))
 
     def actOnBlock(self, i, p):
         self.actOnHit(i, p, True)
@@ -781,12 +781,12 @@ class Model(process_m.ProcessModel):
                 p.char.canEffect = False
 
     def createTransitionDust(self, i, p):
-        if p.char.currMove == p.char.getMoves()['groundHit'] or p.char.currMove.isStun or self.returnCode[i] == 1:
+        if p.char.currMove == p.char.getMoves()[M_GROUND_HIT] or p.char.currMove.isStun or self.returnCode[i] == 1:
             return
 
         pos = add_points(p.char.preciseLoc, (0,0))
-        self.fx.append(fx.FX(pos, True, 'dust'))
-        self.fx.append(fx.FX(pos, False, 'dust'))
+        self.fx.append(fx.FX(pos, True, FX_DUST))
+        self.fx.append(fx.FX(pos, False, FX_DUST))
 
     def checkEnding(self):
         if self.endingVal in [-1, 0, 1]:

@@ -38,10 +38,10 @@ class Player(object):
         self.char.update()
 
     def leftOrRight(self):
-        return exclusiveKeys(self.keys[LEFT].isDown, self.keys[RIGHT].isDown)
+        return exclusiveKeys(self.keys[K_LEFT].isDown, self.keys[K_RIGHT].isDown)
 
     def upOrDown(self):
-        return exclusiveKeys(self.keys[UP].isDown, self.keys[DOWN].isDown)
+        return exclusiveKeys(self.keys[K_UP].isDown, self.keys[K_DOWN].isDown)
 
 class Key(object):
     def __init__(self, isDown, buffer):
