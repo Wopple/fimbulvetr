@@ -1,4 +1,6 @@
 import sys
+import time
+
 import pygame
 
 from common import mvc
@@ -36,15 +38,18 @@ class Controller(mvc.Controller):
                 elif event.key == PY_SUPER:
                     k = K_SUPER
                 elif event.key == PY_ESCAPE:
-                    self.inputQueue.put(None)
-                    sys.exit(0)
+                    self.quit()
 
                 if k is not None:
                     isDown = event.type == pygame.KEYDOWN
                     self.inputQueue.put(Key(k, isDown))
             elif event.type == pygame.QUIT:
-                self.inputQueue.put(None)
-                sys.exit(0)
+                self.quit()
+
+    def quit(self):
+        self.inputQueue.put(None)
+        time.sleep(0.1) # hack to buy time so the queue can finish
+        sys.exit(0)
 
 class Key(object):
     def __init__(self, key, isDown):

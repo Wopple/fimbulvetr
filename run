@@ -2,7 +2,7 @@
 
 cd src
 
-if [ $1 = "server" ]
+if [ "$1" = "server" ]
 then
 	./run_server.py
 else

@@ -12,3 +12,24 @@ def exclusiveKeys(k1, k2):
         k1 = False
         k2 = False
     return k1, k2
+
+def makeByte(*bits):
+    """
+    Converts up to 8
+    """
+
+    if len(bits) > 8:
+        raise RuntimeError, "Too many bits: " + len(bits)
+
+    byte = 0
+
+    for i, b in enumerate(bits):
+        byte |= int(b) << i
+
+    return byte
+
+def byteToList(byte):
+    l = []
+
+    for i in xrange(8):
+        l.append(byte & (1 << i) > 0)

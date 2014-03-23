@@ -8,6 +8,7 @@ from common.data import hare_stats
 from common.data import hare_moves
 from common.data import cat_stats
 from common.data import cat_moves
+from common.util import makeByte
 from common.util.rect import Rect
 
 STATS_MAP = {C_HARE : hare_stats,
@@ -52,6 +53,8 @@ class BattleChar(object):
 
         self.footRect = Rect((0, 0), ((footRectSize * 2)+1, 5))
         self.positionFootRect()
+        self.getNetworkState(True)
+        print "packed:", len(self.getNetworkState())
 
     def __getstate__(self):
         state = self.__dict__.copy()
@@ -62,20 +65,62 @@ class BattleChar(object):
         return state
 
     def getRenderableState(self):
-        packed = ""
-        packed = struct.pack('sb', packed, self.type)
-
-        x = int(self.preciseLoc[0] * PRECISION)
-        y = int(self.preciseLoc[1] * PRECISION)
-        packed = struct.pack('sii', packed, self.type)
-
-        packed = struct.pack('sb', packed, self.facingRight)
+        pass
 
     def setRenderableState(self, state):
         pass
 
-    def getNetworkState(self):
-        pass
+    def getNetworkState(self, full=False):
+        # b - 1 byte
+        # h - 2 bytes
+        # i - 4 bytes
+        packed = struct.pack('b', self.type)
+
+        byte = makeByte(full, self.facingRight, self.inAir, self.holdJump,
+                        self.aerialCharge, self.attackCanHit, self.canShoot, self.onHitTrigger)
+        packed += struct.pack('b', byte)
+
+        x = int(self.preciseLoc[0] * PRECISION)
+        y = int(self.preciseLoc[1] * PRECISION)
+        packed += struct.pack('ii', x, y)
+
+        packed += struct.pack('h', self.hp.value)
+
+        if full:
+            packed += struct.pack('i', self.superEnergy.value)
+
+        x = int(self.accel[0] * PRECISION)
+        y = int(self.accel[1] * PRECISION)
+        packed += struct.pack('ii', x, y)
+
+        x = int(self.vel[0] * PRECISION)
+        y = int(self.vel[1] * PRECISION)
+        packed += struct.pack('ii', x, y)
+
+        # self.projectiles = []
+
+        packed += struct.pack('h', self.retreat.value)
+        packed += struct.pack('b', self.freezeFrame)
+        packed += struct.pack('b', self.blockstun)
+
+        return packed
+
+#        self.techBuffer = TECH_BUFFER_MIN
+#        self.canTech = True
+#        self.dropThroughPlatform = None
+#        self.dashBuffer = [0, 0]
+#        self.canEffect = True
+#        
+#        self.damagePercent = 100
+#
+#        self.currSuperMove = None
+#
+#        self.setCurrMove(M_IDLE)
+#
+#        self.createDust = None
+#
+#        self.footRect = Rect((0, 0), ((footRectSize * 2)+1, 5))
+#        self.positionFootRect()
 
     def setNetworkState(self):
         pass
